@@ -207,6 +207,7 @@ namespace TheTasteReviver.EditorTools
                 }
 
                 EditorUtility.CopySerialized(ingredient, asset);
+                asset.name = ingredient.ingredientID;
                 EditorUtility.SetDirty(asset);
                 created.Add(asset);
             }
@@ -230,6 +231,7 @@ namespace TheTasteReviver.EditorTools
                 }
 
                 EditorUtility.CopySerialized(level, asset);
+                asset.name = level.levelID;
                 EditorUtility.SetDirty(asset);
                 created.Add(asset);
             }
