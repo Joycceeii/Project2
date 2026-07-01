@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
+  m_Name: "L05_\u6F6E\u6C55_\u9648\u76AE\u7C73\u9999"
   m_EditorClassIdentifier: 
   levelID: L05
   levelName: "\u6F6E\u6C55\xB7\u9648\u76AE\u7C73\u9999"
@@ -76,6 +76,7 @@ MonoBehaviour:
     combinationCorrect: "\u7EC4\u5408\u5904\u7406\u65B9\u5F0F\u6B63\u786E\u3002"
     combinationWrong: "\u90E8\u5206\u98DF\u6750\u7684\u6DF7\u5408\u65F6\u673A\u8FD8\u9700\u8981\u8C03\u6574\u3002"
   hintSettings:
+    hintPriority: 0100000002000000030000000500000004000000
     maxOrderHints: 5
     maxRatioHints: 5
     maxCombinationHints: 3
