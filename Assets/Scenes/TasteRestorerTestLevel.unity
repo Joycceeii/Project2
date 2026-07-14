@@ -140,7 +140,7 @@ Material:
     RenderType: Opaque
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -308,8 +308,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -352,8 +352,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.92, g: 0.92, b: 0.92, a: 1}
   m_RaycastTarget: 1
@@ -429,8 +429,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -473,8 +473,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.92, g: 0.92, b: 0.92, a: 1}
   m_RaycastTarget: 1
@@ -641,8 +641,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2eb25feca67fced49ac247b7c65adff0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientData: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
   attemptManager: {fileID: 912469142}
   mortarArea: {fileID: 1355524822}
@@ -820,8 +820,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.82}
   m_RaycastTarget: 1
@@ -858,8 +858,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: ScallionWhite
   ingredientNameCN: Scallion White
   ingredientNameEN: Scallion White
@@ -921,8 +921,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -972,8 +972,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.86, g: 0.86, b: 0.86, a: 0.95}
   m_RaycastTarget: 1
@@ -1010,8 +1010,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4573c609745f60a41a9aeeca9bcd0a1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   forceSlider: {fileID: 146394426}
   forceLabel: {fileID: 1219948508}
 --- !u!1 &155430456
@@ -1061,8 +1061,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -1084,7 +1084,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text:
 --- !u!222 &155430459
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1103,8 +1103,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: SandGinger
   ingredientNameCN: Sand Ginger
   ingredientNameEN: Sand Ginger
@@ -1125,8 +1125,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: Peanut
   ingredientNameCN: Peanut
   ingredientNameEN: Peanut
@@ -1184,8 +1184,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -1266,8 +1266,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.72}
   m_RaycastTarget: 1
@@ -1341,8 +1341,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -1364,7 +1364,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 
+  m_Text:
 --- !u!222 &300730612
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1383,8 +1383,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: RedBean
   ingredientNameCN: Red Bean
   ingredientNameEN: Red Bean
@@ -1404,8 +1404,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: BlackSesame
   ingredientNameCN: Black Sesame
   ingredientNameEN: Black Sesame
@@ -1463,8 +1463,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -1486,7 +1486,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 
+  m_Text:
 --- !u!222 &394512419
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1544,8 +1544,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -1588,8 +1588,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.92, g: 0.92, b: 0.92, a: 1}
   m_RaycastTarget: 1
@@ -1756,8 +1756,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2eb25feca67fced49ac247b7c65adff0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientData: {fileID: 11400000, guid: 9a1cd94e3dd91be4b88ca7f39f71ca64, type: 2}
   attemptManager: {fileID: 912469142}
   mortarArea: {fileID: 1355524822}
@@ -1872,7 +1872,7 @@ Material:
     RenderType: Opaque
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -2053,7 +2053,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: f2cef1b806f5bfb4ba63ed89f9bae346, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
-      value: 
+      value:
       objectReference: {fileID: 2100000, guid: db8a4adc72d8e0c49833eb07c6c06d4b, type: 2}
     - target: {fileID: 919132149155446097, guid: f2cef1b806f5bfb4ba63ed89f9bae346, type: 3}
       propertyPath: m_Name
@@ -2094,8 +2094,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2eb25feca67fced49ac247b7c65adff0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientData: {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
   attemptManager: {fileID: 912469142}
   mortarArea: {fileID: 1355524822}
@@ -2199,8 +2199,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: DriedTangerinePeel
   ingredientNameCN: Dried Tangerine Peel
   ingredientNameEN: Dried Tangerine Peel
@@ -2221,13 +2221,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   levelID: L04
-  levelName: "Peanut Biscuit Nut Aroma"
-  cityName: "Foshan"
-  targetTasteName: "Combination Tutorial"
-  levelIntro: "Fourth lesson: ingredient combination. Peanut and black sesame are both nutty aromas and can be ground together to form a biscuit-like warmth, but sesame should not dominate."
+  levelName: Peanut Biscuit Nut Aroma
+  cityName: Foshan
+  targetTasteName: Combination Tutorial
+  levelIntro: 'Fourth lesson: ingredient combination. Peanut and black sesame are
+    both nutty aromas and can be ground together to form a biscuit-like warmth, but
+    sesame should not dominate.'
   maxIngredientCount: 2
   availableIngredients:
   - {fileID: 187542410}
@@ -2298,28 +2300,35 @@ MonoBehaviour:
     speed: 10
     grindDuration: 10
   unlockCluesOnComplete:
-  - clueId: "L04_Peanut_Combination"
-    title: "Peanut - Combination Clue"
-    content: "Peanut blends well with sesame-like ingredients because both belong to nutty aromas."
+  - clueId: L04_Peanut_Combination
+    title: Peanut - Combination Clue
+    content: Peanut blends well with sesame-like ingredients because both belong
+      to nutty aromas.
     relatedIngredients:
     - {fileID: 187542410}
     relatedDimension: 3
-  - clueId: "L04_BlackSesame_Combination"
-    title: "Black Sesame - Combination Clue"
-    content: "Black sesame can blend with peanut, but it can dominate if handled too heavily."
+  - clueId: L04_BlackSesame_Combination
+    title: Black Sesame - Combination Clue
+    content: Black sesame can blend with peanut, but it can dominate if handled too
+      heavily.
     relatedIngredients:
     - {fileID: 378791487}
     relatedDimension: 3
   processFeedbackRules: []
-  fallbackHintText: "No new experiment conclusion is available yet. Keep the parts that are already correct and adjust only one uncertain mechanic at a time."
+  fallbackHintText: No new experiment conclusion is available yet. Keep the parts
+    that are already correct and adjust only one uncertain mechanic at a time.
   progressiveHintRules:
-  - ruleId: "L04_Hint_Combination"
+  - ruleId: L04_Hint_Combination
     priority: 20
     mechanic: 3
-    hintText: "Peanut and black sesame have similar nutty aromas. Try placing them in the same grinding group."
-  successFeedback: "The solid warmth of peanut and the tail note of black sesame merge into one rounded nutty aroma without separating."
-  closeFeedback: "Both nutty aromas appear, but the blend is not complete. Check whether they are in the same grinding group."
-  wrongFeedback: "Peanut and black sesame feel separated. The biscuit-like tail note did not form; the grouping needs adjustment."
+    hintText: Peanut and black sesame have similar nutty aromas. Try placing them
+      in the same grinding group.
+  successFeedback: The solid warmth of peanut and the tail note of black sesame merge
+    into one rounded nutty aroma without separating.
+  closeFeedback: Both nutty aromas appear, but the blend is not complete. Check whether
+    they are in the same grinding group.
+  wrongFeedback: Peanut and black sesame feel separated. The biscuit-like tail note
+    did not form; the grouping needs adjustment.
 --- !u!21 &592558770
 Material:
   serializedVersion: 8
@@ -2341,7 +2350,7 @@ Material:
     RenderType: Opaque
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -2507,8 +2516,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -2560,7 +2569,7 @@ Material:
     RenderType: Opaque
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -2726,8 +2735,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -2781,7 +2790,7 @@ Material:
     RenderType: Opaque
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -2946,13 +2955,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   levelID: L02
-  levelName: "Tea Bitterness And Sweet Return"
-  cityName: "Chaozhou"
-  targetTasteName: "Speed Tutorial"
-  levelIntro: "Second lesson: grinding speed. Tea leaf carries bitterness and sweet return. If the speed is too fast, bitterness rushes out first and hides the later sweetness."
+  levelName: Tea Bitterness And Sweet Return
+  cityName: Chaozhou
+  targetTasteName: Speed Tutorial
+  levelIntro: 'Second lesson: grinding speed. Tea leaf carries bitterness and sweet
+    return. If the speed is too fast, bitterness rushes out first and hides the later
+    sweetness.'
   maxIngredientCount: 1
   availableIngredients:
   - {fileID: 1016333429}
@@ -3017,37 +3028,45 @@ MonoBehaviour:
     speed: 10
     grindDuration: 10
   unlockCluesOnComplete:
-  - clueId: "L02_Tea_Speed"
-    title: "Tea Leaf - Speed Clue"
-    content: "Tea leaf works best with slow grinding. Fast grinding releases bitterness before sweetness."
+  - clueId: L02_Tea_Speed
+    title: Tea Leaf - Speed Clue
+    content: Tea leaf works best with slow grinding. Fast grinding releases bitterness
+      before sweetness.
     relatedIngredients:
     - {fileID: 1016333429}
     relatedDimension: 5
   processFeedbackRules:
-  - ruleId: "L02_Process_Speed_Wrong"
+  - ruleId: L02_Process_Speed_Wrong
     priority: 30
-    requiredCorrect: []
+    requiredCorrect:
     requiredIncorrect: 05000000
-    hintText: "The speed is not right for tea yet. Keep it Slow so bitterness does not rush out before the sweet return."
-  - ruleId: "L02_Process_Duration_Wrong"
+    hintText: The speed is not right for tea yet. Keep it Slow so bitterness does
+      not rush out before the sweet return.
+  - ruleId: L02_Process_Duration_Wrong
     priority: 25
-    requiredCorrect: []
+    requiredCorrect:
     requiredIncorrect: 06000000
-    hintText: "Slow grinding does not mean endless grinding. Too much time still builds bitterness."
-  - ruleId: "L02_Process_All_Correct"
+    hintText: Slow grinding does not mean endless grinding. Too much time still builds
+      bitterness.
+  - ruleId: L02_Process_All_Correct
     priority: 1
     requiredCorrect: 0500000006000000
-    requiredIncorrect: []
-    hintText: "The speed and duration are correct. Keep Slow and avoid sudden acceleration."
-  fallbackHintText: "No new experiment conclusion is available yet. Keep the parts that are already correct and adjust only one uncertain mechanic at a time."
+    requiredIncorrect:
+    hintText: The speed and duration are correct. Keep Slow and avoid sudden acceleration.
+  fallbackHintText: No new experiment conclusion is available yet. Keep the parts
+    that are already correct and adjust only one uncertain mechanic at a time.
   progressiveHintRules:
-  - ruleId: "L02_Hint_Speed"
+  - ruleId: L02_Hint_Speed
     priority: 20
     mechanic: 5
-    hintText: "Tea needs time for the sweet return to appear. Set the grinding speed to Slow."
-  successFeedback: "The tea aroma opens slowly: first a clean bitterness, then a soft sweet return with stable layers."
-  closeFeedback: "The sweet return appears, but bitterness still arrives too early or too strongly. The speed is close; slow down or shorten the process a little."
-  wrongFeedback: "Bitterness bursts out and covers the tea aroma. The grinding speed is too fast or the process lasted too long."
+    hintText: Tea needs time for the sweet return to appear. Set the grinding speed
+      to Slow.
+  successFeedback: 'The tea aroma opens slowly: first a clean bitterness, then a
+    soft sweet return with stable layers.'
+  closeFeedback: The sweet return appears, but bitterness still arrives too early
+    or too strongly. The speed is close; slow down or shorten the process a little.
+  wrongFeedback: Bitterness bursts out and covers the tea aroma. The grinding speed
+    is too fast or the process lasted too long.
 --- !u!1 &744053906
 GameObject:
   m_ObjectHideFlags: 0
@@ -3078,8 +3097,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 74ee2f87a3260b1449613861aae929ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   mortarArea: {fileID: 1355524822}
   interactionCamera: {fileID: 0}
   speedLabel: {fileID: 2139522175}
@@ -3187,8 +3206,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: WhitePepper
   ingredientNameCN: White Pepper
   ingredientNameEN: White Pepper
@@ -3199,127 +3218,6 @@ MonoBehaviour:
   icon: {fileID: 0}
   prefab: {fileID: 0}
   defaultRatioValue: 1
---- !u!1 &821466087
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 821466088}
-  - component: {fileID: 821466091}
-  - component: {fileID: 821466090}
-  - component: {fileID: 821466089}
-  m_Layer: 0
-  m_Name: Check Grind Process
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &821466088
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 821466087}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1483794717}
-  m_Father: {fileID: 1647328222}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -24, y: 64}
-  m_SizeDelta: {x: 172, y: 36}
-  m_Pivot: {x: 1, y: 0}
---- !u!114 &821466089
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 821466087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 821466090}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &821466090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 821466087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.92, g: 0.92, b: 0.92, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &821466091
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 821466087}
-  m_CullTransparentMesh: 1
 --- !u!21 &868654530
 Material:
   serializedVersion: 8
@@ -3341,7 +3239,7 @@ Material:
     RenderType: Opaque
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -3492,8 +3390,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67435d8849b05a940a81cf20c6b33dc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredients:
   - {fileID: 2039003237}
   - {fileID: 1016333429}
@@ -3551,8 +3449,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 288c7ad8160413e4c821070940b95adc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   currentLevel: {fileID: 11400000, guid: e318f322cb0458142a05d302b01f4329, type: 2}
   uiManager: {fileID: 1647328223}
   forceController: {fileID: 146394429}
@@ -3578,8 +3476,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd58d34753613214da3fcba567f5dea2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   levels:
   - {fileID: 1518569878}
   - {fileID: 670413692}
@@ -3605,8 +3503,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7eb6e7d0c9a644f4fb6d9310f0951623, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!114 &912469145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3617,8 +3515,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 35b93f6a689bd8b4bbba3cef1d7c264c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!114 &912469146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3629,8 +3527,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f7c0de06ca240c44ad7a67d7179494f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   mortarArea: {fileID: 1355524822}
   attemptManager: {fileID: 912469142}
   hideLegacyDisplaysOnFirstRefresh: 1
@@ -3682,8 +3580,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.72}
   m_RaycastTarget: 1
@@ -3758,8 +3656,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.72}
   m_RaycastTarget: 1
@@ -3838,8 +3736,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.94}
   m_RaycastTarget: 1
@@ -3876,8 +3774,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: TeaLeaf
   ingredientNameCN: Tea Leaf
   ingredientNameEN: Tea Leaf
@@ -3909,7 +3807,7 @@ Material:
     RenderType: Opaque
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -4049,7 +3947,7 @@ Material:
     RenderType: Opaque
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -4215,8 +4113,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -4294,8 +4192,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -4375,8 +4273,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -4398,7 +4296,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 
+  m_Text:
 --- !u!222 &1181817892
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4456,8 +4354,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.72}
   m_RaycastTarget: 1
@@ -4494,8 +4392,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -4575,8 +4473,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -4642,7 +4540,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -12, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1207106656
 MonoBehaviour:
@@ -4654,11 +4552,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4666,7 +4564,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 18
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
@@ -4685,7 +4583,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1207106654}
-  m_CullTransparentMesh: 1
+  m_CullTransparentMesh: 0
 --- !u!1 &1219948506
 GameObject:
   m_ObjectHideFlags: 0
@@ -4733,8 +4631,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -4786,7 +4684,7 @@ Material:
     RenderType: Opaque
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -4953,8 +4851,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.72}
   m_RaycastTarget: 1
@@ -5111,8 +5009,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -5134,7 +5032,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 
+  m_Text:
 --- !u!222 &1302703798
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5263,13 +5161,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   levelID: L03
-  levelName: "Black Sesame Paste Aroma"
-  cityName: "Shunde"
-  targetTasteName: "Ratio Tutorial"
-  levelIntro: "Third lesson: ingredient ratio. Black sesame is the main aroma, while glutinous rice provides smoothness and body. Equal portions make the main note unclear."
+  levelName: Black Sesame Paste Aroma
+  cityName: Shunde
+  targetTasteName: Ratio Tutorial
+  levelIntro: 'Third lesson: ingredient ratio. Black sesame is the main aroma, while
+    glutinous rice provides smoothness and body. Equal portions make the main note
+    unclear.'
   maxIngredientCount: 2
   availableIngredients:
   - {fileID: 378791487}
@@ -5341,32 +5241,40 @@ MonoBehaviour:
     speed: 10
     grindDuration: 10
   unlockCluesOnComplete:
-  - clueId: "L03_BlackSesame_Ratio"
-    title: "Black Sesame - Ratio Clue"
-    content: "Black sesame is suited to the main note, but too much can become bitter and dominant."
+  - clueId: L03_BlackSesame_Ratio
+    title: Black Sesame - Ratio Clue
+    content: Black sesame is suited to the main note, but too much can become bitter
+      and dominant.
     relatedIngredients:
     - {fileID: 378791487}
     relatedDimension: 2
-  - clueId: "L03_GlutinousRice_Ratio"
-    title: "Glutinous Rice - Ratio Clue"
-    content: "Glutinous rice is suited to support texture and smoothness, not to lead the aroma."
+  - clueId: L03_GlutinousRice_Ratio
+    title: Glutinous Rice - Ratio Clue
+    content: Glutinous rice is suited to support texture and smoothness, not to lead
+      the aroma.
     relatedIngredients:
     - {fileID: 1989610468}
     relatedDimension: 2
   processFeedbackRules: []
-  fallbackHintText: "No new experiment conclusion is available yet. Keep the parts that are already correct and adjust only one uncertain mechanic at a time."
+  fallbackHintText: No new experiment conclusion is available yet. Keep the parts
+    that are already correct and adjust only one uncertain mechanic at a time.
   progressiveHintRules:
-  - ruleId: "L03_Hint_BlackSesame_Ratio"
+  - ruleId: L03_Hint_BlackSesame_Ratio
     priority: 21
     mechanic: 2
-    hintText: "The main aroma is not clear enough. Black sesame should be higher than glutinous rice."
-  - ruleId: "L03_Hint_GlutinousRice_Ratio"
+    hintText: The main aroma is not clear enough. Black sesame should be higher than
+      glutinous rice.
+  - ruleId: L03_Hint_GlutinousRice_Ratio
     priority: 20
     mechanic: 2
-    hintText: "The paste body is covering the sesame aroma. Reduce glutinous rice so it only supports the texture."
-  successFeedback: "Rich sesame aroma lands first, while glutinous rice supports the body from behind. The main and support roles are clear."
-  closeFeedback: "Sesame and glutinous rice are both present, but the hierarchy is still unclear. Keep black sesame as the main note and adjust the ratio."
-  wrongFeedback: "The aroma is buried by paste-like body, or the sesame bitterness is too heavy. The ratio does not form a clear main-support relationship."
+    hintText: The paste body is covering the sesame aroma. Reduce glutinous rice
+      so it only supports the texture.
+  successFeedback: Rich sesame aroma lands first, while glutinous rice supports the
+    body from behind. The main and support roles are clear.
+  closeFeedback: Sesame and glutinous rice are both present, but the hierarchy is
+    still unclear. Keep black sesame as the main note and adjust the ratio.
+  wrongFeedback: The aroma is buried by paste-like body, or the sesame bitterness
+    is too heavy. The ratio does not form a clear main-support relationship.
 --- !u!1 &1355524821
 GameObject:
   m_ObjectHideFlags: 0
@@ -5397,8 +5305,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b35d397f6e47894c9442ca70de3114a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   mortarCollider: {fileID: 0}
 --- !u!23 &1355524823
 MeshRenderer:
@@ -5521,8 +5429,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2eb25feca67fced49ac247b7c65adff0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientData: {fileID: 11400000, guid: 7d4739beb362291449dfafa1ed616f21, type: 2}
   attemptManager: {fileID: 912469142}
   mortarArea: {fileID: 1355524822}
@@ -5724,85 +5632,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1483794716
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1483794717}
-  - component: {fileID: 1483794719}
-  - component: {fileID: 1483794718}
-  m_Layer: 0
-  m_Name: Check Grind Process Text
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1483794717
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1483794716}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 821466088}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1483794718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1483794716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 4
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 1
-    m_LineSpacing: 1
-  m_Text: 
---- !u!222 &1483794719
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1483794716}
-  m_CullTransparentMesh: 1
 --- !u!1 &1484542257
 GameObject:
   m_ObjectHideFlags: 0
@@ -5850,8 +5679,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.35, g: 0.65, b: 0.95, a: 1}
   m_RaycastTarget: 1
@@ -6037,8 +5866,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -6081,8 +5910,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.92, g: 0.92, b: 0.92, a: 1}
   m_RaycastTarget: 1
@@ -6119,13 +5948,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   levelID: L01
-  levelName: "Rice Porridge Aroma"
-  cityName: "Guangzhou"
-  targetTasteName: "Force Tutorial"
-  levelIntro: "First lesson: grinding force. Rice has a gentle grain aroma that needs even pressure. Too light leaves it closed; too heavy overheats the powder and creates scorched notes."
+  levelName: Rice Porridge Aroma
+  cityName: Guangzhou
+  targetTasteName: Force Tutorial
+  levelIntro: 'First lesson: grinding force. Rice has a gentle grain aroma that needs
+    even pressure. Too light leaves it closed; too heavy overheats the powder and
+    creates scorched notes.'
   maxIngredientCount: 1
   availableIngredients:
   - {fileID: 2039003237}
@@ -6190,37 +6021,46 @@ MonoBehaviour:
     speed: 10
     grindDuration: 10
   unlockCluesOnComplete:
-  - clueId: "L01_Rice_Force"
-    title: "Rice - Force Clue"
-    content: "Rice works best with medium force. Too light keeps the aroma closed; too heavy heats the powder and creates scorched notes."
+  - clueId: L01_Rice_Force
+    title: Rice - Force Clue
+    content: Rice works best with medium force. Too light keeps the aroma closed;
+      too heavy heats the powder and creates scorched notes.
     relatedIngredients:
     - {fileID: 2039003237}
     relatedDimension: 4
   processFeedbackRules:
-  - ruleId: "L01_Process_Force_Wrong"
+  - ruleId: L01_Process_Force_Wrong
     priority: 30
-    requiredCorrect: []
+    requiredCorrect:
     requiredIncorrect: 04000000
-    hintText: "The force is not right for rice yet. Keep the slider near Medium: too light leaves grains closed, while too heavy creates heat."
-  - ruleId: "L01_Process_Duration_Wrong"
+    hintText: 'The force is not right for rice yet. Keep the slider near Medium:
+      too light leaves grains closed, while too heavy creates heat.'
+  - ruleId: L01_Process_Duration_Wrong
     priority: 25
-    requiredCorrect: []
+    requiredCorrect:
     requiredIncorrect: 06000000
-    hintText: "The grinding time is not right yet. Rice needs enough time to become fine, but overgrinding creates heat."
-  - ruleId: "L01_Process_All_Correct"
+    hintText: The grinding time is not right yet. Rice needs enough time to become
+      fine, but overgrinding creates heat.
+  - ruleId: L01_Process_All_Correct
     priority: 1
     requiredCorrect: 0400000006000000
-    requiredIncorrect: []
-    hintText: "The force and duration are correct. Keep this process."
-  fallbackHintText: "No new experiment conclusion is available yet. Keep the parts that are already correct and adjust only one uncertain mechanic at a time."
+    requiredIncorrect:
+    hintText: The force and duration are correct. Keep this process.
+  fallbackHintText: No new experiment conclusion is available yet. Keep the parts
+    that are already correct and adjust only one uncertain mechanic at a time.
   progressiveHintRules:
-  - ruleId: "L01_Hint_Force"
+  - ruleId: L01_Hint_Force
     priority: 20
     mechanic: 4
-    hintText: "Rice is gentle and does not need maximum force. Try keeping the force near the middle of the slider."
-  successFeedback: "A soft rice aroma spreads from the scent paper, like a fresh pot of morning porridge. The grains feel fine, the smell is clean and sweet, and the restoration is complete."
-  closeFeedback: "The rice aroma is present, but it still feels dull or slightly heated. The direction is close; refine the grinding process."
-  wrongFeedback: "The rice aroma was not released correctly. Too light leaves hard grains; too heavy or too long creates hot, scorched notes."
+    hintText: Rice is gentle and does not need maximum force. Try keeping the force
+      near the middle of the slider.
+  successFeedback: A soft rice aroma spreads from the scent paper, like a fresh pot
+    of morning porridge. The grains feel fine, the smell is clean and sweet, and
+    the restoration is complete.
+  closeFeedback: The rice aroma is present, but it still feels dull or slightly heated.
+    The direction is close; refine the grinding process.
+  wrongFeedback: The rice aroma was not released correctly. Too light leaves hard
+    grains; too heavy or too long creates hot, scorched notes.
 --- !u!114 &1538730806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6231,13 +6071,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   levelID: L08
-  levelName: "Lotus Leaf Sticky Rice"
-  cityName: "Zhaoqing"
-  targetTasteName: "Three-Dimension Challenge"
-  levelIntro: "Ratio, combination, and order are unlocked. Restore a layered steamed rice aroma: red bean base, glutinous rice body, a sesame tail, and a fragile lotus-leaf finish."
+  levelName: Lotus Leaf Sticky Rice
+  cityName: Zhaoqing
+  targetTasteName: Three-Dimension Challenge
+  levelIntro: 'Ratio, combination, and order are unlocked. Restore a layered steamed
+    rice aroma: red bean base, glutinous rice body, a sesame tail, and a fragile
+    lotus-leaf finish.'
   maxIngredientCount: 4
   availableIngredients:
   - {fileID: 1989610468}
@@ -6322,58 +6164,66 @@ MonoBehaviour:
     speed: 10
     grindDuration: 10
   unlockCluesOnComplete:
-  - clueId: "L08_LotusLeaf_Ratio"
-    title: "Lotus Leaf - Ratio Clue"
-    content: "Lotus leaf works best as a very low-ratio fresh accent."
+  - clueId: L08_LotusLeaf_Ratio
+    title: Lotus Leaf - Ratio Clue
+    content: Lotus leaf works best as a very low-ratio fresh accent.
     relatedIngredients:
     - {fileID: 1623195174}
     relatedDimension: 2
-  - clueId: "L08_LotusLeaf_Combination"
-    title: "Lotus Leaf - Combination Clue"
-    content: "Lotus leaf can be carried by glutinous rice, but it should not be ground with strong aromas like black sesame."
+  - clueId: L08_LotusLeaf_Combination
+    title: Lotus Leaf - Combination Clue
+    content: Lotus leaf can be carried by glutinous rice, but it should not be ground
+      with strong aromas like black sesame.
     relatedIngredients:
     - {fileID: 1623195174}
     relatedDimension: 3
-  - clueId: "L08_LotusLeaf_Order"
-    title: "Lotus Leaf - Order Clue"
-    content: "Lotus leaf works best at the end. Early or heavy handling removes its fresh aroma."
+  - clueId: L08_LotusLeaf_Order
+    title: Lotus Leaf - Order Clue
+    content: Lotus leaf works best at the end. Early or heavy handling removes its
+      fresh aroma.
     relatedIngredients:
     - {fileID: 1623195174}
     relatedDimension: 1
   processFeedbackRules: []
-  fallbackHintText: "No new experiment conclusion is available yet. Keep the parts that are already correct and adjust only one uncertain mechanic at a time."
+  fallbackHintText: No new experiment conclusion is available yet. Keep the parts
+    that are already correct and adjust only one uncertain mechanic at a time.
   progressiveHintRules:
-  - ruleId: "L08_Hint_RedBean_Ratio"
+  - ruleId: L08_Hint_RedBean_Ratio
     priority: 22
     mechanic: 2
-    hintText: "Red bean should form the thickest base note, higher than glutinous rice, sesame, and lotus leaf."
-  - ruleId: "L08_Hint_LotusLeaf_Ratio"
+    hintText: Red bean should form the thickest base note, higher than glutinous
+      rice, sesame, and lotus leaf.
+  - ruleId: L08_Hint_LotusLeaf_Ratio
     priority: 21
     mechanic: 2
-    hintText: "Lotus leaf is a light finishing aroma. Keep it at the lowest ratio."
-  - ruleId: "L08_Hint_Rice_Lotus_Combination"
+    hintText: Lotus leaf is a light finishing aroma. Keep it at the lowest ratio.
+  - ruleId: L08_Hint_Rice_Lotus_Combination
     priority: 20
     mechanic: 3
-    hintText: "Glutinous rice can carry the lotus-leaf aroma. Put glutinous rice and lotus leaf in the same group."
-  - ruleId: "L08_Hint_Sesame_Lotus_Combination"
+    hintText: Glutinous rice can carry the lotus-leaf aroma. Put glutinous rice and
+      lotus leaf in the same group.
+  - ruleId: L08_Hint_Sesame_Lotus_Combination
     priority: 19
     mechanic: 3
-    hintText: "Black sesame is too strong and can bury lotus leaf. Keep them separate."
-  - ruleId: "L08_Hint_RedBean_Order"
+    hintText: Black sesame is too strong and can bury lotus leaf. Keep them separate.
+  - ruleId: L08_Hint_RedBean_Order
     priority: 22
     mechanic: 1
-    hintText: "Red bean should build the base first. Put red bean in the first position."
-  - ruleId: "L08_Hint_LotusLeaf_Order"
+    hintText: Red bean should build the base first. Put red bean in the first position.
+  - ruleId: L08_Hint_LotusLeaf_Order
     priority: 21
     mechanic: 1
-    hintText: "Lotus leaf is fragile and should appear last."
-  - ruleId: "L08_Hint_Middle_Order"
+    hintText: Lotus leaf is fragile and should appear last.
+  - ruleId: L08_Hint_Middle_Order
     priority: 20
     mechanic: 1
-    hintText: "After red bean, let glutinous rice form body before adding a small amount of black sesame."
-  successFeedback: "Red bean forms the base, glutinous rice supports the body, black sesame adds tail depth, and lotus leaf lifts the finish."
-  closeFeedback: "The steamed rice direction appears, but lotus leaf, sesame, or red bean needs a more accurate role."
-  wrongFeedback: "Lotus leaf is crushed, or black sesame steals the main body."
+    hintText: After red bean, let glutinous rice form body before adding a small
+      amount of black sesame.
+  successFeedback: Red bean forms the base, glutinous rice supports the body, black
+    sesame adds tail depth, and lotus leaf lifts the finish.
+  closeFeedback: The steamed rice direction appears, but lotus leaf, sesame, or red
+    bean needs a more accurate role.
+  wrongFeedback: Lotus leaf is crushed, or black sesame steals the main body.
 --- !u!1 &1566221313
 GameObject:
   m_ObjectHideFlags: 0
@@ -6421,8 +6271,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -6444,7 +6294,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 
+  m_Text:
 --- !u!222 &1566221316
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6474,7 +6324,7 @@ Material:
     RenderType: Opaque
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -6628,7 +6478,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -12, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1586334689
 MonoBehaviour:
@@ -6640,8 +6490,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 0
@@ -6720,8 +6570,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.72}
   m_RaycastTarget: 1
@@ -6796,8 +6646,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.72}
   m_RaycastTarget: 1
@@ -6834,8 +6684,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: YangjiangDouchi
   ingredientNameCN: Yangjiang Douchi
   ingredientNameEN: Yangjiang Douchi
@@ -6856,8 +6706,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: LotusLeaf
   ingredientNameCN: Lotus Leaf
   ingredientNameEN: Lotus Leaf
@@ -6878,8 +6728,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: PeanutCrumb
   ingredientNameCN: Peanut Crumb
   ingredientNameEN: Peanut Crumb
@@ -6900,13 +6750,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   levelID: L06
-  levelName: "Salt-Baked Sand Ginger"
-  cityName: "Meizhou"
-  targetTasteName: "Two-Dimension Challenge"
-  levelIntro: "Force and ratio are unlocked. Sand ginger must open as the core aroma while coarse salt stays supportive and dried tangerine peel cleans the finish."
+  levelName: Salt-Baked Sand Ginger
+  cityName: Meizhou
+  targetTasteName: Two-Dimension Challenge
+  levelIntro: Force and ratio are unlocked. Sand ginger must open as the core aroma
+    while coarse salt stays supportive and dried tangerine peel cleans the finish.
   maxIngredientCount: 3
   availableIngredients:
   - {fileID: 185727215}
@@ -6985,51 +6836,61 @@ MonoBehaviour:
     speed: 10
     grindDuration: 10
   unlockCluesOnComplete:
-  - clueId: "L06_SandGinger_Force"
-    title: "Sand Ginger - Force Clue"
-    content: "Sand ginger likes MediumHigh force. Too light leaves it closed; too heavy makes it harsh."
+  - clueId: L06_SandGinger_Force
+    title: Sand Ginger - Force Clue
+    content: Sand ginger likes MediumHigh force. Too light leaves it closed; too
+      heavy makes it harsh.
     relatedIngredients:
     - {fileID: 185727215}
     relatedDimension: 4
-  - clueId: "L06_CoarseSalt_Ratio"
-    title: "Coarse Salt - Ratio Clue"
-    content: "Coarse salt should be used sparingly as support, not as the main note."
+  - clueId: L06_CoarseSalt_Ratio
+    title: Coarse Salt - Ratio Clue
+    content: Coarse salt should be used sparingly as support, not as the main note.
     relatedIngredients:
     - {fileID: 1778564978}
     relatedDimension: 2
   processFeedbackRules:
-  - ruleId: "L06_Process_Force_Wrong"
+  - ruleId: L06_Process_Force_Wrong
     priority: 30
-    requiredCorrect: []
+    requiredCorrect:
     requiredIncorrect: 04000000
-    hintText: "Sand ginger has not opened correctly yet. Use MediumHigh force, but do not push it to Heavy."
-  - ruleId: "L06_Process_Duration_Wrong"
+    hintText: Sand ginger has not opened correctly yet. Use MediumHigh force, but
+      do not push it to Heavy.
+  - ruleId: L06_Process_Duration_Wrong
     priority: 25
-    requiredCorrect: []
+    requiredCorrect:
     requiredIncorrect: 06000000
-    hintText: "The grinding duration is not right for the salt-baked sand ginger structure yet."
-  - ruleId: "L06_Process_All_Correct"
+    hintText: The grinding duration is not right for the salt-baked sand ginger structure
+      yet.
+  - ruleId: L06_Process_All_Correct
     priority: 1
     requiredCorrect: 0400000006000000
-    requiredIncorrect: []
-    hintText: "The process is correct. Keep MediumHigh force and check the ratio."
-  fallbackHintText: "No new experiment conclusion is available yet. Keep the parts that are already correct and adjust only one uncertain mechanic at a time."
+    requiredIncorrect:
+    hintText: The process is correct. Keep MediumHigh force and check the ratio.
+  fallbackHintText: No new experiment conclusion is available yet. Keep the parts
+    that are already correct and adjust only one uncertain mechanic at a time.
   progressiveHintRules:
-  - ruleId: "L06_Hint_SandGinger_Ratio"
+  - ruleId: L06_Hint_SandGinger_Ratio
     priority: 22
     mechanic: 2
-    hintText: "Sand ginger is the core of the salt-baked powder. It must have the highest ratio."
-  - ruleId: "L06_Hint_CoarseSalt_Ratio"
+    hintText: Sand ginger is the core of the salt-baked powder. It must have the
+      highest ratio.
+  - ruleId: L06_Hint_CoarseSalt_Ratio
     priority: 21
     mechanic: 2
-    hintText: "Salt is covering the spice. Coarse salt should be the lowest support note."
-  - ruleId: "L06_Hint_Peel_Ratio"
+    hintText: Salt is covering the spice. Coarse salt should be the lowest support
+      note.
+  - ruleId: L06_Hint_Peel_Ratio
     priority: 20
     mechanic: 2
-    hintText: "Dried peel is only a light finish, but it should still be more visible than coarse salt."
-  successFeedback: "Sand ginger opens clearly, dried peel brightens the finish, and coarse salt supports from below."
-  closeFeedback: "The sand ginger direction is right, but force or ratio is still unstable."
-  wrongFeedback: "Salt or citrus takes the front, and sand ginger does not open as the core aroma."
+    hintText: Dried peel is only a light finish, but it should still be more visible
+      than coarse salt.
+  successFeedback: Sand ginger opens clearly, dried peel brightens the finish, and
+    coarse salt supports from below.
+  closeFeedback: The sand ginger direction is right, but force or ratio is still
+    unstable.
+  wrongFeedback: Salt or citrus takes the front, and sand ginger does not open as
+    the core aroma.
 --- !u!1 &1647328221
 GameObject:
   m_ObjectHideFlags: 0
@@ -7077,7 +6938,6 @@ RectTransform:
   - {fileID: 2064681051}
   - {fileID: 974416906}
   - {fileID: 45700535}
-  - {fileID: 821466088}
   - {fileID: 122857148}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7096,8 +6956,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00decdbef39a024428fbd3b64a329388, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   attemptManager: {fileID: 912469142}
   evaluator: {fileID: 912469145}
   hintManager: {fileID: 912469144}
@@ -7119,7 +6979,7 @@ MonoBehaviour:
   - {fileID: 421399937}
   - {fileID: 39404568}
   experimentLogButton: {fileID: 45700536}
-  processCheckButton: {fileID: 821466089}
+  processCheckButton: {fileID: 0}
   evaluateButton: {fileID: 2060927022}
   resetAttemptButton: {fileID: 1838303433}
   nextLevelButton: {fileID: 2064681052}
@@ -7135,8 +6995,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a88cee3063ce8044d8a397970a5156d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   logText: {fileID: 0}
   maxVisibleRecords: 5
 --- !u!114 &1647328225
@@ -7149,8 +7009,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_IgnoreReversedGraphics: 1
   m_BlockingObjects: 0
   m_BlockingMask:
@@ -7166,8 +7026,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
@@ -7237,7 +7097,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -12, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1648775671
 MonoBehaviour:
@@ -7249,11 +7109,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -7261,7 +7121,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 18
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
@@ -7270,7 +7130,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Next Level
 --- !u!222 &1648775672
@@ -7280,7 +7140,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1648775669}
-  m_CullTransparentMesh: 1
+  m_CullTransparentMesh: 0
 --- !u!1 &1742555354
 GameObject:
   m_ObjectHideFlags: 0
@@ -7328,8 +7188,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -7366,13 +7226,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   levelID: L10
-  levelName: "Ginger Scallion Dipping Sauce"
-  cityName: "Zhanjiang"
-  targetTasteName: "Final Free Challenge"
-  levelIntro: "All core dimensions are unlocked. Restore the full ginger-scallion dipping sauce structure with a salt base, sand ginger body, ginger freshness, and scallion finish."
+  levelName: Ginger Scallion Dipping Sauce
+  cityName: Zhanjiang
+  targetTasteName: Final Free Challenge
+  levelIntro: All core dimensions are unlocked. Restore the full ginger-scallion
+    dipping sauce structure with a salt base, sand ginger body, ginger freshness,
+    and scallion finish.
   maxIngredientCount: 4
   availableIngredients:
   - {fileID: 185727215}
@@ -7386,7 +7248,7 @@ MonoBehaviour:
   - {fileID: 1778564978}
   forbiddenIngredients: []
   unlockedDimensions: 040000000500000002000000030000000100000006000000
-  lockedDimensions: []
+  lockedDimensions:
   correctIngredientOrder:
   - {fileID: 1778564978}
   - {fileID: 185727215}
@@ -7457,81 +7319,98 @@ MonoBehaviour:
     speed: 10
     grindDuration: 10
   unlockCluesOnComplete:
-  - clueId: "L10_Ginger_Combination"
-    title: "Ginger Combination Clue"
-    content: "Sand ginger and ginger can be partly ground together so the main ginger body and fresh spice connect naturally."
+  - clueId: L10_Ginger_Combination
+    title: Ginger Combination Clue
+    content: Sand ginger and ginger can be partly ground together so the main ginger
+      body and fresh spice connect naturally.
     relatedIngredients:
     - {fileID: 185727215}
     - {fileID: 1870811157}
     relatedDimension: 3
-  - clueId: "L10_Scallion_Order"
-    title: "Scallion White - Order Clue"
-    content: "Scallion white works best at the end and should not be overground with strong spicy ingredients."
+  - clueId: L10_Scallion_Order
+    title: Scallion White - Order Clue
+    content: Scallion white works best at the end and should not be overground with
+      strong spicy ingredients.
     relatedIngredients:
     - {fileID: 126495275}
     relatedDimension: 1
   processFeedbackRules:
-  - ruleId: "L10_Process_Force_Wrong"
+  - ruleId: L10_Process_Force_Wrong
     priority: 30
-    requiredCorrect: []
+    requiredCorrect:
     requiredIncorrect: 04000000
-    hintText: "Sand ginger needs MediumHigh force. Too little force keeps it closed; too much makes it harsh."
-  - ruleId: "L10_Process_Speed_Wrong"
+    hintText: Sand ginger needs MediumHigh force. Too little force keeps it closed;
+      too much makes it harsh.
+  - ruleId: L10_Process_Speed_Wrong
     priority: 25
-    requiredCorrect: []
+    requiredCorrect:
     requiredIncorrect: 05000000
-    hintText: "Ginger needs Medium speed so the spice does not suddenly cover the sand ginger."
-  - ruleId: "L10_Process_Duration_Wrong"
+    hintText: Ginger needs Medium speed so the spice does not suddenly cover the
+      sand ginger.
+  - ruleId: L10_Process_Duration_Wrong
     priority: 20
-    requiredCorrect: []
+    requiredCorrect:
     requiredIncorrect: 06000000
-    hintText: "The whole process has gone too long or not long enough. Protect the fresh scallion finish."
-  - ruleId: "L10_Process_All_Correct"
+    hintText: The whole process has gone too long or not long enough. Protect the
+      fresh scallion finish.
+  - ruleId: L10_Process_All_Correct
     priority: 1
     requiredCorrect: 040000000500000006000000
-    requiredIncorrect: []
-    hintText: "Force, speed, and duration are in the target range. Submit the final aroma evaluation."
-  fallbackHintText: "No new experiment conclusion is available yet. Keep the parts that are already correct and adjust only one uncertain mechanic at a time."
+    requiredIncorrect:
+    hintText: Force, speed, and duration are in the target range. Submit the final
+      aroma evaluation.
+  fallbackHintText: No new experiment conclusion is available yet. Keep the parts
+    that are already correct and adjust only one uncertain mechanic at a time.
   progressiveHintRules:
-  - ruleId: "L10_Hint_SandGinger_Ratio"
+  - ruleId: L10_Hint_SandGinger_Ratio
     priority: 22
     mechanic: 2
-    hintText: "Sand ginger is the main body of the sauce and should have the highest ratio."
-  - ruleId: "L10_Hint_CoarseSalt_Ratio"
+    hintText: Sand ginger is the main body of the sauce and should have the highest
+      ratio.
+  - ruleId: L10_Hint_CoarseSalt_Ratio
     priority: 21
     mechanic: 2
-    hintText: "Coarse salt only supports the base, so it should stay at the lowest ratio."
-  - ruleId: "L10_Hint_Scallion_Ratio"
+    hintText: Coarse salt only supports the base, so it should stay at the lowest
+      ratio.
+  - ruleId: L10_Hint_Scallion_Ratio
     priority: 20
     mechanic: 2
-    hintText: "Scallion is light, but it should still be more visible than coarse salt to leave a fresh finish."
-  - ruleId: "L10_Hint_Ginger_Combination"
+    hintText: Scallion is light, but it should still be more visible than coarse
+      salt to leave a fresh finish.
+  - ruleId: L10_Hint_Ginger_Combination
     priority: 22
     mechanic: 3
-    hintText: "Sand ginger and ginger can be partly ground together so the two ginger aromas connect naturally."
-  - ruleId: "L10_Hint_Scallion_Combination"
+    hintText: Sand ginger and ginger can be partly ground together so the two ginger
+      aromas connect naturally.
+  - ruleId: L10_Hint_Scallion_Combination
     priority: 21
     mechanic: 3
-    hintText: "Scallion is fragile. Keep it separate and handle it lightly instead of grinding it with ginger."
-  - ruleId: "L10_Hint_CoarseSalt_Combination"
+    hintText: Scallion is fragile. Keep it separate and handle it lightly instead
+      of grinding it with ginger.
+  - ruleId: L10_Hint_CoarseSalt_Combination
     priority: 20
     mechanic: 3
-    hintText: "Coarse salt can be crushed separately to form the salty base; it does not need to join the spice group."
-  - ruleId: "L10_Hint_CoarseSalt_Order"
+    hintText: Coarse salt can be crushed separately to form the salty base; it does
+      not need to join the spice group.
+  - ruleId: L10_Hint_CoarseSalt_Order
     priority: 22
     mechanic: 1
-    hintText: "Coarse salt should be crushed first to establish the base saltiness."
-  - ruleId: "L10_Hint_Ginger_Order"
+    hintText: Coarse salt should be crushed first to establish the base saltiness.
+  - ruleId: L10_Hint_Ginger_Order
     priority: 21
     mechanic: 1
-    hintText: "Sand ginger should establish the main body first, then ginger joins in the middle."
-  - ruleId: "L10_Hint_Scallion_Order"
+    hintText: Sand ginger should establish the main body first, then ginger joins
+      in the middle.
+  - ruleId: L10_Hint_Scallion_Order
     priority: 20
     mechanic: 1
-    hintText: "Scallion must be handled last so the bright green finish remains."
-  successFeedback: "Salt supports the base, sand ginger opens depth, ginger adds freshness, and scallion preserves the final green aroma."
-  closeFeedback: "The dipping sauce is close, but scallion, ginger grouping, or final order still needs adjustment."
-  wrongFeedback: "Ginger is too harsh, scallion is crushed, or salt steals the main role."
+    hintText: Scallion must be handled last so the bright green finish remains.
+  successFeedback: Salt supports the base, sand ginger opens depth, ginger adds freshness,
+    and scallion preserves the final green aroma.
+  closeFeedback: The dipping sauce is close, but scallion, ginger grouping, or final
+    order still needs adjustment.
+  wrongFeedback: Ginger is too harsh, scallion is crushed, or salt steals the main
+    role.
 --- !u!114 &1778564978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7542,8 +7421,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: CoarseSalt
   ingredientNameCN: Coarse Salt
   ingredientNameEN: Coarse Salt
@@ -7601,8 +7480,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -7669,11 +7548,11 @@ RectTransform:
   - {fileID: 1586334688}
   m_Father: {fileID: 1647328222}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -410, y: 145}
-  m_SizeDelta: {x: 170, y: 42}
-  m_Pivot: {x: 0.5, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 250, y: -100}
+  m_SizeDelta: {x: 150, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1838303433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7684,8 +7563,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -7728,10 +7607,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.72}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7766,8 +7645,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: Ginger
   ingredientNameCN: Ginger
   ingredientNameEN: Ginger
@@ -7806,8 +7685,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
@@ -7826,8 +7705,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
@@ -7856,8 +7735,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: RockSugar
   ingredientNameCN: Rock Sugar
   ingredientNameEN: Rock Sugar
@@ -7916,8 +7795,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.72}
   m_RaycastTarget: 1
@@ -7954,8 +7833,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: Chili
   ingredientNameCN: Chili
   ingredientNameEN: Chili
@@ -7976,13 +7855,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   levelID: L09
-  levelName: "Douchi Steamed Fish"
-  cityName: "Yangjiang"
-  targetTasteName: "Four-Dimension Challenge"
-  levelIntro: "Force, speed, ratio, order, and duration are unlocked. Yangjiang douchi should become the savory core, with ginger in the middle and peel cleaning the finish."
+  levelName: Douchi Steamed Fish
+  cityName: Yangjiang
+  targetTasteName: Four-Dimension Challenge
+  levelIntro: Force, speed, ratio, order, and duration are unlocked. Yangjiang douchi
+    should become the savory core, with ginger in the middle and peel cleaning the
+    finish.
   maxIngredientCount: 4
   availableIngredients:
   - {fileID: 1608869541}
@@ -8068,76 +7949,88 @@ MonoBehaviour:
     speed: 10
     grindDuration: 10
   unlockCluesOnComplete:
-  - clueId: "L09_Douchi_Force"
-    title: "Yangjiang Douchi - Force Clue"
-    content: "Yangjiang douchi likes Medium force. Too light keeps it closed; too heavy makes fermentation dull or muddy."
+  - clueId: L09_Douchi_Force
+    title: Yangjiang Douchi - Force Clue
+    content: Yangjiang douchi likes Medium force. Too light keeps it closed; too
+      heavy makes fermentation dull or muddy.
     relatedIngredients:
     - {fileID: 1608869541}
     relatedDimension: 4
-  - clueId: "L09_Douchi_Ratio"
-    title: "Yangjiang Douchi - Ratio Clue"
-    content: "Yangjiang douchi can lead the savory aroma, but too much makes the structure heavy."
+  - clueId: L09_Douchi_Ratio
+    title: Yangjiang Douchi - Ratio Clue
+    content: Yangjiang douchi can lead the savory aroma, but too much makes the structure
+      heavy.
     relatedIngredients:
     - {fileID: 1608869541}
     relatedDimension: 2
-  - clueId: "L09_Ginger_Speed"
-    title: "Ginger - Speed Clue"
-    content: "Ginger works best at Medium speed. Too fast makes the spice rush forward."
+  - clueId: L09_Ginger_Speed
+    title: Ginger - Speed Clue
+    content: Ginger works best at Medium speed. Too fast makes the spice rush forward.
     relatedIngredients:
     - {fileID: 1870811157}
     relatedDimension: 5
-  - clueId: "L09_Ginger_Order"
-    title: "Ginger - Order Clue"
-    content: "Ginger works well in the middle, opening freshness after the main body is established."
+  - clueId: L09_Ginger_Order
+    title: Ginger - Order Clue
+    content: Ginger works well in the middle, opening freshness after the main body
+      is established.
     relatedIngredients:
     - {fileID: 1870811157}
     relatedDimension: 1
   processFeedbackRules:
-  - ruleId: "L09_Process_Force_Wrong"
+  - ruleId: L09_Process_Force_Wrong
     priority: 30
-    requiredCorrect: []
+    requiredCorrect:
     requiredIncorrect: 04000000
-    hintText: "Yangjiang douchi is not opening correctly yet. Use Medium force; too light stays closed and too heavy turns muddy."
-  - ruleId: "L09_Process_Speed_Wrong"
+    hintText: Yangjiang douchi is not opening correctly yet. Use Medium force; too
+      light stays closed and too heavy turns muddy.
+  - ruleId: L09_Process_Speed_Wrong
     priority: 25
-    requiredCorrect: []
+    requiredCorrect:
     requiredIncorrect: 05000000
-    hintText: "Ginger is releasing at the wrong pace. Adjust the pestle movement to Medium speed."
-  - ruleId: "L09_Process_Duration_Wrong"
+    hintText: Ginger is releasing at the wrong pace. Adjust the pestle movement to
+      Medium speed.
+  - ruleId: L09_Process_Duration_Wrong
     priority: 20
-    requiredCorrect: []
+    requiredCorrect:
     requiredIncorrect: 06000000
-    hintText: "The grinding duration is not right for the douchi structure yet."
-  - ruleId: "L09_Process_All_Correct"
+    hintText: The grinding duration is not right for the douchi structure yet.
+  - ruleId: L09_Process_All_Correct
     priority: 1
     requiredCorrect: 040000000500000006000000
-    requiredIncorrect: []
-    hintText: "The force, speed, and duration are correct. Continue checking ratio and order."
-  fallbackHintText: "No new experiment conclusion is available yet. Keep the parts that are already correct and adjust only one uncertain mechanic at a time."
+    requiredIncorrect:
+    hintText: The force, speed, and duration are correct. Continue checking ratio
+      and order.
+  fallbackHintText: No new experiment conclusion is available yet. Keep the parts
+    that are already correct and adjust only one uncertain mechanic at a time.
   progressiveHintRules:
-  - ruleId: "L09_Hint_Douchi_Ratio"
+  - ruleId: L09_Hint_Douchi_Ratio
     priority: 22
     mechanic: 2
-    hintText: "Yangjiang douchi must carry the savory main body, so it should have the highest ratio."
-  - ruleId: "L09_Hint_CoarseSalt_Ratio"
+    hintText: Yangjiang douchi must carry the savory main body, so it should have
+      the highest ratio.
+  - ruleId: L09_Hint_CoarseSalt_Ratio
     priority: 21
     mechanic: 2
-    hintText: "Coarse salt is only support and should stay at the lowest ratio."
-  - ruleId: "L09_Hint_Douchi_Order"
+    hintText: Coarse salt is only support and should stay at the lowest ratio.
+  - ruleId: L09_Hint_Douchi_Order
     priority: 22
     mechanic: 1
-    hintText: "Build the fermented savory base with douchi first."
-  - ruleId: "L09_Hint_Ginger_Order"
+    hintText: Build the fermented savory base with douchi first.
+  - ruleId: L09_Hint_Ginger_Order
     priority: 21
     mechanic: 1
-    hintText: "Ginger works in the middle, after douchi and before the finishing peel."
-  - ruleId: "L09_Hint_Tail_Order"
+    hintText: Ginger works in the middle, after douchi and before the finishing peel.
+  - ruleId: L09_Hint_Tail_Order
     priority: 20
     mechanic: 1
-    hintText: "Dried peel cleans the finish, while coarse salt is only a small base correction."
-  successFeedback: "Douchi becomes the savory core, ginger opens freshness, salt supports, and peel cleans the finish."
-  closeFeedback: "The douchi body is present, but ginger, salt, or peel still needs a better position."
-  wrongFeedback: "Salt is too heavy, ginger is too sharp, or peel bitterness arrives too early."
+    hintText: Dried peel cleans the finish, while coarse salt is only a small base
+      correction.
+  successFeedback: Douchi becomes the savory core, ginger opens freshness, salt supports,
+    and peel cleans the finish.
+  closeFeedback: The douchi body is present, but ginger, salt, or peel still needs
+    a better position.
+  wrongFeedback: Salt is too heavy, ginger is too sharp, or peel bitterness arrives
+    too early.
 --- !u!114 &1989610468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8148,8 +8041,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: GlutinousRice
   ingredientNameCN: Glutinous Rice
   ingredientNameEN: Glutinous Rice
@@ -8188,8 +8081,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Version: 3
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -8291,8 +8184,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   ingredientID: Rice
   ingredientNameCN: Rice
   ingredientNameEN: Rice
@@ -8352,8 +8245,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -8396,10 +8289,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.72}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8473,8 +8366,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -8517,10 +8410,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.72}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8566,7 +8459,7 @@ Material:
     RenderType: Opaque
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -8695,13 +8588,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   levelID: L05
-  levelName: "Tangerine Red Bean Sweetness"
-  cityName: "Jiangmen"
-  targetTasteName: "Order Tutorial"
-  levelIntro: "Fifth lesson: ingredient order. Red bean builds the base, dried tangerine peel lifts the middle aroma, and rock sugar rounds the finish. Wrong order can let sweetness or bitterness cover the body."
+  levelName: Tangerine Red Bean Sweetness
+  cityName: Jiangmen
+  targetTasteName: Order Tutorial
+  levelIntro: 'Fifth lesson: ingredient order. Red bean builds the base, dried tangerine
+    peel lifts the middle aroma, and rock sugar rounds the finish. Wrong order can
+    let sweetness or bitterness cover the body.'
   maxIngredientCount: 3
   availableIngredients:
   - {fileID: 345734362}
@@ -8780,42 +8675,49 @@ MonoBehaviour:
     speed: 10
     grindDuration: 10
   unlockCluesOnComplete:
-  - clueId: "L05_RedBean_Order"
-    title: "Red Bean - Order Clue"
-    content: "Red bean works well early because it builds the base body."
+  - clueId: L05_RedBean_Order
+    title: Red Bean - Order Clue
+    content: Red bean works well early because it builds the base body.
     relatedIngredients:
     - {fileID: 345734362}
     relatedDimension: 1
-  - clueId: "L05_Peel_Order"
-    title: "Dried Tangerine Peel - Order Clue"
-    content: "Dried tangerine peel works better later. Too early can release bitterness."
+  - clueId: L05_Peel_Order
+    title: Dried Tangerine Peel - Order Clue
+    content: Dried tangerine peel works better later. Too early can release bitterness.
     relatedIngredients:
     - {fileID: 572168203}
     relatedDimension: 1
-  - clueId: "L05_RockSugar_Order"
-    title: "Rock Sugar - Order Clue"
-    content: "Rock Sugar works best at the end to round sweetness."
+  - clueId: L05_RockSugar_Order
+    title: Rock Sugar - Order Clue
+    content: Rock Sugar works best at the end to round sweetness.
     relatedIngredients:
     - {fileID: 1919107170}
     relatedDimension: 1
   processFeedbackRules: []
-  fallbackHintText: "No new experiment conclusion is available yet. Keep the parts that are already correct and adjust only one uncertain mechanic at a time."
+  fallbackHintText: No new experiment conclusion is available yet. Keep the parts
+    that are already correct and adjust only one uncertain mechanic at a time.
   progressiveHintRules:
-  - ruleId: "L05_Hint_RedBean_Order"
+  - ruleId: L05_Hint_RedBean_Order
     priority: 22
     mechanic: 1
-    hintText: "The thick red bean aroma should form the base first. Place red bean before dried tangerine peel and rock sugar."
-  - ruleId: "L05_Hint_Peel_Order"
+    hintText: The thick red bean aroma should form the base first. Place red bean
+      before dried tangerine peel and rock sugar.
+  - ruleId: L05_Hint_Peel_Order
     priority: 21
     mechanic: 1
-    hintText: "Dried tangerine peel is appearing too early. It should be later so bitterness does not cover the bean aroma."
-  - ruleId: "L05_Hint_RockSugar_Order"
+    hintText: Dried tangerine peel is appearing too early. It should be later so
+      bitterness does not cover the bean aroma.
+  - ruleId: L05_Hint_RockSugar_Order
     priority: 20
     mechanic: 1
-    hintText: "Sweetness should not take the lead. Add rock sugar last to round the finish."
-  successFeedback: "The red bean body opens first, dried tangerine peel lifts the middle, and rock sugar gives a clean warm finish."
-  closeFeedback: "The flavor is layered, but one note is out of order. Red bean should be early, and the finishing note should arrive later."
-  wrongFeedback: "Bitterness, sweetness, or peel aroma appears before the red bean body. The order is disrupted."
+    hintText: Sweetness should not take the lead. Add rock sugar last to round the
+      finish.
+  successFeedback: The red bean body opens first, dried tangerine peel lifts the
+    middle, and rock sugar gives a clean warm finish.
+  closeFeedback: The flavor is layered, but one note is out of order. Red bean should
+    be early, and the finishing note should arrive later.
+  wrongFeedback: Bitterness, sweetness, or peel aroma appears before the red bean
+    body. The order is disrupted.
 --- !u!1 &2124372570
 GameObject:
   m_ObjectHideFlags: 0
@@ -8865,8 +8767,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -8909,8 +8811,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0.92, g: 0.92, b: 0.92, a: 1}
   m_RaycastTarget: 1
@@ -8965,8 +8867,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
@@ -9026,13 +8928,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
   levelID: L07
-  levelName: "White Pepper Soup Aroma"
-  cityName: "Shantou"
-  targetTasteName: "Two-Dimension Challenge"
-  levelIntro: "Speed and combination are unlocked. White pepper is sharp and must be handled at a controlled speed, while peanut and dried tangerine peel should not force the aroma into one harsh blend."
+  levelName: White Pepper Soup Aroma
+  cityName: Shantou
+  targetTasteName: Two-Dimension Challenge
+  levelIntro: Speed and combination are unlocked. White pepper is sharp and must
+    be handled at a controlled speed, while peanut and dried tangerine peel should
+    not force the aroma into one harsh blend.
   maxIngredientCount: 3
   availableIngredients:
   - {fileID: 794819427}
@@ -9111,47 +9015,57 @@ MonoBehaviour:
     speed: 10
     grindDuration: 10
   unlockCluesOnComplete:
-  - clueId: "L07_WhitePepper_Speed"
-    title: "White Pepper - Speed Clue"
-    content: "White pepper works best at Medium speed. Too fast makes it harsh; too slow leaves it under-released."
+  - clueId: L07_WhitePepper_Speed
+    title: White Pepper - Speed Clue
+    content: White pepper works best at Medium speed. Too fast makes it harsh; too
+      slow leaves it under-released.
     relatedIngredients:
     - {fileID: 794819427}
     relatedDimension: 5
-  - clueId: "L07_WhitePepper_Combination"
-    title: "White Pepper - Combination Clue"
-    content: "White pepper should not be overworked with bitter or sharp ingredients such as dried tangerine peel."
+  - clueId: L07_WhitePepper_Combination
+    title: White Pepper - Combination Clue
+    content: White pepper should not be overworked with bitter or sharp ingredients
+      such as dried tangerine peel.
     relatedIngredients:
     - {fileID: 794819427}
     relatedDimension: 3
   processFeedbackRules:
-  - ruleId: "L07_Process_Speed_Wrong"
+  - ruleId: L07_Process_Speed_Wrong
     priority: 30
-    requiredCorrect: []
+    requiredCorrect:
     requiredIncorrect: 05000000
-    hintText: "White pepper is not releasing at the right pace yet. Adjust the pestle movement to Medium speed."
-  - ruleId: "L07_Process_Duration_Wrong"
+    hintText: White pepper is not releasing at the right pace yet. Adjust the pestle
+      movement to Medium speed.
+  - ruleId: L07_Process_Duration_Wrong
     priority: 25
-    requiredCorrect: []
+    requiredCorrect:
     requiredIncorrect: 06000000
-    hintText: "The grinding duration is not right yet. Avoid overworking the sharp pepper aroma."
-  - ruleId: "L07_Process_All_Correct"
+    hintText: The grinding duration is not right yet. Avoid overworking the sharp
+      pepper aroma.
+  - ruleId: L07_Process_All_Correct
     priority: 1
     requiredCorrect: 0500000006000000
-    requiredIncorrect: []
-    hintText: "The speed and duration are correct. Now focus on ingredient grouping."
-  fallbackHintText: "No new experiment conclusion is available yet. Keep the parts that are already correct and adjust only one uncertain mechanic at a time."
+    requiredIncorrect:
+    hintText: The speed and duration are correct. Now focus on ingredient grouping.
+  fallbackHintText: No new experiment conclusion is available yet. Keep the parts
+    that are already correct and adjust only one uncertain mechanic at a time.
   progressiveHintRules:
-  - ruleId: "L07_Hint_Separate_Combination"
+  - ruleId: L07_Hint_Separate_Combination
     priority: 21
     mechanic: 3
-    hintText: "White pepper, peanut, and dried tangerine peel release differently. Try handling them as separate groups."
-  - ruleId: "L07_Hint_Pepper_Peel"
+    hintText: White pepper, peanut, and dried tangerine peel release differently.
+      Try handling them as separate groups.
+  - ruleId: L07_Hint_Pepper_Peel
     priority: 20
     mechanic: 3
-    hintText: "Grinding white pepper with dried tangerine peel can make spice and bitterness rush out together. Separate them."
-  successFeedback: "White pepper stays clear without choking, peanut keeps warmth, and dried peel finishes lightly."
-  closeFeedback: "The aroma direction is close, but some ingredients still interfere with each other."
-  wrongFeedback: "White pepper is too harsh, or dried peel bitterness suppresses the warm peanut note."
+    hintText: Grinding white pepper with dried tangerine peel can make spice and
+      bitterness rush out together. Separate them.
+  successFeedback: White pepper stays clear without choking, peanut keeps warmth,
+    and dried peel finishes lightly.
+  closeFeedback: The aroma direction is close, but some ingredients still interfere
+    with each other.
+  wrongFeedback: White pepper is too harsh, or dried peel bitterness suppresses the
+    warm peanut note.
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
