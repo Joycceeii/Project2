@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Peanut
   m_EditorClassIdentifier: 
   ingredientID: Peanut
-  ingredientNameCN: "\u82B1\u751F"
+  ingredientNameCN: Peanut
   ingredientNameEN: Peanut
   aromaType: nutty
   ingredientColor: {r: 0.72, g: 0.48, b: 0.27, a: 1}

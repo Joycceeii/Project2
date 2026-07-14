@@ -108,6 +108,45 @@ namespace TheTasteReviver
         }
     }
 
+    [Serializable]
+    public class LevelClueData
+    {
+        public string clueId;
+        public string title;
+        [TextArea] public string content;
+        public List<IngredientData> relatedIngredients = new List<IngredientData>();
+        public MechanicType relatedDimension = MechanicType.IngredientSelection;
+
+        public string ToLogText()
+        {
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                return content;
+            }
+
+            return "[" + title + "]\n" + content;
+        }
+    }
+
+    [Serializable]
+    public class ProcessFeedbackRule
+    {
+        public string ruleId;
+        public int priority;
+        public List<MechanicType> requiredCorrect = new List<MechanicType>();
+        public List<MechanicType> requiredIncorrect = new List<MechanicType>();
+        [TextArea] public string hintText;
+    }
+
+    [Serializable]
+    public class ProgressiveHintRule
+    {
+        public string ruleId;
+        public int priority;
+        public MechanicType mechanic = MechanicType.IngredientSelection;
+        [TextArea] public string hintText;
+    }
+
     [CreateAssetMenu(menuName = "The Taste Reviver/Recipe Level Data", fileName = "RecipeLevelData")]
     public class RecipeLevelData : ScriptableObject
     {
@@ -115,10 +154,13 @@ namespace TheTasteReviver
         public string levelName;
         public string cityName;
         public string targetTasteName;
+        [TextArea] public string levelIntro;
         [Range(1, 4)] public int maxIngredientCount = 4;
         public List<IngredientData> availableIngredients = new List<IngredientData>();
         public List<IngredientData> requiredIngredients = new List<IngredientData>();
         public List<IngredientData> forbiddenIngredients = new List<IngredientData>();
+        public List<MechanicType> unlockedDimensions = new List<MechanicType>();
+        public List<MechanicType> lockedDimensions = new List<MechanicType>();
         public List<IngredientData> correctIngredientOrder = new List<IngredientData>();
         public List<RatioRequirement> correctRatioPattern = new List<RatioRequirement>();
         public CombinationPattern correctCombinationPattern = new CombinationPattern();
@@ -131,5 +173,36 @@ namespace TheTasteReviver
         public FeedbackTextData feedbackTexts = new FeedbackTextData();
         public HintSettings hintSettings = new HintSettings();
         public ScoringWeights scoringWeights = new ScoringWeights();
+        public List<LevelClueData> unlockCluesOnComplete = new List<LevelClueData>();
+        public List<ProcessFeedbackRule> processFeedbackRules = new List<ProcessFeedbackRule>();
+        [TextArea] public string fallbackHintText;
+        public List<ProgressiveHintRule> progressiveHintRules = new List<ProgressiveHintRule>();
+        [TextArea] public string successFeedback;
+        [TextArea] public string closeFeedback;
+        [TextArea] public string wrongFeedback;
+
+        public void SyncDimensionsFromEnabledMechanics()
+        {
+            unlockedDimensions.Clear();
+            lockedDimensions.Clear();
+
+            AddDimension(MechanicType.Force, enabledMechanics.enableForce);
+            AddDimension(MechanicType.Speed, enabledMechanics.enableSpeed);
+            AddDimension(MechanicType.Ratio, enabledMechanics.enableRatio);
+            AddDimension(MechanicType.Combination, enabledMechanics.enableCombination);
+            AddDimension(MechanicType.IngredientOrder, enabledMechanics.enableIngredientOrder);
+        }
+
+        private void AddDimension(MechanicType mechanic, bool unlocked)
+        {
+            if (unlocked)
+            {
+                unlockedDimensions.Add(mechanic);
+            }
+            else
+            {
+                lockedDimensions.Add(mechanic);
+            }
+        }
     }
 }

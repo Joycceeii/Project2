@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Rice
   m_EditorClassIdentifier: 
   ingredientID: Rice
-  ingredientNameCN: "\u7C73"
+  ingredientNameCN: Rice
   ingredientNameEN: Rice
   aromaType: clean grain
   ingredientColor: {r: 0.95, g: 0.9, b: 0.75, a: 1}

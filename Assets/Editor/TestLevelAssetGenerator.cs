@@ -4,6 +4,7 @@ using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 namespace TheTasteReviver.EditorTools
@@ -28,7 +29,10 @@ namespace TheTasteReviver.EditorTools
                     GenerateAll();
                 }
 
-                EnsureExperimentLogScene();
+                if (!EditorApplication.isPlayingOrWillChangePlaymode)
+                {
+                    CleanDuplicateEventSystemsInOpenScenes(false);
+                }
             };
         }
 
@@ -59,7 +63,7 @@ namespace TheTasteReviver.EditorTools
                 return;
             }
 
-            TestLevelInitializer initializer = Object.FindObjectOfType<TestLevelInitializer>();
+            TestLevelInitializer initializer = Object.FindFirstObjectByType<TestLevelInitializer>();
             if (initializer == null)
             {
                 GameObject initializerObject = new GameObject("Taste Restorer Reusable Test Level");
@@ -86,7 +90,7 @@ namespace TheTasteReviver.EditorTools
         [MenuItem("The Taste Reviver/Clean Placeholder Object Names In Current Scene")]
         public static void CleanPlaceholderObjectNamesInCurrentScene()
         {
-            GameObject[] objects = Object.FindObjectsOfType<GameObject>();
+            GameObject[] objects = Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
             int renamedCount = 0;
             int removedLabelCount = 0;
 
@@ -130,7 +134,7 @@ namespace TheTasteReviver.EditorTools
         [MenuItem("The Taste Reviver/Rebuild UI Layout In Current Scene")]
         public static void RebuildUILayoutInCurrentScene()
         {
-            TestLevelInitializer initializer = Object.FindObjectOfType<TestLevelInitializer>();
+            TestLevelInitializer initializer = Object.FindFirstObjectByType<TestLevelInitializer>();
             if (initializer == null)
             {
                 Debug.LogWarning("No TestLevelInitializer found in the current scene.");
@@ -145,23 +149,125 @@ namespace TheTasteReviver.EditorTools
             Debug.Log("Rebuilt The Taste Reviver UI layout in the current scene.");
         }
 
+        [MenuItem("The Taste Reviver/Clean Duplicate Event Systems In Open Scenes")]
+        public static void CleanDuplicateEventSystemsInOpenScenes()
+        {
+            CleanDuplicateEventSystemsInOpenScenes(true);
+        }
+
+        private static void CleanDuplicateEventSystemsInOpenScenes(bool logResult)
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                return;
+            }
+
+            EventSystem[] eventSystems = Object.FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
+            if (eventSystems.Length <= 1)
+            {
+                if (logResult)
+                {
+                    Debug.Log("No duplicate EventSystem objects found.");
+                }
+
+                return;
+            }
+
+            EventSystem keep = null;
+            foreach (EventSystem eventSystem in eventSystems)
+            {
+                if (eventSystem.gameObject.scene.path == CurrentTestScenePath)
+                {
+                    keep = eventSystem;
+                    break;
+                }
+            }
+
+            if (keep == null)
+            {
+                keep = eventSystems[0];
+            }
+
+            int removedCount = 0;
+            foreach (EventSystem eventSystem in eventSystems)
+            {
+                if (eventSystem == keep)
+                {
+                    continue;
+                }
+
+                Scene scene = eventSystem.gameObject.scene;
+                Object.DestroyImmediate(eventSystem.gameObject);
+                if (scene.IsValid() && scene.isLoaded)
+                {
+                    EditorSceneManager.MarkSceneDirty(scene);
+                }
+
+                removedCount++;
+            }
+
+            if (logResult)
+            {
+                Debug.Log("Removed " + removedCount + " duplicate EventSystem object(s). Kept " + keep.gameObject.name + " in " + keep.gameObject.scene.name + ".");
+            }
+        }
+
         [MenuItem("The Taste Reviver/Create Experiment Log Scene")]
         public static void EnsureExperimentLogScene()
         {
             EnsureFolder("Assets", "Scenes");
 
+            Scene scene;
             if (!File.Exists(ExperimentLogScenePath))
             {
-                Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
-                GameObject controllerObject = new GameObject("Experiment Log Scene Controller");
-                controllerObject.AddComponent<ExperimentLogSceneController>();
-                EditorSceneManager.SaveScene(scene, ExperimentLogScenePath);
-                EditorSceneManager.CloseScene(scene, true);
+                scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
             }
+            else
+            {
+                scene = SceneManager.GetSceneByPath(ExperimentLogScenePath);
+                if (!scene.isLoaded)
+                {
+                    scene = EditorSceneManager.OpenScene(ExperimentLogScenePath, OpenSceneMode.Additive);
+                }
+            }
+
+            EnsureExperimentLogSceneContents(scene);
+            EditorSceneManager.SaveScene(scene, ExperimentLogScenePath);
 
             EnsureSceneInBuildSettings(CurrentTestScenePath);
             EnsureSceneInBuildSettings(ExperimentLogScenePath);
             AssetDatabase.Refresh();
+        }
+
+        private static void EnsureExperimentLogSceneContents(Scene scene)
+        {
+            if (!scene.IsValid() || !scene.isLoaded)
+            {
+                return;
+            }
+
+            GameObject controllerObject = null;
+            foreach (GameObject root in scene.GetRootGameObjects())
+            {
+                ExperimentLogSceneController existing = root.GetComponentInChildren<ExperimentLogSceneController>(true);
+                if (existing != null)
+                {
+                    controllerObject = existing.gameObject;
+                    break;
+                }
+            }
+
+            if (controllerObject == null)
+            {
+                controllerObject = new GameObject("Experiment Log Scene Controller");
+                SceneManager.MoveGameObjectToScene(controllerObject, scene);
+                controllerObject.AddComponent<ExperimentLogSceneController>();
+            }
+
+            ExperimentLogSceneController controller = controllerObject.GetComponent<ExperimentLogSceneController>();
+            controller.EnsureSceneObjects();
+            EditorUtility.SetDirty(controller);
+            EditorSceneManager.MarkSceneDirty(scene);
         }
 
         private static string CleanArtSlotName(string name)

@@ -40,8 +40,9 @@ namespace TheTasteReviver
                 result.completenessScore = Mathf.RoundToInt(weighted / totalWeight * 100f);
             }
 
-            result.passed = result.completenessScore >= level.passingScore;
-            result.mainFeedback = BuildMainFeedback(result.completenessScore);
+            result.judgement = BuildJudgement(result);
+            result.passed = result.judgement == JudgementResult.Correct;
+            result.mainFeedback = BuildMainFeedback(level, result);
             return result;
         }
 
@@ -138,8 +139,9 @@ namespace TheTasteReviver
                 return new DimensionEvaluation(1f, true, level.feedbackTexts.forceCorrect);
             }
 
+            float score = Mathf.Abs((int)actual - (int)level.targetForceLevel) == 1 ? 0.5f : 0f;
             string feedback = (int)actual < (int)level.targetForceLevel ? level.feedbackTexts.forceTooLight : level.feedbackTexts.forceTooHeavy;
-            return new DimensionEvaluation(0f, false, feedback);
+            return new DimensionEvaluation(score, false, feedback);
         }
 
         private static DimensionEvaluation EvaluateSpeed(RecipeLevelData level, RecipeAttemptManager attempt)
@@ -150,8 +152,9 @@ namespace TheTasteReviver
                 return new DimensionEvaluation(1f, true, level.feedbackTexts.speedCorrect);
             }
 
+            float score = Mathf.Abs((int)actual - (int)level.targetSpeedLevel) == 1 ? 0.5f : 0f;
             string feedback = (int)actual < (int)level.targetSpeedLevel ? level.feedbackTexts.speedTooSlow : level.feedbackTexts.speedTooFast;
-            return new DimensionEvaluation(0f, false, feedback);
+            return new DimensionEvaluation(score, false, feedback);
         }
 
         private static DimensionEvaluation EvaluateDuration(RecipeLevelData level, RecipeAttemptManager attempt)
@@ -168,6 +171,44 @@ namespace TheTasteReviver
             }
 
             return new DimensionEvaluation(1f, true, level.feedbackTexts.durationCorrect);
+        }
+
+        private static JudgementResult BuildJudgement(EvaluationResult result)
+        {
+            if (result.dimensions.Count > 0 && result.dimensions.All(x => x.isCorrect))
+            {
+                return JudgementResult.Correct;
+            }
+
+            if (result.completenessScore >= 45 || result.dimensions.Any(x => x.normalizedScore >= 0.5f))
+            {
+                return JudgementResult.Close;
+            }
+
+            return JudgementResult.Wrong;
+        }
+
+        public static string BuildMainFeedback(RecipeLevelData level, EvaluationResult result)
+        {
+            if (level != null)
+            {
+                if (result.judgement == JudgementResult.Correct && !string.IsNullOrWhiteSpace(level.successFeedback))
+                {
+                    return level.successFeedback;
+                }
+
+                if (result.judgement == JudgementResult.Close && !string.IsNullOrWhiteSpace(level.closeFeedback))
+                {
+                    return level.closeFeedback;
+                }
+
+                if (result.judgement == JudgementResult.Wrong && !string.IsNullOrWhiteSpace(level.wrongFeedback))
+                {
+                    return level.wrongFeedback;
+                }
+            }
+
+            return BuildMainFeedback(result.completenessScore);
         }
 
         public static string BuildMainFeedback(int score)
@@ -232,6 +273,7 @@ namespace TheTasteReviver
     {
         public int completenessScore;
         public bool passed;
+        public JudgementResult judgement = JudgementResult.Wrong;
         public string mainFeedback;
         public List<DimensionEvaluation> dimensions = new List<DimensionEvaluation>();
 

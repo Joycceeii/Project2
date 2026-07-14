@@ -21,10 +21,20 @@ namespace TheTasteReviver
             List<MechanicType> priority = level.hintSettings.hintPriority != null && level.hintSettings.hintPriority.Count > 0
                 ? level.hintSettings.hintPriority
                 : new List<MechanicType> { MechanicType.IngredientOrder, MechanicType.Ratio, MechanicType.Combination, MechanicType.Speed, MechanicType.Force };
+            List<MechanicType> activePriority = priority
+                .Where(mechanic => IsEnabled(level, mechanic))
+                .ToList();
 
-            foreach (MechanicType mechanic in priority)
+            foreach (MechanicType mechanic in activePriority)
             {
-                if (!level.enabledMechanics.IsEnabled(mechanic) || evaluation.IsCorrect(mechanic))
+                if (evaluation.IsCorrect(mechanic))
+                {
+                    continue;
+                }
+
+                if ((mechanic == MechanicType.Speed || mechanic == MechanicType.Force)
+                    && IsEnabled(level, MechanicType.Combination)
+                    && !evaluation.IsCorrect(MechanicType.Combination))
                 {
                     continue;
                 }
@@ -34,7 +44,7 @@ namespace TheTasteReviver
                     continue;
                 }
 
-                string hint = BuildHint(level, attempt, mechanic);
+                string hint = BuildHint(level, attempt, mechanic, givenHints);
                 if (string.IsNullOrWhiteSpace(hint) || givenHints.Contains(hint))
                 {
                     continue;
@@ -45,7 +55,15 @@ namespace TheTasteReviver
                 return new HintResult(mechanic, hint, hintCounts[mechanic], givenHints);
             }
 
-            return new HintResult(MechanicType.IngredientSelection, "No new hint is available. Try adjusting an unfinished mechanic.", givenHints.Count, givenHints);
+            string fallback = GetReusableLevelHint(level);
+            if (string.IsNullOrWhiteSpace(fallback))
+            {
+                fallback = string.IsNullOrWhiteSpace(level.fallbackHintText)
+                    ? "No new hint is available for the current level dimensions."
+                    : level.fallbackHintText;
+            }
+
+            return new HintResult(MechanicType.IngredientSelection, fallback, givenHints.Count, givenHints);
         }
 
         public void ResetHints()
@@ -74,8 +92,14 @@ namespace TheTasteReviver
             hintCounts[mechanic]++;
         }
 
-        private static string BuildHint(RecipeLevelData level, RecipeAttemptManager attempt, MechanicType mechanic)
+        private static string BuildHint(RecipeLevelData level, RecipeAttemptManager attempt, MechanicType mechanic, IReadOnlyList<string> usedHints)
         {
+            string customHint = BuildCustomHint(level, mechanic, usedHints);
+            if (!string.IsNullOrWhiteSpace(customHint))
+            {
+                return customHint;
+            }
+
             switch (mechanic)
             {
                 case MechanicType.IngredientOrder:
@@ -85,12 +109,42 @@ namespace TheTasteReviver
                 case MechanicType.Combination:
                     return BuildCombinationHint(level);
                 case MechanicType.Speed:
-                    return "Grinding speed does not match the target yet.";
                 case MechanicType.Force:
-                    return "Grinding force still needs adjustment.";
+                    return BuildProcessHint(level, attempt);
                 default:
                     return "One key relationship still needs checking.";
             }
+        }
+
+        private static string BuildCustomHint(RecipeLevelData level, MechanicType mechanic, IReadOnlyList<string> usedHints)
+        {
+            if (level == null || level.progressiveHintRules == null || level.progressiveHintRules.Count == 0)
+            {
+                return null;
+            }
+
+            return level.progressiveHintRules
+                .Where(rule => rule != null
+                    && rule.mechanic == mechanic
+                    && !string.IsNullOrWhiteSpace(rule.hintText)
+                    && (usedHints == null || !usedHints.Contains(rule.hintText)))
+                .OrderByDescending(rule => rule.priority)
+                .Select(rule => rule.hintText)
+                .FirstOrDefault();
+        }
+
+        private static string GetReusableLevelHint(RecipeLevelData level)
+        {
+            if (level == null || level.progressiveHintRules == null || level.progressiveHintRules.Count == 0)
+            {
+                return null;
+            }
+
+            return level.progressiveHintRules
+                .Where(rule => rule != null && !string.IsNullOrWhiteSpace(rule.hintText))
+                .OrderByDescending(rule => rule.priority)
+                .Select(rule => rule.hintText)
+                .FirstOrDefault();
         }
 
         private static string BuildOrderHint(RecipeLevelData level, RecipeAttemptManager attempt)
@@ -159,6 +213,35 @@ namespace TheTasteReviver
             return single != null && single.ingredients[0] != null
                 ? single.ingredients[0].DisplayName + " may work better as a separate batch."
                 : "Two ingredients may have been mixed too early.";
+        }
+
+        private static string BuildProcessHint(RecipeLevelData level, RecipeAttemptManager attempt)
+        {
+            ForceLevel actualForce = attempt.forceController != null ? attempt.forceController.CurrentForceLevel : ForceLevel.Medium;
+            SpeedLevel actualSpeed = attempt.pestleController != null ? attempt.pestleController.CurrentSpeedLevel : SpeedLevel.Medium;
+
+            List<string> parts = new List<string>();
+            if (IsEnabled(level, MechanicType.Force) && actualForce != level.targetForceLevel)
+            {
+                parts.Add((int)actualForce < (int)level.targetForceLevel ? "use a little more force" : "use a little less force");
+            }
+
+            if (IsEnabled(level, MechanicType.Speed) && actualSpeed != level.targetSpeedLevel)
+            {
+                parts.Add((int)actualSpeed < (int)level.targetSpeedLevel ? "grind a little faster" : "grind a little slower");
+            }
+
+            if (parts.Count == 0)
+            {
+                return "The process is close. Check the remaining relationship.";
+            }
+
+            return "For the current batch, " + string.Join(", and ", parts) + ".";
+        }
+
+        private static bool IsEnabled(RecipeLevelData level, MechanicType mechanic)
+        {
+            return level != null && level.enabledMechanics != null && level.enabledMechanics.IsEnabled(mechanic);
         }
     }
 

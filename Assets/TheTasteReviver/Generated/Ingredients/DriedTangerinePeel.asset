@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DriedTangerinePeel
   m_EditorClassIdentifier: 
   ingredientID: DriedTangerinePeel
-  ingredientNameCN: "\u9648\u76AE"
+  ingredientNameCN: Dried Tangerine Peel
   ingredientNameEN: Dried Tangerine Peel
   aromaType: citrus
   ingredientColor: {r: 0.95, g: 0.45, b: 0.12, a: 1}

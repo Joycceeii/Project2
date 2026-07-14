@@ -72,7 +72,7 @@ namespace TheTasteReviver
             return true;
         }
 
-        public void ResetAttempt()
+        public void ResetAttempt(bool clearMessages = true)
         {
             ingredientAmounts.Clear();
             ingredientOrder.Clear();
@@ -81,14 +81,17 @@ namespace TheTasteReviver
             pestleController?.ResetTracking();
             RebuildCurrentBatch();
             uiManager?.RefreshAttemptPanels(this);
-            uiManager?.ShowFeedback(string.Empty);
-            uiManager?.ShowHint(string.Empty);
+            if (clearMessages)
+            {
+                uiManager?.ShowFeedback(string.Empty);
+                uiManager?.ShowHint(string.Empty);
+            }
         }
 
         public void SetLevel(RecipeLevelData level)
         {
             currentLevel = level;
-            ResetAttempt();
+            ResetAttempt(false);
         }
 
         public Dictionary<IngredientData, RatioLevel> CalculateRatioPattern(out bool hasAmbiguousTies)

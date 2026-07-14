@@ -9,121 +9,529 @@ namespace TheTasteReviver
     public class ExperimentLogSceneController : MonoBehaviour
     {
         public string testLevelSceneName = "TasteRestorerTestLevel";
+        public Canvas canvas;
+        public ScrollRect scrollRect;
         public Text logText;
+        public Button backButton;
+        public Button refreshButton;
+        public Camera sceneCamera;
 
         private void Awake()
         {
-            EnsureEventSystem();
-            EnsureCanvas();
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+
+            EnsureSceneObjects();
         }
 
         private void OnEnable()
         {
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+
+            EnsureSceneObjects();
             Refresh();
+        }
+
+        public void EnsureSceneObjects()
+        {
+            if (!IsControllerSceneLoaded())
+            {
+                return;
+            }
+
+            ClearDestroyedReferences();
+            EnsureEventSystem();
+            EnsureCamera();
+            EnsureCanvas();
+            BindButtons();
         }
 
         public void Refresh()
         {
-            if (logText != null)
+            if (!IsControllerSceneLoaded())
             {
-                logText.text = ExperimentLogManager.BuildFullLogText();
+                return;
+            }
+
+            if (logText == null)
+            {
+                return;
+            }
+
+            logText.text = ExperimentLogManager.BuildFullLogText();
+            Canvas.ForceUpdateCanvases();
+
+            if (scrollRect != null)
+            {
+                scrollRect.verticalNormalizedPosition = 1f;
             }
         }
 
         public void BackToTestLevel()
         {
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+
             SceneManager.LoadScene(testLevelSceneName);
         }
 
         private void EnsureCanvas()
         {
-            Canvas existingCanvas = FindObjectOfType<Canvas>();
-            Transform parent;
-            if (existingCanvas == null)
+            if (!IsControllerSceneLoaded())
+            {
+                return;
+            }
+
+            if (canvas == null)
+            {
+                canvas = FindInControllerScene<Canvas>();
+            }
+
+            if (canvas == null)
             {
                 GameObject canvasObject = new GameObject("Experiment Log Canvas");
-                existingCanvas = canvasObject.AddComponent<Canvas>();
-                existingCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                SceneManager.MoveGameObjectToScene(canvasObject, gameObject.scene);
+                canvas = canvasObject.AddComponent<Canvas>();
+                canvasObject.AddComponent<GraphicRaycaster>();
                 CanvasScaler scaler = canvasObject.AddComponent<CanvasScaler>();
                 scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
                 scaler.referenceResolution = new Vector2(1366f, 768f);
                 scaler.matchWidthOrHeight = 0.5f;
-                canvasObject.AddComponent<GraphicRaycaster>();
-                parent = canvasObject.transform;
             }
-            else
+
+            canvas.gameObject.SetActive(true);
+            canvas.enabled = true;
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+            GraphicRaycaster raycaster = canvas.GetComponent<GraphicRaycaster>();
+            if (raycaster == null)
             {
-                parent = existingCanvas.transform;
+                raycaster = canvas.gameObject.AddComponent<GraphicRaycaster>();
             }
+            raycaster.enabled = true;
 
-            Text title = CreateText(parent, "Experiment Log Title", new Vector2(900f, 54f), new Vector2(0f, -36f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), TextAnchor.MiddleCenter, 28);
+            RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+            Transform root = canvas.transform;
+
+            Image background = EnsureImage(root, "Background");
+            RectTransform backgroundRect = background.GetComponent<RectTransform>();
+            StretchToParent(backgroundRect);
+            background.color = new Color(0.94f, 0.91f, 0.84f, 1f);
+
+            Text title = EnsureText(root, "Experiment Log Title", TextAnchor.MiddleCenter, 30, FontStyle.Bold);
+            RectTransform titleRect = title.GetComponent<RectTransform>();
+            titleRect.anchorMin = new Vector2(0f, 1f);
+            titleRect.anchorMax = new Vector2(1f, 1f);
+            titleRect.pivot = new Vector2(0.5f, 1f);
+            titleRect.offsetMin = new Vector2(96f, -82f);
+            titleRect.offsetMax = new Vector2(-96f, -24f);
             title.text = "Experiment Log";
+            title.color = new Color(0.12f, 0.1f, 0.08f, 1f);
 
-            logText = CreateText(parent, "Experiment Log Records", new Vector2(1040f, 560f), new Vector2(0f, -112f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), TextAnchor.UpperLeft, 18);
-            logText.horizontalOverflow = HorizontalWrapMode.Wrap;
-            logText.verticalOverflow = VerticalWrapMode.Overflow;
+            EnsureScrollView(root);
 
-            Button backButton = CreateButton(parent, "Back To Test Level", new Vector2(180f, 44f), new Vector2(24f, 24f), Vector2.zero, Vector2.zero);
-            backButton.onClick.AddListener(BackToTestLevel);
+            backButton = EnsureButton(root, "Back To Test Level", new Vector2(196f, 44f), new Vector2(24f, 24f), Vector2.zero, Vector2.zero);
+            refreshButton = EnsureButton(root, "Refresh Log", new Vector2(140f, 44f), new Vector2(-24f, 24f), Vector2.one, Vector2.one);
+
+            if (canvasRect != null)
+            {
+                canvasRect.localScale = Vector3.one;
+            }
         }
 
-        private static void EnsureEventSystem()
+        private void EnsureScrollView(Transform root)
         {
-            if (FindObjectOfType<EventSystem>() != null)
+            Image scrollImage = EnsureImage(root, "Experiment Log Scroll View");
+            scrollImage.color = new Color(1f, 0.98f, 0.92f, 1f);
+            RectTransform scrollRectTransform = scrollImage.GetComponent<RectTransform>();
+            scrollRectTransform.anchorMin = new Vector2(0f, 0f);
+            scrollRectTransform.anchorMax = new Vector2(1f, 1f);
+            scrollRectTransform.pivot = new Vector2(0.5f, 0.5f);
+            scrollRectTransform.offsetMin = new Vector2(72f, 92f);
+            scrollRectTransform.offsetMax = new Vector2(-72f, -100f);
+
+            scrollRect = scrollImage.GetComponent<ScrollRect>();
+            if (scrollRect == null)
+            {
+                scrollRect = scrollImage.gameObject.AddComponent<ScrollRect>();
+            }
+
+            Transform viewportTransform = EnsureChild(scrollImage.transform, "Viewport");
+            RectTransform viewportRect = EnsureRectTransform(viewportTransform);
+            StretchToParent(viewportRect);
+
+            Image viewportImage = viewportTransform.GetComponent<Image>();
+            if (viewportImage == null)
+            {
+                viewportImage = viewportTransform.gameObject.AddComponent<Image>();
+            }
+            viewportImage.color = new Color(1f, 1f, 1f, 0.08f);
+
+            Mask mask = viewportTransform.GetComponent<Mask>();
+            if (mask == null)
+            {
+                mask = viewportTransform.gameObject.AddComponent<Mask>();
+            }
+            mask.showMaskGraphic = false;
+
+            Transform contentTransform = EnsureChild(viewportTransform, "Content");
+            RectTransform contentRect = EnsureRectTransform(contentTransform);
+            contentRect.anchorMin = new Vector2(0f, 1f);
+            contentRect.anchorMax = new Vector2(1f, 1f);
+            contentRect.pivot = new Vector2(0.5f, 1f);
+            contentRect.anchoredPosition = Vector2.zero;
+            contentRect.sizeDelta = new Vector2(0f, 720f);
+
+            logText = contentTransform.GetComponent<Text>();
+            if (logText == null)
+            {
+                logText = contentTransform.gameObject.AddComponent<Text>();
+            }
+
+            logText.font = GetRuntimeFont();
+            logText.fontSize = 18;
+            logText.fontStyle = FontStyle.Normal;
+            logText.color = new Color(0.12f, 0.1f, 0.08f, 1f);
+            logText.alignment = TextAnchor.UpperLeft;
+            logText.horizontalOverflow = HorizontalWrapMode.Wrap;
+            logText.verticalOverflow = VerticalWrapMode.Overflow;
+            logText.raycastTarget = false;
+
+            ContentSizeFitter fitter = contentTransform.GetComponent<ContentSizeFitter>();
+            if (fitter == null)
+            {
+                fitter = contentTransform.gameObject.AddComponent<ContentSizeFitter>();
+            }
+            fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            RectTransform textRect = logText.GetComponent<RectTransform>();
+            textRect.offsetMin = new Vector2(24f, 0f);
+            textRect.offsetMax = new Vector2(-24f, 0f);
+
+            scrollRect.viewport = viewportRect;
+            scrollRect.content = contentRect;
+            scrollRect.horizontal = false;
+            scrollRect.vertical = true;
+            scrollRect.movementType = ScrollRect.MovementType.Clamped;
+            scrollRect.scrollSensitivity = 32f;
+        }
+
+        private void BindButtons()
+        {
+            if (backButton != null)
+            {
+                backButton.onClick.RemoveListener(BackToTestLevel);
+                backButton.onClick.AddListener(BackToTestLevel);
+            }
+
+            if (refreshButton != null)
+            {
+                refreshButton.onClick.RemoveListener(Refresh);
+                refreshButton.onClick.AddListener(Refresh);
+            }
+        }
+
+        private void EnsureCamera()
+        {
+            if (!IsControllerSceneLoaded())
+            {
+                return;
+            }
+
+            if (sceneCamera == null)
+            {
+                sceneCamera = FindInControllerScene<Camera>();
+            }
+
+            if (sceneCamera == null)
+            {
+                GameObject cameraObject = new GameObject("Main Camera");
+                SceneManager.MoveGameObjectToScene(cameraObject, gameObject.scene);
+                sceneCamera = cameraObject.AddComponent<Camera>();
+
+                if (Camera.main == null)
+                {
+                    cameraObject.tag = "MainCamera";
+                }
+            }
+
+            sceneCamera.gameObject.SetActive(true);
+            sceneCamera.enabled = true;
+            sceneCamera.clearFlags = CameraClearFlags.SolidColor;
+            sceneCamera.backgroundColor = new Color(0.94f, 0.91f, 0.84f, 1f);
+            sceneCamera.orthographic = true;
+            sceneCamera.orthographicSize = 5f;
+            sceneCamera.transform.position = new Vector3(0f, 0f, -10f);
+            sceneCamera.transform.rotation = Quaternion.identity;
+
+            if (UnityEngine.Object.FindFirstObjectByType<AudioListener>() == null)
+            {
+                sceneCamera.gameObject.AddComponent<AudioListener>();
+            }
+        }
+
+        private void EnsureEventSystem()
+        {
+            if (!IsControllerSceneLoaded())
+            {
+                return;
+            }
+
+            if (UnityEngine.Object.FindFirstObjectByType<EventSystem>() != null)
             {
                 return;
             }
 
             GameObject eventSystem = new GameObject("EventSystem");
+            SceneManager.MoveGameObjectToScene(eventSystem, gameObject.scene);
             eventSystem.AddComponent<EventSystem>();
             eventSystem.AddComponent<StandaloneInputModule>();
         }
 
-        private static Text CreateText(Transform parent, string name, Vector2 size, Vector2 position, Vector2 anchorPoint, Vector2 pivot, TextAnchor anchor, int fontSize)
+        private T FindInControllerScene<T>() where T : Component
         {
-            GameObject textObject = new GameObject(name);
-            textObject.transform.SetParent(parent, false);
-            RectTransform rect = textObject.AddComponent<RectTransform>();
+            Scene scene = gameObject.scene;
+            if (!scene.IsValid() || !scene.isLoaded)
+            {
+                return null;
+            }
+
+            foreach (GameObject root in scene.GetRootGameObjects())
+            {
+                T component = root.GetComponentInChildren<T>(true);
+                if (component != null)
+                {
+                    return component;
+                }
+            }
+
+            return null;
+        }
+
+        private bool IsControllerSceneLoaded()
+        {
+            Scene scene = gameObject.scene;
+            return scene.IsValid() && scene.isLoaded;
+        }
+
+        private void ClearDestroyedReferences()
+        {
+            if (canvas == null)
+            {
+                canvas = null;
+            }
+
+            if (scrollRect == null)
+            {
+                scrollRect = null;
+            }
+
+            if (logText == null)
+            {
+                logText = null;
+            }
+
+            if (backButton == null)
+            {
+                backButton = null;
+            }
+
+            if (refreshButton == null)
+            {
+                refreshButton = null;
+            }
+
+            if (sceneCamera == null)
+            {
+                sceneCamera = null;
+            }
+        }
+
+        private static Button EnsureButton(Transform parent, string name, Vector2 size, Vector2 position, Vector2 anchorPoint, Vector2 pivot)
+        {
+            Image image = EnsureImage(parent, name);
+            RectTransform rect = image.GetComponent<RectTransform>();
             rect.anchorMin = anchorPoint;
             rect.anchorMax = anchorPoint;
             rect.pivot = pivot;
             rect.sizeDelta = size;
             rect.anchoredPosition = position;
+            image.color = new Color(0.29f, 0.35f, 0.28f, 1f);
 
-            Text text = textObject.AddComponent<Text>();
+            Button button = image.GetComponent<Button>();
+            if (button == null)
+            {
+                button = image.gameObject.AddComponent<Button>();
+            }
+            button.targetGraphic = image;
+
+            Text label = EnsureText(image.transform, name + " Text", TextAnchor.MiddleCenter, 16, FontStyle.Bold);
+            RectTransform labelRect = label.GetComponent<RectTransform>();
+            StretchToParent(labelRect);
+            labelRect.offsetMin = new Vector2(8f, 0f);
+            labelRect.offsetMax = new Vector2(-8f, 0f);
+            label.text = name;
+            label.color = Color.white;
+            label.raycastTarget = false;
+            return button;
+        }
+
+        private static Image EnsureImage(Transform parent, string name)
+        {
+            Transform child = EnsureChild(parent, name);
+            if (!IsAlive(child))
+            {
+                child = CreateChild(parent, name);
+            }
+
+            RectTransform rect = EnsureRectTransform(child);
+            Image image = null;
+
+            try
+            {
+                image = child.GetComponent<Image>();
+            }
+            catch (MissingReferenceException)
+            {
+                child = CreateChild(parent, name);
+                rect = EnsureRectTransform(child);
+            }
+
+            if (!IsAlive(image))
+            {
+                image = child.gameObject.AddComponent<Image>();
+            }
+
+            if (IsAlive(rect))
+            {
+                rect.localScale = Vector3.one;
+            }
+
+            return image;
+        }
+
+        private static Text EnsureText(Transform parent, string name, TextAnchor anchor, int fontSize, FontStyle fontStyle)
+        {
+            Transform child = EnsureChild(parent, name);
+            if (!IsAlive(child))
+            {
+                child = CreateChild(parent, name);
+            }
+
+            RectTransform rect = EnsureRectTransform(child);
+            Text text = null;
+
+            try
+            {
+                text = child.GetComponent<Text>();
+            }
+            catch (MissingReferenceException)
+            {
+                child = CreateChild(parent, name);
+                rect = EnsureRectTransform(child);
+            }
+
+            if (!IsAlive(text))
+            {
+                text = child.gameObject.AddComponent<Text>();
+            }
+
+            if (IsAlive(rect))
+            {
+                rect.localScale = Vector3.one;
+            }
+
             text.font = GetRuntimeFont();
-            text.color = Color.black;
             text.alignment = anchor;
             text.fontSize = fontSize;
+            text.fontStyle = fontStyle;
             return text;
         }
 
-        private static Button CreateButton(Transform parent, string name, Vector2 size, Vector2 position, Vector2 anchorPoint, Vector2 pivot)
+        private static Transform EnsureChild(Transform parent, string name)
         {
-            GameObject buttonObject = new GameObject(name);
-            buttonObject.transform.SetParent(parent, false);
-            RectTransform rect = buttonObject.AddComponent<RectTransform>();
-            rect.anchorMin = anchorPoint;
-            rect.anchorMax = anchorPoint;
-            rect.pivot = pivot;
-            rect.sizeDelta = size;
-            rect.anchoredPosition = position;
+            if (!IsAlive(parent))
+            {
+                return null;
+            }
 
-            Image image = buttonObject.AddComponent<Image>();
-            image.color = new Color(0.9f, 0.9f, 0.9f, 1f);
+            Transform child = null;
+            try
+            {
+                child = parent.Find(name);
+            }
+            catch (MissingReferenceException)
+            {
+                child = null;
+            }
 
-            Button button = buttonObject.AddComponent<Button>();
-            button.targetGraphic = image;
+            if (IsAlive(child))
+            {
+                return child;
+            }
 
-            Text label = CreateText(buttonObject.transform, name + " Text", Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, TextAnchor.MiddleCenter, 16);
-            RectTransform labelRect = label.GetComponent<RectTransform>();
-            labelRect.anchorMin = Vector2.zero;
-            labelRect.anchorMax = Vector2.one;
-            labelRect.offsetMin = new Vector2(6f, 0f);
-            labelRect.offsetMax = new Vector2(-6f, 0f);
-            labelRect.sizeDelta = Vector2.zero;
-            label.text = name;
-            return button;
+            return CreateChild(parent, name);
+        }
+
+        private static Transform CreateChild(Transform parent, string name)
+        {
+            if (!IsAlive(parent))
+            {
+                return null;
+            }
+
+            GameObject obj = new GameObject(name);
+            obj.transform.SetParent(parent, false);
+            return obj.transform;
+        }
+
+        private static RectTransform EnsureRectTransform(Transform transform)
+        {
+            if (!IsAlive(transform))
+            {
+                return null;
+            }
+
+            RectTransform rect = null;
+            try
+            {
+                rect = transform.GetComponent<RectTransform>();
+            }
+            catch (MissingReferenceException)
+            {
+                return null;
+            }
+
+            if (IsAlive(rect))
+            {
+                return rect;
+            }
+
+            return transform.gameObject.AddComponent<RectTransform>();
+        }
+
+        private static void StretchToParent(RectTransform rect)
+        {
+            if (!IsAlive(rect))
+            {
+                return;
+            }
+
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = Vector2.zero;
         }
 
         private static Font GetRuntimeFont()
@@ -141,6 +549,11 @@ namespace TheTasteReviver
             }
 
             return Font.CreateDynamicFontFromOSFont(new[] { "Microsoft YaHei", "Arial", "Helvetica" }, 16);
+        }
+
+        private static bool IsAlive(UnityEngine.Object obj)
+        {
+            return obj != null;
         }
     }
 }

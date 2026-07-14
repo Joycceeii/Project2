@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Chili
   m_EditorClassIdentifier: 
   ingredientID: Chili
-  ingredientNameCN: "\u8FA3\u6912"
+  ingredientNameCN: Chili
   ingredientNameEN: Chili
   aromaType: spicy
   ingredientColor: {r: 0.85, g: 0.1, b: 0.08, a: 1}

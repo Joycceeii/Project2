@@ -15,12 +15,18 @@ namespace TheTasteReviver
 
         private void Awake()
         {
-            startPosition = transform.position;
+            ResetHomePosition();
             if (interactionCamera == null)
             {
                 interactionCamera = Camera.main;
             }
 
+            dragPlaneY = transform.position.y;
+        }
+
+        public void ResetHomePosition()
+        {
+            startPosition = transform.position;
             dragPlaneY = transform.position.y;
         }
 

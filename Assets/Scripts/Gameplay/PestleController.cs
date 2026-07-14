@@ -10,15 +10,16 @@ namespace TheTasteReviver
         public Text speedLabel;
         public float slowThreshold = 360f;
         public float fastThreshold = 720f;
+        public float speedResponseTime = 0.25f;
 
         public SpeedLevel CurrentSpeedLevel { get; private set; } = SpeedLevel.Medium;
-        public float AverageMouseSpeed => trackedTime <= 0f ? 0f : totalMouseDistance / trackedTime;
+        public float AverageMouseSpeed => currentMouseSpeed;
         public float GrindDuration { get; private set; }
 
         private bool dragging;
         private Vector3 lastMousePosition;
-        private float totalMouseDistance;
-        private float trackedTime;
+        private float currentMouseSpeed;
+        private bool hasSpeedSample;
         private float dragPlaneY;
 
         private void Awake()
@@ -55,10 +56,9 @@ namespace TheTasteReviver
             if (validGrinding)
             {
                 float delta = Vector3.Distance(Input.mousePosition, lastMousePosition);
-                totalMouseDistance += delta;
-                trackedTime += Time.deltaTime;
                 GrindDuration += Time.deltaTime;
-                CurrentSpeedLevel = SpeedToLevel(AverageMouseSpeed);
+                UpdateCurrentSpeed(delta);
+                CurrentSpeedLevel = SpeedToLevel(currentMouseSpeed);
                 RefreshLabel();
             }
 
@@ -72,11 +72,27 @@ namespace TheTasteReviver
 
         public void ResetTracking()
         {
-            totalMouseDistance = 0f;
-            trackedTime = 0f;
+            currentMouseSpeed = 0f;
+            hasSpeedSample = false;
             GrindDuration = 0f;
             CurrentSpeedLevel = SpeedLevel.Medium;
             RefreshLabel();
+        }
+
+        private void UpdateCurrentSpeed(float mouseDelta)
+        {
+            float deltaTime = Mathf.Max(Time.deltaTime, 0.0001f);
+            float instantSpeed = mouseDelta / deltaTime;
+            if (!hasSpeedSample)
+            {
+                currentMouseSpeed = instantSpeed;
+                hasSpeedSample = true;
+                return;
+            }
+
+            float response = Mathf.Max(0.01f, speedResponseTime);
+            float blend = 1f - Mathf.Exp(-deltaTime / response);
+            currentMouseSpeed = Mathf.Lerp(currentMouseSpeed, instantSpeed, blend);
         }
 
         private SpeedLevel SpeedToLevel(float speed)

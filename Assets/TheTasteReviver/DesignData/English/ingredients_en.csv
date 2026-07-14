@@ -1,0 +1,16 @@
+IngredientID,EnglishName,AromaType,InitialDescription,DefaultRatio
+Rice,Rice,Grain aroma,Gentle and clean. Fine particles release a soft rice aroma; it does not suit excessive force or overlong grinding.,Normal
+TeaLeaf,Tea Leaves,Tea and herbal aroma,"Carries light bitterness and sweet return. Fast grinding releases bitterness first, so it suits slow handling.",Normal
+BlackSesame,Black Sesame,Nutty and roasted aroma,"Rich and deep, useful as a main note or tail note. Too much or too heavy processing can make it bitter and dominant.",High
+GlutinousRice,Glutinous Rice,Grain and sticky rice aroma,"Mild and smooth. It supports body and sticky texture, but usually should not lead the aroma.",Normal
+Peanut,Peanut,Nutty and oily aroma,Solid and warm. It gives a biscuit-like nut aroma and blends well with similar nutty ingredients.,Normal
+RedBean,Red Bean,Bean and sweet aroma,Thick and warm. It is suited to building a base aroma before lighter notes appear.,High
+DriedTangerinePeel,Dried Tangerine Peel,Citrus peel aroma,"Bright and slightly bitter. It works well as a middle or finishing lift, but can become bitter if handled too early or too much.",Low
+RockSugar,Rock Sugar,Clean sweetness,Clean and mild. It rounds the finish and should not take the lead too early.,Normal
+SandGinger,Sand Ginger,Spicy root aroma,"Deep, dry, and aromatic. It needs stronger pressure to open, but excessive force turns it harsh.",High
+CoarseSalt,Coarse Salt,Mineral and salty support,A support ingredient. It should stay low in ratio and should not become the main aroma.,Low
+WhitePepper,White Pepper,Sharp spice aroma,Clear and piercing. Medium speed opens it without making it rush out harshly.,High
+LotusLeaf,Lotus Leaf,Green leaf aroma,"Light and fragile. It should appear late and in low proportion, supported by mild grain aroma.",Low
+YangjiangDouchi,Yangjiang Douchi,Fermented savory aroma,"Savory and fermented. Medium force opens the body; too much pressure makes it dull, bitter, or muddy.",High
+Ginger,Ginger,Fresh spice aroma,Fresh and sharp. Medium speed and middle order help it blend into the main body without rushing forward.,Normal
+ScallionWhite,Scallion White,Fresh green aroma,Fresh and watery. It should be handled lightly and late so its green finish is not buried.,Low

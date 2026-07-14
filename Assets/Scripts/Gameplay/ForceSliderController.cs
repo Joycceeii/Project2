@@ -8,7 +8,6 @@ namespace TheTasteReviver
         public Slider forceSlider;
         public Text forceLabel;
         public ForceLevel CurrentForceLevel { get; private set; } = ForceLevel.Medium;
-        private bool initialized;
 
         private void Awake()
         {
@@ -36,7 +35,6 @@ namespace TheTasteReviver
             {
                 forceSlider.onValueChanged.RemoveListener(OnSliderChanged);
                 forceSlider.onValueChanged.AddListener(OnSliderChanged);
-                initialized = true;
 
                 forceSlider.minValue = 0f;
                 forceSlider.maxValue = 1f;
@@ -48,7 +46,6 @@ namespace TheTasteReviver
         {
             forceSlider = slider;
             forceLabel = label;
-            initialized = false;
             TryInitialize();
         }
 
@@ -75,8 +72,9 @@ namespace TheTasteReviver
 
         public static ForceLevel ValueToForce(float value)
         {
-            if (value <= 0.33f) return ForceLevel.Light;
-            if (value <= 0.66f) return ForceLevel.Medium;
+            if (value <= 0.25f) return ForceLevel.Light;
+            if (value <= 0.5f) return ForceLevel.Medium;
+            if (value <= 0.75f) return ForceLevel.MediumHigh;
             return ForceLevel.Heavy;
         }
     }

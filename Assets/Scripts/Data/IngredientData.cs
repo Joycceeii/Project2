@@ -9,6 +9,7 @@ namespace TheTasteReviver
         public string ingredientNameCN;
         public string ingredientNameEN;
         public string aromaType;
+        [TextArea] public string initialDescription;
         public Color ingredientColor = Color.white;
         public Sprite icon;
         public GameObject prefab;

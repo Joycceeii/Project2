@@ -9,6 +9,7 @@ namespace TheTasteReviver
         public RecipeAttemptManager attemptManager;
         public UIManager uiManager;
         public HintManager hintManager;
+        public LevelIngredientDisplayManager ingredientDisplayManager;
 
         public int CurrentLevelIndex { get; private set; }
         public RecipeLevelData CurrentLevel => levels.Count == 0 ? null : levels[Mathf.Clamp(CurrentLevelIndex, 0, levels.Count - 1)];
@@ -27,6 +28,7 @@ namespace TheTasteReviver
 
             CurrentLevelIndex = Mathf.Clamp(index, 0, levels.Count - 1);
             attemptManager?.SetLevel(CurrentLevel);
+            ingredientDisplayManager?.ShowLevelIngredients(CurrentLevel);
             hintManager?.ResetHints();
             uiManager?.ShowLevel(CurrentLevel);
         }
