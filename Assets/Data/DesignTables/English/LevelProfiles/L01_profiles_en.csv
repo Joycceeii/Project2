@@ -1,0 +1,3 @@
+LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
+L01,Rice,L01_Rice,Force,Medium,,,,,,,,,,,,"L01 Rice focuses on force."
+L01,Rice,L01_Rice,GrindDuration,8-14,,,,,,,,,,,,"L01 Rice focuses on force."

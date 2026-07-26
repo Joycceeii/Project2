@@ -8,6 +8,7 @@ namespace TheTasteReviver
         public RecipeAttemptManager attemptManager;
         public MortarArea mortarArea;
         public Camera interactionCamera;
+        public GameObject sourcePrefab;
 
         private Vector3 startPosition;
         private bool dragging;
@@ -28,6 +29,13 @@ namespace TheTasteReviver
         {
             startPosition = transform.position;
             dragPlaneY = transform.position.y;
+        }
+
+        public void ReturnHome()
+        {
+            dragging = false;
+            transform.position = startPosition;
+            dragPlaneY = startPosition.y;
         }
 
         private void OnMouseDown()

@@ -1,0 +1,13 @@
+LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
+L09,YangjiangDouchi,L09_YangjiangDouchi,Force,Medium,,,,,,,,,,,,"L09 Yangjiang Black Bean focuses on force ratio and order."
+L09,YangjiangDouchi,L09_YangjiangDouchi,Speed,Medium,,,,,,,,,,,,"L09 Yangjiang Black Bean focuses on force ratio and order."
+L09,Ginger,L09_Ginger,Speed,Medium,,,,,,,,,,,,"L09 Ginger focuses on speed ratio and order."
+L09,YangjiangDouchi,L09_YangjiangDouchi,IngredientOrder,0,,,,,,,,,,,,"L09 Yangjiang Black Bean focuses on force ratio and order."
+L09,Ginger,L09_Ginger,IngredientOrder,1,,,,,,,,,,,,"L09 Ginger focuses on speed ratio and order."
+L09,DriedTangerinePeel,L09_DriedTangerinePeel,IngredientOrder,2,,,,,,,,,,,,"L09 Dried Tangerine Peel focuses on ratio and order."
+L09,CoarseSalt,L09_CoarseSalt,IngredientOrder,3,,,,,,,,,,,,"L09 Coarse Salt focuses on ratio and order."
+L09,YangjiangDouchi,L09_YangjiangDouchi,Ratio,More,,,,,,,,,,,,"L09 Yangjiang Black Bean focuses on force ratio and order."
+L09,Ginger,L09_Ginger,Ratio,SlightlyMore,,,,,,,,,,,,"L09 Ginger focuses on speed ratio and order."
+L09,DriedTangerinePeel,L09_DriedTangerinePeel,Ratio,Less,,,,,,,,,,,,"L09 Dried Tangerine Peel focuses on ratio and order."
+L09,CoarseSalt,L09_CoarseSalt,Ratio,VeryLess,,,,,,,,,,,,"L09 Coarse Salt focuses on ratio and order."
+L09,YangjiangDouchi,L09_YangjiangDouchi,GrindDuration,28-45,,,,,,,,,,,,"L09 Yangjiang Black Bean focuses on force ratio and order."

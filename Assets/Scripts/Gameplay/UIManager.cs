@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,22 +22,25 @@ namespace TheTasteReviver
         public Text currentOrderLabel;
         public Text currentRatioLabel;
         public Text currentSpeedLabel;
-        public Text feedbackLabel;
         public Text hintLabel;
         public Text ingredientTraitLabel;
         public GameObject ratioSelectionPanel;
         public Text ratioSelectionTitle;
         public Button[] ratioSelectionButtons = new Button[4];
         public Button experimentLogButton;
-        public Button processCheckButton;
         public Button evaluateButton;
         public Button resetAttemptButton;
         public Button nextLevelButton;
         public string experimentLogSceneName = "ExperimentLog";
         public bool autoUpdateLevelLabel;
+        [Tooltip("Minimum grinding time before an attempt can be evaluated. Set 0 or below to use each level's table value.")]
+        public float evaluationGateSeconds = 4f;
+        public string resetRequiredHint = "Press Reset Attempt before starting a new test.";
+        public float resetPromptDelaySeconds = 3f;
 
         private Action<RatioLevel> pendingRatioSelection;
-        private string pendingProcessCheckHint;
+        private Coroutine resetPromptCoroutine;
+        private float lastEvaluationTime = -999f;
 
         public bool IsRatioSelectionOpen => ratioSelectionPanel != null && ratioSelectionPanel.activeSelf;
 
@@ -44,12 +48,16 @@ namespace TheTasteReviver
         {
             EnsureRatioSelectionPanel();
             EnsureExperimentLogButton();
-            EnsureProcessCheckButton();
             EnsureActionButtons();
             EnsureIngredientTraitPanel();
         }
 
         public void EvaluateCurrentAttempt()
+        {
+            EvaluateCurrentAttempt(false);
+        }
+
+        private void EvaluateCurrentAttempt(bool isAutoEvaluation)
         {
             if (IsRatioSelectionOpen)
             {
@@ -62,6 +70,12 @@ namespace TheTasteReviver
                 return;
             }
 
+            if (!HasReachedEvaluationGate(attemptManager.currentLevel))
+            {
+                ShowHint(BuildEvaluationGateHint(attemptManager.currentLevel));
+                return;
+            }
+
             EvaluationResult result = evaluator.Evaluate(attemptManager.currentLevel, attemptManager);
             HintResult hint = result.judgement == JudgementResult.Correct ? null : hintManager != null ? hintManager.GetNextHint(attemptManager.currentLevel, attemptManager, result) : null;
             string permanentHint = string.Empty;
@@ -71,35 +85,20 @@ namespace TheTasteReviver
                 permanentHint = BuildPermanentHintText(unlockedClues);
             }
 
-            ShowFeedback(BuildEvaluationFeedback(result));
-            ShowHint(BuildEvaluationHint(result, hint, permanentHint));
-            logManager?.AddRecord(attemptManager, result, hint, pendingProcessCheckHint, permanentHint);
-            pendingProcessCheckHint = null;
-        }
-
-        public void CheckGrindProcess()
-        {
-            if (IsRatioSelectionOpen)
+            ShowEvaluationResult(result, hint, permanentHint);
+            logManager?.AddRecord(attemptManager, result, hint, permanentHint);
+            attemptManager.MarkEvaluated();
+            lastEvaluationTime = Time.time;
+            if (isAutoEvaluation)
             {
-                ShowFeedback("Choose the ingredient ratio before checking the grind process.");
-                return;
+                attemptManager.MarkAutoEvaluated();
             }
-
-            if (attemptManager == null || evaluator == null)
-            {
-                ShowFeedback("Process check is not ready.");
-                return;
-            }
-
-            EvaluationResult result = evaluator.Evaluate(attemptManager.currentLevel, attemptManager);
-            pendingProcessCheckHint = BuildProcessDiagnosticHint(attemptManager.currentLevel, result);
-            ShowHint(pendingProcessCheckHint);
-            ShowFeedback(BuildProcessCheckFeedback(result));
         }
 
         public void ResetAttempt()
         {
-            pendingProcessCheckHint = null;
+            StopResetPrompt();
+            CloseRatioSelection();
             attemptManager?.ResetAttempt();
             ShowFeedback(string.Empty);
             ShowHint(string.Empty);
@@ -107,7 +106,7 @@ namespace TheTasteReviver
 
         public void NextLevel()
         {
-            pendingProcessCheckHint = null;
+            StopResetPrompt();
             levelManager?.NextLevel();
         }
 
@@ -120,52 +119,30 @@ namespace TheTasteReviver
         {
             ApplyLevelPanelVisibility(level);
 
-            if (autoUpdateLevelLabel && levelLabel != null)
+            if (levelLabel != null)
             {
                 levelLabel.text = level == null ? "No Level" : level.levelID + " " + level.cityName + " - " + level.levelName + "\n" + level.levelIntro;
             }
 
-            if (level != null && currentIngredientsLabel != null)
-            {
-                StringBuilder builder = new StringBuilder();
-                builder.AppendLine("Available Ingredients:");
-                foreach (IngredientData ingredient in level.availableIngredients.Where(x => x != null))
-                {
-                    builder.Append("- ").Append(ingredient.DisplayName);
-                    builder.AppendLine();
-                }
-
-                currentIngredientsLabel.text = builder.ToString();
-            }
+            RefreshAttemptPanels(attemptManager);
 
             ShowIngredientTraits(level);
-            pendingProcessCheckHint = null;
         }
 
         private void ApplyLevelPanelVisibility(RecipeLevelData level)
         {
             EnabledMechanics mechanics = level != null ? level.enabledMechanics : null;
-            bool showIngredientPanel = mechanics == null
-                || mechanics.enableIngredientSelection
-                || mechanics.enableIngredientOrder
-                || mechanics.enableRatio
-                || mechanics.enableCombination;
             bool showOrderPanel = mechanics == null || mechanics.enableIngredientOrder;
             bool showRatioPanel = mechanics == null || mechanics.enableRatio;
             bool showSpeedPanel = mechanics == null || mechanics.enableSpeed;
             bool showForceControls = mechanics == null || mechanics.enableForce;
-            bool showProcessCheck = mechanics == null
-                || mechanics.enableForce
-                || mechanics.enableSpeed
-                || mechanics.enableGrindDuration;
 
-            SetTextPanelVisible(currentIngredientsLabel, showIngredientPanel);
-            SetTextPanelVisible(currentOrderLabel, showOrderPanel);
-            SetTextPanelVisible(currentRatioLabel, showRatioPanel);
+            SetTextPanelVisible(currentIngredientsLabel, false);
+            SetTextPanelVisible(currentOrderLabel, false);
+            SetTextPanelVisible(currentRatioLabel, false);
             SetTextPanelVisible(currentSpeedLabel, showSpeedPanel);
             SetNamedObjectVisible("Force Slider", showForceControls);
             SetNamedObjectVisible("Force Label Panel", showForceControls);
-            SetButtonVisible(processCheckButton, showProcessCheck);
         }
 
         private static void SetTextPanelVisible(Text label, bool visible)
@@ -192,14 +169,6 @@ namespace TheTasteReviver
             }
         }
 
-        private static void SetButtonVisible(Button button, bool visible)
-        {
-            if (IsAlive(button))
-            {
-                button.gameObject.SetActive(visible);
-            }
-        }
-
         public void RefreshAttemptPanels(RecipeAttemptManager attempt)
         {
             if (attempt == null)
@@ -207,21 +176,30 @@ namespace TheTasteReviver
                 return;
             }
 
+            EnabledMechanics mechanics = attempt.currentLevel != null ? attempt.currentLevel.enabledMechanics : null;
+            bool hasIngredients = attempt.HasIngredientsInBowl;
+
             if (currentIngredientsLabel != null)
             {
-                currentIngredientsLabel.text = "Current Ingredients:\n" + string.Join(", ", attempt.IngredientAmounts.Where(x => x.ingredient != null).Select(x => x.ingredient.DisplayName));
+                string ingredients = string.Join(", ", attempt.IngredientAmounts.Where(x => x.ingredient != null).Select(x => x.ingredient.DisplayName));
+                currentIngredientsLabel.text = "Current Ingredients:\n" + (string.IsNullOrWhiteSpace(ingredients) ? "None" : ingredients);
+                SetTextPanelVisible(currentIngredientsLabel, hasIngredients);
             }
 
             if (currentOrderLabel != null)
             {
-                currentOrderLabel.text = "Ingredient Order:\n" + string.Join(" -> ", attempt.IngredientOrder.Where(x => x != null).Select(x => x.DisplayName));
+                string order = string.Join(" -> ", attempt.IngredientOrder.Where(x => x != null).Select(x => x.DisplayName));
+                currentOrderLabel.text = "Ingredient Order:\n" + (string.IsNullOrWhiteSpace(order) ? "None" : order);
+                SetTextPanelVisible(currentOrderLabel, hasIngredients && (mechanics == null || mechanics.enableIngredientOrder));
             }
 
             if (currentRatioLabel != null)
             {
                 Dictionary<IngredientData, RatioLevel> ratio = attempt.CalculateRatioPattern(out bool ambiguous);
                 string prefix = ambiguous ? "Ratio:\nRatio values are still close\n" : "Ratio:\n";
-                currentRatioLabel.text = prefix + string.Join(" / ", ratio.Select(x => x.Key.DisplayName + "=" + GetRatioDisplayName(x.Value)));
+                string ratioText = string.Join("\n", ratio.Select(x => x.Key.DisplayName + ": " + GetRatioDisplayName(x.Value)));
+                currentRatioLabel.text = prefix + (string.IsNullOrWhiteSpace(ratioText) ? "None" : ratioText);
+                SetTextPanelVisible(currentRatioLabel, hasIngredients && (mechanics == null || mechanics.enableRatio));
             }
 
             if (currentSpeedLabel != null && attempt.pestleController != null)
@@ -232,11 +210,6 @@ namespace TheTasteReviver
 
         public void ShowFeedback(string text)
         {
-            EnsureFeedbackLabel();
-            if (feedbackLabel != null)
-            {
-                feedbackLabel.text = text;
-            }
         }
 
         public void ShowHint(string text)
@@ -245,6 +218,116 @@ namespace TheTasteReviver
             {
                 hintLabel.text = text;
             }
+        }
+
+        private void ShowEvaluationResult(EvaluationResult result, HintResult hint, string permanentHint)
+        {
+            string feedback = BuildEvaluationFeedback(result);
+            string hintText = BuildEvaluationHint(result, hint, permanentHint);
+            string displayedText;
+            if (string.IsNullOrWhiteSpace(hintText))
+            {
+                displayedText = feedback;
+            }
+            else if (string.IsNullOrWhiteSpace(feedback))
+            {
+                displayedText = hintText;
+            }
+            else
+            {
+                displayedText = feedback + "\n\n" + hintText;
+            }
+
+            ShowHint(displayedText);
+            ScheduleResetPrompt(displayedText);
+        }
+
+        public bool ShowStepFeedback(MechanicType mechanic, IngredientData targetIngredient = null)
+        {
+            if (attemptManager == null || hintManager == null)
+            {
+                return false;
+            }
+
+            if (!attemptManager.HasIngredientsInBowl)
+            {
+                return false;
+            }
+
+            if (attemptManager.HasEvaluated)
+            {
+                if (Time.time - lastEvaluationTime >= resetPromptDelaySeconds)
+                {
+                    ShowHint(resetRequiredHint);
+                }
+
+                return false;
+            }
+
+            RecipeLevelData level = attemptManager.currentLevel;
+            if (level == null || level.enabledMechanics == null || !level.enabledMechanics.IsEnabled(mechanic))
+            {
+                return false;
+            }
+
+            HintResult hint = hintManager.GetStepHint(level, attemptManager, mechanic, targetIngredient);
+            if (hint == null || string.IsNullOrWhiteSpace(hint.text))
+            {
+                return false;
+            }
+
+            ShowHint(GetMechanicDisplayName(mechanic) + " Hint:\n" + hint.text);
+            return true;
+        }
+
+        public void TryAutoEvaluateAfterGrinding()
+        {
+            if (attemptManager == null || evaluator == null || IsRatioSelectionOpen)
+            {
+                return;
+            }
+
+            RecipeLevelData level = attemptManager.currentLevel;
+            if (level == null || attemptManager.HasEvaluated || attemptManager.HasAutoEvaluated || !attemptManager.HasIngredientsInBowl)
+            {
+                return;
+            }
+
+            if (!HasReachedEvaluationGate(level))
+            {
+                return;
+            }
+
+            EvaluateCurrentAttempt(true);
+        }
+
+        private bool HasReachedEvaluationGate(RecipeLevelData level)
+        {
+            if (level == null || attemptManager == null || attemptManager.pestleController == null)
+            {
+                return false;
+            }
+
+            return attemptManager.pestleController.GrindDuration >= GetEvaluationGateSeconds(level);
+        }
+
+        private float GetEvaluationGateSeconds(RecipeLevelData level)
+        {
+            if (evaluationGateSeconds > 0f)
+            {
+                return evaluationGateSeconds;
+            }
+
+            return level != null ? Mathf.Max(0f, level.minGrindDuration) : 0f;
+        }
+
+        private string BuildEvaluationGateHint(RecipeLevelData level)
+        {
+            float requiredSeconds = GetEvaluationGateSeconds(level);
+            float currentSeconds = attemptManager != null && attemptManager.pestleController != null
+                ? attemptManager.pestleController.GrindDuration
+                : 0f;
+            return "Keep grinding before checking. Time: " + currentSeconds.ToString("0.0") + "s / " + requiredSeconds.ToString("0.0") + "s.";
         }
 
         public void ShowIngredientTraits(RecipeLevelData level)
@@ -270,12 +353,6 @@ namespace TheTasteReviver
             EnsureRatioSelectionPanel();
             if (options == null || options.Count == 0)
             {
-                return;
-            }
-
-            if (options.Count == 1)
-            {
-                onSelected?.Invoke(options[0]);
                 return;
             }
 
@@ -312,6 +389,7 @@ namespace TheTasteReviver
                 button.onClick.AddListener(() => SelectRatio(selected));
             }
 
+            ratioSelectionPanel.transform.SetAsLastSibling();
             ratioSelectionPanel.SetActive(true);
         }
 
@@ -324,6 +402,20 @@ namespace TheTasteReviver
                 case RatioLevel.SlightlyMore: return "Much";
                 case RatioLevel.More: return "Very Much";
                 default: return "None";
+            }
+        }
+
+        private static string GetMechanicDisplayName(MechanicType mechanic)
+        {
+            switch (mechanic)
+            {
+                case MechanicType.IngredientOrder: return "Order";
+                case MechanicType.Ratio: return "Ratio";
+                case MechanicType.Combination: return "Combination";
+                case MechanicType.Force: return "Force";
+                case MechanicType.Speed: return "Speed";
+                case MechanicType.GrindDuration: return "Grinding Time";
+                default: return "Experiment";
             }
         }
 
@@ -401,44 +493,11 @@ namespace TheTasteReviver
 #endif
         }
 
-        public void EnsureProcessCheckButton()
-        {
-            if (IsAlive(processCheckButton))
-            {
-                processCheckButton.onClick.RemoveAllListeners();
-                processCheckButton.onClick.AddListener(CheckGrindProcess);
-                return;
-            }
-
-            Transform existing = transform.Find("Check Grind Process");
-            if (IsAlive(existing))
-            {
-                processCheckButton = existing.GetComponent<Button>();
-                if (IsAlive(processCheckButton))
-                {
-                    processCheckButton.onClick.RemoveAllListeners();
-                    processCheckButton.onClick.AddListener(CheckGrindProcess);
-                    return;
-                }
-            }
-
-            processCheckButton = CreateAnchoredRuntimeButton(transform, "Check Grind Process", new Vector2(172f, 36f), new Vector2(-24f, 64f), new Vector2(1f, 0f), new Vector2(1f, 0f));
-            processCheckButton.onClick.AddListener(CheckGrindProcess);
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-            {
-                UnityEditor.EditorUtility.SetDirty(this);
-                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(gameObject.scene);
-            }
-#endif
-        }
-
         public void EnsureActionButtons()
         {
             evaluateButton = BindButton(evaluateButton, "Evaluate", EvaluateCurrentAttempt);
             resetAttemptButton = BindButton(resetAttemptButton, "Reset Attempt", ResetAttempt);
             nextLevelButton = BindButton(nextLevelButton, "Next Level", NextLevel);
-            EnsureFeedbackPanelButton();
         }
 
         private Button BindButton(Button button, string objectName, UnityEngine.Events.UnityAction action)
@@ -514,55 +573,6 @@ namespace TheTasteReviver
             }
         }
 
-        private void EnsureFeedbackPanelButton()
-        {
-            EnsureFeedbackLabel();
-            if (!IsAlive(feedbackLabel))
-            {
-                return;
-            }
-
-            Transform panel = feedbackLabel.transform.parent;
-            if (!IsAlive(panel))
-            {
-                return;
-            }
-
-            Button button = panel.GetComponent<Button>();
-            if (button == null)
-            {
-                button = panel.gameObject.AddComponent<Button>();
-            }
-
-            Image image = panel.GetComponent<Image>();
-            if (IsAlive(image))
-            {
-                button.targetGraphic = image;
-            }
-
-            button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(EvaluateCurrentAttempt);
-        }
-
-        private void EnsureFeedbackLabel()
-        {
-            if (IsAlive(feedbackLabel))
-            {
-                return;
-            }
-
-            Transform feedback = transform.Find("Feedback Panel/Feedback Text");
-            if (!IsAlive(feedback))
-            {
-                feedback = transform.Find("Feedback Panel/Feedback Text Text");
-            }
-
-            if (IsAlive(feedback))
-            {
-                feedbackLabel = feedback.GetComponent<Text>();
-            }
-        }
-
         public void EnsureIngredientTraitPanel()
         {
             if (IsAlive(ingredientTraitLabel))
@@ -627,6 +637,15 @@ namespace TheTasteReviver
             callback?.Invoke(ratio);
         }
 
+        private void CloseRatioSelection()
+        {
+            pendingRatioSelection = null;
+            if (ratioSelectionPanel != null)
+            {
+                ratioSelectionPanel.SetActive(false);
+            }
+        }
+
         private static string BuildDimensionFeedback(EvaluationResult result)
         {
             StringBuilder builder = new StringBuilder();
@@ -665,26 +684,66 @@ namespace TheTasteReviver
             }
 
             StringBuilder builder = new StringBuilder();
-            builder.Append("Completeness: ").Append(result.completenessScore).Append("%");
-
             if (hint != null && !string.IsNullOrWhiteSpace(hint.text))
             {
-                builder.AppendLine();
                 builder.Append(hint.text);
             }
             else if (result.judgement == JudgementResult.Correct)
             {
-                builder.AppendLine();
                 builder.Append("Restoration complete.");
             }
 
             if (!string.IsNullOrWhiteSpace(permanentHint))
             {
-                builder.AppendLine();
+                if (builder.Length > 0)
+                {
+                    builder.AppendLine();
+                }
+
                 builder.Append(permanentHint);
             }
 
             return builder.ToString();
+        }
+
+        private void ScheduleResetPrompt(string baseText)
+        {
+            StopResetPrompt();
+            resetPromptCoroutine = StartCoroutine(ShowResetPromptAfterDelay(baseText));
+        }
+
+        private IEnumerator ShowResetPromptAfterDelay(string baseText)
+        {
+            yield return new WaitForSeconds(Mathf.Max(0f, resetPromptDelaySeconds));
+            resetPromptCoroutine = null;
+
+            if (attemptManager == null || !attemptManager.HasEvaluated || hintLabel == null)
+            {
+                yield break;
+            }
+
+            if (hintLabel.text != baseText)
+            {
+                yield break;
+            }
+
+            if (string.IsNullOrWhiteSpace(baseText))
+            {
+                ShowHint(resetRequiredHint);
+            }
+            else
+            {
+                ShowHint(baseText + "\n\nNext: " + resetRequiredHint);
+            }
+        }
+
+        private void StopResetPrompt()
+        {
+            if (resetPromptCoroutine != null)
+            {
+                StopCoroutine(resetPromptCoroutine);
+                resetPromptCoroutine = null;
+            }
         }
 
         private static string BuildPermanentHintText(IReadOnlyList<UnlockedClueRecord> clues)
@@ -722,6 +781,27 @@ namespace TheTasteReviver
             }
 
             StringBuilder builder = new StringBuilder();
+            if (level.ingredientProfiles != null && level.ingredientProfiles.Count > 0)
+            {
+                foreach (LevelIngredientProfile profile in level.ingredientProfiles.Where(x => x != null && x.ingredient != null))
+                {
+                    string description = !string.IsNullOrWhiteSpace(profile.levelTraitDescription)
+                        ? profile.levelTraitDescription
+                        : profile.ingredient.initialDescription;
+                    if (string.IsNullOrWhiteSpace(description))
+                    {
+                        continue;
+                    }
+
+                    builder.Append(profile.DisplayTag).Append(" - ");
+                    builder.Append(profile.ingredient.DisplayName).Append(": ");
+                    builder.Append(description);
+                    builder.AppendLine();
+                }
+
+                return builder.ToString().Trim();
+            }
+
             foreach (IngredientData ingredient in level.availableIngredients.Where(x => x != null && !string.IsNullOrWhiteSpace(x.initialDescription)))
             {
                 builder.Append(ingredient.DisplayName).Append(": ");
@@ -730,127 +810,6 @@ namespace TheTasteReviver
             }
 
             return builder.ToString().Trim();
-        }
-
-        private static string BuildProcessCheckFeedback(EvaluationResult result)
-        {
-            List<DimensionEvaluation> processDimensions = result.dimensions
-                .Where(x => IsProcessMechanic(x.mechanic))
-                .ToList();
-
-            if (processDimensions.Count == 0)
-            {
-                return "This level does not check grinding process yet.";
-            }
-
-            bool allCorrect = processDimensions.All(x => x.isCorrect);
-            float averageScore = processDimensions.Average(x => x.normalizedScore);
-            StringBuilder builder = new StringBuilder();
-            builder.Append("Grind Process: ");
-            builder.Append(allCorrect ? "Correct" : averageScore >= 0.5f ? "Close" : "Wrong");
-
-            foreach (DimensionEvaluation dimension in processDimensions)
-            {
-                builder.AppendLine();
-                builder.Append(dimension.mechanic).Append(": ");
-                builder.Append(dimension.isCorrect ? "Correct" : dimension.feedback);
-            }
-
-            return builder.ToString();
-        }
-
-        private static string BuildProcessDiagnosticHint(RecipeLevelData level, EvaluationResult result)
-        {
-            ProcessFeedbackRule rule = FindProcessFeedbackRule(level, result);
-            if (rule != null && !string.IsNullOrWhiteSpace(rule.hintText))
-            {
-                return rule.hintText;
-            }
-
-            List<DimensionEvaluation> processDimensions = result.dimensions
-                .Where(x => IsProcessMechanic(x.mechanic) && IsMechanicEnabled(level, x.mechanic))
-                .ToList();
-
-            if (processDimensions.Count == 0)
-            {
-                return "This level has no grinding-process diagnostic rule yet.";
-            }
-
-            DimensionEvaluation firstIssue = processDimensions.FirstOrDefault(x => !x.isCorrect);
-            if (firstIssue == null)
-            {
-                return "The current grinding process is correct. Keep this process and check the recipe structure.";
-            }
-
-            return firstIssue.feedback;
-        }
-
-        private static ProcessFeedbackRule FindProcessFeedbackRule(RecipeLevelData level, EvaluationResult result)
-        {
-            if (level == null || level.processFeedbackRules == null || level.processFeedbackRules.Count == 0)
-            {
-                return null;
-            }
-
-            return level.processFeedbackRules
-                .Where(rule => MatchesProcessFeedbackRule(level, rule, result))
-                .OrderByDescending(rule => rule.priority)
-                .FirstOrDefault();
-        }
-
-        private static bool MatchesProcessFeedbackRule(RecipeLevelData level, ProcessFeedbackRule rule, EvaluationResult result)
-        {
-            if (rule == null)
-            {
-                return false;
-            }
-
-            foreach (MechanicType mechanic in rule.requiredCorrect)
-            {
-                if (!IsMechanicEnabled(level, mechanic))
-                {
-                    return false;
-                }
-
-                if (!IsMechanicCorrect(result, mechanic))
-                {
-                    return false;
-                }
-            }
-
-            foreach (MechanicType mechanic in rule.requiredIncorrect)
-            {
-                if (!IsMechanicEnabled(level, mechanic))
-                {
-                    return false;
-                }
-
-                DimensionEvaluation dimension = result.GetDimension(mechanic);
-                if (dimension == null || dimension.isCorrect)
-                {
-                    return false;
-                }
-            }
-
-            return rule.requiredCorrect.Count > 0 || rule.requiredIncorrect.Count > 0;
-        }
-
-        private static bool IsMechanicCorrect(EvaluationResult result, MechanicType mechanic)
-        {
-            DimensionEvaluation dimension = result.GetDimension(mechanic);
-            return dimension != null && dimension.isCorrect;
-        }
-
-        private static bool IsMechanicEnabled(RecipeLevelData level, MechanicType mechanic)
-        {
-            return level != null && level.enabledMechanics != null && level.enabledMechanics.IsEnabled(mechanic);
-        }
-
-        private static bool IsProcessMechanic(MechanicType mechanic)
-        {
-            return mechanic == MechanicType.Force
-                || mechanic == MechanicType.Speed
-                || mechanic == MechanicType.GrindDuration;
         }
 
         private static Text CreateRuntimeText(Transform parent, string name, Vector2 size, Vector2 position, TextAnchor anchor, int fontSize)

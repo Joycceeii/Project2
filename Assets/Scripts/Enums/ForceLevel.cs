@@ -4,7 +4,6 @@ namespace TheTasteReviver
     {
         Light,
         Medium,
-        MediumHigh,
         Heavy
     }
 }

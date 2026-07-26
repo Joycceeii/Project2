@@ -7,11 +7,16 @@ namespace TheTasteReviver
     public class LevelIngredientDisplayManager : MonoBehaviour
     {
         private const string ContainerName = "Ingredient Slots";
+        private const string LabelName = "Ingredient Label";
         private const int MaxSlots = 4;
 
         public MortarArea mortarArea;
         public RecipeAttemptManager attemptManager;
         public bool hideLegacyDisplaysOnFirstRefresh = true;
+        public bool showIngredientLabels = true;
+        public Vector3 labelOffset = new Vector3(0f, 1.05f, 0f);
+        public int labelFontSize = 32;
+        public float labelCharacterSize = 0.045f;
 
         private bool legacyDisplaysHandled;
 
@@ -96,6 +101,8 @@ namespace TheTasteReviver
             item.transform.localScale = Vector3.one * 0.38f;
             item.AddComponent<DraggableIngredient>();
 
+            EnsureLabel(slot.transform);
+
             return slot;
         }
 
@@ -117,7 +124,7 @@ namespace TheTasteReviver
                 ApplyColor(plate.gameObject, Color.white);
             }
 
-            Transform item = FindIngredientItem(slot.transform);
+            Transform item = EnsureIngredientItem(slot.transform, ingredient);
             if (!IsAlive(item))
             {
                 return;
@@ -126,13 +133,67 @@ namespace TheTasteReviver
             item.gameObject.name = "Ingredient";
             item.localPosition = Vector3.up * 0.45f;
             item.localScale = Vector3.one * 0.38f;
-            ApplyColor(item.gameObject, ingredient.ingredientColor);
+            if (ingredient.prefab == null)
+            {
+                ApplyColor(item.gameObject, ingredient.ingredientColor);
+            }
 
             DraggableIngredient drag = item.GetComponent<DraggableIngredient>() ?? item.gameObject.AddComponent<DraggableIngredient>();
             drag.ingredientData = ingredient;
             drag.mortarArea = mortarArea;
             drag.attemptManager = attemptManager;
+            drag.sourcePrefab = ingredient.prefab;
             drag.ResetHomePosition();
+
+            ConfigureLabel(slot.transform, ingredient);
+        }
+
+        private Transform EnsureIngredientItem(Transform slot, IngredientData ingredient)
+        {
+            Transform current = FindIngredientItem(slot);
+            GameObject prefab = ingredient != null ? ingredient.prefab : null;
+            DraggableIngredient currentDrag = IsAlive(current) ? current.GetComponent<DraggableIngredient>() : null;
+            bool currentMatchesPrefab = prefab == null
+                ? IsAlive(current) && (!IsAlive(currentDrag) || currentDrag.sourcePrefab == null)
+                : IsAlive(currentDrag) && currentDrag.sourcePrefab == prefab;
+
+            if (currentMatchesPrefab)
+            {
+                return current;
+            }
+
+            if (IsAlive(current))
+            {
+                DestroyObject(current.gameObject);
+            }
+
+            GameObject item;
+            if (prefab != null)
+            {
+                item = Instantiate(prefab, slot, false);
+                item.name = "Ingredient";
+                DraggableIngredient drag = item.GetComponent<DraggableIngredient>() ?? item.AddComponent<DraggableIngredient>();
+                drag.sourcePrefab = prefab;
+            }
+            else
+            {
+                item = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                item.name = "Ingredient";
+                item.transform.SetParent(slot, false);
+            }
+
+            if (!IsAlive(item.GetComponent<Collider>()))
+            {
+                SphereCollider collider = item.AddComponent<SphereCollider>();
+                collider.radius = 0.6f;
+            }
+
+            if (!IsAlive(item.GetComponent<DraggableIngredient>()))
+            {
+                item.AddComponent<DraggableIngredient>();
+            }
+
+            return item.transform;
         }
 
         private void SetAllSlotsInactive(List<GameObject> slots)
@@ -154,8 +215,71 @@ namespace TheTasteReviver
                     }
                 }
 
+                Transform label = slot.transform.Find(LabelName);
+                if (IsAlive(label))
+                {
+                    label.gameObject.SetActive(false);
+                }
+
                 slot.SetActive(false);
             }
+        }
+
+        private TextMesh EnsureLabel(Transform slot)
+        {
+            Transform existing = slot.Find(LabelName);
+            if (IsAlive(existing))
+            {
+                TextMesh existingText = existing.GetComponent<TextMesh>();
+                return IsAlive(existingText) ? existingText : existing.gameObject.AddComponent<TextMesh>();
+            }
+
+            GameObject labelObject = new GameObject(LabelName);
+            labelObject.transform.SetParent(slot, false);
+            TextMesh text = labelObject.AddComponent<TextMesh>();
+            text.anchor = TextAnchor.MiddleCenter;
+            text.alignment = TextAlignment.Center;
+            return text;
+        }
+
+        private void ConfigureLabel(Transform slot, IngredientData ingredient)
+        {
+            TextMesh label = EnsureLabel(slot);
+            label.gameObject.SetActive(showIngredientLabels);
+            label.text = ingredient != null ? ingredient.DisplayName : string.Empty;
+            label.color = Color.black;
+            label.fontSize = Mathf.Max(8, labelFontSize);
+            label.characterSize = Mathf.Max(0.001f, labelCharacterSize);
+            label.transform.localPosition = labelOffset;
+            FaceLabelToCamera(label.transform);
+        }
+
+        private void LateUpdate()
+        {
+            Transform container = transform.Find(ContainerName);
+            if (!IsAlive(container))
+            {
+                return;
+            }
+
+            foreach (TextMesh label in container.GetComponentsInChildren<TextMesh>(false))
+            {
+                if (IsAlive(label))
+                {
+                    FaceLabelToCamera(label.transform);
+                }
+            }
+        }
+
+        private static void FaceLabelToCamera(Transform label)
+        {
+            Camera camera = Camera.main;
+            if (!IsAlive(label) || !IsAlive(camera))
+            {
+                return;
+            }
+
+            label.rotation = Quaternion.LookRotation(label.position - camera.transform.position);
         }
 
         private static Transform FindSlot(Transform container, string slotName)
@@ -260,6 +384,23 @@ namespace TheTasteReviver
         private static bool IsAlive(UnityEngine.Object obj)
         {
             return obj != null;
+        }
+
+        private static void DestroyObject(GameObject target)
+        {
+            if (!IsAlive(target))
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(target);
+            }
+            else
+            {
+                DestroyImmediate(target);
+            }
         }
 
         private static Vector3 GetSlotPosition(int index, int activeCount)

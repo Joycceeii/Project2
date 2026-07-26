@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace TheTasteReviver
@@ -129,22 +130,65 @@ namespace TheTasteReviver
     }
 
     [Serializable]
-    public class ProcessFeedbackRule
-    {
-        public string ruleId;
-        public int priority;
-        public List<MechanicType> requiredCorrect = new List<MechanicType>();
-        public List<MechanicType> requiredIncorrect = new List<MechanicType>();
-        [TextArea] public string hintText;
-    }
-
-    [Serializable]
     public class ProgressiveHintRule
     {
         public string ruleId;
         public int priority;
         public MechanicType mechanic = MechanicType.IngredientSelection;
         [TextArea] public string hintText;
+    }
+
+    [Serializable]
+    public class IngredientResponseHintRule
+    {
+        public string ruleId;
+        public int priority;
+        public MechanicType mechanic = MechanicType.Force;
+        public bool matchForce;
+        public ForceLevel forceValue = ForceLevel.Medium;
+        public bool matchSpeed;
+        public SpeedLevel speedValue = SpeedLevel.Medium;
+        public bool matchRatio;
+        public RatioLevel ratioValue = RatioLevel.None;
+        public bool matchCombination;
+        public string combinationKey;
+        [TextArea] public string hintText;
+    }
+
+    [Serializable]
+    public class LevelIngredientProfile
+    {
+        public string profileTag;
+        public IngredientData ingredient;
+        public EnabledMechanics checkedMechanics = new EnabledMechanics();
+        public ForceLevel targetForceLevel = ForceLevel.Medium;
+        public SpeedLevel targetSpeedLevel = SpeedLevel.Medium;
+        public RatioLevel targetRatioLevel = RatioLevel.None;
+        public int targetOrderIndex = -1;
+        public string targetCombinationKey;
+        public float minGrindDuration = 3f;
+        public float maxGrindDuration = 6f;
+        [TextArea] public string levelTraitDescription;
+        public List<IngredientResponseHintRule> responseHintRules = new List<IngredientResponseHintRule>();
+
+        public bool IsEnabled(MechanicType mechanic)
+        {
+            return checkedMechanics != null && checkedMechanics.IsEnabled(mechanic);
+        }
+
+        public string DisplayTag
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(profileTag))
+                {
+                    return profileTag;
+                }
+
+                string ingredientName = ingredient != null ? ingredient.DisplayName : "Ingredient";
+                return ingredientName + "_Profile";
+            }
+        }
     }
 
     [CreateAssetMenu(menuName = "The Taste Reviver/Recipe Level Data", fileName = "RecipeLevelData")]
@@ -174,9 +218,9 @@ namespace TheTasteReviver
         public HintSettings hintSettings = new HintSettings();
         public ScoringWeights scoringWeights = new ScoringWeights();
         public List<LevelClueData> unlockCluesOnComplete = new List<LevelClueData>();
-        public List<ProcessFeedbackRule> processFeedbackRules = new List<ProcessFeedbackRule>();
         [TextArea] public string fallbackHintText;
         public List<ProgressiveHintRule> progressiveHintRules = new List<ProgressiveHintRule>();
+        public List<LevelIngredientProfile> ingredientProfiles = new List<LevelIngredientProfile>();
         [TextArea] public string successFeedback;
         [TextArea] public string closeFeedback;
         [TextArea] public string wrongFeedback;
@@ -203,6 +247,156 @@ namespace TheTasteReviver
             {
                 lockedDimensions.Add(mechanic);
             }
+        }
+
+        public IReadOnlyList<LevelIngredientProfile> GetProfilesForMechanic(MechanicType mechanic)
+        {
+            if (ingredientProfiles == null)
+            {
+                return Array.Empty<LevelIngredientProfile>();
+            }
+
+            return ingredientProfiles
+                .Where(profile => profile != null && profile.ingredient != null && profile.IsEnabled(mechanic))
+                .ToList();
+        }
+
+        public LevelIngredientProfile GetProfile(IngredientData ingredient)
+        {
+            if (ingredient == null || ingredientProfiles == null)
+            {
+                return null;
+            }
+
+            return ingredientProfiles.FirstOrDefault(profile => profile != null && profile.ingredient == ingredient);
+        }
+
+        public void BuildIngredientProfilesFromLevelData()
+        {
+            if (ingredientProfiles == null)
+            {
+                ingredientProfiles = new List<LevelIngredientProfile>();
+            }
+
+            ingredientProfiles.Clear();
+            List<IngredientData> sourceIngredients = availableIngredients != null && availableIngredients.Count > 0
+                ? availableIngredients
+                : requiredIngredients;
+            if (sourceIngredients == null)
+            {
+                return;
+            }
+
+            foreach (IngredientData ingredient in sourceIngredients)
+            {
+                if (ingredient == null)
+                {
+                    continue;
+                }
+
+                LevelIngredientProfile profile = new LevelIngredientProfile
+                {
+                    profileTag = levelID + "_" + ingredient.ingredientID,
+                    ingredient = ingredient,
+                    targetForceLevel = targetForceLevel,
+                    targetSpeedLevel = targetSpeedLevel,
+                    targetRatioLevel = FindTargetRatio(ingredient),
+                    targetOrderIndex = FindTargetOrderIndex(ingredient),
+                    targetCombinationKey = FindTargetCombinationKey(ingredient),
+                    minGrindDuration = minGrindDuration,
+                    maxGrindDuration = maxGrindDuration,
+                    levelTraitDescription = ingredient.initialDescription
+                };
+
+                profile.checkedMechanics.enableIngredientSelection = enabledMechanics != null && enabledMechanics.enableIngredientSelection;
+                profile.checkedMechanics.enableIngredientOrder = enabledMechanics != null && enabledMechanics.enableIngredientOrder && profile.targetOrderIndex >= 0;
+                profile.checkedMechanics.enableRatio = enabledMechanics != null && enabledMechanics.enableRatio && profile.targetRatioLevel != RatioLevel.None;
+                profile.checkedMechanics.enableCombination = enabledMechanics != null && enabledMechanics.enableCombination && !string.IsNullOrWhiteSpace(profile.targetCombinationKey);
+                profile.checkedMechanics.enableForce = enabledMechanics != null && enabledMechanics.enableForce;
+                profile.checkedMechanics.enableSpeed = enabledMechanics != null && enabledMechanics.enableSpeed;
+                profile.checkedMechanics.enableGrindDuration = enabledMechanics != null && enabledMechanics.enableGrindDuration;
+                AddDefaultProfileHints(profile);
+                ingredientProfiles.Add(profile);
+            }
+        }
+
+        private RatioLevel FindTargetRatio(IngredientData ingredient)
+        {
+            RatioRequirement requirement = correctRatioPattern != null
+                ? correctRatioPattern.FirstOrDefault(x => x != null && x.ingredient == ingredient)
+                : null;
+            return requirement != null ? requirement.ratioLevel : RatioLevel.None;
+        }
+
+        private int FindTargetOrderIndex(IngredientData ingredient)
+        {
+            if (correctIngredientOrder == null)
+            {
+                return -1;
+            }
+
+            return correctIngredientOrder.FindIndex(x => x == ingredient);
+        }
+
+        private string FindTargetCombinationKey(IngredientData ingredient)
+        {
+            if (ingredient == null || correctCombinationPattern == null || correctCombinationPattern.groups == null)
+            {
+                return string.Empty;
+            }
+
+            foreach (CombinationGroup group in correctCombinationPattern.groups)
+            {
+                if (group != null && group.ingredients != null && group.ingredients.Contains(ingredient))
+                {
+                    return BuildCombinationKey(group.ingredients);
+                }
+            }
+
+            return string.Empty;
+        }
+
+        public static string BuildCombinationKey(IEnumerable<IngredientData> ingredients)
+        {
+            if (ingredients == null)
+            {
+                return string.Empty;
+            }
+
+            return string.Join("+", ingredients
+                .Where(x => x != null)
+                .Select(x => x.ingredientID)
+                .OrderBy(x => x));
+        }
+
+        private static void AddDefaultProfileHints(LevelIngredientProfile profile)
+        {
+            if (profile == null || profile.ingredient == null)
+            {
+                return;
+            }
+
+            AddDefaultProfileHint(profile, MechanicType.Force, 30, " is not matching the force target for ");
+            AddDefaultProfileHint(profile, MechanicType.Speed, 30, " is not matching the speed target for ");
+            AddDefaultProfileHint(profile, MechanicType.Ratio, 20, " has the wrong ratio for ");
+            AddDefaultProfileHint(profile, MechanicType.Combination, 20, " is in the wrong combination for ");
+            AddDefaultProfileHint(profile, MechanicType.IngredientOrder, 20, " is in the wrong order for ");
+        }
+
+        private static void AddDefaultProfileHint(LevelIngredientProfile profile, MechanicType mechanic, int priority, string message)
+        {
+            if (!profile.IsEnabled(mechanic))
+            {
+                return;
+            }
+
+            profile.responseHintRules.Add(new IngredientResponseHintRule
+            {
+                ruleId = profile.DisplayTag + "_" + mechanic,
+                priority = priority,
+                mechanic = mechanic,
+                hintText = profile.ingredient.DisplayName + message + profile.DisplayTag + "."
+            });
         }
     }
 }

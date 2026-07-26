@@ -1,0 +1,7 @@
+LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
+L05,RedBean,L05_RedBean,IngredientOrder,0,,,,,,,,,,,,"L05 Red Bean focuses on order."
+L05,DriedTangerinePeel,L05_DriedTangerinePeel,IngredientOrder,1,,,,,,,,,,,,"L05 Dried Tangerine Peel focuses on order."
+L05,RockSugar,L05_RockSugar,IngredientOrder,2,,,,,,,,,,,,"L05 Rock Sugar focuses on order."
+L05,RedBean,L05_RedBean,GrindDuration,18-28,,,,,,,,,,,,"L05 Red Bean focuses on order."
+L05,DriedTangerinePeel,L05_DriedTangerinePeel,GrindDuration,18-28,,,,,,,,,,,,"L05 Dried Tangerine Peel focuses on order."
+L05,RockSugar,L05_RockSugar,GrindDuration,18-28,,,,,,,,,,,,"L05 Rock Sugar focuses on order."

@@ -11,7 +11,7 @@ namespace TheTasteReviver.EditorTools
 {
     public static class TestLevelAssetGenerator
     {
-        private const string Root = "Assets/TheTasteReviver/Generated";
+        private const string Root = "Assets/Data/GeneratedAssets";
         private const string IngredientsPath = Root + "/Ingredients";
         private const string LevelsPath = Root + "/Levels";
         private const string ScenePath = "Assets/Scenes/TasteRestorer_ReusableTestLevel.unity";
@@ -39,8 +39,8 @@ namespace TheTasteReviver.EditorTools
         [MenuItem("The Taste Reviver/Generate Reusable Test Level")]
         public static void GenerateAll()
         {
-            EnsureFolder("Assets", "TheTasteReviver");
-            EnsureFolder("Assets/TheTasteReviver", "Generated");
+            EnsureFolder("Assets", "Data");
+            EnsureFolder("Assets/Data", "GeneratedAssets");
             EnsureFolder(Root, "Ingredients");
             EnsureFolder(Root, "Levels");
             EnsureFolder("Assets", "Scenes");

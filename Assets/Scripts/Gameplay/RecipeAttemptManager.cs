@@ -19,6 +19,9 @@ namespace TheTasteReviver
         public IReadOnlyList<IngredientData> IngredientOrder => ingredientOrder;
         public IReadOnlyList<IngredientInstance> IngredientAmounts => ingredientAmounts;
         public IReadOnlyList<GrindingBatch> GrindingBatches => grindingBatches;
+        public bool HasIngredientsInBowl => ingredientAmounts.Any(x => x != null && x.ingredient != null);
+        public bool HasEvaluated { get; private set; }
+        public bool HasAutoEvaluated { get; private set; }
 
         public bool TryAddIngredient(IngredientData ingredient)
         {
@@ -48,18 +51,17 @@ namespace TheTasteReviver
                 return false;
             }
 
+            if (!IsRatioSelectionRequired())
+            {
+                AddIngredientWithRatio(ingredient, RatioLevel.Medium);
+                return true;
+            }
+
             List<RatioLevel> availableRatios = GetAvailableRatioChoices();
             if (availableRatios.Count == 0)
             {
                 uiManager?.ShowHint("No ratio choices are available.");
                 return false;
-            }
-
-            if (availableRatios.Count == 1)
-            {
-                AddIngredientWithRatio(ingredient, availableRatios[0]);
-                uiManager?.ShowHint(ingredient.DisplayName + " ratio was set to " + UIManager.GetRatioDisplayName(availableRatios[0]) + ".");
-                return true;
             }
 
             if (uiManager == null)
@@ -72,13 +74,24 @@ namespace TheTasteReviver
             return true;
         }
 
+        private bool IsRatioSelectionRequired()
+        {
+            return currentLevel != null
+                && currentLevel.enabledMechanics != null
+                && currentLevel.enabledMechanics.enableRatio;
+        }
+
         public void ResetAttempt(bool clearMessages = true)
         {
             ingredientAmounts.Clear();
             ingredientOrder.Clear();
             selectedRatioPattern.Clear();
             grindingBatches.Clear();
-            pestleController?.ResetTracking();
+            HasEvaluated = false;
+            HasAutoEvaluated = false;
+            forceController?.ResetToDefault();
+            pestleController?.ResetToDefault();
+            ReturnIngredientsHome();
             RebuildCurrentBatch();
             uiManager?.RefreshAttemptPanels(this);
             if (clearMessages)
@@ -92,6 +105,27 @@ namespace TheTasteReviver
         {
             currentLevel = level;
             ResetAttempt(false);
+        }
+
+        public void MarkAutoEvaluated()
+        {
+            HasAutoEvaluated = true;
+        }
+
+        public void MarkEvaluated()
+        {
+            HasEvaluated = true;
+        }
+
+        private void ReturnIngredientsHome()
+        {
+            foreach (DraggableIngredient ingredient in FindObjectsByType<DraggableIngredient>(FindObjectsSortMode.None))
+            {
+                if (ingredient != null && ingredient.gameObject.activeInHierarchy)
+                {
+                    ingredient.ReturnHome();
+                }
+            }
         }
 
         public Dictionary<IngredientData, RatioLevel> CalculateRatioPattern(out bool hasAmbiguousTies)
@@ -152,6 +186,12 @@ namespace TheTasteReviver
             selectedRatioPattern.Add(new RatioRequirement { ingredient = ingredient, ratioLevel = ratio });
             RebuildCurrentBatch();
             uiManager?.RefreshAttemptPanels(this);
+            if (uiManager != null
+                && !uiManager.ShowStepFeedback(MechanicType.IngredientOrder, ingredient)
+                && !uiManager.ShowStepFeedback(MechanicType.Ratio, ingredient))
+            {
+                uiManager.ShowStepFeedback(MechanicType.Combination, ingredient);
+            }
         }
 
         private List<RatioLevel> GetAvailableRatioChoices()

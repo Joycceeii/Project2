@@ -7,6 +7,7 @@ namespace TheTasteReviver
     {
         public Slider forceSlider;
         public Text forceLabel;
+        public UIManager uiManager;
         public ForceLevel CurrentForceLevel { get; private set; } = ForceLevel.Medium;
 
         private void Awake()
@@ -61,20 +62,45 @@ namespace TheTasteReviver
             }
         }
 
-        private void OnSliderChanged(float value)
+        public void ResetToDefault()
         {
-            CurrentForceLevel = ValueToForce(value);
+            float defaultValue = 0.5f;
+            if (forceSlider != null)
+            {
+                forceSlider.SetValueWithoutNotify(defaultValue);
+            }
+
+            CurrentForceLevel = ForceLevel.Medium;
             if (forceLabel != null)
             {
                 forceLabel.text = "Current Force: " + CurrentForceLevel;
             }
         }
 
+        private void OnSliderChanged(float value)
+        {
+            ForceLevel previous = CurrentForceLevel;
+            CurrentForceLevel = ValueToForce(value);
+            if (forceLabel != null)
+            {
+                forceLabel.text = "Current Force: " + CurrentForceLevel;
+            }
+
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+
+            if (previous != CurrentForceLevel)
+            {
+                uiManager?.ShowStepFeedback(MechanicType.Force);
+            }
+        }
+
         public static ForceLevel ValueToForce(float value)
         {
-            if (value <= 0.25f) return ForceLevel.Light;
-            if (value <= 0.5f) return ForceLevel.Medium;
-            if (value <= 0.75f) return ForceLevel.MediumHigh;
+            if (value < 0.34f) return ForceLevel.Light;
+            if (value < 0.67f) return ForceLevel.Medium;
             return ForceLevel.Heavy;
         }
     }

@@ -21,24 +21,6 @@ namespace TheTasteReviver
             AddMechanic(result, level, MechanicType.Combination, EvaluateCombination(level, attempt));
             AddMechanic(result, level, MechanicType.Force, EvaluateForce(level, attempt));
             AddMechanic(result, level, MechanicType.Speed, EvaluateSpeed(level, attempt));
-            AddMechanic(result, level, MechanicType.GrindDuration, EvaluateDuration(level, attempt));
-
-            float weighted = 0f;
-            float totalWeight = 0f;
-            foreach (DimensionEvaluation dimension in result.dimensions)
-            {
-                weighted += dimension.normalizedScore * dimension.weight;
-                totalWeight += dimension.weight;
-            }
-
-            if (totalWeight <= 0f)
-            {
-                result.completenessScore = 0;
-            }
-            else
-            {
-                result.completenessScore = Mathf.RoundToInt(weighted / totalWeight * 100f);
-            }
 
             result.judgement = BuildJudgement(result);
             result.passed = result.judgement == JudgementResult.Correct;
@@ -74,6 +56,25 @@ namespace TheTasteReviver
 
         private static DimensionEvaluation EvaluateOrder(RecipeLevelData level, RecipeAttemptManager attempt)
         {
+            IReadOnlyList<LevelIngredientProfile> profiles = level.GetProfilesForMechanic(MechanicType.IngredientOrder);
+            if (profiles.Count > 0)
+            {
+                List<IngredientData> actualProfileOrder = attempt.IngredientOrder.Where(x => level.GetProfile(x) != null).Distinct().ToList();
+                int correctProfiles = 0;
+                foreach (LevelIngredientProfile profile in profiles)
+                {
+                    int actualIndex = actualProfileOrder.IndexOf(profile.ingredient);
+                    if (actualIndex == profile.targetOrderIndex)
+                    {
+                        correctProfiles++;
+                    }
+                }
+
+                float profileScore = correctProfiles / Mathf.Max(1f, profiles.Count);
+                string profileFeedback = profileScore >= 0.99f ? level.feedbackTexts.orderCorrect : profileScore > 0f ? level.feedbackTexts.orderPartial : level.feedbackTexts.orderWrong;
+                return new DimensionEvaluation(profileScore, profileScore >= 0.99f, profileFeedback);
+            }
+
             List<IngredientData> target = level.correctIngredientOrder.Where(x => x != null).ToList();
             List<IngredientData> actual = attempt.IngredientOrder.Where(x => x != null).Distinct().ToList();
             if (target.Count == 0)
@@ -104,6 +105,14 @@ namespace TheTasteReviver
                 return new DimensionEvaluation(0.4f, false, level.feedbackTexts.ratioAmbiguous);
             }
 
+            IReadOnlyList<LevelIngredientProfile> profiles = level.GetProfilesForMechanic(MechanicType.Ratio);
+            if (profiles.Count > 0)
+            {
+                int correctProfiles = profiles.Count(profile => actual.TryGetValue(profile.ingredient, out RatioLevel levelValue) && levelValue == profile.targetRatioLevel);
+                float profileScore = correctProfiles / Mathf.Max(1f, profiles.Count);
+                return new DimensionEvaluation(profileScore, profileScore >= 0.99f, profileScore >= 0.99f ? level.feedbackTexts.ratioCorrect : "Ratio pattern does not match the ingredient profile targets yet.");
+            }
+
             List<RatioRequirement> target = level.correctRatioPattern.Where(x => x.ingredient != null).ToList();
             if (target.Count <= 1)
             {
@@ -125,6 +134,23 @@ namespace TheTasteReviver
 
         private static DimensionEvaluation EvaluateCombination(RecipeLevelData level, RecipeAttemptManager attempt)
         {
+            IReadOnlyList<LevelIngredientProfile> profiles = level.GetProfilesForMechanic(MechanicType.Combination);
+            if (profiles.Count > 0)
+            {
+                int correctProfiles = 0;
+                foreach (LevelIngredientProfile profile in profiles)
+                {
+                    string actualKey = FindActualCombinationKey(profile.ingredient, attempt.GrindingBatches);
+                    if (actualKey == profile.targetCombinationKey || string.IsNullOrWhiteSpace(profile.targetCombinationKey))
+                    {
+                        correctProfiles++;
+                    }
+                }
+
+                float profileScore = correctProfiles / Mathf.Max(1f, profiles.Count);
+                return new DimensionEvaluation(profileScore, profileScore >= 0.99f, profileScore >= 0.99f ? level.feedbackTexts.combinationCorrect : level.feedbackTexts.combinationWrong);
+            }
+
             string target = NormalizeCombination(level.correctCombinationPattern);
             string actual = NormalizeBatches(attempt.GrindingBatches);
             bool correct = target == actual || string.IsNullOrEmpty(target);
@@ -134,6 +160,17 @@ namespace TheTasteReviver
         private static DimensionEvaluation EvaluateForce(RecipeLevelData level, RecipeAttemptManager attempt)
         {
             ForceLevel actual = attempt.forceController != null ? attempt.forceController.CurrentForceLevel : ForceLevel.Medium;
+            IReadOnlyList<LevelIngredientProfile> profiles = level.GetProfilesForMechanic(MechanicType.Force);
+            if (profiles.Count > 0)
+            {
+                int exact = profiles.Count(profile => actual == profile.targetForceLevel);
+                int adjacent = profiles.Count(profile => actual != profile.targetForceLevel && Mathf.Abs((int)actual - (int)profile.targetForceLevel) == 1);
+                float profileScore = (exact + adjacent * 0.5f) / Mathf.Max(1f, profiles.Count);
+                bool correct = exact == profiles.Count;
+                string profileFeedback = correct ? level.feedbackTexts.forceCorrect : BuildProfileForceFeedback(actual, profiles);
+                return new DimensionEvaluation(profileScore, correct, profileFeedback);
+            }
+
             if (actual == level.targetForceLevel)
             {
                 return new DimensionEvaluation(1f, true, level.feedbackTexts.forceCorrect);
@@ -147,6 +184,17 @@ namespace TheTasteReviver
         private static DimensionEvaluation EvaluateSpeed(RecipeLevelData level, RecipeAttemptManager attempt)
         {
             SpeedLevel actual = attempt.pestleController != null ? attempt.pestleController.CurrentSpeedLevel : SpeedLevel.Medium;
+            IReadOnlyList<LevelIngredientProfile> profiles = level.GetProfilesForMechanic(MechanicType.Speed);
+            if (profiles.Count > 0)
+            {
+                int exact = profiles.Count(profile => actual == profile.targetSpeedLevel);
+                int adjacent = profiles.Count(profile => actual != profile.targetSpeedLevel && Mathf.Abs((int)actual - (int)profile.targetSpeedLevel) == 1);
+                float profileScore = (exact + adjacent * 0.5f) / Mathf.Max(1f, profiles.Count);
+                bool correct = exact == profiles.Count;
+                string profileFeedback = correct ? level.feedbackTexts.speedCorrect : BuildProfileSpeedFeedback(actual, profiles);
+                return new DimensionEvaluation(profileScore, correct, profileFeedback);
+            }
+
             if (actual == level.targetSpeedLevel)
             {
                 return new DimensionEvaluation(1f, true, level.feedbackTexts.speedCorrect);
@@ -157,22 +205,6 @@ namespace TheTasteReviver
             return new DimensionEvaluation(score, false, feedback);
         }
 
-        private static DimensionEvaluation EvaluateDuration(RecipeLevelData level, RecipeAttemptManager attempt)
-        {
-            float duration = attempt.pestleController != null ? attempt.pestleController.GrindDuration : 0f;
-            if (duration < level.minGrindDuration)
-            {
-                return new DimensionEvaluation(0f, false, level.feedbackTexts.durationTooShort);
-            }
-
-            if (duration > level.maxGrindDuration)
-            {
-                return new DimensionEvaluation(0f, false, level.feedbackTexts.durationTooLong);
-            }
-
-            return new DimensionEvaluation(1f, true, level.feedbackTexts.durationCorrect);
-        }
-
         private static JudgementResult BuildJudgement(EvaluationResult result)
         {
             if (result.dimensions.Count > 0 && result.dimensions.All(x => x.isCorrect))
@@ -180,7 +212,7 @@ namespace TheTasteReviver
                 return JudgementResult.Correct;
             }
 
-            if (result.completenessScore >= 45 || result.dimensions.Any(x => x.normalizedScore >= 0.5f))
+            if (result.dimensions.Any(x => x.normalizedScore >= 0.5f))
             {
                 return JudgementResult.Close;
             }
@@ -208,15 +240,21 @@ namespace TheTasteReviver
                 }
             }
 
-            return BuildMainFeedback(result.completenessScore);
+            return BuildMainFeedback(result.judgement);
         }
 
-        public static string BuildMainFeedback(int score)
+        public static string BuildMainFeedback(JudgementResult judgement)
         {
-            if (score >= 90) return "Excellent restoration. The structure is close to the target.";
-            if (score >= 80) return "Restoration succeeded, with details still available to refine.";
-            if (score >= 60) return "The direction is mostly correct, but key layers are unstable.";
-            if (score >= 40) return "Some parts work, but the overall structure is unclear.";
+            if (judgement == JudgementResult.Correct)
+            {
+                return "Restoration complete.";
+            }
+
+            if (judgement == JudgementResult.Close)
+            {
+                return "Some parts are working, but one or more recipe relationships still need adjustment.";
+            }
+
             return "The recipe is far from the target and needs rework.";
         }
 
@@ -251,6 +289,50 @@ namespace TheTasteReviver
 
             return string.Join("|", groups.OrderBy(x => x));
         }
+
+        private static string FindActualCombinationKey(IngredientData ingredient, IReadOnlyList<GrindingBatch> batches)
+        {
+            if (ingredient == null || batches == null)
+            {
+                return string.Empty;
+            }
+
+            foreach (GrindingBatch batch in batches)
+            {
+                if (batch != null && batch.ingredientsInBatch != null && batch.ingredientsInBatch.Contains(ingredient))
+                {
+                    return RecipeLevelData.BuildCombinationKey(batch.ingredientsInBatch);
+                }
+            }
+
+            return string.Empty;
+        }
+
+        private static string BuildProfileForceFeedback(ForceLevel actual, IReadOnlyList<LevelIngredientProfile> profiles)
+        {
+            LevelIngredientProfile target = profiles.FirstOrDefault(profile => profile != null && profile.targetForceLevel != actual);
+            if (target == null)
+            {
+                return "The force does not match the ingredient profile target yet.";
+            }
+
+            return (int)actual < (int)target.targetForceLevel
+                ? target.ingredient.DisplayName + " needs more force in " + target.DisplayTag + "."
+                : target.ingredient.DisplayName + " needs less force in " + target.DisplayTag + ".";
+        }
+
+        private static string BuildProfileSpeedFeedback(SpeedLevel actual, IReadOnlyList<LevelIngredientProfile> profiles)
+        {
+            LevelIngredientProfile target = profiles.FirstOrDefault(profile => profile != null && profile.targetSpeedLevel != actual);
+            if (target == null)
+            {
+                return "The speed does not match the ingredient profile target yet.";
+            }
+
+            return (int)actual < (int)target.targetSpeedLevel
+                ? target.ingredient.DisplayName + " needs faster grinding in " + target.DisplayTag + "."
+                : target.ingredient.DisplayName + " needs slower grinding in " + target.DisplayTag + ".";
+        }
     }
 
     public class DimensionEvaluation
@@ -271,7 +353,6 @@ namespace TheTasteReviver
 
     public class EvaluationResult
     {
-        public int completenessScore;
         public bool passed;
         public JudgementResult judgement = JudgementResult.Wrong;
         public string mainFeedback;

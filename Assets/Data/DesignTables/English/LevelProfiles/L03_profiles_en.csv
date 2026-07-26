@@ -1,0 +1,5 @@
+LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
+L03,BlackSesame,L03_BlackSesame,Ratio,More,,,,,,,,,,,,"L03 Black Sesame focuses on ratio."
+L03,GlutinousRice,L03_GlutinousRice,Ratio,Less,,,,,,,,,,,,"L03 Glutinous Rice focuses on ratio."
+L03,BlackSesame,L03_BlackSesame,GrindDuration,14-22,,,,,,,,,,,,"L03 Black Sesame focuses on ratio."
+L03,GlutinousRice,L03_GlutinousRice,GrindDuration,14-22,,,,,,,,,,,,"L03 Glutinous Rice focuses on ratio."

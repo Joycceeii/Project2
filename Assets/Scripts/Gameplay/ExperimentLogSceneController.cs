@@ -117,23 +117,33 @@ namespace TheTasteReviver
             }
             raycaster.enabled = true;
 
-            RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+            RectTransform canvasRect = EnsureComponent<RectTransform>(canvas.transform);
             Transform root = canvas.transform;
 
             Image background = EnsureImage(root, "Background");
-            RectTransform backgroundRect = background.GetComponent<RectTransform>();
+            RectTransform backgroundRect = IsAlive(background) ? EnsureComponent<RectTransform>(background.transform) : null;
             StretchToParent(backgroundRect);
-            background.color = new Color(0.94f, 0.91f, 0.84f, 1f);
+            if (IsAlive(background))
+            {
+                background.color = new Color(0.94f, 0.91f, 0.84f, 1f);
+            }
 
             Text title = EnsureText(root, "Experiment Log Title", TextAnchor.MiddleCenter, 30, FontStyle.Bold);
-            RectTransform titleRect = title.GetComponent<RectTransform>();
-            titleRect.anchorMin = new Vector2(0f, 1f);
-            titleRect.anchorMax = new Vector2(1f, 1f);
-            titleRect.pivot = new Vector2(0.5f, 1f);
-            titleRect.offsetMin = new Vector2(96f, -82f);
-            titleRect.offsetMax = new Vector2(-96f, -24f);
-            title.text = "Experiment Log";
-            title.color = new Color(0.12f, 0.1f, 0.08f, 1f);
+            RectTransform titleRect = IsAlive(title) ? EnsureComponent<RectTransform>(title.transform) : null;
+            if (IsAlive(titleRect))
+            {
+                titleRect.anchorMin = new Vector2(0f, 1f);
+                titleRect.anchorMax = new Vector2(1f, 1f);
+                titleRect.pivot = new Vector2(0.5f, 1f);
+                titleRect.offsetMin = new Vector2(96f, -82f);
+                titleRect.offsetMax = new Vector2(-96f, -24f);
+            }
+
+            if (IsAlive(title))
+            {
+                title.text = "Experiment Log";
+                title.color = new Color(0.12f, 0.1f, 0.08f, 1f);
+            }
 
             EnsureScrollView(root);
 
@@ -149,50 +159,67 @@ namespace TheTasteReviver
         private void EnsureScrollView(Transform root)
         {
             Image scrollImage = EnsureImage(root, "Experiment Log Scroll View");
+            if (!IsAlive(scrollImage))
+            {
+                return;
+            }
+
             scrollImage.color = new Color(1f, 0.98f, 0.92f, 1f);
-            RectTransform scrollRectTransform = scrollImage.GetComponent<RectTransform>();
+            RectTransform scrollRectTransform = EnsureComponent<RectTransform>(scrollImage.transform);
+            if (!IsAlive(scrollRectTransform))
+            {
+                return;
+            }
+
             scrollRectTransform.anchorMin = new Vector2(0f, 0f);
             scrollRectTransform.anchorMax = new Vector2(1f, 1f);
             scrollRectTransform.pivot = new Vector2(0.5f, 0.5f);
             scrollRectTransform.offsetMin = new Vector2(72f, 92f);
             scrollRectTransform.offsetMax = new Vector2(-72f, -100f);
 
-            scrollRect = scrollImage.GetComponent<ScrollRect>();
-            if (scrollRect == null)
+            scrollRect = EnsureComponent<ScrollRect>(scrollImage.transform);
+            if (!IsAlive(scrollRect))
             {
-                scrollRect = scrollImage.gameObject.AddComponent<ScrollRect>();
+                return;
             }
 
             Transform viewportTransform = EnsureChild(scrollImage.transform, "Viewport");
             RectTransform viewportRect = EnsureRectTransform(viewportTransform);
             StretchToParent(viewportRect);
 
-            Image viewportImage = viewportTransform.GetComponent<Image>();
-            if (viewportImage == null)
+            Image viewportImage = EnsureComponent<Image>(viewportTransform);
+            if (!IsAlive(viewportImage))
             {
-                viewportImage = viewportTransform.gameObject.AddComponent<Image>();
+                return;
             }
+
             viewportImage.color = new Color(1f, 1f, 1f, 0.08f);
 
-            Mask mask = viewportTransform.GetComponent<Mask>();
-            if (mask == null)
+            Mask mask = EnsureComponent<Mask>(viewportTransform);
+            if (!IsAlive(mask))
             {
-                mask = viewportTransform.gameObject.AddComponent<Mask>();
+                return;
             }
+
             mask.showMaskGraphic = false;
 
             Transform contentTransform = EnsureChild(viewportTransform, "Content");
             RectTransform contentRect = EnsureRectTransform(contentTransform);
+            if (!IsAlive(contentRect))
+            {
+                return;
+            }
+
             contentRect.anchorMin = new Vector2(0f, 1f);
             contentRect.anchorMax = new Vector2(1f, 1f);
             contentRect.pivot = new Vector2(0.5f, 1f);
             contentRect.anchoredPosition = Vector2.zero;
             contentRect.sizeDelta = new Vector2(0f, 720f);
 
-            logText = contentTransform.GetComponent<Text>();
-            if (logText == null)
+            logText = EnsureComponent<Text>(contentTransform);
+            if (!IsAlive(logText))
             {
-                logText = contentTransform.gameObject.AddComponent<Text>();
+                return;
             }
 
             logText.font = GetRuntimeFont();
@@ -204,15 +231,21 @@ namespace TheTasteReviver
             logText.verticalOverflow = VerticalWrapMode.Overflow;
             logText.raycastTarget = false;
 
-            ContentSizeFitter fitter = contentTransform.GetComponent<ContentSizeFitter>();
-            if (fitter == null)
+            ContentSizeFitter fitter = EnsureComponent<ContentSizeFitter>(contentTransform);
+            if (!IsAlive(fitter))
             {
-                fitter = contentTransform.gameObject.AddComponent<ContentSizeFitter>();
+                return;
             }
+
             fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
             fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            RectTransform textRect = logText.GetComponent<RectTransform>();
+            RectTransform textRect = EnsureComponent<RectTransform>(logText.transform);
+            if (!IsAlive(textRect))
+            {
+                return;
+            }
+
             textRect.offsetMin = new Vector2(24f, 0f);
             textRect.offsetMax = new Vector2(-24f, 0f);
 
@@ -358,7 +391,17 @@ namespace TheTasteReviver
         private static Button EnsureButton(Transform parent, string name, Vector2 size, Vector2 position, Vector2 anchorPoint, Vector2 pivot)
         {
             Image image = EnsureImage(parent, name);
-            RectTransform rect = image.GetComponent<RectTransform>();
+            if (!IsAlive(image))
+            {
+                return null;
+            }
+
+            RectTransform rect = EnsureComponent<RectTransform>(image.transform);
+            if (!IsAlive(rect))
+            {
+                return null;
+            }
+
             rect.anchorMin = anchorPoint;
             rect.anchorMax = anchorPoint;
             rect.pivot = pivot;
@@ -366,18 +409,27 @@ namespace TheTasteReviver
             rect.anchoredPosition = position;
             image.color = new Color(0.29f, 0.35f, 0.28f, 1f);
 
-            Button button = image.GetComponent<Button>();
-            if (button == null)
+            Button button = EnsureComponent<Button>(image.transform);
+            if (!IsAlive(button))
             {
-                button = image.gameObject.AddComponent<Button>();
+                return null;
             }
             button.targetGraphic = image;
 
             Text label = EnsureText(image.transform, name + " Text", TextAnchor.MiddleCenter, 16, FontStyle.Bold);
-            RectTransform labelRect = label.GetComponent<RectTransform>();
+            if (!IsAlive(label))
+            {
+                return button;
+            }
+
+            RectTransform labelRect = EnsureComponent<RectTransform>(label.transform);
             StretchToParent(labelRect);
-            labelRect.offsetMin = new Vector2(8f, 0f);
-            labelRect.offsetMax = new Vector2(-8f, 0f);
+            if (IsAlive(labelRect))
+            {
+                labelRect.offsetMin = new Vector2(8f, 0f);
+                labelRect.offsetMax = new Vector2(-8f, 0f);
+            }
+
             label.text = name;
             label.color = Color.white;
             label.raycastTarget = false;
@@ -387,9 +439,11 @@ namespace TheTasteReviver
         private static Image EnsureImage(Transform parent, string name)
         {
             Transform child = EnsureChild(parent, name);
-            if (!IsAlive(child))
+            GameObject childObject = GetLiveGameObject(child);
+            if (!IsAlive(childObject))
             {
                 child = CreateChild(parent, name);
+                childObject = GetLiveGameObject(child);
             }
 
             RectTransform rect = EnsureRectTransform(child);
@@ -402,12 +456,26 @@ namespace TheTasteReviver
             catch (MissingReferenceException)
             {
                 child = CreateChild(parent, name);
+                childObject = GetLiveGameObject(child);
                 rect = EnsureRectTransform(child);
             }
 
             if (!IsAlive(image))
             {
-                image = child.gameObject.AddComponent<Image>();
+                childObject = GetLiveGameObject(child);
+                if (!IsAlive(childObject))
+                {
+                    child = CreateChild(parent, name);
+                    childObject = GetLiveGameObject(child);
+                    rect = EnsureRectTransform(child);
+                }
+
+                if (!IsAlive(childObject))
+                {
+                    return null;
+                }
+
+                image = childObject.AddComponent<Image>();
             }
 
             if (IsAlive(rect))
@@ -421,9 +489,11 @@ namespace TheTasteReviver
         private static Text EnsureText(Transform parent, string name, TextAnchor anchor, int fontSize, FontStyle fontStyle)
         {
             Transform child = EnsureChild(parent, name);
-            if (!IsAlive(child))
+            GameObject childObject = GetLiveGameObject(child);
+            if (!IsAlive(childObject))
             {
                 child = CreateChild(parent, name);
+                childObject = GetLiveGameObject(child);
             }
 
             RectTransform rect = EnsureRectTransform(child);
@@ -436,12 +506,26 @@ namespace TheTasteReviver
             catch (MissingReferenceException)
             {
                 child = CreateChild(parent, name);
+                childObject = GetLiveGameObject(child);
                 rect = EnsureRectTransform(child);
             }
 
             if (!IsAlive(text))
             {
-                text = child.gameObject.AddComponent<Text>();
+                childObject = GetLiveGameObject(child);
+                if (!IsAlive(childObject))
+                {
+                    child = CreateChild(parent, name);
+                    childObject = GetLiveGameObject(child);
+                    rect = EnsureRectTransform(child);
+                }
+
+                if (!IsAlive(childObject))
+                {
+                    return null;
+                }
+
+                text = childObject.AddComponent<Text>();
             }
 
             if (IsAlive(rect))
@@ -515,7 +599,34 @@ namespace TheTasteReviver
                 return rect;
             }
 
-            return transform.gameObject.AddComponent<RectTransform>();
+            GameObject target = GetLiveGameObject(transform);
+            return IsAlive(target) ? target.AddComponent<RectTransform>() : null;
+        }
+
+        private static T EnsureComponent<T>(Transform transform) where T : Component
+        {
+            if (!IsAlive(transform))
+            {
+                return null;
+            }
+
+            T component = null;
+            try
+            {
+                component = transform.GetComponent<T>();
+            }
+            catch (MissingReferenceException)
+            {
+                return null;
+            }
+
+            if (IsAlive(component))
+            {
+                return component;
+            }
+
+            GameObject target = GetLiveGameObject(transform);
+            return IsAlive(target) ? target.AddComponent<T>() : null;
         }
 
         private static void StretchToParent(RectTransform rect)
@@ -554,6 +665,23 @@ namespace TheTasteReviver
         private static bool IsAlive(UnityEngine.Object obj)
         {
             return obj != null;
+        }
+
+        private static GameObject GetLiveGameObject(Component component)
+        {
+            if (!IsAlive(component))
+            {
+                return null;
+            }
+
+            try
+            {
+                return component.gameObject;
+            }
+            catch (MissingReferenceException)
+            {
+                return null;
+            }
         }
     }
 }

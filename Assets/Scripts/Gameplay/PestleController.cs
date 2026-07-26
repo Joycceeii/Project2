@@ -8,6 +8,7 @@ namespace TheTasteReviver
         public MortarArea mortarArea;
         public Camera interactionCamera;
         public Text speedLabel;
+        public UIManager uiManager;
         public float slowThreshold = 360f;
         public float fastThreshold = 720f;
         public float speedResponseTime = 0.25f;
@@ -21,9 +22,13 @@ namespace TheTasteReviver
         private float currentMouseSpeed;
         private bool hasSpeedSample;
         private float dragPlaneY;
+        private Vector3 startPosition;
+        private Quaternion startRotation;
 
         private void Awake()
         {
+            startPosition = transform.position;
+            startRotation = transform.rotation;
             if (interactionCamera == null)
             {
                 interactionCamera = Camera.main;
@@ -60,6 +65,7 @@ namespace TheTasteReviver
                 UpdateCurrentSpeed(delta);
                 CurrentSpeedLevel = SpeedToLevel(currentMouseSpeed);
                 RefreshLabel();
+                uiManager?.TryAutoEvaluateAfterGrinding();
             }
 
             lastMousePosition = Input.mousePosition;
@@ -68,15 +74,28 @@ namespace TheTasteReviver
         private void OnMouseUp()
         {
             dragging = false;
+            if (hasSpeedSample)
+            {
+                uiManager?.ShowStepFeedback(MechanicType.Speed);
+            }
         }
 
         public void ResetTracking()
         {
+            dragging = false;
             currentMouseSpeed = 0f;
             hasSpeedSample = false;
             GrindDuration = 0f;
             CurrentSpeedLevel = SpeedLevel.Medium;
             RefreshLabel();
+        }
+
+        public void ResetToDefault()
+        {
+            ResetTracking();
+            transform.position = startPosition;
+            transform.rotation = startRotation;
+            dragPlaneY = transform.position.y;
         }
 
         private void UpdateCurrentSpeed(float mouseDelta)

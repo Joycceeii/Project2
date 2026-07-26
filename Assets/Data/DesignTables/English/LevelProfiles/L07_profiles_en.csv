@@ -1,0 +1,5 @@
+LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
+L07,WhitePepper,L07_WhitePepper,Speed,Medium,,,,,,,,,,,,"L07 White Pepper focuses on speed."
+L07,WhitePepper,L07_WhitePepper,GrindDuration,20-32,,,,,,,,,,,,"L07 White Pepper focuses on speed."
+L07,Peanut,L07_Peanut,GrindDuration,20-32,,,,,,,,,,,,"L07 Peanut supports the soup aroma."
+L07,DriedTangerinePeel,L07_DriedTangerinePeel,GrindDuration,20-32,,,,,,,,,,,,"L07 Dried Tangerine Peel supports the soup aroma."

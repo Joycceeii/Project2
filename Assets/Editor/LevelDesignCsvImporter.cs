@@ -13,19 +13,20 @@ namespace TheTasteReviver.EditorTools
 {
     public static class LevelDesignCsvImporter
     {
-        private const string GeneratedRoot = "Assets/TheTasteReviver/Generated";
+        private const string GeneratedRoot = "Assets/Data/GeneratedAssets";
         private const string IngredientsPath = GeneratedRoot + "/Ingredients";
         private const string LevelsPath = GeneratedRoot + "/Levels";
-        private const string DesignDataPath = "Assets/TheTasteReviver/DesignData/English";
+        private const string DesignDataPath = "Assets/Data/DesignTables/English";
         private const string IngredientCsvPath = DesignDataPath + "/ingredients_en.csv";
         private const string LevelCsvPath = DesignDataPath + "/levels_en.csv";
         private const string HintCsvPath = DesignDataPath + "/hints_en.csv";
+        private const string LevelProfileFolderPath = DesignDataPath + "/LevelProfiles";
 
         [MenuItem("The Taste Reviver/Import English CSV Design Data")]
         public static void ImportEnglishCsvDesignData()
         {
-            EnsureFolder("Assets", "TheTasteReviver");
-            EnsureFolder("Assets/TheTasteReviver", "Generated");
+            EnsureFolder("Assets", "Data");
+            EnsureFolder("Assets/Data", "GeneratedAssets");
             EnsureFolder(GeneratedRoot, "Ingredients");
             EnsureFolder(GeneratedRoot, "Levels");
 
@@ -34,6 +35,7 @@ namespace TheTasteReviver.EditorTools
             List<Dictionary<string, string>> hintRows = ReadCsvAsset(HintCsvPath);
 
             Dictionary<string, IngredientData> ingredients = ImportIngredients(ingredientRows);
+            TryGenerateIngredientPrefabs();
             List<RecipeLevelData> levels = ImportLevels(levelRows, hintRows, ingredients);
             AssignOpenSceneReferences(ingredients.Values.ToList(), levels);
 
@@ -77,7 +79,10 @@ namespace TheTasteReviver.EditorTools
                 {
                     asset.ingredientColor = defaults.ingredientColor;
                     asset.icon = defaults.icon;
-                    asset.prefab = defaults.prefab;
+                    if (asset.prefab == null && defaults.prefab != null)
+                    {
+                        asset.prefab = defaults.prefab;
+                    }
                 }
 
                 EditorUtility.SetDirty(asset);
@@ -141,10 +146,17 @@ namespace TheTasteReviver.EditorTools
                 asset.enabledMechanics = ParseMechanics(Get(row, "EnabledMechanics"));
                 asset.SyncDimensionsFromEnabledMechanics();
                 asset.hintSettings.hintPriority = BuildHintPriority(asset.enabledMechanics);
-                asset.processFeedbackRules.Clear();
                 asset.unlockCluesOnComplete.Clear();
                 asset.progressiveHintRules.Clear();
                 asset.fallbackHintText = string.Empty;
+                asset.BuildIngredientProfilesFromLevelData();
+
+                List<Dictionary<string, string>> levelProfiles = ReadLevelProfileCsv(id);
+                if (levelProfiles.Count > 0)
+                {
+                    asset.ingredientProfiles.Clear();
+                    ApplyIngredientProfiles(asset, levelProfiles, ingredients);
+                }
 
                 if (hintsByLevel.TryGetValue(id, out List<Dictionary<string, string>> levelHints))
                 {
@@ -175,20 +187,6 @@ namespace TheTasteReviver.EditorTools
                     continue;
                 }
 
-                if (type == "ProcessCheck")
-                {
-                    ProcessFeedbackRule rule = new ProcessFeedbackRule
-                    {
-                        ruleId = Get(row, "RuleID"),
-                        priority = ParseInt(Get(row, "Priority"), 0),
-                        hintText = text
-                    };
-                    rule.requiredCorrect.AddRange(ParseMechanicList(Get(row, "RequiredCorrect")));
-                    rule.requiredIncorrect.AddRange(ParseMechanicList(Get(row, "RequiredIncorrect")));
-                    level.processFeedbackRules.Add(rule);
-                    continue;
-                }
-
                 if (type == "ProgressiveHint")
                 {
                     level.progressiveHintRules.Add(new ProgressiveHintRule
@@ -214,6 +212,148 @@ namespace TheTasteReviver.EditorTools
                     level.unlockCluesOnComplete.Add(clue);
                 }
             }
+        }
+
+        private static List<Dictionary<string, string>> ReadLevelProfileCsv(string levelID)
+        {
+            if (string.IsNullOrWhiteSpace(levelID))
+            {
+                return new List<Dictionary<string, string>>();
+            }
+
+            string path = LevelProfileFolderPath + "/" + Sanitize(levelID) + "_profiles_en.csv";
+            return ReadOptionalCsvAsset(path);
+        }
+
+        private static void ApplyIngredientProfiles(RecipeLevelData level, List<Dictionary<string, string>> rows, Dictionary<string, IngredientData> ingredients)
+        {
+            foreach (Dictionary<string, string> row in rows)
+            {
+                string ingredientId = Get(row, "IngredientID");
+                if (!ingredients.TryGetValue(ingredientId, out IngredientData ingredient))
+                {
+                    Debug.LogWarning("Unknown profile ingredient ID in CSV: " + ingredientId);
+                    continue;
+                }
+
+                LevelIngredientProfile profile = level.ingredientProfiles.FirstOrDefault(x => x != null && x.ingredient == ingredient);
+                if (profile == null)
+                {
+                    profile = new LevelIngredientProfile { ingredient = ingredient };
+                    level.ingredientProfiles.Add(profile);
+                }
+
+                string tag = Get(row, "ProfileTag");
+                if (!string.IsNullOrWhiteSpace(tag))
+                {
+                    profile.profileTag = tag;
+                }
+
+                string trait = Get(row, "TraitDescription");
+                if (!string.IsNullOrWhiteSpace(trait))
+                {
+                    profile.levelTraitDescription = trait;
+                }
+
+                MechanicType mechanic = ParseEnum(Get(row, "Mechanic"), MechanicType.IngredientSelection);
+                EnableProfileMechanic(profile, mechanic);
+                ApplyProfileTarget(profile, row, mechanic);
+
+                string hint = Get(row, "HintText");
+                if (!string.IsNullOrWhiteSpace(hint))
+                {
+                    profile.responseHintRules.Add(new IngredientResponseHintRule
+                    {
+                        ruleId = Get(row, "RuleID"),
+                        priority = ParseInt(Get(row, "Priority"), 0),
+                        mechanic = mechanic,
+                        matchForce = ParseBool(Get(row, "MatchForce")),
+                        forceValue = ParseEnum(Get(row, "ForceValue"), profile.targetForceLevel),
+                        matchSpeed = ParseBool(Get(row, "MatchSpeed")),
+                        speedValue = ParseEnum(Get(row, "SpeedValue"), profile.targetSpeedLevel),
+                        matchRatio = ParseBool(Get(row, "MatchRatio")),
+                        ratioValue = ParseEnum(Get(row, "RatioValue"), profile.targetRatioLevel),
+                        matchCombination = ParseBool(Get(row, "MatchCombination")),
+                        combinationKey = Get(row, "CombinationKey"),
+                        hintText = hint
+                    });
+                }
+            }
+        }
+
+        private static void EnableProfileMechanic(LevelIngredientProfile profile, MechanicType mechanic)
+        {
+            if (profile.checkedMechanics == null)
+            {
+                profile.checkedMechanics = new EnabledMechanics();
+            }
+
+            switch (mechanic)
+            {
+                case MechanicType.IngredientSelection:
+                    profile.checkedMechanics.enableIngredientSelection = true;
+                    break;
+                case MechanicType.IngredientOrder:
+                    profile.checkedMechanics.enableIngredientOrder = true;
+                    break;
+                case MechanicType.Ratio:
+                    profile.checkedMechanics.enableRatio = true;
+                    break;
+                case MechanicType.Combination:
+                    profile.checkedMechanics.enableCombination = true;
+                    break;
+                case MechanicType.Force:
+                    profile.checkedMechanics.enableForce = true;
+                    break;
+                case MechanicType.Speed:
+                    profile.checkedMechanics.enableSpeed = true;
+                    break;
+                case MechanicType.GrindDuration:
+                    profile.checkedMechanics.enableGrindDuration = true;
+                    break;
+            }
+        }
+
+        private static void ApplyProfileTarget(LevelIngredientProfile profile, Dictionary<string, string> row, MechanicType mechanic)
+        {
+            switch (mechanic)
+            {
+                case MechanicType.Force:
+                    profile.targetForceLevel = ParseEnum(Get(row, "TargetValue"), profile.targetForceLevel);
+                    break;
+                case MechanicType.Speed:
+                    profile.targetSpeedLevel = ParseEnum(Get(row, "TargetValue"), profile.targetSpeedLevel);
+                    break;
+                case MechanicType.Ratio:
+                    profile.targetRatioLevel = ParseEnum(Get(row, "TargetValue"), profile.targetRatioLevel);
+                    break;
+                case MechanicType.IngredientOrder:
+                    profile.targetOrderIndex = ParseInt(Get(row, "TargetValue"), profile.targetOrderIndex);
+                    break;
+                case MechanicType.Combination:
+                    profile.targetCombinationKey = Get(row, "TargetValue");
+                    break;
+                case MechanicType.GrindDuration:
+                    ApplyDurationTarget(profile, Get(row, "TargetValue"));
+                    break;
+            }
+        }
+
+        private static void ApplyDurationTarget(LevelIngredientProfile profile, string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return;
+            }
+
+            string[] parts = value.Split('-');
+            if (parts.Length != 2)
+            {
+                return;
+            }
+
+            profile.minGrindDuration = ParseFloat(parts[0], profile.minGrindDuration);
+            profile.maxGrindDuration = ParseFloat(parts[1], profile.maxGrindDuration);
         }
 
         private static void AssignOpenSceneReferences(List<IngredientData> ingredients, List<RecipeLevelData> levels)
@@ -425,6 +565,12 @@ namespace TheTasteReviver.EditorTools
             return rows.Where(x => x.Any(cell => !string.IsNullOrWhiteSpace(cell))).ToList();
         }
 
+        private static List<Dictionary<string, string>> ReadOptionalCsvAsset(string assetPath)
+        {
+            string fullPath = Path.GetFullPath(assetPath);
+            return File.Exists(fullPath) ? ReadCsvAsset(assetPath) : new List<Dictionary<string, string>>();
+        }
+
         private static List<string> SplitList(string value, char separator)
         {
             if (string.IsNullOrWhiteSpace(value))
@@ -458,6 +604,13 @@ namespace TheTasteReviver.EditorTools
             return float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out float parsed) ? parsed : fallback;
         }
 
+        private static bool ParseBool(string value)
+        {
+            return value.Equals("true", StringComparison.OrdinalIgnoreCase)
+                || value.Equals("yes", StringComparison.OrdinalIgnoreCase)
+                || value == "1";
+        }
+
         private static int DefaultRatioToInt(string value)
         {
             switch (value)
@@ -475,6 +628,20 @@ namespace TheTasteReviver.EditorTools
             {
                 AssetDatabase.CreateFolder(parent, child);
             }
+        }
+
+        private static void TryGenerateIngredientPrefabs()
+        {
+            Type generatorType = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .Select(assembly => assembly.GetType("TheTasteReviver.EditorTools.IngredientPrefabGenerator"))
+                .FirstOrDefault(type => type != null);
+            if (generatorType == null)
+            {
+                return;
+            }
+
+            generatorType.GetMethod("GenerateAndAssignIngredientPrefabs")?.Invoke(null, null);
         }
 
         private static string Sanitize(string value)

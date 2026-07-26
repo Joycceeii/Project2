@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91aa1781c9c9dbf4bb481900dbcafaf8, type: 3}
+  m_Name: TeaLeaf
+  m_EditorClassIdentifier: 
+  ingredientID: TeaLeaf
+  ingredientNameCN: Tea Leaf
+  ingredientNameEN: Tea Leaf
+  aromaType: herbal bitter
+  initialDescription: Carries light bitterness and sweet return. If handled too aggressively,
+    bitterness rushes out before sweetness.
+  ingredientColor: {r: 0.25, g: 0.5, b: 0.22, a: 1}
+  icon: {fileID: 0}
+  prefab: {fileID: 7697071128784244215, guid: 7903e0f1efe5b8b46b3d658e9b2a57e7, type: 3}
+  defaultRatioValue: 1

@@ -1,0 +1,16 @@
+IngredientID,EnglishName,AromaType,InitialDescription,DefaultRatio
+Rice,Rice,Grain aroma,"Gentle and clean. It opens with steady handling but becomes hot and scorched if pushed too hard or too long.",Normal
+TeaLeaf,Tea Leaves,Tea and herbal aroma,"Carries light bitterness and sweet return. If handled too aggressively, bitterness rushes out before sweetness.",Normal
+BlackSesame,Black Sesame,Nutty and roasted aroma,"Rich and deep, useful as a leading note or tail note. If it takes too much space, it becomes bitter and dominant.",High
+GlutinousRice,Glutinous Rice,Grain and sticky rice aroma,"Mild and smooth. It gives body and texture, but it can blur stronger aromas if it takes the lead.",Normal
+Peanut,Peanut,Nutty and oily aroma,"Solid and warm. It gives a biscuit-like nut aroma and blends well with similar nutty ingredients.",Normal
+RedBean,Red Bean,Bean and sweet aroma,"Thick and warm. It is good at building a base before lighter notes appear.",High
+DriedTangerinePeel,Dried Tangerine Peel,Citrus peel aroma,"Bright and slightly bitter. It lifts the middle or finish, but becomes bitter if it arrives too early or too strongly.",Low
+RockSugar,Rock Sugar,Clean sweetness,"Clean and mild. It rounds the finish and can cover detail if it leads too early.",Normal
+SandGinger,Sand Ginger,Spicy root aroma,"Deep, dry, and aromatic. It needs enough pressure to open, but excessive pressure turns it harsh.",High
+CoarseSalt,Coarse Salt,Mineral and salty support,"A support ingredient. It strengthens the base but should not become the main aroma.",Low
+WhitePepper,White Pepper,Sharp spice aroma,"Clear and piercing. It needs a controlled release; rushing it makes the spice harsh.",High
+LotusLeaf,Lotus Leaf,Green leaf aroma,"Light and fragile. It works as a fresh wrapper note and can be crushed by early, heavy, or excessive handling.",Low
+YangjiangDouchi,Yangjiang Douchi,Fermented savory aroma,"Savory and fermented. It carries body, but rough handling can make it dull, bitter, or muddy.",High
+Ginger,Ginger,Fresh spice aroma,"Fresh and sharp. It opens brightness, but can rush forward and dominate if handled too aggressively.",Normal
+ScallionWhite,Scallion White,Fresh green aroma,"Fresh and watery. It keeps a clean finish, but heavy or early handling can bury its freshness.",Low

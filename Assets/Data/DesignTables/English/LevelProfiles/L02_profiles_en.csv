@@ -1,0 +1,3 @@
+LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
+L02,TeaLeaf,L02_TeaLeaf,Speed,Slow,,,,,,,,,,,,"L02 Tea Leaves focus on speed."
+L02,TeaLeaf,L02_TeaLeaf,GrindDuration,10-16,,,,,,,,,,,,"L02 Tea Leaves focus on speed."

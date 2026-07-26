@@ -24,7 +24,7 @@ namespace TheTasteReviver
             LoadUnlockedClues();
         }
 
-        public void AddRecord(RecipeAttemptManager attempt, EvaluationResult evaluation, HintResult hint, string processCheckHint = null, string permanentHint = null)
+        public void AddRecord(RecipeAttemptManager attempt, EvaluationResult evaluation, HintResult hint, string permanentHint = null)
         {
             if (attempt == null || evaluation == null)
             {
@@ -43,10 +43,8 @@ namespace TheTasteReviver
                 forceLevel = attempt.forceController != null ? attempt.forceController.CurrentForceLevel : ForceLevel.Medium,
                 speedLevel = attempt.pestleController != null ? attempt.pestleController.CurrentSpeedLevel : SpeedLevel.Medium,
                 grindDuration = attempt.pestleController != null ? attempt.pestleController.GrindDuration : 0f,
-                completenessScore = evaluation.completenessScore,
                 mainFeedback = evaluation.mainFeedback,
                 hintGiven = hint != null ? hint.text : string.Empty,
-                processCheckHint = processCheckHint ?? string.Empty,
                 permanentHint = permanentHint ?? string.Empty,
                 orderStatus = BuildStatus(evaluation, MechanicType.IngredientOrder),
                 combinationStatus = BuildStatus(evaluation, MechanicType.Combination),
@@ -216,13 +214,7 @@ namespace TheTasteReviver
             builder.AppendLine("Force: " + record.forceLevel + " [" + record.forceStatus + "]");
             builder.AppendLine("Speed: " + record.speedLevel + " [" + record.speedStatus + "]");
             builder.AppendLine("Duration: " + record.grindDuration.ToString("0.0") + "s");
-            builder.AppendLine("Completeness: " + record.completenessScore + "%");
             builder.AppendLine("Feedback: " + record.mainFeedback);
-            if (!string.IsNullOrWhiteSpace(record.processCheckHint))
-            {
-                builder.AppendLine("Process Check Hint: " + record.processCheckHint);
-            }
-
             if (!string.IsNullOrWhiteSpace(record.permanentHint))
             {
                 builder.AppendLine("Permanent Hint: " + record.permanentHint);
@@ -254,10 +246,8 @@ namespace TheTasteReviver
         public ForceLevel forceLevel;
         public SpeedLevel speedLevel;
         public float grindDuration;
-        public int completenessScore;
         public string mainFeedback;
         public string hintGiven;
-        public string processCheckHint;
         public string permanentHint;
         public string orderStatus;
         public string combinationStatus;
