@@ -13,11 +13,10 @@ MonoBehaviour:
   m_Name: TeaLeaf
   m_EditorClassIdentifier: 
   ingredientID: TeaLeaf
-  ingredientNameCN: Tea Leaf
-  ingredientNameEN: Tea Leaf
-  aromaType: herbal bitter
-  initialDescription: Carries light bitterness and sweet return. If handled too aggressively,
-    bitterness rushes out before sweetness.
+  ingredientNameCN:
+  ingredientNameEN: Tea Leaves
+  aromaType: Tea
+  initialDescription: Tea leaves taste bitter at first and sweet later. Slow grinding helps the sweetness come out.
   ingredientColor: {r: 0.25, g: 0.5, b: 0.22, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 7697071128784244215, guid: 7903e0f1efe5b8b46b3d658e9b2a57e7, type: 3}

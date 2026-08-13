@@ -246,14 +246,49 @@ public class TestLevelInitializer : MonoBehaviour
                 return;
             }
 
+            SyncRuntimeIngredientMetadata();
+
             if (!HasExpectedRuntimeIngredients())
             {
                 ingredients = CreateRuntimeIngredients();
             }
 
-            if (!HasExpectedRuntimeLevels())
+            levels = CreateRuntimeLevels(ingredients);
+        }
+
+        private void SyncRuntimeIngredientMetadata()
+        {
+            if (ingredients == null || ingredients.Count == 0)
             {
-                levels = CreateRuntimeLevels(ingredients);
+                return;
+            }
+
+            Dictionary<string, IngredientData> defaults = new Dictionary<string, IngredientData>();
+            foreach (IngredientData ingredient in CreateRuntimeIngredients())
+            {
+                if (ingredient != null && !string.IsNullOrWhiteSpace(ingredient.ingredientID))
+                {
+                    defaults[ingredient.ingredientID] = ingredient;
+                }
+            }
+
+            foreach (IngredientData ingredient in ingredients)
+            {
+                if (ingredient == null || string.IsNullOrWhiteSpace(ingredient.ingredientID))
+                {
+                    continue;
+                }
+
+                if (!defaults.TryGetValue(ingredient.ingredientID, out IngredientData source))
+                {
+                    continue;
+                }
+
+                ingredient.ingredientNameCN = source.ingredientNameCN;
+                ingredient.ingredientNameEN = source.ingredientNameEN;
+                ingredient.aromaType = source.aromaType;
+                ingredient.initialDescription = source.initialDescription;
+                ingredient.ingredientColor = source.ingredientColor;
             }
         }
 
@@ -267,12 +302,18 @@ public class TestLevelInitializer : MonoBehaviour
 
         private bool HasExpectedRuntimeLevels()
         {
-            return levels.Count == 10
+            return levels.Count == 11
                 && levels[0] != null
                 && levels[0].levelID == "L01"
                 && levels[0].levelName == "Gentle Grain Awakening"
-                && levels[9] != null
-                && levels[9].levelID == "L10";
+                && levels[2] != null
+                && levels[2].levelID == "L03"
+                && levels[2].levelName == "Layered Dessert"
+                && levels[4] != null
+                && levels[4].levelID == "L05"
+                && levels[4].levelName == "Clear Spice Split"
+                && levels[10] != null
+                && levels[10].levelID == "L11";
         }
 
         private static void DestroyGeneratedObject(string objectName)
@@ -372,22 +413,22 @@ public class TestLevelInitializer : MonoBehaviour
         {
             return new List<IngredientData>
             {
-                CreateIngredient("Rice", "Rice", "Rice", "clean grain", new Color(0.95f, 0.9f, 0.75f), "Gentle and clean. It opens with steady handling but becomes hot and scorched if pushed too hard or too long."),
-                CreateIngredient("TeaLeaf", "Tea Leaf", "Tea Leaf", "herbal bitter", new Color(0.25f, 0.5f, 0.22f), "Carries light bitterness and sweet return. If handled too aggressively, bitterness rushes out before sweetness."),
-                CreateIngredient("BlackSesame", "Black Sesame", "Black Sesame", "roasted nutty", new Color(0.08f, 0.07f, 0.06f), "Rich and deep, useful as a leading note or tail note. If it takes too much space, it becomes bitter and dominant."),
-                CreateIngredient("GlutinousRice", "Glutinous Rice", "Glutinous Rice", "sticky grain", new Color(0.92f, 0.86f, 0.68f), "Mild and smooth. It gives body and texture, but it can blur stronger aromas if it takes the lead."),
-                CreateIngredient("Peanut", "Peanut", "Peanut", "nutty", new Color(0.72f, 0.48f, 0.27f), "Warm and full roasted nut aroma. It blends well with nearby nutty ingredients."),
-                CreateIngredient("RedBean", "Red Bean", "Red Bean", "warm sweet", new Color(0.55f, 0.12f, 0.11f), "Thick and warm. It is good at building a base before lighter notes appear."),
-                CreateIngredient("DriedTangerinePeel", "Dried Tangerine Peel", "Dried Tangerine Peel", "citrus bitter", new Color(0.95f, 0.45f, 0.12f), "Bright and slightly bitter. It lifts the middle or finish, but becomes bitter if it arrives too early or too strongly."),
-                CreateIngredient("RockSugar", "Rock Sugar", "Rock Sugar", "clean sweet", new Color(0.88f, 0.95f, 1f), "Clean and mild. It rounds the finish and can cover detail if it leads too early."),
-                CreateIngredient("SandGinger", "Sand Ginger", "Sand Ginger", "sharp spicy", new Color(0.78f, 0.58f, 0.35f), "Deep, dry, and aromatic. It needs enough pressure to open, but excessive pressure turns it harsh."),
-                CreateIngredient("CoarseSalt", "Coarse Salt", "Coarse Salt", "salty mineral", new Color(0.85f, 0.84f, 0.78f), "A support ingredient. It strengthens the base but should not become the main aroma."),
-                CreateIngredient("WhitePepper", "White Pepper", "White Pepper", "peppery", new Color(0.8f, 0.77f, 0.68f), "Clear and piercing. It needs a controlled release; rushing it makes the spice harsh."),
-                CreateIngredient("PeanutCrumb", "Peanut Crumb", "Peanut Crumb", "warm nutty", new Color(0.68f, 0.46f, 0.25f), "Warm roasted nut aroma. It is gentle and can be covered by sharper spices."),
-                CreateIngredient("LotusLeaf", "Lotus Leaf", "Lotus Leaf", "leafy fresh", new Color(0.34f, 0.58f, 0.3f), "Light and fragile. It works as a fresh wrapper note and can be crushed by early, heavy, or excessive handling."),
-                CreateIngredient("YangjiangDouchi", "Yangjiang Douchi", "Yangjiang Douchi", "fermented savory", new Color(0.18f, 0.14f, 0.1f), "Savory and fermented. It carries body, but rough handling can make it dull, bitter, or muddy."),
-                CreateIngredient("Ginger", "Ginger", "Ginger", "fresh spicy", new Color(0.9f, 0.75f, 0.38f), "Fresh and sharp. It opens brightness, but can rush forward and dominate if handled too aggressively."),
-                CreateIngredient("ScallionWhite", "Scallion White", "Scallion White", "green fresh", new Color(0.76f, 0.9f, 0.62f), "Fresh and watery. It keeps a clean finish, but heavy or early handling can bury its freshness."),
+                CreateIngredient("Rice", "Rice", "Rice", "Soft grain", new Color(0.95f, 0.9f, 0.75f), "Rice is mild and clean. It needs steady grinding, but too much force can make it taste burnt."),
+                CreateIngredient("TeaLeaf", "Tea Leaves", "Tea Leaves", "Tea", new Color(0.25f, 0.5f, 0.22f), "Tea leaves are bitter at first and sweet later. Slow grinding helps the sweetness come out."),
+                CreateIngredient("BlackSesame", "Black Sesame", "Black Sesame", "Roasted nut", new Color(0.08f, 0.07f, 0.06f), "Black sesame has a strong roasted flavor. It can lead a recipe, but too much makes it bitter."),
+                CreateIngredient("GlutinousRice", "Glutinous Rice", "Glutinous Rice", "Sticky grain", new Color(0.92f, 0.86f, 0.68f), "Glutinous rice makes the mixture smooth and thick. It should support stronger flavors."),
+                CreateIngredient("Peanut", "Peanut", "Peanut", "Roasted nut", new Color(0.72f, 0.48f, 0.27f), "Peanut gives a warm roasted flavor. It works well with other nutty ingredients."),
+                CreateIngredient("RedBean", "Red Bean", "Red Bean", "Sweet bean", new Color(0.55f, 0.12f, 0.11f), "Red bean is thick and gently sweet. It works well as a base flavor."),
+                CreateIngredient("DriedTangerinePeel", "Dried Tangerine Peel", "Dried Tangerine Peel", "Citrus peel", new Color(0.95f, 0.45f, 0.12f), "Dried tangerine peel is bright and slightly bitter. It works best as a small accent."),
+                CreateIngredient("RockSugar", "Rock Sugar", "Rock Sugar", "Clean sweetness", new Color(0.88f, 0.95f, 1f), "Rock sugar adds clean sweetness. It should round out the recipe instead of taking over."),
+                CreateIngredient("SandGinger", "Sand Ginger", "Sand Ginger", "Root spice", new Color(0.78f, 0.58f, 0.35f), "Sand ginger is deep and spicy. It needs enough force to bring out its flavor."),
+                CreateIngredient("CoarseSalt", "Coarse Salt", "Coarse Salt", "Salt", new Color(0.85f, 0.84f, 0.78f), "Coarse salt supports other flavors. Use it lightly so it does not become the main taste."),
+                CreateIngredient("WhitePepper", "White Pepper", "White Pepper", "Sharp spice", new Color(0.8f, 0.77f, 0.68f), "White pepper is sharp and quick to spread. Too much grinding can make it harsh."),
+                CreateIngredient("PeanutCrumb", "Peanut Crumb", "Peanut Crumb", "Roasted nut", new Color(0.68f, 0.46f, 0.25f), "Peanut crumb is warm and nutty. Strong spices can cover it easily."),
+                CreateIngredient("LotusLeaf", "Lotus Leaf", "Lotus Leaf", "Green leaf", new Color(0.34f, 0.58f, 0.3f), "Lotus leaf is light and fresh. It can be covered easily by stronger ingredients."),
+                CreateIngredient("YangjiangDouchi", "Yangjiang Douchi", "Yangjiang Douchi", "Fermented bean", new Color(0.18f, 0.14f, 0.1f), "Yangjiang douchi is savory and fermented. It gives the recipe a strong base."),
+                CreateIngredient("Ginger", "Ginger", "Ginger", "Fresh spice", new Color(0.9f, 0.75f, 0.38f), "Ginger is fresh and sharp. It can brighten a recipe, but it can also become too strong."),
+                CreateIngredient("ScallionWhite", "Scallion White", "Scallion White", "Fresh green", new Color(0.76f, 0.9f, 0.62f), "Scallion white is fresh and light. It works best near the end of a recipe."),
                 CreateIngredient("Chili", "Chili", "Chili", "spicy", new Color(0.85f, 0.1f, 0.08f), "Direct hot spice. It is kept for compatibility and is not used by the default ten-level set.")
             };
         }
@@ -412,131 +453,145 @@ public class TestLevelInitializer : MonoBehaviour
 
             return new List<RecipeLevelData>
             {
-                Level("L01", "Gentle Grain Awakening", "Guangzhou", "Force Tutorial", "Only force is unlocked. Restore a gentle rice aroma.", new [] { rice }, new [] { rice }, ForceLevel.Medium, SpeedLevel.Medium, Mechanics(force:true, duration:true), 100,
+                Level("L01", "Gentle Grain Awakening", "Guangzhou", "Force Tutorial", "Use rice to learn grinding force. The goal is a soft rice flavor without a burnt taste.", new [] { rice }, new [] { rice }, ForceLevel.Medium, SpeedLevel.Medium, Mechanics(force:true, duration:true), 100,
                     minDuration:8f,
                     maxDuration:14f,
-                    success:"The rice aroma opens softly with a clean sweetness.",
-                    close:"The rice aroma is present, but the force still needs adjustment.",
-                    wrong:"The rice aroma is suppressed, too faint, or slightly scorched.",
-                    clues:new [] { Clue("L01_Rice_Force", "Rice - Force Clue", "Rice works best with medium force. Too light keeps the aroma closed; too heavy heats the powder and creates scorched notes.", MechanicType.Force, rice) }),
+                    success:"The rice tastes soft and clean, with no burnt flavor.",
+                    close:"Very close. Adjust the force or grinding time a little.",
+                    wrong:"The rice does not taste right. Check the force and grinding time.",
+                    clues:new [] { Clue("L01_Rice_Force", "Rice - Force Clue", "Rice works best with medium force. Too little force keeps it weak; too much can make it taste burnt.", MechanicType.Force, rice) }),
 
-                Level("L02", "Slow Tea Return", "Chaozhou", "Speed Tutorial", "Only speed is unlocked. Restore the layered release of tea.", new [] { tea }, new [] { tea }, ForceLevel.Medium, SpeedLevel.Slow, Mechanics(speed:true, duration:true), 100,
+                Level("L02", "Slow Tea Return", "Chaozhou", "Speed Tutorial", "Use tea leaves to learn grinding speed. The goal is gentle tea bitterness followed by sweetness.", new [] { tea }, new [] { tea }, ForceLevel.Medium, SpeedLevel.Slow, Mechanics(speed:true, duration:true), 100,
                     minDuration:10f,
                     maxDuration:16f,
-                    success:"The tea opens slowly: first a light bitterness, then a clear sweet return.",
-                    close:"The tea aroma appears, but bitterness comes forward too early.",
-                    wrong:"The bitterness rushes out and buries the sweet return.",
-                    clues:new [] { Clue("L02_Tea_Speed", "Tea Leaf - Speed Clue", "Tea leaf works best with slow grinding. Fast grinding releases bitterness before sweetness.", MechanicType.Speed, tea) }),
+                    success:"The tea tastes balanced: light bitterness first, then sweetness.",
+                    close:"Very close. Adjust the speed or grinding time a little.",
+                    wrong:"The tea is too bitter. Check the speed and grinding time.",
+                    clues:new [] { Clue("L02_Tea_Speed", "Tea Leaf - Speed Clue", "Tea leaves work best with slow grinding. Fast grinding makes the tea too bitter.", MechanicType.Speed, tea) }),
 
-                Level("L03", "Sesame Takes the Lead", "Shunde", "Ratio Tutorial", "Only ratio is unlocked. Learn which ingredient should lead.", new [] { blackSesame, glutinousRice }, new [] { blackSesame, glutinousRice }, ForceLevel.Medium, SpeedLevel.Medium, Mechanics(ratio:true, duration:true), 100,
-                    ratios:new [] { Ratio(blackSesame, RatioLevel.More), Ratio(glutinousRice, RatioLevel.Less) },
-                    order:new [] { blackSesame, glutinousRice },
-                    minDuration:14f,
-                    maxDuration:22f,
-                    success:"Black sesame leads with roasted depth while glutinous rice supports the smooth body.",
-                    close:"The direction is right, but the main and support notes are not clear enough.",
-                    wrong:"The sesame note is weakened and the rice body becomes too heavy.",
+                Level("L03", "Layered Dessert", "Jiangmen", "Layer Timing", "Red bean, dried tangerine peel, and rock sugar each change the dessert at a different moment.", new [] { redBean, peel, rockSugar }, new [] { redBean, peel, rockSugar }, ForceLevel.Medium, SpeedLevel.Medium, Mechanics(order:true, duration:true), 100,
+                    order:new [] { redBean, peel, rockSugar },
+                    ratios:new [] { Ratio(redBean, RatioLevel.More), Ratio(rockSugar, RatioLevel.SlightlyMore), Ratio(peel, RatioLevel.Less) },
+                    minDuration:18f,
+                    maxDuration:28f,
+                    success:"The dessert has a clear order: red bean first, citrus next, sweetness last.",
+                    close:"Very close. Check the order or grinding time.",
+                    wrong:"The dessert tastes out of order. Check when each ingredient is added.",
                     clues:new [] {
-                        Clue("L03_BlackSesame_Ratio", "Black Sesame - Ratio Clue", "Black sesame is suited to the main note. Too much can become bitter and dominant.", MechanicType.Ratio, blackSesame),
-                        Clue("L03_GlutinousRice_Ratio", "Glutinous Rice - Ratio Clue", "Glutinous rice is suited to support texture and smoothness, not to lead the aroma.", MechanicType.Ratio, glutinousRice)
+                        Clue("L03_RedBean_Order", "Red Bean - Order Clue", "Red bean works well early because it builds the base flavor.", MechanicType.IngredientOrder, redBean),
+                        Clue("L03_Peel_Order", "Dried Tangerine Peel - Order Clue", "Dried tangerine peel works better after the base is set. Too early can make the recipe bitter.", MechanicType.IngredientOrder, peel),
+                        Clue("L03_RockSugar_Order", "Rock Sugar - Order Clue", "Rock sugar works best at the end because it softens the final taste.", MechanicType.IngredientOrder, rockSugar)
                     }),
 
-                Level("L04", "Joined Nut Crisp", "Foshan", "Combination Tutorial", "Only combination is unlocked. Learn how nearby nut aromas blend.", new [] { peanut, blackSesame }, new [] { peanut, blackSesame }, ForceLevel.Medium, SpeedLevel.Medium, Mechanics(combination:true, duration:true), 100,
+                Level("L04", "Joined Nut Crisp", "Foshan", "Shared Grind", "Peanut and black sesame are close in flavor. Try to find when they feel connected.", new [] { peanut, blackSesame }, new [] { peanut, blackSesame }, ForceLevel.Medium, SpeedLevel.Medium, Mechanics(combination:true, duration:true), 100,
                     ratios:new [] { Ratio(peanut, RatioLevel.More), Ratio(blackSesame, RatioLevel.Less) },
                     order:new [] { peanut, blackSesame },
                     combination:Combination(new [] { peanut, blackSesame }),
                     minDuration:15f,
                     maxDuration:24f,
-                    success:"Peanut warmth and black sesame tail aroma blend into one complete nutty note.",
-                    close:"Both aromas appear, but they are not fully blended.",
-                    wrong:"The two aromas feel separate instead of forming one biscuit-like note.",
+                    success:"Peanut and black sesame blend into one warm nutty flavor.",
+                    close:"Very close. Check the grouping or grinding time.",
+                    wrong:"The two nutty flavors feel separate. Try a different grouping.",
                     clues:new [] {
-                        Clue("L04_Peanut_Combination", "Peanut - Combination Clue", "Peanut blends well with sesame-like ingredients because both belong to nutty aromas.", MechanicType.Combination, peanut, blackSesame),
-                        Clue("L04_BlackSesame_Combination", "Black Sesame - Combination Clue", "Black sesame can blend with peanut, but it can dominate if handled too heavily.", MechanicType.Combination, blackSesame, peanut)
+                        Clue("L04_Peanut_Combination", "Peanut - Combination Clue", "Peanut works well with other nutty ingredients such as black sesame.", MechanicType.Combination, peanut, blackSesame),
+                        Clue("L04_BlackSesame_Combination", "Black Sesame - Combination Clue", "Black sesame can blend with peanut, but too much handling can make it bitter.", MechanicType.Combination, blackSesame, peanut)
                     }),
 
-                Level("L05", "Three-Layer Dessert", "Jiangmen", "Order Tutorial", "Only order is unlocked. Build base, middle citrus, and sweet finish.", new [] { redBean, peel, rockSugar }, new [] { redBean, peel, rockSugar }, ForceLevel.Medium, SpeedLevel.Medium, Mechanics(order:true, duration:true), 100,
-                    order:new [] { redBean, peel, rockSugar },
-                    ratios:new [] { Ratio(redBean, RatioLevel.More), Ratio(rockSugar, RatioLevel.SlightlyMore), Ratio(peel, RatioLevel.Less) },
-                    minDuration:18f,
-                    maxDuration:28f,
-                    success:"Red bean builds the body, dried tangerine peel rises in the middle, and rock sugar rounds the finish.",
-                    close:"The layers are appearing, but one ingredient is too early or too late.",
-                    wrong:"Sweetness, bean aroma, and citrus are mixed without a clear order.",
+                Level("L05", "Clear Spice Split", "Shantou", "Separate Grind", "White pepper and dried tangerine peel are both sharp. Find a way to keep their edges clear.", new [] { whitePepper, peel }, new [] { whitePepper, peel }, ForceLevel.Medium, SpeedLevel.Medium, Mechanics(combination:true, duration:true), 100,
+                    ratios:new [] { Ratio(whitePepper, RatioLevel.More), Ratio(peel, RatioLevel.Less) },
+                    order:new [] { whitePepper, peel },
+                    combination:Combination(new [] { whitePepper }, new [] { peel }),
+                    minDuration:14f,
+                    maxDuration:22f,
+                    success:"White pepper and dried tangerine peel stay clear because they were handled separately.",
+                    close:"Very close. Check whether each ingredient has its own batch.",
+                    wrong:"The sharp flavors are tangled together. Try using a separate batch.",
                     clues:new [] {
-                        Clue("L05_RedBean_Order", "Red Bean - Order Clue", "Red bean works well early because it builds the base body.", MechanicType.IngredientOrder, redBean),
-                        Clue("L05_Peel_Order", "Dried Tangerine Peel - Order Clue", "Dried tangerine peel works better later. Too early can release bitterness.", MechanicType.IngredientOrder, peel),
-                        Clue("L05_RockSugar_Order", "Rock Sugar - Order Clue", "Rock sugar works best at the end to round sweetness.", MechanicType.IngredientOrder, rockSugar)
+                        Clue("L05_WhitePepper_Separate", "White Pepper - Batch Clue", "White pepper is strong. It often works better away from other sharp ingredients.", MechanicType.Combination, whitePepper),
+                        Clue("L05_Peel_Separate", "Dried Tangerine Peel - Batch Clue", "Dried tangerine peel can turn bitter when it is ground with another sharp ingredient.", MechanicType.Combination, peel)
                     }),
 
-                Level("L06", "Sand Ginger Core", "Meizhou", "Two-Dimension Challenge", "Force and ratio are unlocked. Open sand ginger while keeping salt supportive.", new [] { sandGinger, coarseSalt, peel }, new [] { sandGinger, coarseSalt, peel }, ForceLevel.Heavy, SpeedLevel.Medium, Mechanics(force:true, ratio:true, duration:true), 90,
+                Level("L06", "Soft Sesame Paste", "Shunde", "Subtle Balance", "A small change in amount can shift how the sesame paste feels.", new [] { blackSesame, glutinousRice }, new [] { blackSesame, glutinousRice }, ForceLevel.Medium, SpeedLevel.Medium, Mechanics(ratio:true, duration:true), 100,
+                    ratios:new [] { Ratio(blackSesame, RatioLevel.Less), Ratio(glutinousRice, RatioLevel.VeryLess) },
+                    order:new [] { blackSesame, glutinousRice },
+                    combination:Combination(new [] { blackSesame }, new [] { glutinousRice }),
+                    minDuration:14f,
+                    maxDuration:22f,
+                    success:"Black sesame is slightly stronger, and glutinous rice keeps the paste smooth.",
+                    close:"Very close. Adjust the ratio or grinding time a little.",
+                    wrong:"The sesame flavor is not clear enough. Check the ratio and grinding time.",
+                    clues:new [] {
+                        Clue("L06_BlackSesame_Ratio", "Black Sesame - Ratio Clue", "Use a little black sesame. It should be stronger than glutinous rice, but not heavy.", MechanicType.Ratio, blackSesame),
+                        Clue("L06_GlutinousRice_Ratio", "Glutinous Rice - Ratio Clue", "Use the smallest amount of glutinous rice. It should only smooth the paste.", MechanicType.Ratio, glutinousRice)
+                    }),
+
+                Level("L07", "Sand Ginger Core", "Meizhou", "Two-Dimension Challenge", "Sand ginger should be the main flavor. Dried tangerine peel and coarse salt should support it.", new [] { sandGinger, coarseSalt, peel }, new [] { sandGinger, coarseSalt, peel }, ForceLevel.Heavy, SpeedLevel.Medium, Mechanics(force:true, ratio:true, duration:true), 90,
                     ratios:new [] { Ratio(sandGinger, RatioLevel.More), Ratio(peel, RatioLevel.SlightlyMore), Ratio(coarseSalt, RatioLevel.Less) },
                     order:new [] { sandGinger, peel, coarseSalt },
                     minDuration:20f,
                     maxDuration:32f,
-                    success:"Sand ginger opens clearly, dried peel cleans the finish, and coarse salt supports from below.",
-                    close:"The sand ginger direction is right, but force or ratio is still unstable.",
-                    wrong:"Salt or citrus takes the front, and sand ginger does not open as the core aroma.",
+                    success:"Sand ginger is clear, with a little citrus and salt behind it.",
+                    close:"Very close. Check the force, ratio, or grinding time.",
+                    wrong:"Salt or citrus is too strong, and sand ginger is not the main flavor.",
                     clues:new [] {
-                        Clue("L06_SandGinger_Force", "Sand Ginger - Force Clue", "Sand ginger likes medium-high force. Too light leaves it closed; too heavy makes it harsh.", MechanicType.Force, sandGinger),
-                        Clue("L06_CoarseSalt_Ratio", "Coarse Salt - Ratio Clue", "Coarse salt should be used sparingly as support, not as the main note.", MechanicType.Ratio, coarseSalt)
+                        Clue("L07_SandGinger_Force", "Sand Ginger - Force Clue", "Sand ginger needs heavy force, but too much grinding can still make it harsh.", MechanicType.Force, sandGinger),
+                        Clue("L07_CoarseSalt_Ratio", "Coarse Salt - Ratio Clue", "Coarse salt should stay in the background. Do not make it the main flavor.", MechanicType.Ratio, coarseSalt)
                     }),
 
-                Level("L07", "Pepper Held in Balance", "Shantou", "Two-Dimension Challenge", "Speed is unlocked. Handle sharp spice carefully.", new [] { whitePepper, peanut, peel }, new [] { whitePepper, peanut, peel }, ForceLevel.Medium, SpeedLevel.Medium, Mechanics(speed:true, duration:true), 90,
+                Level("L08", "Pepper Held in Balance", "Shantou", "Two-Dimension Challenge", "Speed is unlocked. Handle sharp spice carefully.", new [] { whitePepper, peanut, peel }, new [] { whitePepper, peanut, peel }, ForceLevel.Medium, SpeedLevel.Medium, Mechanics(speed:true, duration:true), 90,
                     ratios:new [] { Ratio(whitePepper, RatioLevel.More), Ratio(peanut, RatioLevel.SlightlyMore), Ratio(peel, RatioLevel.Less) },
                     order:new [] { whitePepper, peanut, peel },
                     combination:Combination(new [] { whitePepper }, new [] { peanut }, new [] { peel }),
                     minDuration:20f,
                     maxDuration:32f,
-                    success:"White pepper stays clear without choking, peanut keeps warmth, and dried peel finishes lightly.",
-                    close:"The aroma direction is close, but some ingredients interfere with each other.",
-                    wrong:"White pepper is too harsh, or dried peel bitterness suppresses the warm peanut note.",
+                    success:"White pepper is clear, peanut adds warmth, and citrus keeps it light.",
+                    close:"Very close. Check the speed or grinding time.",
+                    wrong:"White pepper is too harsh, or the support flavors are too weak.",
                     clues:new [] {
-                        Clue("L07_WhitePepper_Speed", "White Pepper - Speed Clue", "White pepper works best at medium speed. Too fast makes the spice rush out harshly.", MechanicType.Speed, whitePepper),
-                        Clue("L07_StrongSpice_Combination", "Strong Spice - Combination Clue", "Strong spice usually needs careful grouping with clear aromas, or the notes will compete.", MechanicType.Combination, whitePepper, peel)
+                        Clue("L08_WhitePepper_Speed", "White Pepper - Speed Clue", "White pepper works best at medium speed. Too fast makes it harsh; too slow makes it weak.", MechanicType.Speed, whitePepper)
                     }),
 
-                Level("L08", "Wrapped Rice Layers", "Zhaoqing", "Three-Dimension Challenge", "Ratio, combination, and order are unlocked. Restore a layered steamed rice aroma.", new [] { glutinousRice, redBean, lotusLeaf, blackSesame }, new [] { glutinousRice, redBean, lotusLeaf, blackSesame }, ForceLevel.Medium, SpeedLevel.Medium, Mechanics(ratio:true, combination:true, order:true, duration:true), 90,
+                Level("L09", "Wrapped Rice Layers", "Zhaoqing", "Three-Dimension Challenge", "Make a layered rice dumpling flavor with red bean, glutinous rice, black sesame, and lotus leaf.", new [] { glutinousRice, redBean, lotusLeaf, blackSesame }, new [] { glutinousRice, redBean, lotusLeaf, blackSesame }, ForceLevel.Medium, SpeedLevel.Medium, Mechanics(ratio:true, combination:true, order:true, duration:true), 90,
                     ratios:new [] { Ratio(redBean, RatioLevel.More), Ratio(glutinousRice, RatioLevel.SlightlyMore), Ratio(blackSesame, RatioLevel.Less), Ratio(lotusLeaf, RatioLevel.VeryLess) },
                     order:new [] { redBean, glutinousRice, blackSesame, lotusLeaf },
                     combination:Combination(new [] { glutinousRice, lotusLeaf }, new [] { redBean }, new [] { blackSesame }),
                     minDuration:25f,
                     maxDuration:40f,
-                    success:"Red bean forms the base, glutinous rice supports the body, black sesame adds tail depth, and lotus leaf lifts the finish.",
-                    close:"The steamed rice direction appears, but lotus leaf, sesame, or red bean needs a more accurate role.",
-                    wrong:"Lotus leaf is crushed, or black sesame steals the main body.",
+                    success:"The dumpling flavor has clear layers: red bean, sticky rice, sesame, and lotus leaf.",
+                    close:"Very close. Check the ratio, grouping, order, or time.",
+                    wrong:"The layers are unclear. One flavor may be too strong or added at the wrong time.",
                     clues:new [] {
-                        Clue("L08_LotusLeaf_Order", "Lotus Leaf - Order Clue", "Lotus leaf is fragile and works better late, not early or heavy.", MechanicType.IngredientOrder, lotusLeaf),
-                        Clue("L08_LotusLeaf_Combination", "Lotus Leaf - Combination Clue", "Lotus leaf can soften glutinous rice aroma, but should not be overworked with strong notes.", MechanicType.Combination, lotusLeaf, glutinousRice)
+                        Clue("L09_LotusLeaf_Order", "Lotus Leaf - Order Clue", "Add lotus leaf near the end. If it is used too early, its fresh flavor gets covered.", MechanicType.IngredientOrder, lotusLeaf),
+                        Clue("L09_LotusLeaf_Combination", "Lotus Leaf - Combination Clue", "Lotus leaf can be paired with glutinous rice, but black sesame is too strong for it.", MechanicType.Combination, lotusLeaf, glutinousRice)
                     }),
 
-                Level("L09", "Savory Bean Current", "Yangjiang", "Four-Dimension Challenge", "Force, speed, ratio, and order are unlocked. Combination remains locked.", new [] { douchi, ginger, peel, coarseSalt }, new [] { douchi, ginger, peel, coarseSalt }, ForceLevel.Medium, SpeedLevel.Medium, Mechanics(force:true, speed:true, ratio:true, order:true, duration:true), 90,
+                Level("L10", "Savory Bean Current", "Yangjiang", "Four-Dimension Challenge", "Force, speed, ratio, and order are unlocked. Combination remains locked.", new [] { douchi, ginger, peel, coarseSalt }, new [] { douchi, ginger, peel, coarseSalt }, ForceLevel.Medium, SpeedLevel.Medium, Mechanics(force:true, speed:true, ratio:true, order:true, duration:true), 90,
                     ratios:new [] { Ratio(douchi, RatioLevel.More), Ratio(ginger, RatioLevel.SlightlyMore), Ratio(peel, RatioLevel.Less), Ratio(coarseSalt, RatioLevel.VeryLess) },
                     order:new [] { douchi, ginger, peel, coarseSalt },
                     minDuration:28f,
                     maxDuration:45f,
-                    success:"Douchi becomes the savory core, ginger opens freshness, salt supports, and peel cleans the finish.",
-                    close:"The douchi body is present, but ginger, salt, or peel still needs a better position.",
-                    wrong:"Salt is too heavy, ginger is too sharp, or peel bitterness arrives too early.",
+                    success:"Douchi is the main savory flavor, with ginger, citrus, and light salt behind it.",
+                    close:"Very close. Check one process or structure setting.",
+                    wrong:"Salt, ginger, or citrus is too strong, or the douchi flavor is unclear.",
                     clues:new [] {
-                        Clue("L09_Douchi_Force", "Yangjiang Douchi - Force Clue", "Yangjiang douchi likes medium force. Too light keeps it closed; too heavy makes fermentation dull.", MechanicType.Force, douchi),
-                        Clue("L09_Ginger_Speed", "Ginger - Speed Clue", "Ginger works best at medium speed. Too fast makes the spice rush forward.", MechanicType.Speed, ginger),
-                        Clue("L09_Ginger_Order", "Ginger - Order Clue", "Ginger works well in the middle, opening freshness after the main body is established.", MechanicType.IngredientOrder, ginger)
+                        Clue("L10_Douchi_Force", "Yangjiang Douchi - Force Clue", "Yangjiang douchi works best with medium force. Too little is weak; too much makes it muddy.", MechanicType.Force, douchi),
+                        Clue("L10_Ginger_Speed", "Ginger - Speed Clue", "Ginger works best at medium speed. Too fast can make it too sharp.", MechanicType.Speed, ginger),
+                        Clue("L10_Ginger_Order", "Ginger - Order Clue", "Ginger works well in the middle, after the base flavor is set.", MechanicType.IngredientOrder, ginger)
                     }),
 
-                Level("L10", "Ginger-Scallion Finale", "Zhanjiang", "Final Free Challenge", "All core dimensions are unlocked. Restore the full ginger-scallion dipping sauce structure.", new [] { sandGinger, ginger, scallion, coarseSalt }, new [] { sandGinger, ginger, scallion, coarseSalt }, ForceLevel.Heavy, SpeedLevel.Medium, Mechanics(force:true, speed:true, ratio:true, combination:true, order:true, duration:true), 90,
+                Level("L11", "Ginger-Scallion Finale", "Zhanjiang", "Final Free Challenge", "Make a balanced ginger-scallion sauce. Ginger flavors should lead, with scallion and salt kept light.", new [] { sandGinger, ginger, scallion, coarseSalt }, new [] { sandGinger, ginger, scallion, coarseSalt }, ForceLevel.Heavy, SpeedLevel.Medium, Mechanics(force:true, speed:true, ratio:true, combination:true, order:true, duration:true), 90,
                     ratios:new [] { Ratio(sandGinger, RatioLevel.More), Ratio(ginger, RatioLevel.SlightlyMore), Ratio(scallion, RatioLevel.Less), Ratio(coarseSalt, RatioLevel.VeryLess) },
                     order:new [] { coarseSalt, sandGinger, ginger, scallion },
                     combination:Combination(new [] { sandGinger, ginger }, new [] { scallion }, new [] { coarseSalt }),
                     minDuration:30f,
                     maxDuration:50f,
-                    success:"Salt supports the base, sand ginger opens depth, ginger adds freshness, and scallion preserves the final green aroma.",
-                    close:"The dipping sauce is close, but scallion, ginger grouping, or final order still needs adjustment.",
-                    wrong:"Ginger is too harsh, scallion is crushed, or salt steals the main role.",
+                    success:"The sauce is balanced: light salt, strong ginger, and fresh scallion at the end.",
+                    close:"Very close. Check the final ratio, grouping, order, force, or speed.",
+                    wrong:"The sauce is unbalanced. Ginger may be harsh, scallion may be lost, or salt may be too strong.",
                     clues:new [] {
-                        Clue("L10_Scallion_Force", "Scallion White - Force Clue", "Scallion white likes light force. Too much force releases water and green harshness.", MechanicType.Force, scallion),
-                        Clue("L10_Scallion_Order", "Scallion White - Order Clue", "Scallion white works best at the end, keeping the finish fresh.", MechanicType.IngredientOrder, scallion),
-                        Clue("L10_Scallion_Combination", "Scallion White - Combination Clue", "Scallion white should not be overworked with strong ginger notes, or its freshness will be buried.", MechanicType.Combination, scallion, ginger)
+                        Clue("L11_Scallion_Force", "Scallion White - Force Clue", "Use light force for scallion white. Too much force makes it watery and sharp.", MechanicType.Force, scallion),
+                        Clue("L11_Scallion_Order", "Scallion White - Order Clue", "Add scallion white at the end so it stays fresh.", MechanicType.IngredientOrder, scallion),
+                        Clue("L11_Scallion_Combination", "Scallion White - Combination Clue", "Keep scallion white separate from strong ginger so its fresh flavor stays clear.", MechanicType.Combination, scallion, ginger)
                     })
             };
         }
@@ -767,10 +822,9 @@ public class TestLevelInitializer : MonoBehaviour
             Vector2 bottomLeft = new Vector2(0f, 0f);
 
             ui.levelLabel = CreateText(canvas.transform, "Level", new Vector2(280f, 58f), new Vector2(24f, -24f), topLeft, topLeft);
-            ui.currentIngredientsLabel = CreateText(canvas.transform, "Current Ingredients", new Vector2(300f, 76f), new Vector2(24f, -94f), topLeft, topLeft);
-            ui.currentOrderLabel = CreateText(canvas.transform, "Current Order", new Vector2(300f, 68f), new Vector2(24f, -182f), topLeft, topLeft);
-            ui.currentRatioLabel = CreateText(canvas.transform, "Current Ratio", new Vector2(300f, 68f), new Vector2(24f, -262f), topLeft, topLeft);
-            ui.currentSpeedLabel = CreateText(canvas.transform, "Current Speed", new Vector2(300f, 42f), new Vector2(24f, -342f), topLeft, topLeft);
+            ui.currentOrderLabel = CreateText(canvas.transform, "Current Order", new Vector2(300f, 68f), new Vector2(24f, -104f), topLeft, topLeft);
+            ui.currentRatioLabel = CreateText(canvas.transform, "Current Ratio", new Vector2(300f, 68f), new Vector2(24f, -184f), topLeft, topLeft);
+            ui.currentSpeedLabel = CreateText(canvas.transform, "Current Speed", new Vector2(300f, 42f), new Vector2(24f, -264f), topLeft, topLeft);
             ui.hintLabel = CreateText(canvas.transform, "Hint", new Vector2(380f, 160f), new Vector2(-24f, -24f), topRight, topRight, TextAnchor.UpperLeft);
             ui.EnsureIngredientTraitPanel();
             log.logText = null;
@@ -788,6 +842,7 @@ public class TestLevelInitializer : MonoBehaviour
             ui.EnsureExperimentLogButton();
             ui.evaluateButton = CreateButton(canvas.transform, "Evaluate", new Vector2(132f, 36f), new Vector2(-24f, 144f), bottomRight, bottomRight, ui.EvaluateCurrentAttempt);
             ui.resetAttemptButton = CreateButton(canvas.transform, "Reset Attempt", new Vector2(132f, 36f), new Vector2(-24f, 104f), bottomRight, bottomRight, ui.ResetAttempt);
+            ui.newBatchButton = CreateButton(canvas.transform, "New Batch", new Vector2(132f, 36f), new Vector2(-24f, 64f), bottomRight, bottomRight, ui.StartNewBatch);
             ui.nextLevelButton = CreateButton(canvas.transform, "Next Level", new Vector2(132f, 36f), new Vector2(-24f, 24f), bottomRight, bottomRight, ui.NextLevel);
             ui.EnsureActionButtons();
             ui.EnsureIngredientTraitPanel();

@@ -1,8 +1,5 @@
 LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
-L06,SandGinger,L06_SandGinger,Force,Heavy,,,,,,,,,,,,"L06 Sand Ginger focuses on force and ratio."
-L06,SandGinger,L06_SandGinger,Ratio,More,,,,,,,,,,,,"L06 Sand Ginger focuses on force and ratio."
-L06,DriedTangerinePeel,L06_DriedTangerinePeel,Ratio,SlightlyMore,,,,,,,,,,,,"L06 Dried Tangerine Peel focuses on ratio."
-L06,CoarseSalt,L06_CoarseSalt,Ratio,Less,,,,,,,,,,,,"L06 Coarse Salt focuses on ratio."
-L06,SandGinger,L06_SandGinger,GrindDuration,20-32,,,,,,,,,,,,"L06 Sand Ginger focuses on force and ratio."
-L06,DriedTangerinePeel,L06_DriedTangerinePeel,GrindDuration,20-32,,,,,,,,,,,,"L06 Dried Tangerine Peel focuses on ratio."
-L06,CoarseSalt,L06_CoarseSalt,GrindDuration,20-32,,,,,,,,,,,,"L06 Coarse Salt focuses on ratio."
+L06,BlackSesame,L06_BlackSesame,Ratio,Less,,,,,,,,,,,,"Black sesame gives the paste its strong roasted taste."
+L06,GlutinousRice,L06_GlutinousRice,Ratio,VeryLess,,,,,,,,,,,,"Glutinous rice makes the paste smooth and soft."
+L06,BlackSesame,L06_BlackSesame,GrindDuration,14-22,,,,,,,,,,,,"Black sesame gives the paste its strong roasted taste."
+L06,GlutinousRice,L06_GlutinousRice,GrindDuration,14-22,,,,,,,,,,,,"Glutinous rice makes the paste smooth and soft."

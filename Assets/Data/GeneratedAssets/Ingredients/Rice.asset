@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Rice
   m_EditorClassIdentifier: 
   ingredientID: Rice
-  ingredientNameCN: Rice
+  ingredientNameCN:
   ingredientNameEN: Rice
-  aromaType: clean grain
-  initialDescription: 
+  aromaType: Soft grain
+  initialDescription: Rice is mild and clean. It needs steady grinding, but too much force can make it taste burnt.
   ingredientColor: {r: 0.95, g: 0.9, b: 0.75, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 5529012155505820837, guid: 3ac58dbef5492ca458080abe036ddbc2, type: 3}

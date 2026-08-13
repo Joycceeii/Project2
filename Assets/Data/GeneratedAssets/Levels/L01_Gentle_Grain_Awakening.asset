@@ -1,0 +1,118 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: L01_Gentle_Grain_Awakening
+  m_EditorClassIdentifier: 
+  levelID: L01
+  levelName: Gentle Grain Awakening
+  cityName: Guangzhou
+  targetTasteName: Force Tutorial
+  levelIntro: "Use rice to learn grinding force. The goal is a soft rice flavor without a burnt taste."
+  maxIngredientCount: 1
+  availableIngredients:
+  - {fileID: 11400000, guid: 9a1cd94e3dd91be4b88ca7f39f71ca64, type: 2}
+  requiredIngredients:
+  - {fileID: 11400000, guid: 9a1cd94e3dd91be4b88ca7f39f71ca64, type: 2}
+  forbiddenIngredients: []
+  unlockedDimensions: 04000000
+  lockedDimensions: 05000000020000000300000001000000
+  correctIngredientOrder:
+  - {fileID: 11400000, guid: 9a1cd94e3dd91be4b88ca7f39f71ca64, type: 2}
+  correctRatioPattern:
+  - ingredient: {fileID: 11400000, guid: 9a1cd94e3dd91be4b88ca7f39f71ca64, type: 2}
+    ratioLevel: 3
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 11400000, guid: 9a1cd94e3dd91be4b88ca7f39f71ca64, type: 2}
+  targetForceLevel: 1
+  targetSpeedLevel: 1
+  minGrindDuration: 8
+  maxGrindDuration: 14
+  passingScore: 100
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 0
+    enableRatio: 0
+    enableCombination: 0
+    enableForce: 1
+    enableSpeed: 0
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 04000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L01_Rice_Force
+    title: Rice - Force Clue
+    content: "Rice works best with medium force. Too little force keeps it weak; too much can make it taste burnt."
+    relatedIngredients:
+    - {fileID: 11400000, guid: 9a1cd94e3dd91be4b88ca7f39f71ca64, type: 2}
+    relatedDimension: 4
+  fallbackHintText: No new hint for now. Keep what worked
+  progressiveHintRules:
+  - ruleId: L01_Hint_Force
+    priority: 20
+    mechanic: 4
+    hintText: Rice does not need full force. Try setting the force near the middle of the slider.
+  ingredientProfiles:
+  - profileTag: L01_Rice
+    ingredient: {fileID: 11400000, guid: 9a1cd94e3dd91be4b88ca7f39f71ca64, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 0
+      enableRatio: 0
+      enableCombination: 0
+      enableForce: 1
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 0
+    targetOrderIndex: -1
+    targetCombinationKey: 
+    minGrindDuration: 8
+    maxGrindDuration: 14
+    levelTraitDescription: Rice gives a soft grain base with mild congee warmth.
+    responseHintRules: []
+  successFeedback: "The rice tastes soft and clean, with no burnt flavor."
+  closeFeedback: Very close. Adjust the force or grinding time a little.
+  wrongFeedback: The rice does not taste right. Check the force and grinding time.

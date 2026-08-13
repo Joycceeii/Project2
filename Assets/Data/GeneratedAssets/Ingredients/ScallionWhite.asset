@@ -13,12 +13,11 @@ MonoBehaviour:
   m_Name: ScallionWhite
   m_EditorClassIdentifier: 
   ingredientID: ScallionWhite
-  ingredientNameCN: Scallion White
+  ingredientNameCN:
   ingredientNameEN: Scallion White
-  aromaType: green fresh
-  initialDescription: Fresh and watery. It keeps a clean finish, but heavy or early
-    handling can bury its freshness.
+  aromaType: Fresh green
+  initialDescription: Scallion white is fresh and light. It works best near the end of a recipe.
   ingredientColor: {r: 0.76, g: 0.9, b: 0.62, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 5487728497233254322, guid: 285ddf16a2d948a4f8137e8b3d1e2f1a, type: 3}
-  defaultRatioValue: 1
+  defaultRatioValue: 0

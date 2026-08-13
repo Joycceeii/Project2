@@ -1,0 +1,190 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: L03_Layered_Dessert
+  m_EditorClassIdentifier: 
+  levelID: L03
+  levelName: Layered Dessert
+  cityName: Jiangmen
+  targetTasteName: Layer Timing
+  levelIntro: "Red bean, dried tangerine peel, and rock sugar each change the dessert at a different moment."
+  maxIngredientCount: 3
+  availableIngredients:
+  - {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
+  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  - {fileID: 11400000, guid: f8de9a412976d494dbf0864972bd41a3, type: 2}
+  requiredIngredients:
+  - {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
+  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  - {fileID: 11400000, guid: f8de9a412976d494dbf0864972bd41a3, type: 2}
+  forbiddenIngredients: []
+  unlockedDimensions: 01000000
+  lockedDimensions: 04000000050000000200000003000000
+  correctIngredientOrder:
+  - {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
+  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  - {fileID: 11400000, guid: f8de9a412976d494dbf0864972bd41a3, type: 2}
+  correctRatioPattern:
+  - ingredient: {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
+    ratioLevel: 5
+  - ingredient: {fileID: 11400000, guid: f8de9a412976d494dbf0864972bd41a3, type: 2}
+    ratioLevel: 4
+  - ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    ratioLevel: 2
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
+    - ingredients:
+      - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    - ingredients:
+      - {fileID: 11400000, guid: f8de9a412976d494dbf0864972bd41a3, type: 2}
+  targetForceLevel: 1
+  targetSpeedLevel: 1
+  minGrindDuration: 18
+  maxGrindDuration: 28
+  passingScore: 100
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 1
+    enableRatio: 0
+    enableCombination: 0
+    enableForce: 0
+    enableSpeed: 0
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 01000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L03_RedBean_Order
+    title: Red Bean - Order Clue
+    content: Red bean works well early because it builds the base flavor.
+    relatedIngredients:
+    - {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
+    relatedDimension: 1
+  - clueId: L03_Peel_Order
+    title: Dried Tangerine Peel - Order Clue
+    content: "Dried tangerine peel works better after the base is set. Too early can make the recipe bitter."
+    relatedIngredients:
+    - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    relatedDimension: 1
+  - clueId: L03_RockSugar_Order
+    title: Rock Sugar - Order Clue
+    content: Rock sugar works best at the end because it softens the final taste.
+    relatedIngredients:
+    - {fileID: 11400000, guid: f8de9a412976d494dbf0864972bd41a3, type: 2}
+    relatedDimension: 1
+  fallbackHintText: No new hint for now. Keep what worked
+  progressiveHintRules:
+  - ruleId: L03_Hint_RedBean_Order
+    priority: 22
+    mechanic: 1
+    hintText: Red bean should go first. Place it before dried tangerine peel and rock sugar.
+  - ruleId: L03_Hint_Peel_Order
+    priority: 21
+    mechanic: 1
+    hintText: Dried tangerine peel should come after red bean so it does not make the base bitter.
+  - ruleId: L03_Hint_RockSugar_Order
+    priority: 20
+    mechanic: 1
+    hintText: Rock sugar should go last. Let it soften the dessert.
+  ingredientProfiles:
+  - profileTag: L03_RedBean
+    ingredient: {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 1
+      enableRatio: 0
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 0
+    targetOrderIndex: 0
+    targetCombinationKey: 
+    minGrindDuration: 18
+    maxGrindDuration: 28
+    levelTraitDescription: Red bean is a thick warm dessert base.
+    responseHintRules: []
+  - profileTag: L03_DriedTangerinePeel
+    ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 1
+      enableRatio: 0
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 0
+    targetOrderIndex: 1
+    targetCombinationKey: 
+    minGrindDuration: 18
+    maxGrindDuration: 28
+    levelTraitDescription: Dried tangerine peel gives a bright citrus lift.
+    responseHintRules: []
+  - profileTag: L03_RockSugar
+    ingredient: {fileID: 11400000, guid: f8de9a412976d494dbf0864972bd41a3, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 1
+      enableRatio: 0
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 0
+    targetOrderIndex: 2
+    targetCombinationKey: 
+    minGrindDuration: 18
+    maxGrindDuration: 28
+    levelTraitDescription: Rock sugar adds a clean sweetness at the end.
+    responseHintRules: []
+  successFeedback: "The dessert has a clear order: red bean first, citrus next, sweetness last."
+  closeFeedback: Very close. Check the order or grinding time.
+  wrongFeedback: The dessert tastes out of order. Check when each ingredient is added.

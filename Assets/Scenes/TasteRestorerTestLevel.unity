@@ -416,7 +416,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -600, y: 380}
+  m_AnchoredPosition: {x: -650, y: 380}
   m_SizeDelta: {x: 132, y: 36}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &45700536
@@ -808,8 +808,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 240, y: 100}
-  m_SizeDelta: {x: 300, y: 100}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 620, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &122857149
 MonoBehaviour:
@@ -824,7 +824,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.82}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.94}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -864,9 +864,9 @@ MonoBehaviour:
   ingredientID: ScallionWhite
   ingredientNameCN: Scallion White
   ingredientNameEN: Scallion White
-  aromaType: green fresh
-  initialDescription: Fresh green aroma. It dislikes heavy grinding and strong ginger
-    pressure.
+  aromaType: Fresh green
+  initialDescription: Scallion white is fresh and light. It works best near the end
+    of a recipe.
   ingredientColor: {r: 0.76, g: 0.9, b: 0.62, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 0}
@@ -1110,9 +1110,9 @@ MonoBehaviour:
   ingredientID: SandGinger
   ingredientNameCN: Sand Ginger
   ingredientNameEN: Sand Ginger
-  aromaType: sharp spicy
-  initialDescription: Sharp and penetrating spice aroma. It is often the core of
-    salt-baked flavor.
+  aromaType: Root spice
+  initialDescription: Sand ginger is deep and spicy. It needs enough force to bring
+    out its flavor.
   ingredientColor: {r: 0.78, g: 0.58, b: 0.35, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 0}
@@ -1132,8 +1132,8 @@ MonoBehaviour:
   ingredientID: Peanut
   ingredientNameCN: Peanut
   ingredientNameEN: Peanut
-  aromaType: nutty
-  initialDescription: Warm and full roasted nut aroma. It blends well with nearby
+  aromaType: Roasted nut
+  initialDescription: Peanut gives a warm roasted flavor. It works well with other
     nutty ingredients.
   ingredientColor: {r: 0.72, g: 0.48, b: 0.27, a: 1}
   icon: {fileID: 0}
@@ -1220,7 +1220,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 203992320}
   m_CullTransparentMesh: 1
---- !u!1 &267308223
+--- !u!1 &232150040
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1228,73 +1228,76 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 267308224}
-  - component: {fileID: 267308226}
-  - component: {fileID: 267308225}
+  - component: {fileID: 232150041}
+  - component: {fileID: 232150043}
+  - component: {fileID: 232150042}
   m_Layer: 0
-  m_Name: Current Ingredients Panel
+  m_Name: Ingredient Traits Toggle Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &267308224
+--- !u!224 &232150041
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 267308223}
+  m_GameObject: {fileID: 232150040}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1804428966}
-  m_Father: {fileID: 1647328222}
+  m_Children: []
+  m_Father: {fileID: 333045194}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 250, y: -60}
-  m_SizeDelta: {x: 250, y: 70}
-  m_Pivot: {x: 0.5, y: 1}
---- !u!114 &267308225
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &232150042
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 267308223}
+  m_GameObject: {fileID: 232150040}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.72}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &267308226
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 15
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: Traits
+--- !u!222 &232150043
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 267308223}
+  m_GameObject: {fileID: 232150040}
   m_CullTransparentMesh: 1
 --- !u!1 &300730609
 GameObject:
@@ -1375,6 +1378,252 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 300730609}
   m_CullTransparentMesh: 1
+--- !u!1 &333045193
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 333045194}
+  - component: {fileID: 333045197}
+  - component: {fileID: 333045196}
+  - component: {fileID: 333045195}
+  m_Layer: 0
+  m_Name: Ingredient Traits Toggle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &333045194
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 333045193}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 232150041}
+  m_Father: {fileID: 1647328222}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -24, y: -24}
+  m_SizeDelta: {x: 112, y: 40}
+  m_Pivot: {x: 1, y: 1}
+--- !u!114 &333045195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 333045193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 333045196}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &333045196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 333045193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.92, g: 0.92, b: 0.92, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &333045197
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 333045193}
+  m_CullTransparentMesh: 1
+--- !u!114 &335242289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelID: L02
+  levelName: Slow Tea Return
+  cityName: Chaozhou
+  targetTasteName: Speed Tutorial
+  levelIntro: Use tea leaves to learn grinding speed. The goal is gentle tea bitterness
+    followed by sweetness.
+  maxIngredientCount: 1
+  availableIngredients:
+  - {fileID: 1016333429}
+  requiredIngredients:
+  - {fileID: 1016333429}
+  forbiddenIngredients: []
+  unlockedDimensions: 05000000
+  lockedDimensions: 04000000020000000300000001000000
+  correctIngredientOrder:
+  - {fileID: 1016333429}
+  correctRatioPattern: []
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 1016333429}
+  targetForceLevel: 1
+  targetSpeedLevel: 0
+  minGrindDuration: 10
+  maxGrindDuration: 16
+  passingScore: 100
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 0
+    enableRatio: 0
+    enableCombination: 0
+    enableForce: 0
+    enableSpeed: 1
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 0100000002000000030000000500000004000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L02_Tea_Speed
+    title: Tea Leaf - Speed Clue
+    content: Tea leaves work best with slow grinding. Fast grinding makes the tea
+      too bitter.
+    relatedIngredients:
+    - {fileID: 1016333429}
+    relatedDimension: 5
+  fallbackHintText: 
+  progressiveHintRules: []
+  ingredientProfiles:
+  - profileTag: L02_TeaLeaf
+    ingredient: {fileID: 1016333429}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 0
+      enableRatio: 0
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 1
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 0
+    targetRatioLevel: 0
+    targetOrderIndex: 0
+    targetCombinationKey: TeaLeaf
+    minGrindDuration: 10
+    maxGrindDuration: 16
+    levelTraitDescription: Tea leaves are bitter at first and sweet later. Slow grinding
+      helps the sweetness come out.
+    responseHintRules:
+    - ruleId: L02_TeaLeaf_Speed
+      priority: 30
+      mechanic: 5
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Tea Leaves is not matching the speed target for L02_TeaLeaf.
+  successFeedback: 'The tea tastes balanced: light bitterness first, then sweetness.'
+  closeFeedback: Very close. Adjust the speed or grinding time a little.
+  wrongFeedback: The tea is too bitter. Check the speed and grinding time.
 --- !u!114 &345734362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1390,8 +1639,9 @@ MonoBehaviour:
   ingredientID: RedBean
   ingredientNameCN: Red Bean
   ingredientNameEN: Red Bean
-  aromaType: warm sweet
-  initialDescription: Thick, warm, and sweet. It works well as a base note.
+  aromaType: Sweet bean
+  initialDescription: Red bean is thick and gently sweet. It works well as a base
+    flavor.
   ingredientColor: {r: 0.55, g: 0.12, b: 0.11, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 0}
@@ -1411,9 +1661,9 @@ MonoBehaviour:
   ingredientID: BlackSesame
   ingredientNameCN: Black Sesame
   ingredientNameEN: Black Sesame
-  aromaType: roasted nutty
-  initialDescription: Deep roasted nut aroma. It can become the main note, but too
-    much makes it bitter and dominant.
+  aromaType: Roasted nut
+  initialDescription: Black sesame has a strong roasted flavor. It can lead a recipe,
+    but too much makes it bitter.
   ingredientColor: {r: 0.08, g: 0.07, b: 0.06, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 0}
@@ -1497,6 +1747,403 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 394512416}
   m_CullTransparentMesh: 1
+--- !u!114 &413123163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelID: L10
+  levelName: Savory Bean Current
+  cityName: Yangjiang
+  targetTasteName: Four-Dimension Challenge
+  levelIntro: Force, speed, ratio, and order are unlocked. Combination remains locked.
+  maxIngredientCount: 4
+  availableIngredients:
+  - {fileID: 1608869541}
+  - {fileID: 1870811157}
+  - {fileID: 572168203}
+  - {fileID: 1778564978}
+  requiredIngredients:
+  - {fileID: 1608869541}
+  - {fileID: 1870811157}
+  - {fileID: 572168203}
+  - {fileID: 1778564978}
+  forbiddenIngredients: []
+  unlockedDimensions: 04000000050000000200000001000000
+  lockedDimensions: 03000000
+  correctIngredientOrder:
+  - {fileID: 1608869541}
+  - {fileID: 1870811157}
+  - {fileID: 572168203}
+  - {fileID: 1778564978}
+  correctRatioPattern:
+  - ingredient: {fileID: 1608869541}
+    ratioLevel: 5
+  - ingredient: {fileID: 1870811157}
+    ratioLevel: 4
+  - ingredient: {fileID: 572168203}
+    ratioLevel: 2
+  - ingredient: {fileID: 1778564978}
+    ratioLevel: 1
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 1608869541}
+      - {fileID: 1870811157}
+      - {fileID: 572168203}
+      - {fileID: 1778564978}
+  targetForceLevel: 1
+  targetSpeedLevel: 1
+  minGrindDuration: 28
+  maxGrindDuration: 45
+  passingScore: 90
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 1
+    enableRatio: 1
+    enableCombination: 0
+    enableForce: 1
+    enableSpeed: 1
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 0100000002000000030000000500000004000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L10_Douchi_Force
+    title: Yangjiang Douchi - Force Clue
+    content: Yangjiang douchi works best with medium force. Too little is weak; too
+      much makes it muddy.
+    relatedIngredients:
+    - {fileID: 1608869541}
+    relatedDimension: 4
+  - clueId: L10_Ginger_Speed
+    title: Ginger - Speed Clue
+    content: Ginger works best at medium speed. Too fast can make it too sharp.
+    relatedIngredients:
+    - {fileID: 1870811157}
+    relatedDimension: 5
+  - clueId: L10_Ginger_Order
+    title: Ginger - Order Clue
+    content: Ginger works well in the middle, after the base flavor is set.
+    relatedIngredients:
+    - {fileID: 1870811157}
+    relatedDimension: 1
+  fallbackHintText: 
+  progressiveHintRules: []
+  ingredientProfiles:
+  - profileTag: L10_YangjiangDouchi
+    ingredient: {fileID: 1608869541}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 1
+      enableSpeed: 1
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 5
+    targetOrderIndex: 0
+    targetCombinationKey: CoarseSalt+DriedTangerinePeel+Ginger+YangjiangDouchi
+    minGrindDuration: 28
+    maxGrindDuration: 45
+    levelTraitDescription: Yangjiang douchi is savory and fermented. It gives the
+      recipe a strong base.
+    responseHintRules:
+    - ruleId: L10_YangjiangDouchi_Force
+      priority: 30
+      mechanic: 4
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Yangjiang Douchi is not matching the force target for L10_YangjiangDouchi.
+    - ruleId: L10_YangjiangDouchi_Speed
+      priority: 30
+      mechanic: 5
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Yangjiang Douchi is not matching the speed target for L10_YangjiangDouchi.
+    - ruleId: L10_YangjiangDouchi_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Yangjiang Douchi has the wrong ratio for L10_YangjiangDouchi.
+    - ruleId: L10_YangjiangDouchi_IngredientOrder
+      priority: 20
+      mechanic: 1
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Yangjiang Douchi is in the wrong order for L10_YangjiangDouchi.
+  - profileTag: L10_Ginger
+    ingredient: {fileID: 1870811157}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 1
+      enableSpeed: 1
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 4
+    targetOrderIndex: 1
+    targetCombinationKey: CoarseSalt+DriedTangerinePeel+Ginger+YangjiangDouchi
+    minGrindDuration: 28
+    maxGrindDuration: 45
+    levelTraitDescription: Ginger is fresh and sharp. It can brighten a recipe, but
+      it can also become too strong.
+    responseHintRules:
+    - ruleId: L10_Ginger_Force
+      priority: 30
+      mechanic: 4
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Ginger is not matching the force target for L10_Ginger.
+    - ruleId: L10_Ginger_Speed
+      priority: 30
+      mechanic: 5
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Ginger is not matching the speed target for L10_Ginger.
+    - ruleId: L10_Ginger_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Ginger has the wrong ratio for L10_Ginger.
+    - ruleId: L10_Ginger_IngredientOrder
+      priority: 20
+      mechanic: 1
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Ginger is in the wrong order for L10_Ginger.
+  - profileTag: L10_DriedTangerinePeel
+    ingredient: {fileID: 572168203}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 1
+      enableSpeed: 1
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 2
+    targetOrderIndex: 2
+    targetCombinationKey: CoarseSalt+DriedTangerinePeel+Ginger+YangjiangDouchi
+    minGrindDuration: 28
+    maxGrindDuration: 45
+    levelTraitDescription: Dried tangerine peel is bright and slightly bitter. It
+      works best as a small accent.
+    responseHintRules:
+    - ruleId: L10_DriedTangerinePeel_Force
+      priority: 30
+      mechanic: 4
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Dried Tangerine Peel is not matching the force target for L10_DriedTangerinePeel.
+    - ruleId: L10_DriedTangerinePeel_Speed
+      priority: 30
+      mechanic: 5
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Dried Tangerine Peel is not matching the speed target for L10_DriedTangerinePeel.
+    - ruleId: L10_DriedTangerinePeel_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Dried Tangerine Peel has the wrong ratio for L10_DriedTangerinePeel.
+    - ruleId: L10_DriedTangerinePeel_IngredientOrder
+      priority: 20
+      mechanic: 1
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Dried Tangerine Peel is in the wrong order for L10_DriedTangerinePeel.
+  - profileTag: L10_CoarseSalt
+    ingredient: {fileID: 1778564978}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 1
+      enableSpeed: 1
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 1
+    targetOrderIndex: 3
+    targetCombinationKey: CoarseSalt+DriedTangerinePeel+Ginger+YangjiangDouchi
+    minGrindDuration: 28
+    maxGrindDuration: 45
+    levelTraitDescription: Coarse salt supports other flavors. Use it lightly so
+      it does not become the main taste.
+    responseHintRules:
+    - ruleId: L10_CoarseSalt_Force
+      priority: 30
+      mechanic: 4
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Coarse Salt is not matching the force target for L10_CoarseSalt.
+    - ruleId: L10_CoarseSalt_Speed
+      priority: 30
+      mechanic: 5
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Coarse Salt is not matching the speed target for L10_CoarseSalt.
+    - ruleId: L10_CoarseSalt_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Coarse Salt has the wrong ratio for L10_CoarseSalt.
+    - ruleId: L10_CoarseSalt_IngredientOrder
+      priority: 20
+      mechanic: 1
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Coarse Salt is in the wrong order for L10_CoarseSalt.
+  successFeedback: Douchi is the main savory flavor, with ginger, citrus, and light
+    salt behind it.
+  closeFeedback: Very close. Check one process or structure setting.
+  wrongFeedback: Salt, ginger, or citrus is too strong, or the douchi flavor is unclear.
 --- !u!1 &421399935
 GameObject:
   m_ObjectHideFlags: 0
@@ -1618,353 +2265,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 421399935}
   m_CullTransparentMesh: 1
---- !u!114 &432976716
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelID: L08
-  levelName: Wrapped Rice Layers
-  cityName: Zhaoqing
-  targetTasteName: Three-Dimension Challenge
-  levelIntro: Ratio, combination, and order are unlocked. Restore a layered steamed
-    rice aroma.
-  maxIngredientCount: 4
-  availableIngredients:
-  - {fileID: 1989610468}
-  - {fileID: 345734362}
-  - {fileID: 1623195174}
-  - {fileID: 378791487}
-  requiredIngredients:
-  - {fileID: 1989610468}
-  - {fileID: 345734362}
-  - {fileID: 1623195174}
-  - {fileID: 378791487}
-  forbiddenIngredients: []
-  unlockedDimensions: 020000000300000001000000
-  lockedDimensions: 0400000005000000
-  correctIngredientOrder:
-  - {fileID: 345734362}
-  - {fileID: 1989610468}
-  - {fileID: 378791487}
-  - {fileID: 1623195174}
-  correctRatioPattern:
-  - ingredient: {fileID: 345734362}
-    ratioLevel: 5
-  - ingredient: {fileID: 1989610468}
-    ratioLevel: 4
-  - ingredient: {fileID: 378791487}
-    ratioLevel: 2
-  - ingredient: {fileID: 1623195174}
-    ratioLevel: 1
-  correctCombinationPattern:
-    groups:
-    - ingredients:
-      - {fileID: 1989610468}
-      - {fileID: 1623195174}
-    - ingredients:
-      - {fileID: 345734362}
-    - ingredients:
-      - {fileID: 378791487}
-  targetForceLevel: 1
-  targetSpeedLevel: 1
-  minGrindDuration: 25
-  maxGrindDuration: 40
-  passingScore: 90
-  enabledMechanics:
-    enableIngredientSelection: 0
-    enableIngredientOrder: 1
-    enableRatio: 1
-    enableCombination: 1
-    enableForce: 0
-    enableSpeed: 0
-    enableGrindDuration: 1
-  feedbackTexts:
-    forceTooLight: Grinding force is too light.
-    forceTooHeavy: Grinding force is too heavy.
-    forceCorrect: Grinding force is correct.
-    speedTooSlow: Grinding speed is too slow.
-    speedTooFast: Grinding speed is too fast.
-    speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
-    selectionCorrect: Ingredient selection is correct.
-    selectionWrong: Ingredient selection does not match the target.
-    orderCorrect: Ingredient order is correct.
-    orderPartial: Ingredient order is partially correct.
-    orderWrong: Ingredient order does not match the target.
-    ratioCorrect: Ratio pattern is correct.
-    ratioAmbiguous: Ratio pattern is still ambiguous.
-    combinationCorrect: Combination pattern is correct.
-    combinationWrong: Combination pattern does not match the target.
-  hintSettings:
-    hintPriority: 0100000002000000030000000500000004000000
-    maxOrderHints: 5
-    maxRatioHints: 5
-    maxCombinationHints: 3
-    maxProcessHints: 2
-  scoringWeights:
-    ingredientSelection: 20
-    ingredientOrder: 15
-    ratio: 20
-    combination: 15
-    force: 10
-    speed: 10
-    grindDuration: 10
-  unlockCluesOnComplete:
-  - clueId: L08_LotusLeaf_Order
-    title: Lotus Leaf - Order Clue
-    content: Lotus leaf is fragile and works better late, not early or heavy.
-    relatedIngredients:
-    - {fileID: 1623195174}
-    relatedDimension: 1
-  - clueId: L08_LotusLeaf_Combination
-    title: Lotus Leaf - Combination Clue
-    content: Lotus leaf can soften glutinous rice aroma, but should not be overworked
-      with strong notes.
-    relatedIngredients:
-    - {fileID: 1623195174}
-    - {fileID: 1989610468}
-    relatedDimension: 3
-  fallbackHintText: 
-  progressiveHintRules: []
-  ingredientProfiles:
-  - profileTag: L08_GlutinousRice
-    ingredient: {fileID: 1989610468}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 1
-      enableRatio: 1
-      enableCombination: 1
-      enableForce: 0
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 4
-    targetOrderIndex: 1
-    targetCombinationKey: GlutinousRice+LotusLeaf
-    minGrindDuration: 25
-    maxGrindDuration: 40
-    levelTraitDescription: Soft sticky grain aroma. It supports smoothness, but should
-      not take the lead.
-    responseHintRules:
-    - ruleId: L08_GlutinousRice_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Glutinous Rice has the wrong ratio for L08_GlutinousRice.
-    - ruleId: L08_GlutinousRice_Combination
-      priority: 20
-      mechanic: 3
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Glutinous Rice is in the wrong combination for L08_GlutinousRice.
-    - ruleId: L08_GlutinousRice_IngredientOrder
-      priority: 20
-      mechanic: 1
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Glutinous Rice is in the wrong order for L08_GlutinousRice.
-  - profileTag: L08_RedBean
-    ingredient: {fileID: 345734362}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 1
-      enableRatio: 1
-      enableCombination: 1
-      enableForce: 0
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 5
-    targetOrderIndex: 0
-    targetCombinationKey: RedBean
-    minGrindDuration: 25
-    maxGrindDuration: 40
-    levelTraitDescription: Thick, warm, and sweet. It works well as a base note.
-    responseHintRules:
-    - ruleId: L08_RedBean_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Red Bean has the wrong ratio for L08_RedBean.
-    - ruleId: L08_RedBean_Combination
-      priority: 20
-      mechanic: 3
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Red Bean is in the wrong combination for L08_RedBean.
-    - ruleId: L08_RedBean_IngredientOrder
-      priority: 20
-      mechanic: 1
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Red Bean is in the wrong order for L08_RedBean.
-  - profileTag: L08_LotusLeaf
-    ingredient: {fileID: 1623195174}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 1
-      enableRatio: 1
-      enableCombination: 1
-      enableForce: 0
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 1
-    targetOrderIndex: 3
-    targetCombinationKey: GlutinousRice+LotusLeaf
-    minGrindDuration: 25
-    maxGrindDuration: 40
-    levelTraitDescription: Light leafy aroma, fragile and fresh. It should not be
-      handled too heavily or too early.
-    responseHintRules:
-    - ruleId: L08_LotusLeaf_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Lotus Leaf has the wrong ratio for L08_LotusLeaf.
-    - ruleId: L08_LotusLeaf_Combination
-      priority: 20
-      mechanic: 3
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Lotus Leaf is in the wrong combination for L08_LotusLeaf.
-    - ruleId: L08_LotusLeaf_IngredientOrder
-      priority: 20
-      mechanic: 1
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Lotus Leaf is in the wrong order for L08_LotusLeaf.
-  - profileTag: L08_BlackSesame
-    ingredient: {fileID: 378791487}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 1
-      enableRatio: 1
-      enableCombination: 1
-      enableForce: 0
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 2
-    targetOrderIndex: 2
-    targetCombinationKey: BlackSesame
-    minGrindDuration: 25
-    maxGrindDuration: 40
-    levelTraitDescription: Deep roasted nut aroma. It can become the main note, but
-      too much makes it bitter and dominant.
-    responseHintRules:
-    - ruleId: L08_BlackSesame_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Black Sesame has the wrong ratio for L08_BlackSesame.
-    - ruleId: L08_BlackSesame_Combination
-      priority: 20
-      mechanic: 3
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Black Sesame is in the wrong combination for L08_BlackSesame.
-    - ruleId: L08_BlackSesame_IngredientOrder
-      priority: 20
-      mechanic: 1
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Black Sesame is in the wrong order for L08_BlackSesame.
-  successFeedback: Red bean forms the base, glutinous rice supports the body, black
-    sesame adds tail depth, and lotus leaf lifts the finish.
-  closeFeedback: The steamed rice direction appears, but lotus leaf, sesame, or red
-    bean needs a more accurate role.
-  wrongFeedback: Lotus leaf is crushed, or black sesame steals the main body.
 --- !u!1 &434197621
 GameObject:
   m_ObjectHideFlags: 0
@@ -2555,9 +2855,9 @@ MonoBehaviour:
   ingredientID: DriedTangerinePeel
   ingredientNameCN: Dried Tangerine Peel
   ingredientNameEN: Dried Tangerine Peel
-  aromaType: citrus bitter
-  initialDescription: Clear citrus aroma with slight bitterness. It is recognizable,
-    but becomes bitter if processed too early.
+  aromaType: Citrus peel
+  initialDescription: Dried tangerine peel is bright and slightly bitter. It works
+    best as a small accent.
   ingredientColor: {r: 0.95, g: 0.45, b: 0.12, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 0}
@@ -2702,6 +3002,211 @@ Material:
     - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
+--- !u!114 &631077597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelID: L08
+  levelName: Pepper Held in Balance
+  cityName: Shantou
+  targetTasteName: Two-Dimension Challenge
+  levelIntro: Speed is unlocked. Handle sharp spice carefully.
+  maxIngredientCount: 3
+  availableIngredients:
+  - {fileID: 794819427}
+  - {fileID: 187542410}
+  - {fileID: 572168203}
+  requiredIngredients:
+  - {fileID: 794819427}
+  - {fileID: 187542410}
+  - {fileID: 572168203}
+  forbiddenIngredients: []
+  unlockedDimensions: 05000000
+  lockedDimensions: 04000000020000000300000001000000
+  correctIngredientOrder:
+  - {fileID: 794819427}
+  - {fileID: 187542410}
+  - {fileID: 572168203}
+  correctRatioPattern:
+  - ingredient: {fileID: 794819427}
+    ratioLevel: 5
+  - ingredient: {fileID: 187542410}
+    ratioLevel: 4
+  - ingredient: {fileID: 572168203}
+    ratioLevel: 2
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 794819427}
+    - ingredients:
+      - {fileID: 187542410}
+    - ingredients:
+      - {fileID: 572168203}
+  targetForceLevel: 1
+  targetSpeedLevel: 1
+  minGrindDuration: 20
+  maxGrindDuration: 32
+  passingScore: 90
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 0
+    enableRatio: 0
+    enableCombination: 0
+    enableForce: 0
+    enableSpeed: 1
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 0100000002000000030000000500000004000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L08_WhitePepper_Speed
+    title: White Pepper - Speed Clue
+    content: White pepper works best at medium speed. Too fast makes it harsh; too
+      slow makes it weak.
+    relatedIngredients:
+    - {fileID: 794819427}
+    relatedDimension: 5
+  fallbackHintText: 
+  progressiveHintRules: []
+  ingredientProfiles:
+  - profileTag: L08_WhitePepper
+    ingredient: {fileID: 794819427}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 0
+      enableRatio: 0
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 1
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 5
+    targetOrderIndex: 0
+    targetCombinationKey: WhitePepper
+    minGrindDuration: 20
+    maxGrindDuration: 32
+    levelTraitDescription: White pepper is sharp and quick to spread. Too much grinding
+      can make it harsh.
+    responseHintRules:
+    - ruleId: L08_WhitePepper_Speed
+      priority: 30
+      mechanic: 5
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: White Pepper is not matching the speed target for L08_WhitePepper.
+  - profileTag: L08_Peanut
+    ingredient: {fileID: 187542410}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 0
+      enableRatio: 0
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 1
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 4
+    targetOrderIndex: 1
+    targetCombinationKey: Peanut
+    minGrindDuration: 20
+    maxGrindDuration: 32
+    levelTraitDescription: Peanut gives a warm roasted flavor. It works well with
+      other nutty ingredients.
+    responseHintRules:
+    - ruleId: L08_Peanut_Speed
+      priority: 30
+      mechanic: 5
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Peanut is not matching the speed target for L08_Peanut.
+  - profileTag: L08_DriedTangerinePeel
+    ingredient: {fileID: 572168203}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 0
+      enableRatio: 0
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 1
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 2
+    targetOrderIndex: 2
+    targetCombinationKey: DriedTangerinePeel
+    minGrindDuration: 20
+    maxGrindDuration: 32
+    levelTraitDescription: Dried tangerine peel is bright and slightly bitter. It
+      works best as a small accent.
+    responseHintRules:
+    - ruleId: L08_DriedTangerinePeel_Speed
+      priority: 30
+      mechanic: 5
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Dried Tangerine Peel is not matching the speed target for L08_DriedTangerinePeel.
+  successFeedback: White pepper is clear, peanut adds warmth, and citrus keeps it
+    light.
+  closeFeedback: Very close. Check the speed or grinding time.
+  wrongFeedback: White pepper is too harsh, or the support flavors are too weak.
 --- !u!21 &636816419
 Material:
   serializedVersion: 8
@@ -3099,6 +3604,179 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -16, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &698851025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelID: L04
+  levelName: Joined Nut Crisp
+  cityName: Foshan
+  targetTasteName: Shared Grind
+  levelIntro: Peanut and black sesame are close in flavor. Try to find when they
+    feel connected.
+  maxIngredientCount: 2
+  availableIngredients:
+  - {fileID: 187542410}
+  - {fileID: 378791487}
+  requiredIngredients:
+  - {fileID: 187542410}
+  - {fileID: 378791487}
+  forbiddenIngredients: []
+  unlockedDimensions: 03000000
+  lockedDimensions: 04000000050000000200000001000000
+  correctIngredientOrder:
+  - {fileID: 187542410}
+  - {fileID: 378791487}
+  correctRatioPattern:
+  - ingredient: {fileID: 187542410}
+    ratioLevel: 5
+  - ingredient: {fileID: 378791487}
+    ratioLevel: 2
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 187542410}
+      - {fileID: 378791487}
+  targetForceLevel: 1
+  targetSpeedLevel: 1
+  minGrindDuration: 15
+  maxGrindDuration: 24
+  passingScore: 100
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 0
+    enableRatio: 0
+    enableCombination: 1
+    enableForce: 0
+    enableSpeed: 0
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 0100000002000000030000000500000004000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L04_Peanut_Combination
+    title: Peanut - Combination Clue
+    content: Peanut works well with other nutty ingredients such as black sesame.
+    relatedIngredients:
+    - {fileID: 187542410}
+    - {fileID: 378791487}
+    relatedDimension: 3
+  - clueId: L04_BlackSesame_Combination
+    title: Black Sesame - Combination Clue
+    content: Black sesame can blend with peanut, but too much handling can make it
+      bitter.
+    relatedIngredients:
+    - {fileID: 378791487}
+    - {fileID: 187542410}
+    relatedDimension: 3
+  fallbackHintText: 
+  progressiveHintRules: []
+  ingredientProfiles:
+  - profileTag: L04_Peanut
+    ingredient: {fileID: 187542410}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 0
+      enableRatio: 0
+      enableCombination: 1
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 5
+    targetOrderIndex: 0
+    targetCombinationKey: BlackSesame+Peanut
+    minGrindDuration: 15
+    maxGrindDuration: 24
+    levelTraitDescription: Peanut gives a warm roasted flavor. It works well with
+      other nutty ingredients.
+    responseHintRules:
+    - ruleId: L04_Peanut_Combination
+      priority: 20
+      mechanic: 3
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Peanut is in the wrong combination for L04_Peanut.
+  - profileTag: L04_BlackSesame
+    ingredient: {fileID: 378791487}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 0
+      enableRatio: 0
+      enableCombination: 1
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 2
+    targetOrderIndex: 1
+    targetCombinationKey: BlackSesame+Peanut
+    minGrindDuration: 15
+    maxGrindDuration: 24
+    levelTraitDescription: Black sesame has a strong roasted flavor. It can lead
+      a recipe, but too much makes it bitter.
+    responseHintRules:
+    - ruleId: L04_BlackSesame_Combination
+      priority: 20
+      mechanic: 3
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Black Sesame is in the wrong combination for L04_BlackSesame.
+  successFeedback: Peanut and black sesame blend into one warm nutty flavor.
+  closeFeedback: Very close. Check the grouping or grinding time.
+  wrongFeedback: The two nutty flavors feel separate. Try a different grouping.
 --- !u!1 &744053906
 GameObject:
   m_ObjectHideFlags: 0
@@ -3229,6 +3907,85 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &763528816
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 763528817}
+  - component: {fileID: 763528819}
+  - component: {fileID: 763528818}
+  m_Layer: 0
+  m_Name: New Batch Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &763528817
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763528816}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1114566061}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &763528818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763528816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 18
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: New Batch
+--- !u!222 &763528819
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763528816}
+  m_CullTransparentMesh: 0
 --- !u!114 &794819427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3244,9 +4001,9 @@ MonoBehaviour:
   ingredientID: WhitePepper
   ingredientNameCN: White Pepper
   ingredientNameEN: White Pepper
-  aromaType: peppery
-  initialDescription: Bright pepper aroma that spreads quickly. It needs slower release
-    to avoid harshness.
+  aromaType: Sharp spice
+  initialDescription: White pepper is sharp and quick to spread. Too much grinding
+    can make it harsh.
   ingredientColor: {r: 0.8, g: 0.77, b: 0.68, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 0}
@@ -3444,16 +4201,17 @@ MonoBehaviour:
   - {fileID: 126495275}
   - {fileID: 1944881787}
   levels:
-  - {fileID: 2107979103}
-  - {fileID: 2100515720}
-  - {fileID: 1270655957}
-  - {fileID: 1020432908}
-  - {fileID: 1349132190}
-  - {fileID: 1627048050}
-  - {fileID: 1671599988}
-  - {fileID: 432976716}
-  - {fileID: 1903700760}
-  - {fileID: 1629247738}
+  - {fileID: 1719112767}
+  - {fileID: 335242289}
+  - {fileID: 1135272300}
+  - {fileID: 698851025}
+  - {fileID: 1738689386}
+  - {fileID: 1373645860}
+  - {fileID: 931904916}
+  - {fileID: 631077597}
+  - {fileID: 1820021243}
+  - {fileID: 413123163}
+  - {fileID: 1534672813}
   useRuntimeTenLevelData: 1
   buildOnStart: 0
   buildInEditMode: 1
@@ -3512,16 +4270,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levels:
-  - {fileID: 2107979103}
-  - {fileID: 2100515720}
-  - {fileID: 1270655957}
-  - {fileID: 1020432908}
-  - {fileID: 1349132190}
-  - {fileID: 1627048050}
-  - {fileID: 1671599988}
-  - {fileID: 432976716}
-  - {fileID: 1903700760}
-  - {fileID: 1629247738}
+  - {fileID: 1719112767}
+  - {fileID: 335242289}
+  - {fileID: 1135272300}
+  - {fileID: 698851025}
+  - {fileID: 1738689386}
+  - {fileID: 1373645860}
+  - {fileID: 931904916}
+  - {fileID: 631077597}
+  - {fileID: 1820021243}
+  - {fileID: 413123163}
+  - {fileID: 1534672813}
   attemptManager: {fileID: 912469142}
   uiManager: {fileID: 1647328223}
   hintManager: {fileID: 912469144}
@@ -3604,8 +4363,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -250, y: -100}
-  m_SizeDelta: {x: 200, y: 100}
+  m_AnchoredPosition: {x: -250, y: -90}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &914060436
 MonoBehaviour:
@@ -3645,6 +4404,251 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 914060434}
   m_CullTransparentMesh: 1
+--- !u!114 &931904916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelID: L07
+  levelName: Sand Ginger Core
+  cityName: Meizhou
+  targetTasteName: Two-Dimension Challenge
+  levelIntro: Sand ginger should be the main flavor. Dried tangerine peel and coarse
+    salt should support it.
+  maxIngredientCount: 3
+  availableIngredients:
+  - {fileID: 185727215}
+  - {fileID: 1778564978}
+  - {fileID: 572168203}
+  requiredIngredients:
+  - {fileID: 185727215}
+  - {fileID: 1778564978}
+  - {fileID: 572168203}
+  forbiddenIngredients: []
+  unlockedDimensions: 0400000002000000
+  lockedDimensions: 050000000300000001000000
+  correctIngredientOrder:
+  - {fileID: 185727215}
+  - {fileID: 572168203}
+  - {fileID: 1778564978}
+  correctRatioPattern:
+  - ingredient: {fileID: 185727215}
+    ratioLevel: 5
+  - ingredient: {fileID: 572168203}
+    ratioLevel: 4
+  - ingredient: {fileID: 1778564978}
+    ratioLevel: 2
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 185727215}
+      - {fileID: 1778564978}
+      - {fileID: 572168203}
+  targetForceLevel: 2
+  targetSpeedLevel: 1
+  minGrindDuration: 20
+  maxGrindDuration: 32
+  passingScore: 90
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 0
+    enableRatio: 1
+    enableCombination: 0
+    enableForce: 1
+    enableSpeed: 0
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 0100000002000000030000000500000004000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L07_SandGinger_Force
+    title: Sand Ginger - Force Clue
+    content: Sand ginger needs heavy force, but too much grinding can still make
+      it harsh.
+    relatedIngredients:
+    - {fileID: 185727215}
+    relatedDimension: 4
+  - clueId: L07_CoarseSalt_Ratio
+    title: Coarse Salt - Ratio Clue
+    content: Coarse salt should stay in the background. Do not make it the main flavor.
+    relatedIngredients:
+    - {fileID: 1778564978}
+    relatedDimension: 2
+  fallbackHintText: 
+  progressiveHintRules: []
+  ingredientProfiles:
+  - profileTag: L07_SandGinger
+    ingredient: {fileID: 185727215}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 0
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 1
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 2
+    targetSpeedLevel: 1
+    targetRatioLevel: 5
+    targetOrderIndex: 0
+    targetCombinationKey: CoarseSalt+DriedTangerinePeel+SandGinger
+    minGrindDuration: 20
+    maxGrindDuration: 32
+    levelTraitDescription: Sand ginger is deep and spicy. It needs enough force to
+      bring out its flavor.
+    responseHintRules:
+    - ruleId: L07_SandGinger_Force
+      priority: 30
+      mechanic: 4
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Sand Ginger is not matching the force target for L07_SandGinger.
+    - ruleId: L07_SandGinger_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Sand Ginger has the wrong ratio for L07_SandGinger.
+  - profileTag: L07_CoarseSalt
+    ingredient: {fileID: 1778564978}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 0
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 1
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 2
+    targetSpeedLevel: 1
+    targetRatioLevel: 2
+    targetOrderIndex: 2
+    targetCombinationKey: CoarseSalt+DriedTangerinePeel+SandGinger
+    minGrindDuration: 20
+    maxGrindDuration: 32
+    levelTraitDescription: Coarse salt supports other flavors. Use it lightly so
+      it does not become the main taste.
+    responseHintRules:
+    - ruleId: L07_CoarseSalt_Force
+      priority: 30
+      mechanic: 4
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Coarse Salt is not matching the force target for L07_CoarseSalt.
+    - ruleId: L07_CoarseSalt_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Coarse Salt has the wrong ratio for L07_CoarseSalt.
+  - profileTag: L07_DriedTangerinePeel
+    ingredient: {fileID: 572168203}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 0
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 1
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 2
+    targetSpeedLevel: 1
+    targetRatioLevel: 4
+    targetOrderIndex: 1
+    targetCombinationKey: CoarseSalt+DriedTangerinePeel+SandGinger
+    minGrindDuration: 20
+    maxGrindDuration: 32
+    levelTraitDescription: Dried tangerine peel is bright and slightly bitter. It
+      works best as a small accent.
+    responseHintRules:
+    - ruleId: L07_DriedTangerinePeel_Force
+      priority: 30
+      mechanic: 4
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Dried Tangerine Peel is not matching the force target for L07_DriedTangerinePeel.
+    - ruleId: L07_DriedTangerinePeel_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Dried Tangerine Peel has the wrong ratio for L07_DriedTangerinePeel.
+  successFeedback: Sand ginger is clear, with a little citrus and salt behind it.
+  closeFeedback: Very close. Check the force, ratio, or grinding time.
+  wrongFeedback: Salt or citrus is too strong, and sand ginger is not the main flavor.
 --- !u!1 &933057147
 GameObject:
   m_ObjectHideFlags: 0
@@ -3814,190 +4818,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ingredientID: TeaLeaf
-  ingredientNameCN: Tea Leaf
-  ingredientNameEN: Tea Leaf
-  aromaType: herbal bitter
-  initialDescription: Herbal, lightly bitter, and sweet after release. It becomes
-    harsh if handled too quickly.
+  ingredientNameCN: Tea Leaves
+  ingredientNameEN: Tea Leaves
+  aromaType: Tea
+  initialDescription: Tea leaves are bitter at first and sweet later. Slow grinding
+    helps the sweetness come out.
   ingredientColor: {r: 0.25, g: 0.5, b: 0.22, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 0}
   defaultRatioValue: 1
---- !u!114 &1020432908
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelID: L04
-  levelName: Joined Nut Crisp
-  cityName: Foshan
-  targetTasteName: Combination Tutorial
-  levelIntro: Only combination is unlocked. Learn how nearby nut aromas blend.
-  maxIngredientCount: 2
-  availableIngredients:
-  - {fileID: 187542410}
-  - {fileID: 378791487}
-  requiredIngredients:
-  - {fileID: 187542410}
-  - {fileID: 378791487}
-  forbiddenIngredients: []
-  unlockedDimensions: 03000000
-  lockedDimensions: 04000000050000000200000001000000
-  correctIngredientOrder:
-  - {fileID: 187542410}
-  - {fileID: 378791487}
-  correctRatioPattern:
-  - ingredient: {fileID: 187542410}
-    ratioLevel: 5
-  - ingredient: {fileID: 378791487}
-    ratioLevel: 2
-  correctCombinationPattern:
-    groups:
-    - ingredients:
-      - {fileID: 187542410}
-      - {fileID: 378791487}
-  targetForceLevel: 1
-  targetSpeedLevel: 1
-  minGrindDuration: 15
-  maxGrindDuration: 24
-  passingScore: 100
-  enabledMechanics:
-    enableIngredientSelection: 0
-    enableIngredientOrder: 0
-    enableRatio: 0
-    enableCombination: 1
-    enableForce: 0
-    enableSpeed: 0
-    enableGrindDuration: 1
-  feedbackTexts:
-    forceTooLight: Grinding force is too light.
-    forceTooHeavy: Grinding force is too heavy.
-    forceCorrect: Grinding force is correct.
-    speedTooSlow: Grinding speed is too slow.
-    speedTooFast: Grinding speed is too fast.
-    speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
-    selectionCorrect: Ingredient selection is correct.
-    selectionWrong: Ingredient selection does not match the target.
-    orderCorrect: Ingredient order is correct.
-    orderPartial: Ingredient order is partially correct.
-    orderWrong: Ingredient order does not match the target.
-    ratioCorrect: Ratio pattern is correct.
-    ratioAmbiguous: Ratio pattern is still ambiguous.
-    combinationCorrect: Combination pattern is correct.
-    combinationWrong: Combination pattern does not match the target.
-  hintSettings:
-    hintPriority: 0100000002000000030000000500000004000000
-    maxOrderHints: 5
-    maxRatioHints: 5
-    maxCombinationHints: 3
-    maxProcessHints: 2
-  scoringWeights:
-    ingredientSelection: 20
-    ingredientOrder: 15
-    ratio: 20
-    combination: 15
-    force: 10
-    speed: 10
-    grindDuration: 10
-  unlockCluesOnComplete:
-  - clueId: L04_Peanut_Combination
-    title: Peanut - Combination Clue
-    content: Peanut blends well with sesame-like ingredients because both belong
-      to nutty aromas.
-    relatedIngredients:
-    - {fileID: 187542410}
-    - {fileID: 378791487}
-    relatedDimension: 3
-  - clueId: L04_BlackSesame_Combination
-    title: Black Sesame - Combination Clue
-    content: Black sesame can blend with peanut, but it can dominate if handled too
-      heavily.
-    relatedIngredients:
-    - {fileID: 378791487}
-    - {fileID: 187542410}
-    relatedDimension: 3
-  fallbackHintText: 
-  progressiveHintRules: []
-  ingredientProfiles:
-  - profileTag: L04_Peanut
-    ingredient: {fileID: 187542410}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 0
-      enableRatio: 0
-      enableCombination: 1
-      enableForce: 0
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 5
-    targetOrderIndex: 0
-    targetCombinationKey: BlackSesame+Peanut
-    minGrindDuration: 15
-    maxGrindDuration: 24
-    levelTraitDescription: Warm and full roasted nut aroma. It blends well with nearby
-      nutty ingredients.
-    responseHintRules:
-    - ruleId: L04_Peanut_Combination
-      priority: 20
-      mechanic: 3
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Peanut is in the wrong combination for L04_Peanut.
-  - profileTag: L04_BlackSesame
-    ingredient: {fileID: 378791487}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 0
-      enableRatio: 0
-      enableCombination: 1
-      enableForce: 0
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 2
-    targetOrderIndex: 1
-    targetCombinationKey: BlackSesame+Peanut
-    minGrindDuration: 15
-    maxGrindDuration: 24
-    levelTraitDescription: Deep roasted nut aroma. It can become the main note, but
-      too much makes it bitter and dominant.
-    responseHintRules:
-    - ruleId: L04_BlackSesame_Combination
-      priority: 20
-      mechanic: 3
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Black Sesame is in the wrong combination for L04_BlackSesame.
-  successFeedback: Peanut warmth and black sesame tail aroma blend into one complete
-    nutty note.
-  closeFeedback: Both aromas appear, but they are not fully blended.
-  wrongFeedback: The two aromas feel separate instead of forming one biscuit-like
-    note.
 --- !u!21 &1074167280
 Material:
   serializedVersion: 8
@@ -4278,6 +5107,127 @@ Material:
     - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
+--- !u!1 &1114566060
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1114566061}
+  - component: {fileID: 1114566064}
+  - component: {fileID: 1114566063}
+  - component: {fileID: 1114566062}
+  m_Layer: 0
+  m_Name: New Batch
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1114566061
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114566060}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 763528817}
+  m_Father: {fileID: 1647328222}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -24, y: 64}
+  m_SizeDelta: {x: 132, y: 36}
+  m_Pivot: {x: 1, y: 0}
+--- !u!114 &1114566062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114566060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1114566063}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1114566063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114566060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1114566064
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114566060}
+  m_CullTransparentMesh: 1
 --- !u!1 &1134961015
 GameObject:
   m_ObjectHideFlags: 0
@@ -4337,7 +5287,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
@@ -4357,6 +5307,222 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1134961015}
   m_CullTransparentMesh: 1
+--- !u!114 &1135272300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelID: L03
+  levelName: Layered Dessert
+  cityName: Jiangmen
+  targetTasteName: Layer Timing
+  levelIntro: Red bean, dried tangerine peel, and rock sugar each change the dessert
+    at a different moment.
+  maxIngredientCount: 3
+  availableIngredients:
+  - {fileID: 345734362}
+  - {fileID: 572168203}
+  - {fileID: 1919107170}
+  requiredIngredients:
+  - {fileID: 345734362}
+  - {fileID: 572168203}
+  - {fileID: 1919107170}
+  forbiddenIngredients: []
+  unlockedDimensions: 01000000
+  lockedDimensions: 04000000050000000200000003000000
+  correctIngredientOrder:
+  - {fileID: 345734362}
+  - {fileID: 572168203}
+  - {fileID: 1919107170}
+  correctRatioPattern:
+  - ingredient: {fileID: 345734362}
+    ratioLevel: 5
+  - ingredient: {fileID: 1919107170}
+    ratioLevel: 4
+  - ingredient: {fileID: 572168203}
+    ratioLevel: 2
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 345734362}
+      - {fileID: 572168203}
+      - {fileID: 1919107170}
+  targetForceLevel: 1
+  targetSpeedLevel: 1
+  minGrindDuration: 18
+  maxGrindDuration: 28
+  passingScore: 100
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 1
+    enableRatio: 0
+    enableCombination: 0
+    enableForce: 0
+    enableSpeed: 0
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 0100000002000000030000000500000004000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L03_RedBean_Order
+    title: Red Bean - Order Clue
+    content: Red bean works well early because it builds the base flavor.
+    relatedIngredients:
+    - {fileID: 345734362}
+    relatedDimension: 1
+  - clueId: L03_Peel_Order
+    title: Dried Tangerine Peel - Order Clue
+    content: Dried tangerine peel works better after the base is set. Too early can
+      make the recipe bitter.
+    relatedIngredients:
+    - {fileID: 572168203}
+    relatedDimension: 1
+  - clueId: L03_RockSugar_Order
+    title: Rock Sugar - Order Clue
+    content: Rock sugar works best at the end because it softens the final taste.
+    relatedIngredients:
+    - {fileID: 1919107170}
+    relatedDimension: 1
+  fallbackHintText: 
+  progressiveHintRules: []
+  ingredientProfiles:
+  - profileTag: L03_RedBean
+    ingredient: {fileID: 345734362}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 1
+      enableRatio: 0
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 5
+    targetOrderIndex: 0
+    targetCombinationKey: DriedTangerinePeel+RedBean+RockSugar
+    minGrindDuration: 18
+    maxGrindDuration: 28
+    levelTraitDescription: Red bean is thick and gently sweet. It works well as a
+      base flavor.
+    responseHintRules:
+    - ruleId: L03_RedBean_IngredientOrder
+      priority: 20
+      mechanic: 1
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Red Bean is in the wrong order for L03_RedBean.
+  - profileTag: L03_DriedTangerinePeel
+    ingredient: {fileID: 572168203}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 1
+      enableRatio: 0
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 2
+    targetOrderIndex: 1
+    targetCombinationKey: DriedTangerinePeel+RedBean+RockSugar
+    minGrindDuration: 18
+    maxGrindDuration: 28
+    levelTraitDescription: Dried tangerine peel is bright and slightly bitter. It
+      works best as a small accent.
+    responseHintRules:
+    - ruleId: L03_DriedTangerinePeel_IngredientOrder
+      priority: 20
+      mechanic: 1
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Dried Tangerine Peel is in the wrong order for L03_DriedTangerinePeel.
+  - profileTag: L03_RockSugar
+    ingredient: {fileID: 1919107170}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 1
+      enableRatio: 0
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 4
+    targetOrderIndex: 2
+    targetCombinationKey: DriedTangerinePeel+RedBean+RockSugar
+    minGrindDuration: 18
+    maxGrindDuration: 28
+    levelTraitDescription: Rock sugar adds clean sweetness. It should round out the
+      recipe instead of taking over.
+    responseHintRules:
+    - ruleId: L03_RockSugar_IngredientOrder
+      priority: 20
+      mechanic: 1
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Rock Sugar is in the wrong order for L03_RockSugar.
+  successFeedback: 'The dessert has a clear order: red bean first, citrus next, sweetness
+    last.'
+  closeFeedback: Very close. Check the order or grinding time.
+  wrongFeedback: The dessert tastes out of order. Check when each ingredient is added.
 --- !u!1 &1181163759
 GameObject:
   m_ObjectHideFlags: 0
@@ -4754,6 +5920,126 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1219948506}
   m_CullTransparentMesh: 1
+--- !u!1 &1229548371
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1229548372}
+  - component: {fileID: 1229548375}
+  - component: {fileID: 1229548374}
+  - component: {fileID: 1229548373}
+  m_Layer: 0
+  m_Name: Ingredient Traits Backdrop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1229548372
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229548371}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1647328222}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1229548373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229548371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 0
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1229548374}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1229548374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229548371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.24}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1229548375
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229548371}
+  m_CullTransparentMesh: 1
 --- !u!21 &1237965490
 Material:
   serializedVersion: 8
@@ -4894,179 +6180,6 @@ Material:
     - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &1270655957
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelID: L03
-  levelName: Sesame Takes the Lead
-  cityName: Shunde
-  targetTasteName: Ratio Tutorial
-  levelIntro: Only ratio is unlocked. Learn which ingredient should lead.
-  maxIngredientCount: 2
-  availableIngredients:
-  - {fileID: 378791487}
-  - {fileID: 1989610468}
-  requiredIngredients:
-  - {fileID: 378791487}
-  - {fileID: 1989610468}
-  forbiddenIngredients: []
-  unlockedDimensions: 02000000
-  lockedDimensions: 04000000050000000300000001000000
-  correctIngredientOrder:
-  - {fileID: 378791487}
-  - {fileID: 1989610468}
-  correctRatioPattern:
-  - ingredient: {fileID: 378791487}
-    ratioLevel: 5
-  - ingredient: {fileID: 1989610468}
-    ratioLevel: 2
-  correctCombinationPattern:
-    groups:
-    - ingredients:
-      - {fileID: 378791487}
-      - {fileID: 1989610468}
-  targetForceLevel: 1
-  targetSpeedLevel: 1
-  minGrindDuration: 14
-  maxGrindDuration: 22
-  passingScore: 100
-  enabledMechanics:
-    enableIngredientSelection: 0
-    enableIngredientOrder: 0
-    enableRatio: 1
-    enableCombination: 0
-    enableForce: 0
-    enableSpeed: 0
-    enableGrindDuration: 1
-  feedbackTexts:
-    forceTooLight: Grinding force is too light.
-    forceTooHeavy: Grinding force is too heavy.
-    forceCorrect: Grinding force is correct.
-    speedTooSlow: Grinding speed is too slow.
-    speedTooFast: Grinding speed is too fast.
-    speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
-    selectionCorrect: Ingredient selection is correct.
-    selectionWrong: Ingredient selection does not match the target.
-    orderCorrect: Ingredient order is correct.
-    orderPartial: Ingredient order is partially correct.
-    orderWrong: Ingredient order does not match the target.
-    ratioCorrect: Ratio pattern is correct.
-    ratioAmbiguous: Ratio pattern is still ambiguous.
-    combinationCorrect: Combination pattern is correct.
-    combinationWrong: Combination pattern does not match the target.
-  hintSettings:
-    hintPriority: 0100000002000000030000000500000004000000
-    maxOrderHints: 5
-    maxRatioHints: 5
-    maxCombinationHints: 3
-    maxProcessHints: 2
-  scoringWeights:
-    ingredientSelection: 20
-    ingredientOrder: 15
-    ratio: 20
-    combination: 15
-    force: 10
-    speed: 10
-    grindDuration: 10
-  unlockCluesOnComplete:
-  - clueId: L03_BlackSesame_Ratio
-    title: Black Sesame - Ratio Clue
-    content: Black sesame is suited to the main note. Too much can become bitter
-      and dominant.
-    relatedIngredients:
-    - {fileID: 378791487}
-    relatedDimension: 2
-  - clueId: L03_GlutinousRice_Ratio
-    title: Glutinous Rice - Ratio Clue
-    content: Glutinous rice is suited to support texture and smoothness, not to lead
-      the aroma.
-    relatedIngredients:
-    - {fileID: 1989610468}
-    relatedDimension: 2
-  fallbackHintText: 
-  progressiveHintRules: []
-  ingredientProfiles:
-  - profileTag: L03_BlackSesame
-    ingredient: {fileID: 378791487}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 0
-      enableRatio: 1
-      enableCombination: 0
-      enableForce: 0
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 5
-    targetOrderIndex: 0
-    targetCombinationKey: BlackSesame+GlutinousRice
-    minGrindDuration: 14
-    maxGrindDuration: 22
-    levelTraitDescription: Deep roasted nut aroma. It can become the main note, but
-      too much makes it bitter and dominant.
-    responseHintRules:
-    - ruleId: L03_BlackSesame_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Black Sesame has the wrong ratio for L03_BlackSesame.
-  - profileTag: L03_GlutinousRice
-    ingredient: {fileID: 1989610468}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 0
-      enableRatio: 1
-      enableCombination: 0
-      enableForce: 0
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 2
-    targetOrderIndex: 1
-    targetCombinationKey: BlackSesame+GlutinousRice
-    minGrindDuration: 14
-    maxGrindDuration: 22
-    levelTraitDescription: Soft sticky grain aroma. It supports smoothness, but should
-      not take the lead.
-    responseHintRules:
-    - ruleId: L03_GlutinousRice_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Glutinous Rice has the wrong ratio for L03_GlutinousRice.
-  successFeedback: Black sesame leads with roasted depth while glutinous rice supports
-    the smooth body.
-  closeFeedback: The direction is right, but the main and support notes are not clear
-    enough.
-  wrongFeedback: The sesame note is weakened and the rice body becomes too heavy.
 --- !u!1 &1271261275
 GameObject:
   m_ObjectHideFlags: 0
@@ -5415,220 +6528,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1349132190
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelID: L05
-  levelName: Three-Layer Dessert
-  cityName: Jiangmen
-  targetTasteName: Order Tutorial
-  levelIntro: Only order is unlocked. Build base, middle citrus, and sweet finish.
-  maxIngredientCount: 3
-  availableIngredients:
-  - {fileID: 345734362}
-  - {fileID: 572168203}
-  - {fileID: 1919107170}
-  requiredIngredients:
-  - {fileID: 345734362}
-  - {fileID: 572168203}
-  - {fileID: 1919107170}
-  forbiddenIngredients: []
-  unlockedDimensions: 01000000
-  lockedDimensions: 04000000050000000200000003000000
-  correctIngredientOrder:
-  - {fileID: 345734362}
-  - {fileID: 572168203}
-  - {fileID: 1919107170}
-  correctRatioPattern:
-  - ingredient: {fileID: 345734362}
-    ratioLevel: 5
-  - ingredient: {fileID: 1919107170}
-    ratioLevel: 4
-  - ingredient: {fileID: 572168203}
-    ratioLevel: 2
-  correctCombinationPattern:
-    groups:
-    - ingredients:
-      - {fileID: 345734362}
-      - {fileID: 572168203}
-      - {fileID: 1919107170}
-  targetForceLevel: 1
-  targetSpeedLevel: 1
-  minGrindDuration: 18
-  maxGrindDuration: 28
-  passingScore: 100
-  enabledMechanics:
-    enableIngredientSelection: 0
-    enableIngredientOrder: 1
-    enableRatio: 0
-    enableCombination: 0
-    enableForce: 0
-    enableSpeed: 0
-    enableGrindDuration: 1
-  feedbackTexts:
-    forceTooLight: Grinding force is too light.
-    forceTooHeavy: Grinding force is too heavy.
-    forceCorrect: Grinding force is correct.
-    speedTooSlow: Grinding speed is too slow.
-    speedTooFast: Grinding speed is too fast.
-    speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
-    selectionCorrect: Ingredient selection is correct.
-    selectionWrong: Ingredient selection does not match the target.
-    orderCorrect: Ingredient order is correct.
-    orderPartial: Ingredient order is partially correct.
-    orderWrong: Ingredient order does not match the target.
-    ratioCorrect: Ratio pattern is correct.
-    ratioAmbiguous: Ratio pattern is still ambiguous.
-    combinationCorrect: Combination pattern is correct.
-    combinationWrong: Combination pattern does not match the target.
-  hintSettings:
-    hintPriority: 0100000002000000030000000500000004000000
-    maxOrderHints: 5
-    maxRatioHints: 5
-    maxCombinationHints: 3
-    maxProcessHints: 2
-  scoringWeights:
-    ingredientSelection: 20
-    ingredientOrder: 15
-    ratio: 20
-    combination: 15
-    force: 10
-    speed: 10
-    grindDuration: 10
-  unlockCluesOnComplete:
-  - clueId: L05_RedBean_Order
-    title: Red Bean - Order Clue
-    content: Red bean works well early because it builds the base body.
-    relatedIngredients:
-    - {fileID: 345734362}
-    relatedDimension: 1
-  - clueId: L05_Peel_Order
-    title: Dried Tangerine Peel - Order Clue
-    content: Dried tangerine peel works better later. Too early can release bitterness.
-    relatedIngredients:
-    - {fileID: 572168203}
-    relatedDimension: 1
-  - clueId: L05_RockSugar_Order
-    title: Rock Sugar - Order Clue
-    content: Rock sugar works best at the end to round sweetness.
-    relatedIngredients:
-    - {fileID: 1919107170}
-    relatedDimension: 1
-  fallbackHintText: 
-  progressiveHintRules: []
-  ingredientProfiles:
-  - profileTag: L05_RedBean
-    ingredient: {fileID: 345734362}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 1
-      enableRatio: 0
-      enableCombination: 0
-      enableForce: 0
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 5
-    targetOrderIndex: 0
-    targetCombinationKey: DriedTangerinePeel+RedBean+RockSugar
-    minGrindDuration: 18
-    maxGrindDuration: 28
-    levelTraitDescription: Thick, warm, and sweet. It works well as a base note.
-    responseHintRules:
-    - ruleId: L05_RedBean_IngredientOrder
-      priority: 20
-      mechanic: 1
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Red Bean is in the wrong order for L05_RedBean.
-  - profileTag: L05_DriedTangerinePeel
-    ingredient: {fileID: 572168203}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 1
-      enableRatio: 0
-      enableCombination: 0
-      enableForce: 0
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 2
-    targetOrderIndex: 1
-    targetCombinationKey: DriedTangerinePeel+RedBean+RockSugar
-    minGrindDuration: 18
-    maxGrindDuration: 28
-    levelTraitDescription: Clear citrus aroma with slight bitterness. It is recognizable,
-      but becomes bitter if processed too early.
-    responseHintRules:
-    - ruleId: L05_DriedTangerinePeel_IngredientOrder
-      priority: 20
-      mechanic: 1
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Dried Tangerine Peel is in the wrong order for L05_DriedTangerinePeel.
-  - profileTag: L05_RockSugar
-    ingredient: {fileID: 1919107170}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 1
-      enableRatio: 0
-      enableCombination: 0
-      enableForce: 0
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 4
-    targetOrderIndex: 2
-    targetCombinationKey: DriedTangerinePeel+RedBean+RockSugar
-    minGrindDuration: 18
-    maxGrindDuration: 28
-    levelTraitDescription: Clean sweetness. It rounds the finish, but should not
-      lead the recipe.
-    responseHintRules:
-    - ruleId: L05_RockSugar_IngredientOrder
-      priority: 20
-      mechanic: 1
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Rock Sugar is in the wrong order for L05_RockSugar.
-  successFeedback: Red bean builds the body, dried tangerine peel rises in the middle,
-    and rock sugar rounds the finish.
-  closeFeedback: The layers are appearing, but one ingredient is too early or too
-    late.
-  wrongFeedback: Sweetness, bean aroma, and citrus are mixed without a clear order.
 --- !u!1 &1355524821
 GameObject:
   m_ObjectHideFlags: 0
@@ -5879,6 +6778,180 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1373645860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelID: L06
+  levelName: Soft Sesame Paste
+  cityName: Shunde
+  targetTasteName: Subtle Balance
+  levelIntro: A small change in amount can shift how the sesame paste feels.
+  maxIngredientCount: 2
+  availableIngredients:
+  - {fileID: 378791487}
+  - {fileID: 1989610468}
+  requiredIngredients:
+  - {fileID: 378791487}
+  - {fileID: 1989610468}
+  forbiddenIngredients: []
+  unlockedDimensions: 02000000
+  lockedDimensions: 04000000050000000300000001000000
+  correctIngredientOrder:
+  - {fileID: 378791487}
+  - {fileID: 1989610468}
+  correctRatioPattern:
+  - ingredient: {fileID: 378791487}
+    ratioLevel: 2
+  - ingredient: {fileID: 1989610468}
+    ratioLevel: 1
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 378791487}
+    - ingredients:
+      - {fileID: 1989610468}
+  targetForceLevel: 1
+  targetSpeedLevel: 1
+  minGrindDuration: 14
+  maxGrindDuration: 22
+  passingScore: 100
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 0
+    enableRatio: 1
+    enableCombination: 0
+    enableForce: 0
+    enableSpeed: 0
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 0100000002000000030000000500000004000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L06_BlackSesame_Ratio
+    title: Black Sesame - Ratio Clue
+    content: Use a little black sesame. It should be stronger than glutinous rice,
+      but not heavy.
+    relatedIngredients:
+    - {fileID: 378791487}
+    relatedDimension: 2
+  - clueId: L06_GlutinousRice_Ratio
+    title: Glutinous Rice - Ratio Clue
+    content: Use the smallest amount of glutinous rice. It should only smooth the
+      paste.
+    relatedIngredients:
+    - {fileID: 1989610468}
+    relatedDimension: 2
+  fallbackHintText: 
+  progressiveHintRules: []
+  ingredientProfiles:
+  - profileTag: L06_BlackSesame
+    ingredient: {fileID: 378791487}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 0
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 2
+    targetOrderIndex: 0
+    targetCombinationKey: BlackSesame
+    minGrindDuration: 14
+    maxGrindDuration: 22
+    levelTraitDescription: Black sesame has a strong roasted flavor. It can lead
+      a recipe, but too much makes it bitter.
+    responseHintRules:
+    - ruleId: L06_BlackSesame_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Black Sesame has the wrong ratio for L06_BlackSesame.
+  - profileTag: L06_GlutinousRice
+    ingredient: {fileID: 1989610468}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 0
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 1
+    targetOrderIndex: 1
+    targetCombinationKey: GlutinousRice
+    minGrindDuration: 14
+    maxGrindDuration: 22
+    levelTraitDescription: Glutinous rice makes the mixture smooth and thick. It
+      should support stronger flavors.
+    responseHintRules:
+    - ruleId: L06_GlutinousRice_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Glutinous Rice has the wrong ratio for L06_GlutinousRice.
+  successFeedback: Black sesame is slightly stronger, and glutinous rice keeps the
+    paste smooth.
+  closeFeedback: Very close. Adjust the ratio or grinding time a little.
+  wrongFeedback: The sesame flavor is not clear enough. Check the ratio and grinding
+    time.
 --- !u!1 &1428028132
 GameObject:
   m_ObjectHideFlags: 0
@@ -6293,6 +7366,457 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1507673902}
   m_CullTransparentMesh: 1
+--- !u!114 &1534672813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelID: L11
+  levelName: Ginger-Scallion Finale
+  cityName: Zhanjiang
+  targetTasteName: Final Free Challenge
+  levelIntro: Make a balanced ginger-scallion sauce. Ginger flavors should lead,
+    with scallion and salt kept light.
+  maxIngredientCount: 4
+  availableIngredients:
+  - {fileID: 185727215}
+  - {fileID: 1870811157}
+  - {fileID: 126495275}
+  - {fileID: 1778564978}
+  requiredIngredients:
+  - {fileID: 185727215}
+  - {fileID: 1870811157}
+  - {fileID: 126495275}
+  - {fileID: 1778564978}
+  forbiddenIngredients: []
+  unlockedDimensions: 0400000005000000020000000300000001000000
+  lockedDimensions: 
+  correctIngredientOrder:
+  - {fileID: 1778564978}
+  - {fileID: 185727215}
+  - {fileID: 1870811157}
+  - {fileID: 126495275}
+  correctRatioPattern:
+  - ingredient: {fileID: 185727215}
+    ratioLevel: 5
+  - ingredient: {fileID: 1870811157}
+    ratioLevel: 4
+  - ingredient: {fileID: 126495275}
+    ratioLevel: 2
+  - ingredient: {fileID: 1778564978}
+    ratioLevel: 1
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 185727215}
+      - {fileID: 1870811157}
+    - ingredients:
+      - {fileID: 126495275}
+    - ingredients:
+      - {fileID: 1778564978}
+  targetForceLevel: 2
+  targetSpeedLevel: 1
+  minGrindDuration: 30
+  maxGrindDuration: 50
+  passingScore: 90
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 1
+    enableRatio: 1
+    enableCombination: 1
+    enableForce: 1
+    enableSpeed: 1
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 0100000002000000030000000500000004000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L11_Scallion_Force
+    title: Scallion White - Force Clue
+    content: Use light force for scallion white. Too much force makes it watery and
+      sharp.
+    relatedIngredients:
+    - {fileID: 126495275}
+    relatedDimension: 4
+  - clueId: L11_Scallion_Order
+    title: Scallion White - Order Clue
+    content: Add scallion white at the end so it stays fresh.
+    relatedIngredients:
+    - {fileID: 126495275}
+    relatedDimension: 1
+  - clueId: L11_Scallion_Combination
+    title: Scallion White - Combination Clue
+    content: Keep scallion white separate from strong ginger so its fresh flavor
+      stays clear.
+    relatedIngredients:
+    - {fileID: 126495275}
+    - {fileID: 1870811157}
+    relatedDimension: 3
+  fallbackHintText: 
+  progressiveHintRules: []
+  ingredientProfiles:
+  - profileTag: L11_SandGinger
+    ingredient: {fileID: 185727215}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 1
+      enableForce: 1
+      enableSpeed: 1
+      enableGrindDuration: 1
+    targetForceLevel: 2
+    targetSpeedLevel: 1
+    targetRatioLevel: 5
+    targetOrderIndex: 1
+    targetCombinationKey: Ginger+SandGinger
+    minGrindDuration: 30
+    maxGrindDuration: 50
+    levelTraitDescription: Sand ginger is deep and spicy. It needs enough force to
+      bring out its flavor.
+    responseHintRules:
+    - ruleId: L11_SandGinger_Force
+      priority: 30
+      mechanic: 4
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Sand Ginger is not matching the force target for L11_SandGinger.
+    - ruleId: L11_SandGinger_Speed
+      priority: 30
+      mechanic: 5
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Sand Ginger is not matching the speed target for L11_SandGinger.
+    - ruleId: L11_SandGinger_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Sand Ginger has the wrong ratio for L11_SandGinger.
+    - ruleId: L11_SandGinger_Combination
+      priority: 20
+      mechanic: 3
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Sand Ginger is in the wrong combination for L11_SandGinger.
+    - ruleId: L11_SandGinger_IngredientOrder
+      priority: 20
+      mechanic: 1
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Sand Ginger is in the wrong order for L11_SandGinger.
+  - profileTag: L11_Ginger
+    ingredient: {fileID: 1870811157}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 1
+      enableForce: 1
+      enableSpeed: 1
+      enableGrindDuration: 1
+    targetForceLevel: 2
+    targetSpeedLevel: 1
+    targetRatioLevel: 4
+    targetOrderIndex: 2
+    targetCombinationKey: Ginger+SandGinger
+    minGrindDuration: 30
+    maxGrindDuration: 50
+    levelTraitDescription: Ginger is fresh and sharp. It can brighten a recipe, but
+      it can also become too strong.
+    responseHintRules:
+    - ruleId: L11_Ginger_Force
+      priority: 30
+      mechanic: 4
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Ginger is not matching the force target for L11_Ginger.
+    - ruleId: L11_Ginger_Speed
+      priority: 30
+      mechanic: 5
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Ginger is not matching the speed target for L11_Ginger.
+    - ruleId: L11_Ginger_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Ginger has the wrong ratio for L11_Ginger.
+    - ruleId: L11_Ginger_Combination
+      priority: 20
+      mechanic: 3
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Ginger is in the wrong combination for L11_Ginger.
+    - ruleId: L11_Ginger_IngredientOrder
+      priority: 20
+      mechanic: 1
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Ginger is in the wrong order for L11_Ginger.
+  - profileTag: L11_ScallionWhite
+    ingredient: {fileID: 126495275}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 1
+      enableForce: 1
+      enableSpeed: 1
+      enableGrindDuration: 1
+    targetForceLevel: 2
+    targetSpeedLevel: 1
+    targetRatioLevel: 2
+    targetOrderIndex: 3
+    targetCombinationKey: ScallionWhite
+    minGrindDuration: 30
+    maxGrindDuration: 50
+    levelTraitDescription: Scallion white is fresh and light. It works best near
+      the end of a recipe.
+    responseHintRules:
+    - ruleId: L11_ScallionWhite_Force
+      priority: 30
+      mechanic: 4
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Scallion White is not matching the force target for L11_ScallionWhite.
+    - ruleId: L11_ScallionWhite_Speed
+      priority: 30
+      mechanic: 5
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Scallion White is not matching the speed target for L11_ScallionWhite.
+    - ruleId: L11_ScallionWhite_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Scallion White has the wrong ratio for L11_ScallionWhite.
+    - ruleId: L11_ScallionWhite_Combination
+      priority: 20
+      mechanic: 3
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Scallion White is in the wrong combination for L11_ScallionWhite.
+    - ruleId: L11_ScallionWhite_IngredientOrder
+      priority: 20
+      mechanic: 1
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Scallion White is in the wrong order for L11_ScallionWhite.
+  - profileTag: L11_CoarseSalt
+    ingredient: {fileID: 1778564978}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 1
+      enableForce: 1
+      enableSpeed: 1
+      enableGrindDuration: 1
+    targetForceLevel: 2
+    targetSpeedLevel: 1
+    targetRatioLevel: 1
+    targetOrderIndex: 0
+    targetCombinationKey: CoarseSalt
+    minGrindDuration: 30
+    maxGrindDuration: 50
+    levelTraitDescription: Coarse salt supports other flavors. Use it lightly so
+      it does not become the main taste.
+    responseHintRules:
+    - ruleId: L11_CoarseSalt_Force
+      priority: 30
+      mechanic: 4
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Coarse Salt is not matching the force target for L11_CoarseSalt.
+    - ruleId: L11_CoarseSalt_Speed
+      priority: 30
+      mechanic: 5
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Coarse Salt is not matching the speed target for L11_CoarseSalt.
+    - ruleId: L11_CoarseSalt_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Coarse Salt has the wrong ratio for L11_CoarseSalt.
+    - ruleId: L11_CoarseSalt_Combination
+      priority: 20
+      mechanic: 3
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Coarse Salt is in the wrong combination for L11_CoarseSalt.
+    - ruleId: L11_CoarseSalt_IngredientOrder
+      priority: 20
+      mechanic: 1
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Coarse Salt is in the wrong order for L11_CoarseSalt.
+  successFeedback: 'The sauce is balanced: light salt, strong ginger, and fresh scallion
+    at the end.'
+  closeFeedback: Very close. Check the final ratio, grouping, order, force, or speed.
+  wrongFeedback: The sauce is unbalanced. Ginger may be harsh, scallion may be lost,
+    or salt may be too strong.
 --- !u!1 &1566221313
 GameObject:
   m_ObjectHideFlags: 0
@@ -6627,7 +8151,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -20}
-  m_SizeDelta: {x: 250, y: 30}
+  m_SizeDelta: {x: 400, y: 30}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1591337392
 MonoBehaviour:
@@ -6758,9 +8282,9 @@ MonoBehaviour:
   ingredientID: YangjiangDouchi
   ingredientNameCN: Yangjiang Douchi
   ingredientNameEN: Yangjiang Douchi
-  aromaType: fermented savory
-  initialDescription: Fermented savory aroma. It can carry the main body, but becomes
-    dull and bitter if overworked.
+  aromaType: Fermented bean
+  initialDescription: Yangjiang douchi is savory and fermented. It gives the recipe
+    a strong base.
   ingredientColor: {r: 0.18, g: 0.14, b: 0.1, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 0}
@@ -6780,9 +8304,9 @@ MonoBehaviour:
   ingredientID: LotusLeaf
   ingredientNameCN: Lotus Leaf
   ingredientNameEN: Lotus Leaf
-  aromaType: leafy fresh
-  initialDescription: Light leafy aroma, fragile and fresh. It should not be handled
-    too heavily or too early.
+  aromaType: Green leaf
+  initialDescription: Lotus leaf is light and fresh. It can be covered easily by
+    stronger ingredients.
   ingredientColor: {r: 0.34, g: 0.58, b: 0.3, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 0}
@@ -6802,712 +8326,13 @@ MonoBehaviour:
   ingredientID: PeanutCrumb
   ingredientNameCN: Peanut Crumb
   ingredientNameEN: Peanut Crumb
-  aromaType: warm nutty
-  initialDescription: Warm roasted nut aroma. It is gentle and can be covered by
-    sharper spices.
+  aromaType: Roasted nut
+  initialDescription: Peanut crumb is warm and nutty. Strong spices can cover it
+    easily.
   ingredientColor: {r: 0.68, g: 0.46, b: 0.25, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 0}
   defaultRatioValue: 1
---- !u!114 &1627048050
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelID: L06
-  levelName: Sand Ginger Core
-  cityName: Meizhou
-  targetTasteName: Two-Dimension Challenge
-  levelIntro: Force and ratio are unlocked. Open sand ginger while keeping salt supportive.
-  maxIngredientCount: 3
-  availableIngredients:
-  - {fileID: 185727215}
-  - {fileID: 1778564978}
-  - {fileID: 572168203}
-  requiredIngredients:
-  - {fileID: 185727215}
-  - {fileID: 1778564978}
-  - {fileID: 572168203}
-  forbiddenIngredients: []
-  unlockedDimensions: 0400000002000000
-  lockedDimensions: 050000000300000001000000
-  correctIngredientOrder:
-  - {fileID: 185727215}
-  - {fileID: 572168203}
-  - {fileID: 1778564978}
-  correctRatioPattern:
-  - ingredient: {fileID: 185727215}
-    ratioLevel: 5
-  - ingredient: {fileID: 572168203}
-    ratioLevel: 4
-  - ingredient: {fileID: 1778564978}
-    ratioLevel: 2
-  correctCombinationPattern:
-    groups:
-    - ingredients:
-      - {fileID: 185727215}
-      - {fileID: 1778564978}
-      - {fileID: 572168203}
-  targetForceLevel: 2
-  targetSpeedLevel: 1
-  minGrindDuration: 20
-  maxGrindDuration: 32
-  passingScore: 90
-  enabledMechanics:
-    enableIngredientSelection: 0
-    enableIngredientOrder: 0
-    enableRatio: 1
-    enableCombination: 0
-    enableForce: 1
-    enableSpeed: 0
-    enableGrindDuration: 1
-  feedbackTexts:
-    forceTooLight: Grinding force is too light.
-    forceTooHeavy: Grinding force is too heavy.
-    forceCorrect: Grinding force is correct.
-    speedTooSlow: Grinding speed is too slow.
-    speedTooFast: Grinding speed is too fast.
-    speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
-    selectionCorrect: Ingredient selection is correct.
-    selectionWrong: Ingredient selection does not match the target.
-    orderCorrect: Ingredient order is correct.
-    orderPartial: Ingredient order is partially correct.
-    orderWrong: Ingredient order does not match the target.
-    ratioCorrect: Ratio pattern is correct.
-    ratioAmbiguous: Ratio pattern is still ambiguous.
-    combinationCorrect: Combination pattern is correct.
-    combinationWrong: Combination pattern does not match the target.
-  hintSettings:
-    hintPriority: 0100000002000000030000000500000004000000
-    maxOrderHints: 5
-    maxRatioHints: 5
-    maxCombinationHints: 3
-    maxProcessHints: 2
-  scoringWeights:
-    ingredientSelection: 20
-    ingredientOrder: 15
-    ratio: 20
-    combination: 15
-    force: 10
-    speed: 10
-    grindDuration: 10
-  unlockCluesOnComplete:
-  - clueId: L06_SandGinger_Force
-    title: Sand Ginger - Force Clue
-    content: Sand ginger likes medium-high force. Too light leaves it closed; too
-      heavy makes it harsh.
-    relatedIngredients:
-    - {fileID: 185727215}
-    relatedDimension: 4
-  - clueId: L06_CoarseSalt_Ratio
-    title: Coarse Salt - Ratio Clue
-    content: Coarse salt should be used sparingly as support, not as the main note.
-    relatedIngredients:
-    - {fileID: 1778564978}
-    relatedDimension: 2
-  fallbackHintText: 
-  progressiveHintRules: []
-  ingredientProfiles:
-  - profileTag: L06_SandGinger
-    ingredient: {fileID: 185727215}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 0
-      enableRatio: 1
-      enableCombination: 0
-      enableForce: 1
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 2
-    targetSpeedLevel: 1
-    targetRatioLevel: 5
-    targetOrderIndex: 0
-    targetCombinationKey: CoarseSalt+DriedTangerinePeel+SandGinger
-    minGrindDuration: 20
-    maxGrindDuration: 32
-    levelTraitDescription: Sharp and penetrating spice aroma. It is often the core
-      of salt-baked flavor.
-    responseHintRules:
-    - ruleId: L06_SandGinger_Force
-      priority: 30
-      mechanic: 4
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Sand Ginger is not matching the force target for L06_SandGinger.
-    - ruleId: L06_SandGinger_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Sand Ginger has the wrong ratio for L06_SandGinger.
-  - profileTag: L06_CoarseSalt
-    ingredient: {fileID: 1778564978}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 0
-      enableRatio: 1
-      enableCombination: 0
-      enableForce: 1
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 2
-    targetSpeedLevel: 1
-    targetRatioLevel: 2
-    targetOrderIndex: 2
-    targetCombinationKey: CoarseSalt+DriedTangerinePeel+SandGinger
-    minGrindDuration: 20
-    maxGrindDuration: 32
-    levelTraitDescription: Direct salty mineral note. It supports flavor, but should
-      not become the main note.
-    responseHintRules:
-    - ruleId: L06_CoarseSalt_Force
-      priority: 30
-      mechanic: 4
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Coarse Salt is not matching the force target for L06_CoarseSalt.
-    - ruleId: L06_CoarseSalt_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Coarse Salt has the wrong ratio for L06_CoarseSalt.
-  - profileTag: L06_DriedTangerinePeel
-    ingredient: {fileID: 572168203}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 0
-      enableRatio: 1
-      enableCombination: 0
-      enableForce: 1
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 2
-    targetSpeedLevel: 1
-    targetRatioLevel: 4
-    targetOrderIndex: 1
-    targetCombinationKey: CoarseSalt+DriedTangerinePeel+SandGinger
-    minGrindDuration: 20
-    maxGrindDuration: 32
-    levelTraitDescription: Clear citrus aroma with slight bitterness. It is recognizable,
-      but becomes bitter if processed too early.
-    responseHintRules:
-    - ruleId: L06_DriedTangerinePeel_Force
-      priority: 30
-      mechanic: 4
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Dried Tangerine Peel is not matching the force target for L06_DriedTangerinePeel.
-    - ruleId: L06_DriedTangerinePeel_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Dried Tangerine Peel has the wrong ratio for L06_DriedTangerinePeel.
-  successFeedback: Sand ginger opens clearly, dried peel cleans the finish, and coarse
-    salt supports from below.
-  closeFeedback: The sand ginger direction is right, but force or ratio is still
-    unstable.
-  wrongFeedback: Salt or citrus takes the front, and sand ginger does not open as
-    the core aroma.
---- !u!114 &1629247738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelID: L10
-  levelName: Ginger-Scallion Finale
-  cityName: Zhanjiang
-  targetTasteName: Final Free Challenge
-  levelIntro: All core dimensions are unlocked. Restore the full ginger-scallion
-    dipping sauce structure.
-  maxIngredientCount: 4
-  availableIngredients:
-  - {fileID: 185727215}
-  - {fileID: 1870811157}
-  - {fileID: 126495275}
-  - {fileID: 1778564978}
-  requiredIngredients:
-  - {fileID: 185727215}
-  - {fileID: 1870811157}
-  - {fileID: 126495275}
-  - {fileID: 1778564978}
-  forbiddenIngredients: []
-  unlockedDimensions: 0400000005000000020000000300000001000000
-  lockedDimensions: 
-  correctIngredientOrder:
-  - {fileID: 1778564978}
-  - {fileID: 185727215}
-  - {fileID: 1870811157}
-  - {fileID: 126495275}
-  correctRatioPattern:
-  - ingredient: {fileID: 185727215}
-    ratioLevel: 5
-  - ingredient: {fileID: 1870811157}
-    ratioLevel: 4
-  - ingredient: {fileID: 126495275}
-    ratioLevel: 2
-  - ingredient: {fileID: 1778564978}
-    ratioLevel: 1
-  correctCombinationPattern:
-    groups:
-    - ingredients:
-      - {fileID: 185727215}
-      - {fileID: 1870811157}
-    - ingredients:
-      - {fileID: 126495275}
-    - ingredients:
-      - {fileID: 1778564978}
-  targetForceLevel: 2
-  targetSpeedLevel: 1
-  minGrindDuration: 30
-  maxGrindDuration: 50
-  passingScore: 90
-  enabledMechanics:
-    enableIngredientSelection: 0
-    enableIngredientOrder: 1
-    enableRatio: 1
-    enableCombination: 1
-    enableForce: 1
-    enableSpeed: 1
-    enableGrindDuration: 1
-  feedbackTexts:
-    forceTooLight: Grinding force is too light.
-    forceTooHeavy: Grinding force is too heavy.
-    forceCorrect: Grinding force is correct.
-    speedTooSlow: Grinding speed is too slow.
-    speedTooFast: Grinding speed is too fast.
-    speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
-    selectionCorrect: Ingredient selection is correct.
-    selectionWrong: Ingredient selection does not match the target.
-    orderCorrect: Ingredient order is correct.
-    orderPartial: Ingredient order is partially correct.
-    orderWrong: Ingredient order does not match the target.
-    ratioCorrect: Ratio pattern is correct.
-    ratioAmbiguous: Ratio pattern is still ambiguous.
-    combinationCorrect: Combination pattern is correct.
-    combinationWrong: Combination pattern does not match the target.
-  hintSettings:
-    hintPriority: 0100000002000000030000000500000004000000
-    maxOrderHints: 5
-    maxRatioHints: 5
-    maxCombinationHints: 3
-    maxProcessHints: 2
-  scoringWeights:
-    ingredientSelection: 20
-    ingredientOrder: 15
-    ratio: 20
-    combination: 15
-    force: 10
-    speed: 10
-    grindDuration: 10
-  unlockCluesOnComplete:
-  - clueId: L10_Scallion_Force
-    title: Scallion White - Force Clue
-    content: Scallion white likes light force. Too much force releases water and
-      green harshness.
-    relatedIngredients:
-    - {fileID: 126495275}
-    relatedDimension: 4
-  - clueId: L10_Scallion_Order
-    title: Scallion White - Order Clue
-    content: Scallion white works best at the end, keeping the finish fresh.
-    relatedIngredients:
-    - {fileID: 126495275}
-    relatedDimension: 1
-  - clueId: L10_Scallion_Combination
-    title: Scallion White - Combination Clue
-    content: Scallion white should not be overworked with strong ginger notes, or
-      its freshness will be buried.
-    relatedIngredients:
-    - {fileID: 126495275}
-    - {fileID: 1870811157}
-    relatedDimension: 3
-  fallbackHintText: 
-  progressiveHintRules: []
-  ingredientProfiles:
-  - profileTag: L10_SandGinger
-    ingredient: {fileID: 185727215}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 1
-      enableRatio: 1
-      enableCombination: 1
-      enableForce: 1
-      enableSpeed: 1
-      enableGrindDuration: 1
-    targetForceLevel: 2
-    targetSpeedLevel: 1
-    targetRatioLevel: 5
-    targetOrderIndex: 1
-    targetCombinationKey: Ginger+SandGinger
-    minGrindDuration: 30
-    maxGrindDuration: 50
-    levelTraitDescription: Sharp and penetrating spice aroma. It is often the core
-      of salt-baked flavor.
-    responseHintRules:
-    - ruleId: L10_SandGinger_Force
-      priority: 30
-      mechanic: 4
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Sand Ginger is not matching the force target for L10_SandGinger.
-    - ruleId: L10_SandGinger_Speed
-      priority: 30
-      mechanic: 5
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Sand Ginger is not matching the speed target for L10_SandGinger.
-    - ruleId: L10_SandGinger_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Sand Ginger has the wrong ratio for L10_SandGinger.
-    - ruleId: L10_SandGinger_Combination
-      priority: 20
-      mechanic: 3
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Sand Ginger is in the wrong combination for L10_SandGinger.
-    - ruleId: L10_SandGinger_IngredientOrder
-      priority: 20
-      mechanic: 1
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Sand Ginger is in the wrong order for L10_SandGinger.
-  - profileTag: L10_Ginger
-    ingredient: {fileID: 1870811157}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 1
-      enableRatio: 1
-      enableCombination: 1
-      enableForce: 1
-      enableSpeed: 1
-      enableGrindDuration: 1
-    targetForceLevel: 2
-    targetSpeedLevel: 1
-    targetRatioLevel: 4
-    targetOrderIndex: 2
-    targetCombinationKey: Ginger+SandGinger
-    minGrindDuration: 30
-    maxGrindDuration: 50
-    levelTraitDescription: Bright fresh spice. It opens freshness, but can dominate
-      if too early or too fast.
-    responseHintRules:
-    - ruleId: L10_Ginger_Force
-      priority: 30
-      mechanic: 4
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Ginger is not matching the force target for L10_Ginger.
-    - ruleId: L10_Ginger_Speed
-      priority: 30
-      mechanic: 5
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Ginger is not matching the speed target for L10_Ginger.
-    - ruleId: L10_Ginger_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Ginger has the wrong ratio for L10_Ginger.
-    - ruleId: L10_Ginger_Combination
-      priority: 20
-      mechanic: 3
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Ginger is in the wrong combination for L10_Ginger.
-    - ruleId: L10_Ginger_IngredientOrder
-      priority: 20
-      mechanic: 1
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Ginger is in the wrong order for L10_Ginger.
-  - profileTag: L10_ScallionWhite
-    ingredient: {fileID: 126495275}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 1
-      enableRatio: 1
-      enableCombination: 1
-      enableForce: 1
-      enableSpeed: 1
-      enableGrindDuration: 1
-    targetForceLevel: 2
-    targetSpeedLevel: 1
-    targetRatioLevel: 2
-    targetOrderIndex: 3
-    targetCombinationKey: ScallionWhite
-    minGrindDuration: 30
-    maxGrindDuration: 50
-    levelTraitDescription: Fresh green aroma. It dislikes heavy grinding and strong
-      ginger pressure.
-    responseHintRules:
-    - ruleId: L10_ScallionWhite_Force
-      priority: 30
-      mechanic: 4
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Scallion White is not matching the force target for L10_ScallionWhite.
-    - ruleId: L10_ScallionWhite_Speed
-      priority: 30
-      mechanic: 5
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Scallion White is not matching the speed target for L10_ScallionWhite.
-    - ruleId: L10_ScallionWhite_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Scallion White has the wrong ratio for L10_ScallionWhite.
-    - ruleId: L10_ScallionWhite_Combination
-      priority: 20
-      mechanic: 3
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Scallion White is in the wrong combination for L10_ScallionWhite.
-    - ruleId: L10_ScallionWhite_IngredientOrder
-      priority: 20
-      mechanic: 1
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Scallion White is in the wrong order for L10_ScallionWhite.
-  - profileTag: L10_CoarseSalt
-    ingredient: {fileID: 1778564978}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 1
-      enableRatio: 1
-      enableCombination: 1
-      enableForce: 1
-      enableSpeed: 1
-      enableGrindDuration: 1
-    targetForceLevel: 2
-    targetSpeedLevel: 1
-    targetRatioLevel: 1
-    targetOrderIndex: 0
-    targetCombinationKey: CoarseSalt
-    minGrindDuration: 30
-    maxGrindDuration: 50
-    levelTraitDescription: Direct salty mineral note. It supports flavor, but should
-      not become the main note.
-    responseHintRules:
-    - ruleId: L10_CoarseSalt_Force
-      priority: 30
-      mechanic: 4
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Coarse Salt is not matching the force target for L10_CoarseSalt.
-    - ruleId: L10_CoarseSalt_Speed
-      priority: 30
-      mechanic: 5
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Coarse Salt is not matching the speed target for L10_CoarseSalt.
-    - ruleId: L10_CoarseSalt_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Coarse Salt has the wrong ratio for L10_CoarseSalt.
-    - ruleId: L10_CoarseSalt_Combination
-      priority: 20
-      mechanic: 3
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Coarse Salt is in the wrong combination for L10_CoarseSalt.
-    - ruleId: L10_CoarseSalt_IngredientOrder
-      priority: 20
-      mechanic: 1
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Coarse Salt is in the wrong order for L10_CoarseSalt.
-  successFeedback: Salt supports the base, sand ginger opens depth, ginger adds freshness,
-    and scallion preserves the final green aroma.
-  closeFeedback: The dipping sauce is close, but scallion, ginger grouping, or final
-    order still needs adjustment.
-  wrongFeedback: Ginger is too harsh, scallion is crushed, or salt steals the main
-    role.
 --- !u!1 &1647328221
 GameObject:
   m_ObjectHideFlags: 0
@@ -7542,7 +8367,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1591337391}
-  - {fileID: 267308224}
   - {fileID: 1935503219}
   - {fileID: 1271261276}
   - {fileID: 1591811231}
@@ -7555,6 +8379,9 @@ RectTransform:
   - {fileID: 974416906}
   - {fileID: 45700535}
   - {fileID: 122857148}
+  - {fileID: 333045194}
+  - {fileID: 1114566061}
+  - {fileID: 1229548372}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -7580,12 +8407,12 @@ MonoBehaviour:
   logManager: {fileID: 1647328224}
   levelManager: {fileID: 912469143}
   levelLabel: {fileID: 1181163761}
-  currentIngredientsLabel: {fileID: 1804428967}
   currentOrderLabel: {fileID: 203992322}
   currentRatioLabel: {fileID: 653776885}
   currentSpeedLabel: {fileID: 2139522175}
   hintLabel: {fileID: 1302703797}
   ingredientTraitLabel: {fileID: 1134961017}
+  ingredientTraitToggleButton: {fileID: 333045195}
   ratioSelectionPanel: {fileID: 974416905}
   ratioSelectionTitle: {fileID: 155430458}
   ratioSelectionButtons:
@@ -7596,6 +8423,7 @@ MonoBehaviour:
   experimentLogButton: {fileID: 45700536}
   evaluateButton: {fileID: 2060927022}
   resetAttemptButton: {fileID: 1838303433}
+  newBatchButton: {fileID: 1114566062}
   nextLevelButton: {fileID: 2064681052}
   experimentLogSceneName: ExperimentLog
   autoUpdateLevelLabel: 0
@@ -7758,7 +8586,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1648775669}
   m_CullTransparentMesh: 0
---- !u!114 &1671599988
+--- !u!114 &1719112767
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7770,54 +8598,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelID: L07
-  levelName: Pepper Held in Balance
-  cityName: Shantou
-  targetTasteName: Two-Dimension Challenge
-  levelIntro: Speed is unlocked. Handle sharp spice carefully.
-  maxIngredientCount: 3
+  levelID: L01
+  levelName: Gentle Grain Awakening
+  cityName: Guangzhou
+  targetTasteName: Force Tutorial
+  levelIntro: Use rice to learn grinding force. The goal is a soft rice flavor without
+    a burnt taste.
+  maxIngredientCount: 1
   availableIngredients:
-  - {fileID: 794819427}
-  - {fileID: 187542410}
-  - {fileID: 572168203}
+  - {fileID: 2039003237}
   requiredIngredients:
-  - {fileID: 794819427}
-  - {fileID: 187542410}
-  - {fileID: 572168203}
+  - {fileID: 2039003237}
   forbiddenIngredients: []
-  unlockedDimensions: 05000000
-  lockedDimensions: 04000000020000000300000001000000
+  unlockedDimensions: 04000000
+  lockedDimensions: 05000000020000000300000001000000
   correctIngredientOrder:
-  - {fileID: 794819427}
-  - {fileID: 187542410}
-  - {fileID: 572168203}
-  correctRatioPattern:
-  - ingredient: {fileID: 794819427}
-    ratioLevel: 5
-  - ingredient: {fileID: 187542410}
-    ratioLevel: 4
-  - ingredient: {fileID: 572168203}
-    ratioLevel: 2
+  - {fileID: 2039003237}
+  correctRatioPattern: []
   correctCombinationPattern:
     groups:
     - ingredients:
-      - {fileID: 794819427}
-    - ingredients:
-      - {fileID: 187542410}
-    - ingredients:
-      - {fileID: 572168203}
+      - {fileID: 2039003237}
   targetForceLevel: 1
   targetSpeedLevel: 1
-  minGrindDuration: 20
-  maxGrindDuration: 32
-  passingScore: 90
+  minGrindDuration: 8
+  maxGrindDuration: 14
+  passingScore: 100
   enabledMechanics:
     enableIngredientSelection: 0
     enableIngredientOrder: 0
     enableRatio: 0
     enableCombination: 0
-    enableForce: 0
-    enableSpeed: 1
+    enableForce: 1
+    enableSpeed: 0
     enableGrindDuration: 1
   feedbackTexts:
     forceTooLight: Grinding force is too light.
@@ -7853,47 +8666,180 @@ MonoBehaviour:
     speed: 10
     grindDuration: 10
   unlockCluesOnComplete:
-  - clueId: L07_WhitePepper_Speed
-    title: White Pepper - Speed Clue
-    content: White pepper works best at medium speed. Too fast makes the spice rush
-      out harshly.
+  - clueId: L01_Rice_Force
+    title: Rice - Force Clue
+    content: Rice works best with medium force. Too little force keeps it weak; too
+      much can make it taste burnt.
     relatedIngredients:
-    - {fileID: 794819427}
-    relatedDimension: 5
-  - clueId: L07_StrongSpice_Combination
-    title: Strong Spice - Combination Clue
-    content: Strong spice usually needs careful grouping with clear aromas, or the
-      notes will compete.
-    relatedIngredients:
-    - {fileID: 794819427}
-    - {fileID: 572168203}
-    relatedDimension: 3
+    - {fileID: 2039003237}
+    relatedDimension: 4
   fallbackHintText: 
   progressiveHintRules: []
   ingredientProfiles:
-  - profileTag: L07_WhitePepper
-    ingredient: {fileID: 794819427}
+  - profileTag: L01_Rice
+    ingredient: {fileID: 2039003237}
     checkedMechanics:
       enableIngredientSelection: 0
       enableIngredientOrder: 0
       enableRatio: 0
       enableCombination: 0
+      enableForce: 1
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 0
+    targetOrderIndex: 0
+    targetCombinationKey: Rice
+    minGrindDuration: 8
+    maxGrindDuration: 14
+    levelTraitDescription: Rice is mild and clean. It needs steady grinding, but
+      too much force can make it taste burnt.
+    responseHintRules:
+    - ruleId: L01_Rice_Force
+      priority: 30
+      mechanic: 4
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Rice is not matching the force target for L01_Rice.
+  successFeedback: The rice tastes soft and clean, with no burnt flavor.
+  closeFeedback: Very close. Adjust the force or grinding time a little.
+  wrongFeedback: The rice does not taste right. Check the force and grinding time.
+--- !u!114 &1738689386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelID: L05
+  levelName: Clear Spice Split
+  cityName: Shantou
+  targetTasteName: Separate Grind
+  levelIntro: White pepper and dried tangerine peel are both sharp. Find a way to
+    keep their edges clear.
+  maxIngredientCount: 2
+  availableIngredients:
+  - {fileID: 794819427}
+  - {fileID: 572168203}
+  requiredIngredients:
+  - {fileID: 794819427}
+  - {fileID: 572168203}
+  forbiddenIngredients: []
+  unlockedDimensions: 03000000
+  lockedDimensions: 04000000050000000200000001000000
+  correctIngredientOrder:
+  - {fileID: 794819427}
+  - {fileID: 572168203}
+  correctRatioPattern:
+  - ingredient: {fileID: 794819427}
+    ratioLevel: 5
+  - ingredient: {fileID: 572168203}
+    ratioLevel: 2
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 794819427}
+    - ingredients:
+      - {fileID: 572168203}
+  targetForceLevel: 1
+  targetSpeedLevel: 1
+  minGrindDuration: 14
+  maxGrindDuration: 22
+  passingScore: 100
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 0
+    enableRatio: 0
+    enableCombination: 1
+    enableForce: 0
+    enableSpeed: 0
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 0100000002000000030000000500000004000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L05_WhitePepper_Separate
+    title: White Pepper - Batch Clue
+    content: White pepper is strong. It often works better away from other sharp
+      ingredients.
+    relatedIngredients:
+    - {fileID: 794819427}
+    relatedDimension: 3
+  - clueId: L05_Peel_Separate
+    title: Dried Tangerine Peel - Batch Clue
+    content: Dried tangerine peel can turn bitter when it is ground with another
+      sharp ingredient.
+    relatedIngredients:
+    - {fileID: 572168203}
+    relatedDimension: 3
+  fallbackHintText: 
+  progressiveHintRules: []
+  ingredientProfiles:
+  - profileTag: L05_WhitePepper
+    ingredient: {fileID: 794819427}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 0
+      enableRatio: 0
+      enableCombination: 1
       enableForce: 0
-      enableSpeed: 1
+      enableSpeed: 0
       enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 5
     targetOrderIndex: 0
     targetCombinationKey: WhitePepper
-    minGrindDuration: 20
-    maxGrindDuration: 32
-    levelTraitDescription: Bright pepper aroma that spreads quickly. It needs slower
-      release to avoid harshness.
+    minGrindDuration: 14
+    maxGrindDuration: 22
+    levelTraitDescription: White pepper is sharp and quick to spread. Too much grinding
+      can make it harsh.
     responseHintRules:
-    - ruleId: L07_WhitePepper_Speed
-      priority: 30
-      mechanic: 5
+    - ruleId: L05_WhitePepper_Combination
+      priority: 20
+      mechanic: 3
       matchForce: 0
       forceValue: 1
       matchSpeed: 0
@@ -7902,62 +8848,30 @@ MonoBehaviour:
       ratioValue: 0
       matchCombination: 0
       combinationKey: 
-      hintText: White Pepper is not matching the speed target for L07_WhitePepper.
-  - profileTag: L07_Peanut
-    ingredient: {fileID: 187542410}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 0
-      enableRatio: 0
-      enableCombination: 0
-      enableForce: 0
-      enableSpeed: 1
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 4
-    targetOrderIndex: 1
-    targetCombinationKey: Peanut
-    minGrindDuration: 20
-    maxGrindDuration: 32
-    levelTraitDescription: Warm and full roasted nut aroma. It blends well with nearby
-      nutty ingredients.
-    responseHintRules:
-    - ruleId: L07_Peanut_Speed
-      priority: 30
-      mechanic: 5
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Peanut is not matching the speed target for L07_Peanut.
-  - profileTag: L07_DriedTangerinePeel
+      hintText: White Pepper is in the wrong combination for L05_WhitePepper.
+  - profileTag: L05_DriedTangerinePeel
     ingredient: {fileID: 572168203}
     checkedMechanics:
       enableIngredientSelection: 0
       enableIngredientOrder: 0
       enableRatio: 0
-      enableCombination: 0
+      enableCombination: 1
       enableForce: 0
-      enableSpeed: 1
+      enableSpeed: 0
       enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 2
-    targetOrderIndex: 2
+    targetOrderIndex: 1
     targetCombinationKey: DriedTangerinePeel
-    minGrindDuration: 20
-    maxGrindDuration: 32
-    levelTraitDescription: Clear citrus aroma with slight bitterness. It is recognizable,
-      but becomes bitter if processed too early.
+    minGrindDuration: 14
+    maxGrindDuration: 22
+    levelTraitDescription: Dried tangerine peel is bright and slightly bitter. It
+      works best as a small accent.
     responseHintRules:
-    - ruleId: L07_DriedTangerinePeel_Speed
-      priority: 30
-      mechanic: 5
+    - ruleId: L05_DriedTangerinePeel_Combination
+      priority: 20
+      mechanic: 3
       matchForce: 0
       forceValue: 1
       matchSpeed: 0
@@ -7966,13 +8880,11 @@ MonoBehaviour:
       ratioValue: 0
       matchCombination: 0
       combinationKey: 
-      hintText: Dried Tangerine Peel is not matching the speed target for L07_DriedTangerinePeel.
-  successFeedback: White pepper stays clear without choking, peanut keeps warmth,
-    and dried peel finishes lightly.
-  closeFeedback: The aroma direction is close, but some ingredients interfere with
-    each other.
-  wrongFeedback: White pepper is too harsh, or dried peel bitterness suppresses the
-    warm peanut note.
+      hintText: Dried Tangerine Peel is in the wrong combination for L05_DriedTangerinePeel.
+  successFeedback: White pepper and dried tangerine peel stay clear because they
+    were handled separately.
+  closeFeedback: Very close. Check whether each ingredient has its own batch.
+  wrongFeedback: The sharp flavors are tangled together. Try using a separate batch.
 --- !u!1 &1742555354
 GameObject:
   m_ObjectHideFlags: 0
@@ -8063,94 +8975,362 @@ MonoBehaviour:
   ingredientID: CoarseSalt
   ingredientNameCN: Coarse Salt
   ingredientNameEN: Coarse Salt
-  aromaType: salty mineral
-  initialDescription: Direct salty mineral note. It supports flavor, but should not
-    become the main note.
+  aromaType: Salt
+  initialDescription: Coarse salt supports other flavors. Use it lightly so it does
+    not become the main taste.
   ingredientColor: {r: 0.85, g: 0.84, b: 0.78, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 0}
   defaultRatioValue: 1
---- !u!1 &1804428965
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1804428966}
-  - component: {fileID: 1804428968}
-  - component: {fileID: 1804428967}
-  m_Layer: 0
-  m_Name: Current Ingredients Text
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1804428966
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1804428965}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 267308224}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1804428967
+--- !u!114 &1820021243
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1804428965}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 15
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 3
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 1
-    m_LineSpacing: 1
-  m_Text: 'Current Ingredients:
-
-'
---- !u!222 &1804428968
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1804428965}
-  m_CullTransparentMesh: 1
+  levelID: L09
+  levelName: Wrapped Rice Layers
+  cityName: Zhaoqing
+  targetTasteName: Three-Dimension Challenge
+  levelIntro: Make a layered rice dumpling flavor with red bean, glutinous rice,
+    black sesame, and lotus leaf.
+  maxIngredientCount: 4
+  availableIngredients:
+  - {fileID: 1989610468}
+  - {fileID: 345734362}
+  - {fileID: 1623195174}
+  - {fileID: 378791487}
+  requiredIngredients:
+  - {fileID: 1989610468}
+  - {fileID: 345734362}
+  - {fileID: 1623195174}
+  - {fileID: 378791487}
+  forbiddenIngredients: []
+  unlockedDimensions: 020000000300000001000000
+  lockedDimensions: 0400000005000000
+  correctIngredientOrder:
+  - {fileID: 345734362}
+  - {fileID: 1989610468}
+  - {fileID: 378791487}
+  - {fileID: 1623195174}
+  correctRatioPattern:
+  - ingredient: {fileID: 345734362}
+    ratioLevel: 5
+  - ingredient: {fileID: 1989610468}
+    ratioLevel: 4
+  - ingredient: {fileID: 378791487}
+    ratioLevel: 2
+  - ingredient: {fileID: 1623195174}
+    ratioLevel: 1
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 1989610468}
+      - {fileID: 1623195174}
+    - ingredients:
+      - {fileID: 345734362}
+    - ingredients:
+      - {fileID: 378791487}
+  targetForceLevel: 1
+  targetSpeedLevel: 1
+  minGrindDuration: 25
+  maxGrindDuration: 40
+  passingScore: 90
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 1
+    enableRatio: 1
+    enableCombination: 1
+    enableForce: 0
+    enableSpeed: 0
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 0100000002000000030000000500000004000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L09_LotusLeaf_Order
+    title: Lotus Leaf - Order Clue
+    content: Add lotus leaf near the end. If it is used too early, its fresh flavor
+      gets covered.
+    relatedIngredients:
+    - {fileID: 1623195174}
+    relatedDimension: 1
+  - clueId: L09_LotusLeaf_Combination
+    title: Lotus Leaf - Combination Clue
+    content: Lotus leaf can be paired with glutinous rice, but black sesame is too
+      strong for it.
+    relatedIngredients:
+    - {fileID: 1623195174}
+    - {fileID: 1989610468}
+    relatedDimension: 3
+  fallbackHintText: 
+  progressiveHintRules: []
+  ingredientProfiles:
+  - profileTag: L09_GlutinousRice
+    ingredient: {fileID: 1989610468}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 1
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 4
+    targetOrderIndex: 1
+    targetCombinationKey: GlutinousRice+LotusLeaf
+    minGrindDuration: 25
+    maxGrindDuration: 40
+    levelTraitDescription: Glutinous rice makes the mixture smooth and thick. It
+      should support stronger flavors.
+    responseHintRules:
+    - ruleId: L09_GlutinousRice_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Glutinous Rice has the wrong ratio for L09_GlutinousRice.
+    - ruleId: L09_GlutinousRice_Combination
+      priority: 20
+      mechanic: 3
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Glutinous Rice is in the wrong combination for L09_GlutinousRice.
+    - ruleId: L09_GlutinousRice_IngredientOrder
+      priority: 20
+      mechanic: 1
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Glutinous Rice is in the wrong order for L09_GlutinousRice.
+  - profileTag: L09_RedBean
+    ingredient: {fileID: 345734362}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 1
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 5
+    targetOrderIndex: 0
+    targetCombinationKey: RedBean
+    minGrindDuration: 25
+    maxGrindDuration: 40
+    levelTraitDescription: Red bean is thick and gently sweet. It works well as a
+      base flavor.
+    responseHintRules:
+    - ruleId: L09_RedBean_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Red Bean has the wrong ratio for L09_RedBean.
+    - ruleId: L09_RedBean_Combination
+      priority: 20
+      mechanic: 3
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Red Bean is in the wrong combination for L09_RedBean.
+    - ruleId: L09_RedBean_IngredientOrder
+      priority: 20
+      mechanic: 1
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Red Bean is in the wrong order for L09_RedBean.
+  - profileTag: L09_LotusLeaf
+    ingredient: {fileID: 1623195174}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 1
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 1
+    targetOrderIndex: 3
+    targetCombinationKey: GlutinousRice+LotusLeaf
+    minGrindDuration: 25
+    maxGrindDuration: 40
+    levelTraitDescription: Lotus leaf is light and fresh. It can be covered easily
+      by stronger ingredients.
+    responseHintRules:
+    - ruleId: L09_LotusLeaf_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Lotus Leaf has the wrong ratio for L09_LotusLeaf.
+    - ruleId: L09_LotusLeaf_Combination
+      priority: 20
+      mechanic: 3
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Lotus Leaf is in the wrong combination for L09_LotusLeaf.
+    - ruleId: L09_LotusLeaf_IngredientOrder
+      priority: 20
+      mechanic: 1
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Lotus Leaf is in the wrong order for L09_LotusLeaf.
+  - profileTag: L09_BlackSesame
+    ingredient: {fileID: 378791487}
+    checkedMechanics:
+      enableIngredientSelection: 0
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 1
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 2
+    targetOrderIndex: 2
+    targetCombinationKey: BlackSesame
+    minGrindDuration: 25
+    maxGrindDuration: 40
+    levelTraitDescription: Black sesame has a strong roasted flavor. It can lead
+      a recipe, but too much makes it bitter.
+    responseHintRules:
+    - ruleId: L09_BlackSesame_Ratio
+      priority: 20
+      mechanic: 2
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Black Sesame has the wrong ratio for L09_BlackSesame.
+    - ruleId: L09_BlackSesame_Combination
+      priority: 20
+      mechanic: 3
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Black Sesame is in the wrong combination for L09_BlackSesame.
+    - ruleId: L09_BlackSesame_IngredientOrder
+      priority: 20
+      mechanic: 1
+      matchForce: 0
+      forceValue: 1
+      matchSpeed: 0
+      speedValue: 1
+      matchRatio: 0
+      ratioValue: 0
+      matchCombination: 0
+      combinationKey: 
+      hintText: Black Sesame is in the wrong order for L09_BlackSesame.
+  successFeedback: 'The dumpling flavor has clear layers: red bean, sticky rice,
+    sesame, and lotus leaf.'
+  closeFeedback: Very close. Check the ratio, grouping, order, or time.
+  wrongFeedback: The layers are unclear. One flavor may be too strong or added at
+    the wrong time.
 --- !u!1 &1838303431
 GameObject:
   m_ObjectHideFlags: 0
@@ -8287,9 +9467,9 @@ MonoBehaviour:
   ingredientID: Ginger
   ingredientNameCN: Ginger
   ingredientNameEN: Ginger
-  aromaType: fresh spicy
-  initialDescription: Bright fresh spice. It opens freshness, but can dominate if
-    too early or too fast.
+  aromaType: Fresh spice
+  initialDescription: Ginger is fresh and sharp. It can brighten a recipe, but it
+    can also become too strong.
   ingredientColor: {r: 0.9, g: 0.75, b: 0.38, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 0}
@@ -8362,406 +9542,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1903700760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelID: L09
-  levelName: Savory Bean Current
-  cityName: Yangjiang
-  targetTasteName: Four-Dimension Challenge
-  levelIntro: Force, speed, ratio, and order are unlocked. Combination remains locked.
-  maxIngredientCount: 4
-  availableIngredients:
-  - {fileID: 1608869541}
-  - {fileID: 1870811157}
-  - {fileID: 572168203}
-  - {fileID: 1778564978}
-  requiredIngredients:
-  - {fileID: 1608869541}
-  - {fileID: 1870811157}
-  - {fileID: 572168203}
-  - {fileID: 1778564978}
-  forbiddenIngredients: []
-  unlockedDimensions: 04000000050000000200000001000000
-  lockedDimensions: 03000000
-  correctIngredientOrder:
-  - {fileID: 1608869541}
-  - {fileID: 1870811157}
-  - {fileID: 572168203}
-  - {fileID: 1778564978}
-  correctRatioPattern:
-  - ingredient: {fileID: 1608869541}
-    ratioLevel: 5
-  - ingredient: {fileID: 1870811157}
-    ratioLevel: 4
-  - ingredient: {fileID: 572168203}
-    ratioLevel: 2
-  - ingredient: {fileID: 1778564978}
-    ratioLevel: 1
-  correctCombinationPattern:
-    groups:
-    - ingredients:
-      - {fileID: 1608869541}
-      - {fileID: 1870811157}
-      - {fileID: 572168203}
-      - {fileID: 1778564978}
-  targetForceLevel: 1
-  targetSpeedLevel: 1
-  minGrindDuration: 28
-  maxGrindDuration: 45
-  passingScore: 90
-  enabledMechanics:
-    enableIngredientSelection: 0
-    enableIngredientOrder: 1
-    enableRatio: 1
-    enableCombination: 0
-    enableForce: 1
-    enableSpeed: 1
-    enableGrindDuration: 1
-  feedbackTexts:
-    forceTooLight: Grinding force is too light.
-    forceTooHeavy: Grinding force is too heavy.
-    forceCorrect: Grinding force is correct.
-    speedTooSlow: Grinding speed is too slow.
-    speedTooFast: Grinding speed is too fast.
-    speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
-    selectionCorrect: Ingredient selection is correct.
-    selectionWrong: Ingredient selection does not match the target.
-    orderCorrect: Ingredient order is correct.
-    orderPartial: Ingredient order is partially correct.
-    orderWrong: Ingredient order does not match the target.
-    ratioCorrect: Ratio pattern is correct.
-    ratioAmbiguous: Ratio pattern is still ambiguous.
-    combinationCorrect: Combination pattern is correct.
-    combinationWrong: Combination pattern does not match the target.
-  hintSettings:
-    hintPriority: 0100000002000000030000000500000004000000
-    maxOrderHints: 5
-    maxRatioHints: 5
-    maxCombinationHints: 3
-    maxProcessHints: 2
-  scoringWeights:
-    ingredientSelection: 20
-    ingredientOrder: 15
-    ratio: 20
-    combination: 15
-    force: 10
-    speed: 10
-    grindDuration: 10
-  unlockCluesOnComplete:
-  - clueId: L09_Douchi_Force
-    title: Yangjiang Douchi - Force Clue
-    content: Yangjiang douchi likes medium force. Too light keeps it closed; too
-      heavy makes fermentation dull.
-    relatedIngredients:
-    - {fileID: 1608869541}
-    relatedDimension: 4
-  - clueId: L09_Ginger_Speed
-    title: Ginger - Speed Clue
-    content: Ginger works best at medium speed. Too fast makes the spice rush forward.
-    relatedIngredients:
-    - {fileID: 1870811157}
-    relatedDimension: 5
-  - clueId: L09_Ginger_Order
-    title: Ginger - Order Clue
-    content: Ginger works well in the middle, opening freshness after the main body
-      is established.
-    relatedIngredients:
-    - {fileID: 1870811157}
-    relatedDimension: 1
-  fallbackHintText: 
-  progressiveHintRules: []
-  ingredientProfiles:
-  - profileTag: L09_YangjiangDouchi
-    ingredient: {fileID: 1608869541}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 1
-      enableRatio: 1
-      enableCombination: 0
-      enableForce: 1
-      enableSpeed: 1
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 5
-    targetOrderIndex: 0
-    targetCombinationKey: CoarseSalt+DriedTangerinePeel+Ginger+YangjiangDouchi
-    minGrindDuration: 28
-    maxGrindDuration: 45
-    levelTraitDescription: Fermented savory aroma. It can carry the main body, but
-      becomes dull and bitter if overworked.
-    responseHintRules:
-    - ruleId: L09_YangjiangDouchi_Force
-      priority: 30
-      mechanic: 4
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Yangjiang Douchi is not matching the force target for L09_YangjiangDouchi.
-    - ruleId: L09_YangjiangDouchi_Speed
-      priority: 30
-      mechanic: 5
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Yangjiang Douchi is not matching the speed target for L09_YangjiangDouchi.
-    - ruleId: L09_YangjiangDouchi_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Yangjiang Douchi has the wrong ratio for L09_YangjiangDouchi.
-    - ruleId: L09_YangjiangDouchi_IngredientOrder
-      priority: 20
-      mechanic: 1
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Yangjiang Douchi is in the wrong order for L09_YangjiangDouchi.
-  - profileTag: L09_Ginger
-    ingredient: {fileID: 1870811157}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 1
-      enableRatio: 1
-      enableCombination: 0
-      enableForce: 1
-      enableSpeed: 1
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 4
-    targetOrderIndex: 1
-    targetCombinationKey: CoarseSalt+DriedTangerinePeel+Ginger+YangjiangDouchi
-    minGrindDuration: 28
-    maxGrindDuration: 45
-    levelTraitDescription: Bright fresh spice. It opens freshness, but can dominate
-      if too early or too fast.
-    responseHintRules:
-    - ruleId: L09_Ginger_Force
-      priority: 30
-      mechanic: 4
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Ginger is not matching the force target for L09_Ginger.
-    - ruleId: L09_Ginger_Speed
-      priority: 30
-      mechanic: 5
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Ginger is not matching the speed target for L09_Ginger.
-    - ruleId: L09_Ginger_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Ginger has the wrong ratio for L09_Ginger.
-    - ruleId: L09_Ginger_IngredientOrder
-      priority: 20
-      mechanic: 1
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Ginger is in the wrong order for L09_Ginger.
-  - profileTag: L09_DriedTangerinePeel
-    ingredient: {fileID: 572168203}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 1
-      enableRatio: 1
-      enableCombination: 0
-      enableForce: 1
-      enableSpeed: 1
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 2
-    targetOrderIndex: 2
-    targetCombinationKey: CoarseSalt+DriedTangerinePeel+Ginger+YangjiangDouchi
-    minGrindDuration: 28
-    maxGrindDuration: 45
-    levelTraitDescription: Clear citrus aroma with slight bitterness. It is recognizable,
-      but becomes bitter if processed too early.
-    responseHintRules:
-    - ruleId: L09_DriedTangerinePeel_Force
-      priority: 30
-      mechanic: 4
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Dried Tangerine Peel is not matching the force target for L09_DriedTangerinePeel.
-    - ruleId: L09_DriedTangerinePeel_Speed
-      priority: 30
-      mechanic: 5
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Dried Tangerine Peel is not matching the speed target for L09_DriedTangerinePeel.
-    - ruleId: L09_DriedTangerinePeel_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Dried Tangerine Peel has the wrong ratio for L09_DriedTangerinePeel.
-    - ruleId: L09_DriedTangerinePeel_IngredientOrder
-      priority: 20
-      mechanic: 1
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Dried Tangerine Peel is in the wrong order for L09_DriedTangerinePeel.
-  - profileTag: L09_CoarseSalt
-    ingredient: {fileID: 1778564978}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 1
-      enableRatio: 1
-      enableCombination: 0
-      enableForce: 1
-      enableSpeed: 1
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 1
-    targetOrderIndex: 3
-    targetCombinationKey: CoarseSalt+DriedTangerinePeel+Ginger+YangjiangDouchi
-    minGrindDuration: 28
-    maxGrindDuration: 45
-    levelTraitDescription: Direct salty mineral note. It supports flavor, but should
-      not become the main note.
-    responseHintRules:
-    - ruleId: L09_CoarseSalt_Force
-      priority: 30
-      mechanic: 4
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Coarse Salt is not matching the force target for L09_CoarseSalt.
-    - ruleId: L09_CoarseSalt_Speed
-      priority: 30
-      mechanic: 5
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Coarse Salt is not matching the speed target for L09_CoarseSalt.
-    - ruleId: L09_CoarseSalt_Ratio
-      priority: 20
-      mechanic: 2
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Coarse Salt has the wrong ratio for L09_CoarseSalt.
-    - ruleId: L09_CoarseSalt_IngredientOrder
-      priority: 20
-      mechanic: 1
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Coarse Salt is in the wrong order for L09_CoarseSalt.
-  successFeedback: Douchi becomes the savory core, ginger opens freshness, salt supports,
-    and peel cleans the finish.
-  closeFeedback: The douchi body is present, but ginger, salt, or peel still needs
-    a better position.
-  wrongFeedback: Salt is too heavy, ginger is too sharp, or peel bitterness arrives
-    too early.
 --- !u!114 &1919107170
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8777,9 +9557,9 @@ MonoBehaviour:
   ingredientID: RockSugar
   ingredientNameCN: Rock Sugar
   ingredientNameEN: Rock Sugar
-  aromaType: clean sweet
-  initialDescription: Clean sweetness. It rounds the finish, but should not lead
-    the recipe.
+  aromaType: Clean sweetness
+  initialDescription: Rock sugar adds clean sweetness. It should round out the recipe
+    instead of taking over.
   ingredientColor: {r: 0.88, g: 0.95, b: 1, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 0}
@@ -8897,9 +9677,9 @@ MonoBehaviour:
   ingredientID: GlutinousRice
   ingredientNameCN: Glutinous Rice
   ingredientNameEN: Glutinous Rice
-  aromaType: sticky grain
-  initialDescription: Soft sticky grain aroma. It supports smoothness, but should
-    not take the lead.
+  aromaType: Sticky grain
+  initialDescription: Glutinous rice makes the mixture smooth and thick. It should
+    support stronger flavors.
   ingredientColor: {r: 0.92, g: 0.86, b: 0.68, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 0}
@@ -9040,9 +9820,9 @@ MonoBehaviour:
   ingredientID: Rice
   ingredientNameCN: Rice
   ingredientNameEN: Rice
-  aromaType: clean grain
-  initialDescription: Warm, clean, and soft grain aroma. It is gentle rather than
-    forceful, and needs to be awakened steadily.
+  aromaType: Soft grain
+  initialDescription: Rice is mild and clean. It needs steady grinding, but too much
+    force can make it taste burnt.
   ingredientColor: {r: 0.95, g: 0.9, b: 0.75, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 0}
@@ -9429,255 +10209,6 @@ Material:
     - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &2100515720
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelID: L02
-  levelName: Slow Tea Return
-  cityName: Chaozhou
-  targetTasteName: Speed Tutorial
-  levelIntro: Only speed is unlocked. Restore the layered release of tea.
-  maxIngredientCount: 1
-  availableIngredients:
-  - {fileID: 1016333429}
-  requiredIngredients:
-  - {fileID: 1016333429}
-  forbiddenIngredients: []
-  unlockedDimensions: 05000000
-  lockedDimensions: 04000000020000000300000001000000
-  correctIngredientOrder:
-  - {fileID: 1016333429}
-  correctRatioPattern: []
-  correctCombinationPattern:
-    groups:
-    - ingredients:
-      - {fileID: 1016333429}
-  targetForceLevel: 1
-  targetSpeedLevel: 0
-  minGrindDuration: 10
-  maxGrindDuration: 16
-  passingScore: 100
-  enabledMechanics:
-    enableIngredientSelection: 0
-    enableIngredientOrder: 0
-    enableRatio: 0
-    enableCombination: 0
-    enableForce: 0
-    enableSpeed: 1
-    enableGrindDuration: 1
-  feedbackTexts:
-    forceTooLight: Grinding force is too light.
-    forceTooHeavy: Grinding force is too heavy.
-    forceCorrect: Grinding force is correct.
-    speedTooSlow: Grinding speed is too slow.
-    speedTooFast: Grinding speed is too fast.
-    speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
-    selectionCorrect: Ingredient selection is correct.
-    selectionWrong: Ingredient selection does not match the target.
-    orderCorrect: Ingredient order is correct.
-    orderPartial: Ingredient order is partially correct.
-    orderWrong: Ingredient order does not match the target.
-    ratioCorrect: Ratio pattern is correct.
-    ratioAmbiguous: Ratio pattern is still ambiguous.
-    combinationCorrect: Combination pattern is correct.
-    combinationWrong: Combination pattern does not match the target.
-  hintSettings:
-    hintPriority: 0100000002000000030000000500000004000000
-    maxOrderHints: 5
-    maxRatioHints: 5
-    maxCombinationHints: 3
-    maxProcessHints: 2
-  scoringWeights:
-    ingredientSelection: 20
-    ingredientOrder: 15
-    ratio: 20
-    combination: 15
-    force: 10
-    speed: 10
-    grindDuration: 10
-  unlockCluesOnComplete:
-  - clueId: L02_Tea_Speed
-    title: Tea Leaf - Speed Clue
-    content: Tea leaf works best with slow grinding. Fast grinding releases bitterness
-      before sweetness.
-    relatedIngredients:
-    - {fileID: 1016333429}
-    relatedDimension: 5
-  fallbackHintText: 
-  progressiveHintRules: []
-  ingredientProfiles:
-  - profileTag: L02_TeaLeaf
-    ingredient: {fileID: 1016333429}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 0
-      enableRatio: 0
-      enableCombination: 0
-      enableForce: 0
-      enableSpeed: 1
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 0
-    targetRatioLevel: 0
-    targetOrderIndex: 0
-    targetCombinationKey: TeaLeaf
-    minGrindDuration: 10
-    maxGrindDuration: 16
-    levelTraitDescription: Herbal, lightly bitter, and sweet after release. It becomes
-      harsh if handled too quickly.
-    responseHintRules:
-    - ruleId: L02_TeaLeaf_Speed
-      priority: 30
-      mechanic: 5
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Tea Leaf is not matching the speed target for L02_TeaLeaf.
-  successFeedback: 'The tea opens slowly: first a light bitterness, then a clear
-    sweet return.'
-  closeFeedback: The tea aroma appears, but bitterness comes forward too early.
-  wrongFeedback: The bitterness rushes out and buries the sweet return.
---- !u!114 &2107979103
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelID: L01
-  levelName: Gentle Grain Awakening
-  cityName: Guangzhou
-  targetTasteName: Force Tutorial
-  levelIntro: Only force is unlocked. Restore a gentle rice aroma.
-  maxIngredientCount: 1
-  availableIngredients:
-  - {fileID: 2039003237}
-  requiredIngredients:
-  - {fileID: 2039003237}
-  forbiddenIngredients: []
-  unlockedDimensions: 04000000
-  lockedDimensions: 05000000020000000300000001000000
-  correctIngredientOrder:
-  - {fileID: 2039003237}
-  correctRatioPattern: []
-  correctCombinationPattern:
-    groups:
-    - ingredients:
-      - {fileID: 2039003237}
-  targetForceLevel: 1
-  targetSpeedLevel: 1
-  minGrindDuration: 8
-  maxGrindDuration: 14
-  passingScore: 100
-  enabledMechanics:
-    enableIngredientSelection: 0
-    enableIngredientOrder: 0
-    enableRatio: 0
-    enableCombination: 0
-    enableForce: 1
-    enableSpeed: 0
-    enableGrindDuration: 1
-  feedbackTexts:
-    forceTooLight: Grinding force is too light.
-    forceTooHeavy: Grinding force is too heavy.
-    forceCorrect: Grinding force is correct.
-    speedTooSlow: Grinding speed is too slow.
-    speedTooFast: Grinding speed is too fast.
-    speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
-    selectionCorrect: Ingredient selection is correct.
-    selectionWrong: Ingredient selection does not match the target.
-    orderCorrect: Ingredient order is correct.
-    orderPartial: Ingredient order is partially correct.
-    orderWrong: Ingredient order does not match the target.
-    ratioCorrect: Ratio pattern is correct.
-    ratioAmbiguous: Ratio pattern is still ambiguous.
-    combinationCorrect: Combination pattern is correct.
-    combinationWrong: Combination pattern does not match the target.
-  hintSettings:
-    hintPriority: 0100000002000000030000000500000004000000
-    maxOrderHints: 5
-    maxRatioHints: 5
-    maxCombinationHints: 3
-    maxProcessHints: 2
-  scoringWeights:
-    ingredientSelection: 20
-    ingredientOrder: 15
-    ratio: 20
-    combination: 15
-    force: 10
-    speed: 10
-    grindDuration: 10
-  unlockCluesOnComplete:
-  - clueId: L01_Rice_Force
-    title: Rice - Force Clue
-    content: Rice works best with medium force. Too light keeps the aroma closed;
-      too heavy heats the powder and creates scorched notes.
-    relatedIngredients:
-    - {fileID: 2039003237}
-    relatedDimension: 4
-  fallbackHintText: 
-  progressiveHintRules: []
-  ingredientProfiles:
-  - profileTag: L01_Rice
-    ingredient: {fileID: 2039003237}
-    checkedMechanics:
-      enableIngredientSelection: 0
-      enableIngredientOrder: 0
-      enableRatio: 0
-      enableCombination: 0
-      enableForce: 1
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
-    targetRatioLevel: 0
-    targetOrderIndex: 0
-    targetCombinationKey: Rice
-    minGrindDuration: 8
-    maxGrindDuration: 14
-    levelTraitDescription: Warm, clean, and soft grain aroma. It is gentle rather
-      than forceful, and needs to be awakened steadily.
-    responseHintRules:
-    - ruleId: L01_Rice_Force
-      priority: 30
-      mechanic: 4
-      matchForce: 0
-      forceValue: 1
-      matchSpeed: 0
-      speedValue: 1
-      matchRatio: 0
-      ratioValue: 0
-      matchCombination: 0
-      combinationKey: 
-      hintText: Rice is not matching the force target for L01_Rice.
-  successFeedback: The rice aroma opens softly with a clean sweetness.
-  closeFeedback: The rice aroma is present, but the force still needs adjustment.
-  wrongFeedback: The rice aroma is suppressed, too faint, or slightly scorched.
 --- !u!1 &2124372570
 GameObject:
   m_ObjectHideFlags: 0

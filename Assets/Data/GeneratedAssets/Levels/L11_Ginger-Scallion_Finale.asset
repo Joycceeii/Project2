@@ -1,0 +1,234 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: L11_Ginger-Scallion_Finale
+  m_EditorClassIdentifier: 
+  levelID: L11
+  levelName: Ginger-Scallion Finale
+  cityName: Zhanjiang
+  targetTasteName: Final Challenge
+  levelIntro: "Make a balanced ginger-scallion sauce. Ginger flavors should lead, with scallion and salt kept light."
+  maxIngredientCount: 4
+  availableIngredients:
+  - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
+  - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+  - {fileID: 11400000, guid: 90232a38a4c71eb4396c578d8b4122a9, type: 2}
+  - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+  requiredIngredients:
+  - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
+  - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+  - {fileID: 11400000, guid: 90232a38a4c71eb4396c578d8b4122a9, type: 2}
+  - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+  forbiddenIngredients: []
+  unlockedDimensions: 0400000005000000020000000300000001000000
+  lockedDimensions: 
+  correctIngredientOrder:
+  - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+  - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
+  - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+  - {fileID: 11400000, guid: 90232a38a4c71eb4396c578d8b4122a9, type: 2}
+  correctRatioPattern:
+  - ingredient: {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
+    ratioLevel: 5
+  - ingredient: {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+    ratioLevel: 4
+  - ingredient: {fileID: 11400000, guid: 90232a38a4c71eb4396c578d8b4122a9, type: 2}
+    ratioLevel: 2
+  - ingredient: {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+    ratioLevel: 1
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
+      - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+    - ingredients:
+      - {fileID: 11400000, guid: 90232a38a4c71eb4396c578d8b4122a9, type: 2}
+    - ingredients:
+      - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+  targetForceLevel: 2
+  targetSpeedLevel: 1
+  minGrindDuration: 30
+  maxGrindDuration: 50
+  passingScore: 90
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 1
+    enableRatio: 1
+    enableCombination: 1
+    enableForce: 1
+    enableSpeed: 1
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 0100000002000000030000000500000004000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L11_Ginger_Combination
+    title: Ginger Combination Clue
+    content: "Sand ginger and ginger can be ground together because they support the same main flavor."
+    relatedIngredients:
+    - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
+    - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+    relatedDimension: 3
+  - clueId: L11_Scallion_Order
+    title: Scallion White - Order Clue
+    content: Scallion white works best at the end. Do not overgrind it with strong spices.
+    relatedIngredients:
+    - {fileID: 11400000, guid: 90232a38a4c71eb4396c578d8b4122a9, type: 2}
+    relatedDimension: 1
+  fallbackHintText: No new hint for now. Keep what worked
+  progressiveHintRules:
+  - ruleId: L11_Hint_SandGinger_Ratio
+    priority: 22
+    mechanic: 2
+    hintText: Sand ginger should be the largest amount. It is the main ginger flavor.
+  - ruleId: L11_Hint_CoarseSalt_Ratio
+    priority: 21
+    mechanic: 2
+    hintText: Coarse salt should be the smallest amount. It should not taste salty.
+  - ruleId: L11_Hint_Scallion_Ratio
+    priority: 20
+    mechanic: 2
+    hintText: "Use more scallion white than coarse salt, but less than ginger."
+  - ruleId: L11_Hint_Ginger_Combination
+    priority: 22
+    mechanic: 3
+    hintText: Sand ginger and ginger can be ground together.
+  - ruleId: L11_Hint_Scallion_Combination
+    priority: 21
+    mechanic: 3
+    hintText: Keep scallion white separate from the ginger group.
+  - ruleId: L11_Hint_CoarseSalt_Combination
+    priority: 20
+    mechanic: 3
+    hintText: Grind coarse salt separately. It does not need to join the ginger group.
+  - ruleId: L11_Hint_CoarseSalt_Order
+    priority: 22
+    mechanic: 1
+    hintText: Start with coarse salt to set a light base.
+  - ruleId: L11_Hint_Ginger_Order
+    priority: 21
+    mechanic: 1
+    hintText: Add sand ginger before fresh ginger.
+  - ruleId: L11_Hint_Scallion_Order
+    priority: 20
+    mechanic: 1
+    hintText: Add scallion white last so it stays fresh.
+  ingredientProfiles:
+  - profileTag: L11_SandGinger
+    ingredient: {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 1
+      enableForce: 1
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 2
+    targetSpeedLevel: 1
+    targetRatioLevel: 5
+    targetOrderIndex: 1
+    targetCombinationKey: Ginger+SandGinger
+    minGrindDuration: 30
+    maxGrindDuration: 50
+    levelTraitDescription: Sand ginger gives the recipe a dry spicy base.
+    responseHintRules: []
+  - profileTag: L11_Ginger
+    ingredient: {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 1
+      enableForce: 0
+      enableSpeed: 1
+      enableGrindDuration: 0
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 4
+    targetOrderIndex: 2
+    targetCombinationKey: Ginger+SandGinger
+    minGrindDuration: 3
+    maxGrindDuration: 6
+    levelTraitDescription: Ginger brings a fresher sharper spice layer.
+    responseHintRules: []
+  - profileTag: L11_CoarseSalt
+    ingredient: {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 1
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 0
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 1
+    targetOrderIndex: 0
+    targetCombinationKey: CoarseSalt
+    minGrindDuration: 3
+    maxGrindDuration: 6
+    levelTraitDescription: Coarse salt is a quiet mineral base.
+    responseHintRules: []
+  - profileTag: L11_ScallionWhite
+    ingredient: {fileID: 11400000, guid: 90232a38a4c71eb4396c578d8b4122a9, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 1
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 0
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 2
+    targetOrderIndex: 3
+    targetCombinationKey: ScallionWhite
+    minGrindDuration: 3
+    maxGrindDuration: 6
+    levelTraitDescription: Scallion white adds a fresh green taste.
+    responseHintRules: []
+  successFeedback: "The sauce is balanced: light salt, strong ginger, and fresh scallion at the end."
+  closeFeedback: "Very close. Check the final ratio, grouping, order, force, or speed."
+  wrongFeedback: "The sauce is unbalanced. Ginger may be harsh, scallion may be lost, or salt may be too strong."

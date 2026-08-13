@@ -16,7 +16,8 @@ MonoBehaviour:
   ingredientNameCN: Chili
   ingredientNameEN: Chili
   aromaType: spicy
-  initialDescription: 
+  initialDescription: Direct hot spice. It is kept for compatibility and is not used
+    by the default ten-level set.
   ingredientColor: {r: 0.85, g: 0.1, b: 0.08, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 9095778456970719305, guid: 1facfbd9c371a514da01fcf1129558eb, type: 3}

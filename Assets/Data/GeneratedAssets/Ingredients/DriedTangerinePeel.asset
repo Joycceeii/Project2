@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: DriedTangerinePeel
   m_EditorClassIdentifier: 
   ingredientID: DriedTangerinePeel
-  ingredientNameCN: Dried Tangerine Peel
+  ingredientNameCN:
   ingredientNameEN: Dried Tangerine Peel
-  aromaType: citrus
-  initialDescription: 
+  aromaType: Citrus peel
+  initialDescription: Dried tangerine peel is bright and slightly bitter. It works best as a small accent.
   ingredientColor: {r: 0.95, g: 0.45, b: 0.12, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 6875286091638436770, guid: f03367bf6a933e94aba8419093de0d9f, type: 3}
-  defaultRatioValue: 1
+  defaultRatioValue: 0

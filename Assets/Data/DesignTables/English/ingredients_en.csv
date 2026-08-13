@@ -1,16 +1,16 @@
 IngredientID,EnglishName,AromaType,InitialDescription,DefaultRatio
-Rice,Rice,Grain aroma,"Gentle and clean. It opens with steady handling but becomes hot and scorched if pushed too hard or too long.",Normal
-TeaLeaf,Tea Leaves,Tea and herbal aroma,"Carries light bitterness and sweet return. If handled too aggressively, bitterness rushes out before sweetness.",Normal
-BlackSesame,Black Sesame,Nutty and roasted aroma,"Rich and deep, useful as a leading note or tail note. If it takes too much space, it becomes bitter and dominant.",High
-GlutinousRice,Glutinous Rice,Grain and sticky rice aroma,"Mild and smooth. It gives body and texture, but it can blur stronger aromas if it takes the lead.",Normal
-Peanut,Peanut,Nutty and oily aroma,"Solid and warm. It gives a biscuit-like nut aroma and blends well with similar nutty ingredients.",Normal
-RedBean,Red Bean,Bean and sweet aroma,"Thick and warm. It is good at building a base before lighter notes appear.",High
-DriedTangerinePeel,Dried Tangerine Peel,Citrus peel aroma,"Bright and slightly bitter. It lifts the middle or finish, but becomes bitter if it arrives too early or too strongly.",Low
-RockSugar,Rock Sugar,Clean sweetness,"Clean and mild. It rounds the finish and can cover detail if it leads too early.",Normal
-SandGinger,Sand Ginger,Spicy root aroma,"Deep, dry, and aromatic. It needs enough pressure to open, but excessive pressure turns it harsh.",High
-CoarseSalt,Coarse Salt,Mineral and salty support,"A support ingredient. It strengthens the base but should not become the main aroma.",Low
-WhitePepper,White Pepper,Sharp spice aroma,"Clear and piercing. It needs a controlled release; rushing it makes the spice harsh.",High
-LotusLeaf,Lotus Leaf,Green leaf aroma,"Light and fragile. It works as a fresh wrapper note and can be crushed by early, heavy, or excessive handling.",Low
-YangjiangDouchi,Yangjiang Douchi,Fermented savory aroma,"Savory and fermented. It carries body, but rough handling can make it dull, bitter, or muddy.",High
-Ginger,Ginger,Fresh spice aroma,"Fresh and sharp. It opens brightness, but can rush forward and dominate if handled too aggressively.",Normal
-ScallionWhite,Scallion White,Fresh green aroma,"Fresh and watery. It keeps a clean finish, but heavy or early handling can bury its freshness.",Low
+Rice,Rice,Soft grain,"Rice is mild and clean. It needs steady grinding, but too much force can make it taste burnt.",Normal
+TeaLeaf,Tea Leaves,Tea,"Tea leaves taste bitter at first and sweet later. Slow grinding helps the sweetness come out.",Normal
+BlackSesame,Black Sesame,Roasted nut,"Black sesame has a strong roasted flavor. It can lead a recipe, but too much makes it bitter.",High
+GlutinousRice,Glutinous Rice,Sticky grain,"Glutinous rice makes the mixture smooth and thick. It should support stronger flavors.",Normal
+Peanut,Peanut,Roasted nut,"Peanut gives a warm roasted flavor. It works well with other nutty ingredients.",Normal
+RedBean,Red Bean,Sweet bean,"Red bean is thick and gently sweet. It works well as a base flavor.",High
+DriedTangerinePeel,Dried Tangerine Peel,Citrus peel,"Dried tangerine peel is bright and slightly bitter. It works best as a small accent.",Low
+RockSugar,Rock Sugar,Clean sweetness,"Rock sugar adds clean sweetness. It should round out the recipe instead of taking over.",Normal
+SandGinger,Sand Ginger,Root spice,"Sand ginger is deep and spicy. It needs enough force to bring out its flavor.",High
+CoarseSalt,Coarse Salt,Salt,"Coarse salt supports other flavors. Use it lightly so it does not become the main taste.",Low
+WhitePepper,White Pepper,Sharp spice,"White pepper is sharp and quick to spread. Too much grinding can make it harsh.",High
+LotusLeaf,Lotus Leaf,Green leaf,"Lotus leaf is light and fresh. It can be covered easily by stronger ingredients.",Low
+YangjiangDouchi,Yangjiang Douchi,Fermented bean,"Yangjiang douchi is savory and fermented. It gives the recipe a strong base.",High
+Ginger,Ginger,Fresh spice,"Ginger is fresh and sharp. It can brighten a recipe, but it can also become too strong.",Normal
+ScallionWhite,Scallion White,Fresh green,"Scallion white is fresh and light. It works best near the end of a recipe.",Low

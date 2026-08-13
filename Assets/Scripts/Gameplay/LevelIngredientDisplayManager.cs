@@ -9,6 +9,7 @@ namespace TheTasteReviver
         private const string ContainerName = "Ingredient Slots";
         private const string LabelName = "Ingredient Label";
         private const int MaxSlots = 4;
+        private const float TopDownLabelRollDegrees = 180f;
 
         public MortarArea mortarArea;
         public RecipeAttemptManager attemptManager;
@@ -279,7 +280,8 @@ namespace TheTasteReviver
                 return;
             }
 
-            label.rotation = Quaternion.LookRotation(label.position - camera.transform.position);
+            label.rotation = Quaternion.LookRotation(label.position - camera.transform.position)
+                * Quaternion.Euler(0f, 0f, TopDownLabelRollDegrees);
         }
 
         private static Transform FindSlot(Transform container, string slotName)

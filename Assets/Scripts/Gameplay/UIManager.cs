@@ -18,18 +18,19 @@ namespace TheTasteReviver
         public LevelManager levelManager;
 
         public Text levelLabel;
-        public Text currentIngredientsLabel;
         public Text currentOrderLabel;
         public Text currentRatioLabel;
         public Text currentSpeedLabel;
         public Text hintLabel;
         public Text ingredientTraitLabel;
+        public Button ingredientTraitToggleButton;
         public GameObject ratioSelectionPanel;
         public Text ratioSelectionTitle;
         public Button[] ratioSelectionButtons = new Button[4];
         public Button experimentLogButton;
         public Button evaluateButton;
         public Button resetAttemptButton;
+        public Button newBatchButton;
         public Button nextLevelButton;
         public string experimentLogSceneName = "ExperimentLog";
         public bool autoUpdateLevelLabel;
@@ -41,6 +42,8 @@ namespace TheTasteReviver
         private Action<RatioLevel> pendingRatioSelection;
         private Coroutine resetPromptCoroutine;
         private float lastEvaluationTime = -999f;
+        private GameObject ingredientTraitPanel;
+        private GameObject ingredientTraitBackdrop;
 
         public bool IsRatioSelectionOpen => ratioSelectionPanel != null && ratioSelectionPanel.activeSelf;
 
@@ -101,7 +104,18 @@ namespace TheTasteReviver
             CloseRatioSelection();
             attemptManager?.ResetAttempt();
             ShowFeedback(string.Empty);
-            ShowHint(string.Empty);
+            ShowHint(BuildLevelStartHint(attemptManager != null ? attemptManager.currentLevel : null));
+        }
+
+        public void StartNewBatch()
+        {
+            if (IsRatioSelectionOpen)
+            {
+                ShowHint("Choose the ingredient amount before starting another batch.");
+                return;
+            }
+
+            attemptManager?.StartNewBatch();
         }
 
         public void NextLevel()
@@ -125,6 +139,7 @@ namespace TheTasteReviver
             }
 
             RefreshAttemptPanels(attemptManager);
+            ShowHint(BuildLevelStartHint(level));
 
             ShowIngredientTraits(level);
         }
@@ -132,12 +147,9 @@ namespace TheTasteReviver
         private void ApplyLevelPanelVisibility(RecipeLevelData level)
         {
             EnabledMechanics mechanics = level != null ? level.enabledMechanics : null;
-            bool showOrderPanel = mechanics == null || mechanics.enableIngredientOrder;
-            bool showRatioPanel = mechanics == null || mechanics.enableRatio;
             bool showSpeedPanel = mechanics == null || mechanics.enableSpeed;
             bool showForceControls = mechanics == null || mechanics.enableForce;
 
-            SetTextPanelVisible(currentIngredientsLabel, false);
             SetTextPanelVisible(currentOrderLabel, false);
             SetTextPanelVisible(currentRatioLabel, false);
             SetTextPanelVisible(currentSpeedLabel, showSpeedPanel);
@@ -179,13 +191,6 @@ namespace TheTasteReviver
             EnabledMechanics mechanics = attempt.currentLevel != null ? attempt.currentLevel.enabledMechanics : null;
             bool hasIngredients = attempt.HasIngredientsInBowl;
 
-            if (currentIngredientsLabel != null)
-            {
-                string ingredients = string.Join(", ", attempt.IngredientAmounts.Where(x => x.ingredient != null).Select(x => x.ingredient.DisplayName));
-                currentIngredientsLabel.text = "Current Ingredients:\n" + (string.IsNullOrWhiteSpace(ingredients) ? "None" : ingredients);
-                SetTextPanelVisible(currentIngredientsLabel, hasIngredients);
-            }
-
             if (currentOrderLabel != null)
             {
                 string order = string.Join(" -> ", attempt.IngredientOrder.Where(x => x != null).Select(x => x.DisplayName));
@@ -206,6 +211,12 @@ namespace TheTasteReviver
             {
                 currentSpeedLabel.text = "Current Grind Speed: " + attempt.pestleController.CurrentSpeedLevel;
             }
+
+            if (IsAlive(newBatchButton))
+            {
+                bool showNewBatch = mechanics != null && mechanics.enableCombination && hasIngredients;
+                newBatchButton.gameObject.SetActive(showNewBatch);
+            }
         }
 
         public void ShowFeedback(string text)
@@ -222,8 +233,10 @@ namespace TheTasteReviver
 
         private void ShowEvaluationResult(EvaluationResult result, HintResult hint, string permanentHint)
         {
-            string feedback = BuildEvaluationFeedback(result);
-            string hintText = BuildEvaluationHint(result, hint, permanentHint);
+            string feedback = BuildPanelEvaluationFeedback(result, permanentHint);
+            string hintText = result != null && result.judgement == JudgementResult.Correct
+                ? string.Empty
+                : BuildEvaluationHint(result, hint, permanentHint);
             string displayedText;
             if (string.IsNullOrWhiteSpace(hintText))
             {
@@ -330,6 +343,52 @@ namespace TheTasteReviver
             return "Keep grinding before checking. Time: " + currentSeconds.ToString("0.0") + "s / " + requiredSeconds.ToString("0.0") + "s.";
         }
 
+        private static string BuildLevelStartHint(RecipeLevelData level)
+        {
+            if (level == null || level.enabledMechanics == null)
+            {
+                return string.Empty;
+            }
+
+            List<string> checkedMechanics = new List<string>();
+            List<string> notCheckedMechanics = new List<string>();
+            AddMechanicState(level, MechanicType.Combination, "batch grouping", checkedMechanics, notCheckedMechanics);
+            AddMechanicState(level, MechanicType.Force, "force", checkedMechanics, notCheckedMechanics);
+            AddMechanicState(level, MechanicType.Speed, "speed", checkedMechanics, notCheckedMechanics);
+            AddMechanicState(level, MechanicType.IngredientOrder, "ingredient order", checkedMechanics, notCheckedMechanics);
+            AddMechanicState(level, MechanicType.Ratio, "amounts", checkedMechanics, notCheckedMechanics);
+
+            return "This level checks: " + FormatList(checkedMechanics) + ".\n"
+                + "Not checked yet: " + FormatList(notCheckedMechanics) + ".";
+        }
+
+        private static void AddMechanicState(RecipeLevelData level, MechanicType mechanic, string label, List<string> checkedMechanics, List<string> notCheckedMechanics)
+        {
+            if (level.enabledMechanics.IsEnabled(mechanic))
+            {
+                checkedMechanics.Add(label);
+            }
+            else
+            {
+                notCheckedMechanics.Add(label);
+            }
+        }
+
+        private static string FormatList(List<string> values)
+        {
+            if (values == null || values.Count == 0)
+            {
+                return "none";
+            }
+
+            if (values.Count == 1)
+            {
+                return values[0];
+            }
+
+            return string.Join(", ", values.Take(values.Count - 1)) + ", and " + values[values.Count - 1];
+        }
+
         public void ShowIngredientTraits(RecipeLevelData level)
         {
             EnsureIngredientTraitPanel();
@@ -339,13 +398,61 @@ namespace TheTasteReviver
             }
 
             string text = BuildIngredientTraitText(level);
-            Transform panel = ingredientTraitLabel.transform.parent;
-            if (IsAlive(panel))
+            ingredientTraitLabel.text = text;
+            if (string.IsNullOrWhiteSpace(text))
             {
-                panel.gameObject.SetActive(!string.IsNullOrWhiteSpace(text));
+                SetIngredientTraitsExpanded(false);
+                if (IsAlive(ingredientTraitToggleButton))
+                {
+                    ingredientTraitToggleButton.gameObject.SetActive(false);
+                }
+                return;
             }
 
-            ingredientTraitLabel.text = text;
+            SetIngredientTraitsExpanded(true);
+        }
+
+        public void ExpandIngredientTraits()
+        {
+            SetIngredientTraitsExpanded(true);
+        }
+
+        public void CollapseIngredientTraits()
+        {
+            SetIngredientTraitsExpanded(false);
+        }
+
+        private void SetIngredientTraitsExpanded(bool expanded)
+        {
+            EnsureIngredientTraitPanel();
+            bool hasText = IsAlive(ingredientTraitLabel) && !string.IsNullOrWhiteSpace(ingredientTraitLabel.text);
+
+            if (IsAlive(ingredientTraitBackdrop))
+            {
+                ingredientTraitBackdrop.SetActive(expanded && hasText);
+                if (expanded && hasText)
+                {
+                    ingredientTraitBackdrop.transform.SetAsLastSibling();
+                }
+            }
+
+            if (IsAlive(ingredientTraitPanel))
+            {
+                ingredientTraitPanel.SetActive(expanded && hasText);
+                if (expanded && hasText)
+                {
+                    ingredientTraitPanel.transform.SetAsLastSibling();
+                }
+            }
+
+            if (IsAlive(ingredientTraitToggleButton))
+            {
+                ingredientTraitToggleButton.gameObject.SetActive(!expanded && hasText);
+                if (!expanded && hasText)
+                {
+                    ingredientTraitToggleButton.transform.SetAsLastSibling();
+                }
+            }
         }
 
         public void ShowRatioSelection(IngredientData ingredient, IReadOnlyList<RatioLevel> options, Action<RatioLevel> onSelected)
@@ -397,10 +504,10 @@ namespace TheTasteReviver
         {
             switch (ratio)
             {
-                case RatioLevel.VeryLess: return "Very Little";
-                case RatioLevel.Less: return "Little";
-                case RatioLevel.SlightlyMore: return "Much";
-                case RatioLevel.More: return "Very Much";
+                case RatioLevel.VeryLess: return "Very Small";
+                case RatioLevel.Less: return "Small";
+                case RatioLevel.SlightlyMore: return "Medium";
+                case RatioLevel.More: return "Large";
                 default: return "None";
             }
         }
@@ -497,6 +604,18 @@ namespace TheTasteReviver
         {
             evaluateButton = BindButton(evaluateButton, "Evaluate", EvaluateCurrentAttempt);
             resetAttemptButton = BindButton(resetAttemptButton, "Reset Attempt", ResetAttempt);
+            if (!IsAlive(newBatchButton))
+            {
+                Transform existing = transform.Find("New Batch");
+                newBatchButton = IsAlive(existing)
+                    ? existing.GetComponent<Button>()
+                    : CreateAnchoredRuntimeButton(transform, "New Batch", new Vector2(132f, 36f), new Vector2(-24f, 64f), new Vector2(1f, 0f), new Vector2(1f, 0f));
+            }
+            newBatchButton = BindButton(newBatchButton, "New Batch", StartNewBatch);
+            if (IsAlive(newBatchButton))
+            {
+                newBatchButton.gameObject.SetActive(false);
+            }
             nextLevelButton = BindButton(nextLevelButton, "Next Level", NextLevel);
         }
 
@@ -577,6 +696,11 @@ namespace TheTasteReviver
         {
             if (IsAlive(ingredientTraitLabel))
             {
+                ingredientTraitPanel = ingredientTraitLabel.transform.parent != null
+                    ? ingredientTraitLabel.transform.parent.gameObject
+                    : ingredientTraitLabel.gameObject;
+                EnsureIngredientTraitBackdrop();
+                EnsureIngredientTraitToggleButton();
                 return;
             }
 
@@ -600,6 +724,11 @@ namespace TheTasteReviver
             if (IsAlive(existing))
             {
                 ingredientTraitLabel = existing.GetComponent<Text>();
+                ingredientTraitPanel = ingredientTraitLabel.transform.parent != null
+                    ? ingredientTraitLabel.transform.parent.gameObject
+                    : ingredientTraitLabel.gameObject;
+                EnsureIngredientTraitBackdrop();
+                EnsureIngredientTraitToggleButton();
                 return;
             }
 
@@ -609,13 +738,18 @@ namespace TheTasteReviver
             panelRect.anchorMin = new Vector2(1f, 1f);
             panelRect.anchorMax = new Vector2(1f, 1f);
             panelRect.pivot = new Vector2(1f, 1f);
-            panelRect.sizeDelta = new Vector2(380f, 88f);
-            panelRect.anchoredPosition = new Vector2(-24f, -244f);
+            panelRect.sizeDelta = new Vector2(380f, 400f);
+            panelRect.anchoredPosition = new Vector2(-24f, -252f);
 
             Image image = panel.AddComponent<Image>();
             image.color = new Color(1f, 1f, 1f, 0.82f);
 
             ingredientTraitLabel = CreateRuntimeText(panel.transform, "Ingredient Traits Text", Vector2.zero, Vector2.zero, TextAnchor.UpperLeft, 14);
+            ingredientTraitLabel.fontSize = 14;
+            ingredientTraitLabel.alignment = TextAnchor.UpperLeft;
+            ingredientTraitLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
+            ingredientTraitLabel.verticalOverflow = VerticalWrapMode.Truncate;
+
             RectTransform textRect = ingredientTraitLabel.GetComponent<RectTransform>();
             textRect.anchorMin = Vector2.zero;
             textRect.anchorMax = Vector2.one;
@@ -623,6 +757,92 @@ namespace TheTasteReviver
             textRect.offsetMax = new Vector2(-8f, -6f);
             textRect.sizeDelta = Vector2.zero;
             ingredientTraitLabel.text = "Ingredient Traits";
+            ingredientTraitPanel = panel;
+            EnsureIngredientTraitBackdrop();
+            EnsureIngredientTraitToggleButton();
+            SetIngredientTraitsExpanded(false);
+        }
+
+        private void EnsureIngredientTraitBackdrop()
+        {
+            if (IsAlive(ingredientTraitBackdrop))
+            {
+                return;
+            }
+
+            Transform existing = transform.Find("Ingredient Traits Backdrop");
+            Image backdropImage;
+            if (IsAlive(existing))
+            {
+                ingredientTraitBackdrop = existing.gameObject;
+                backdropImage = ingredientTraitBackdrop.GetComponent<Image>();
+            }
+            else
+            {
+                ingredientTraitBackdrop = new GameObject("Ingredient Traits Backdrop");
+                ingredientTraitBackdrop.transform.SetParent(transform, false);
+                RectTransform rect = ingredientTraitBackdrop.AddComponent<RectTransform>();
+                rect.anchorMin = Vector2.zero;
+                rect.anchorMax = Vector2.one;
+                rect.pivot = new Vector2(0.5f, 0.5f);
+                rect.offsetMin = Vector2.zero;
+                rect.offsetMax = Vector2.zero;
+
+                backdropImage = ingredientTraitBackdrop.AddComponent<Image>();
+                backdropImage.color = new Color(0f, 0f, 0f, 0.24f);
+            }
+
+            if (!IsAlive(backdropImage))
+            {
+                backdropImage = ingredientTraitBackdrop.AddComponent<Image>();
+                backdropImage.color = new Color(0f, 0f, 0f, 0.24f);
+            }
+
+            Button button = ingredientTraitBackdrop.GetComponent<Button>();
+            if (!IsAlive(button))
+            {
+                button = ingredientTraitBackdrop.AddComponent<Button>();
+            }
+
+            button.transition = Selectable.Transition.None;
+            button.targetGraphic = backdropImage;
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(CollapseIngredientTraits);
+            ingredientTraitBackdrop.SetActive(false);
+        }
+
+        private void EnsureIngredientTraitToggleButton()
+        {
+            if (!IsAlive(ingredientTraitToggleButton))
+            {
+                Transform existing = transform.Find("Ingredient Traits Toggle");
+                if (IsAlive(existing))
+                {
+                    ingredientTraitToggleButton = existing.GetComponent<Button>();
+                }
+            }
+
+            if (!IsAlive(ingredientTraitToggleButton))
+            {
+                ingredientTraitToggleButton = CreateAnchoredRuntimeButton(
+                    transform,
+                    "Ingredient Traits Toggle",
+                    new Vector2(112f, 40f),
+                    new Vector2(-24f, -24f),
+                    new Vector2(1f, 1f),
+                    new Vector2(1f, 1f));
+            }
+
+            Text label = ingredientTraitToggleButton.GetComponentInChildren<Text>();
+            if (IsAlive(label))
+            {
+                label.text = "Traits";
+                label.fontSize = 15;
+            }
+
+            ingredientTraitToggleButton.onClick.RemoveAllListeners();
+            ingredientTraitToggleButton.onClick.AddListener(ExpandIngredientTraits);
+            ingredientTraitToggleButton.gameObject.SetActive(false);
         }
 
         private void SelectRatio(RatioLevel ratio)
@@ -670,10 +890,28 @@ namespace TheTasteReviver
 
             if (result.judgement != JudgementResult.Correct)
             {
-                return "Result: " + result.judgement + "\nKeep experimenting with the hints.";
+                return "Result: " + result.judgement + "\nUse the hint and try again.";
             }
 
             return "Result: Correct\n" + result.mainFeedback + BuildDimensionFeedback(result);
+        }
+
+        private static string BuildPanelEvaluationFeedback(EvaluationResult result, string permanentHint)
+        {
+            if (result == null)
+            {
+                return string.Empty;
+            }
+
+            if (result.judgement != JudgementResult.Correct)
+            {
+                return BuildEvaluationFeedback(result);
+            }
+
+            string message = "Result: Correct\nRecipe complete.";
+            return string.IsNullOrWhiteSpace(permanentHint)
+                ? message
+                : message + "\nNew clue saved to Experiment Log.";
         }
 
         private static string BuildEvaluationHint(EvaluationResult result, HintResult hint, string permanentHint)
@@ -690,7 +928,7 @@ namespace TheTasteReviver
             }
             else if (result.judgement == JudgementResult.Correct)
             {
-                builder.Append("Restoration complete.");
+                builder.Append("Recipe complete.");
             }
 
             if (!string.IsNullOrWhiteSpace(permanentHint))
@@ -733,7 +971,7 @@ namespace TheTasteReviver
             }
             else
             {
-                ShowHint(baseText + "\n\nNext: " + resetRequiredHint);
+                ShowHint(baseText + "\n\n" + resetRequiredHint);
             }
         }
 
@@ -781,35 +1019,202 @@ namespace TheTasteReviver
             }
 
             StringBuilder builder = new StringBuilder();
-            if (level.ingredientProfiles != null && level.ingredientProfiles.Count > 0)
-            {
-                foreach (LevelIngredientProfile profile in level.ingredientProfiles.Where(x => x != null && x.ingredient != null))
-                {
-                    string description = !string.IsNullOrWhiteSpace(profile.levelTraitDescription)
-                        ? profile.levelTraitDescription
-                        : profile.ingredient.initialDescription;
-                    if (string.IsNullOrWhiteSpace(description))
-                    {
-                        continue;
-                    }
+            builder.AppendLine("Ingredient Traits");
+            IEnumerable<LevelIngredientProfile> profiles = level.ingredientProfiles != null && level.ingredientProfiles.Count > 0
+                ? level.ingredientProfiles.Where(x => x != null && x.ingredient != null)
+                    .GroupBy(x => x.ingredient)
+                    .Select(x => x.First())
+                : Enumerable.Empty<LevelIngredientProfile>();
 
-                    builder.Append(profile.DisplayTag).Append(" - ");
-                    builder.Append(profile.ingredient.DisplayName).Append(": ");
-                    builder.Append(description);
+            if (profiles.Any())
+            {
+                foreach (LevelIngredientProfile profile in profiles)
+                {
+                    string trait = !string.IsNullOrWhiteSpace(profile.levelTraitDescription)
+                        ? profile.levelTraitDescription
+                        : GetIngredientTraitFallback(profile.ingredient);
+                    builder.Append("- ").Append(profile.ingredient.DisplayName).Append(": ");
+                    builder.Append(BuildIngredientTraitLine(level, profile, trait));
                     builder.AppendLine();
                 }
 
                 return builder.ToString().Trim();
             }
 
-            foreach (IngredientData ingredient in level.availableIngredients.Where(x => x != null && !string.IsNullOrWhiteSpace(x.initialDescription)))
+            foreach (IngredientData ingredient in level.availableIngredients.Where(x => x != null))
             {
-                builder.Append(ingredient.DisplayName).Append(": ");
-                builder.Append(ingredient.initialDescription);
+                builder.Append("- ").Append(ingredient.DisplayName).Append(": ");
+                builder.Append(BuildIngredientTraitLine(level, level.GetProfile(ingredient), GetIngredientTraitFallback(ingredient)));
                 builder.AppendLine();
             }
 
             return builder.ToString().Trim();
+        }
+
+        private static string BuildIngredientTraitLine(RecipeLevelData level, LevelIngredientProfile profile, string baseTrait)
+        {
+            List<string> clues = BuildLevelTraitClues(level, profile);
+            if (clues.Count == 0)
+            {
+                return baseTrait;
+            }
+
+            return baseTrait.TrimEnd('.') + ". " + string.Join(" ", clues);
+        }
+
+        private static List<string> BuildLevelTraitClues(RecipeLevelData level, LevelIngredientProfile profile)
+        {
+            List<string> clues = new List<string>();
+            if (level == null || level.enabledMechanics == null || profile == null || profile.ingredient == null)
+            {
+                return clues;
+            }
+
+            if (level.enabledMechanics.enableIngredientOrder && profile.targetOrderIndex >= 0)
+            {
+                clues.Add(BuildOrderTraitClue(level, profile));
+            }
+
+            if (level.enabledMechanics.enableRatio && profile.targetRatioLevel != RatioLevel.None)
+            {
+                clues.Add(BuildRatioTraitClue(profile.targetRatioLevel));
+            }
+
+            if (level.enabledMechanics.enableCombination && !string.IsNullOrWhiteSpace(profile.targetCombinationKey))
+            {
+                clues.Add(BuildCombinationTraitClue(level, profile));
+            }
+
+            if (level.enabledMechanics.enableForce)
+            {
+                clues.Add(BuildForceTraitClue(profile.targetForceLevel));
+            }
+
+            if (level.enabledMechanics.enableSpeed)
+            {
+                clues.Add(BuildSpeedTraitClue(profile.targetSpeedLevel));
+            }
+
+            return clues.Where(clue => !string.IsNullOrWhiteSpace(clue)).ToList();
+        }
+
+        private static string BuildOrderTraitClue(RecipeLevelData level, LevelIngredientProfile profile)
+        {
+            int count = level.correctIngredientOrder != null
+                ? level.correctIngredientOrder.Count(x => x != null)
+                : 0;
+            if (profile.targetOrderIndex <= 0)
+            {
+                return "It feels like a base note.";
+            }
+
+            if (count > 0 && profile.targetOrderIndex >= count - 1)
+            {
+                return "It reads best as a finishing note.";
+            }
+
+            return "It fits better after the base has formed.";
+        }
+
+        private static string BuildRatioTraitClue(RatioLevel ratio)
+        {
+            switch (ratio)
+            {
+                case RatioLevel.VeryLess:
+                    return "Use it like a trace, not a main flavor.";
+                case RatioLevel.Less:
+                    return "Let it stay light in the mix.";
+                case RatioLevel.SlightlyMore:
+                    return "Give it a clear supporting role.";
+                case RatioLevel.More:
+                    return "Let it lead the flavor.";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        private static string BuildCombinationTraitClue(RecipeLevelData level, LevelIngredientProfile profile)
+        {
+            List<IngredientData> group = FindCombinationGroup(level, profile.ingredient);
+            if (group.Count <= 1)
+            {
+                return "It keeps its shape better on its own.";
+            }
+
+            List<string> partners = group
+                .Where(ingredient => ingredient != null && ingredient != profile.ingredient)
+                .Select(ingredient => ingredient.DisplayName)
+                .ToList();
+            return partners.Count == 0
+                ? "It can share a batch with a close flavor."
+                : "It can blend with " + FormatNameList(partners) + ".";
+        }
+
+        private static List<IngredientData> FindCombinationGroup(RecipeLevelData level, IngredientData ingredient)
+        {
+            if (level == null || ingredient == null || level.correctCombinationPattern == null || level.correctCombinationPattern.groups == null)
+            {
+                return new List<IngredientData>();
+            }
+
+            CombinationGroup group = level.correctCombinationPattern.groups
+                .FirstOrDefault(candidate => candidate != null && candidate.ingredients != null && candidate.ingredients.Contains(ingredient));
+            return group != null
+                ? group.ingredients.Where(x => x != null).ToList()
+                : new List<IngredientData>();
+        }
+
+        private static string BuildForceTraitClue(ForceLevel force)
+        {
+            switch (force)
+            {
+                case ForceLevel.Light:
+                    return "It opens with gentle pressure.";
+                case ForceLevel.Heavy:
+                    return "It needs firm pressure to come forward.";
+                default:
+                    return "It responds to steady pressure.";
+            }
+        }
+
+        private static string BuildSpeedTraitClue(SpeedLevel speed)
+        {
+            switch (speed)
+            {
+                case SpeedLevel.Slow:
+                    return "A slower rhythm keeps it clean.";
+                case SpeedLevel.Fast:
+                    return "A faster rhythm wakes it up.";
+                default:
+                    return "A steady rhythm keeps it balanced.";
+            }
+        }
+
+        private static string FormatNameList(List<string> names)
+        {
+            if (names == null || names.Count == 0)
+            {
+                return "another ingredient";
+            }
+
+            if (names.Count == 1)
+            {
+                return names[0];
+            }
+
+            return string.Join(", ", names.Take(names.Count - 1)) + ", and " + names[names.Count - 1];
+        }
+
+        private static string GetIngredientTraitFallback(IngredientData ingredient)
+        {
+            if (ingredient == null)
+            {
+                return "Distinct flavor";
+            }
+
+            return !string.IsNullOrWhiteSpace(ingredient.aromaType)
+                ? ingredient.aromaType
+                : "Distinct flavor";
         }
 
         private static Text CreateRuntimeText(Transform parent, string name, Vector2 size, Vector2 position, TextAnchor anchor, int fontSize)

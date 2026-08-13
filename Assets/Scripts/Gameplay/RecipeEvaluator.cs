@@ -247,7 +247,7 @@ namespace TheTasteReviver
         {
             if (judgement == JudgementResult.Correct)
             {
-                return "Restoration complete.";
+                return "Recipe complete.";
             }
 
             if (judgement == JudgementResult.Close)

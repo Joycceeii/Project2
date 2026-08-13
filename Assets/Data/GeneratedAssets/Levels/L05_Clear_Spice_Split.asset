@@ -1,0 +1,154 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: L05_Clear_Spice_Split
+  m_EditorClassIdentifier: 
+  levelID: L05
+  levelName: Clear Spice Split
+  cityName: Shantou
+  targetTasteName: Separate Grind
+  levelIntro: "White pepper and dried tangerine peel are both sharp. Find a way to keep their edges clear."
+  maxIngredientCount: 2
+  availableIngredients:
+  - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
+  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  requiredIngredients:
+  - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
+  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  forbiddenIngredients: []
+  unlockedDimensions: 03000000
+  lockedDimensions: 04000000050000000200000001000000
+  correctIngredientOrder:
+  - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
+  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  correctRatioPattern:
+  - ingredient: {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
+    ratioLevel: 5
+  - ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    ratioLevel: 2
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
+    - ingredients:
+      - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  targetForceLevel: 1
+  targetSpeedLevel: 1
+  minGrindDuration: 14
+  maxGrindDuration: 22
+  passingScore: 100
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 0
+    enableRatio: 0
+    enableCombination: 1
+    enableForce: 0
+    enableSpeed: 0
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 03000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L05_WhitePepper_Separate
+    title: White Pepper - Batch Clue
+    content: White pepper is strong. It often works better away from other sharp ingredients.
+    relatedIngredients:
+    - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
+    relatedDimension: 3
+  - clueId: L05_Peel_Separate
+    title: Dried Tangerine Peel - Batch Clue
+    content: Dried tangerine peel can turn bitter when it is ground with another sharp ingredient.
+    relatedIngredients:
+    - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    relatedDimension: 3
+  fallbackHintText: No new hint for now. Keep what worked
+  progressiveHintRules:
+  - ruleId: L05_Hint_NewBatch
+    priority: 22
+    mechanic: 3
+    hintText: Use New Batch after white pepper so dried tangerine peel is ground separately.
+  - ruleId: L05_Hint_Separate_Combination
+    priority: 21
+    mechanic: 3
+    hintText: White pepper and dried tangerine peel should each have their own batch.
+  ingredientProfiles:
+  - profileTag: L05_WhitePepper
+    ingredient: {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 0
+      enableRatio: 0
+      enableCombination: 1
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 0
+    targetOrderIndex: -1
+    targetCombinationKey: WhitePepper
+    minGrindDuration: 14
+    maxGrindDuration: 22
+    levelTraitDescription: White pepper is sharp and spreads quickly.
+    responseHintRules: []
+  - profileTag: L05_DriedTangerinePeel
+    ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 0
+      enableRatio: 0
+      enableCombination: 1
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 0
+    targetOrderIndex: -1
+    targetCombinationKey: DriedTangerinePeel
+    minGrindDuration: 14
+    maxGrindDuration: 22
+    levelTraitDescription: Dried tangerine peel adds a bright citrus edge.
+    responseHintRules: []
+  successFeedback: White pepper and dried tangerine peel stay clear because they were handled separately.
+  closeFeedback: Very close. Check whether each ingredient has its own batch.
+  wrongFeedback: The sharp flavors are tangled together. Try using a separate batch.

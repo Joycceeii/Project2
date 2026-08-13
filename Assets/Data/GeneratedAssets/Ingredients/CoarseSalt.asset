@@ -13,12 +13,11 @@ MonoBehaviour:
   m_Name: CoarseSalt
   m_EditorClassIdentifier: 
   ingredientID: CoarseSalt
-  ingredientNameCN: Coarse Salt
+  ingredientNameCN:
   ingredientNameEN: Coarse Salt
-  aromaType: salty mineral
-  initialDescription: A support ingredient. It strengthens the base but should not
-    become the main aroma.
+  aromaType: Mineral and salty support
+  initialDescription: Coarse salt supports other flavors. Use it lightly so it does not become the main taste.
   ingredientColor: {r: 0.85, g: 0.84, b: 0.78, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 7302915921474419236, guid: 5332918182d17704f9d0493ba8af7688, type: 3}
-  defaultRatioValue: 1
+  defaultRatioValue: 0

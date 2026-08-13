@@ -1,0 +1,118 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: L02_Slow_Tea_Return
+  m_EditorClassIdentifier: 
+  levelID: L02
+  levelName: Slow Tea Return
+  cityName: Chaozhou
+  targetTasteName: Speed Tutorial
+  levelIntro: "Use tea leaves to learn grinding speed. The goal is gentle tea bitterness followed by sweetness."
+  maxIngredientCount: 1
+  availableIngredients:
+  - {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
+  requiredIngredients:
+  - {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
+  forbiddenIngredients: []
+  unlockedDimensions: 05000000
+  lockedDimensions: 04000000020000000300000001000000
+  correctIngredientOrder:
+  - {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
+  correctRatioPattern:
+  - ingredient: {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
+    ratioLevel: 3
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
+  targetForceLevel: 1
+  targetSpeedLevel: 0
+  minGrindDuration: 10
+  maxGrindDuration: 16
+  passingScore: 100
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 0
+    enableRatio: 0
+    enableCombination: 0
+    enableForce: 0
+    enableSpeed: 1
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 05000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L02_Tea_Speed
+    title: Tea Leaf - Speed Clue
+    content: Tea leaves work best with slow grinding. Fast grinding makes the tea too bitter.
+    relatedIngredients:
+    - {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
+    relatedDimension: 5
+  fallbackHintText: No new hint for now. Keep what worked
+  progressiveHintRules:
+  - ruleId: L02_Hint_Speed
+    priority: 20
+    mechanic: 5
+    hintText: Tea needs slow grinding. Set the speed to Slow.
+  ingredientProfiles:
+  - profileTag: L02_TeaLeaf
+    ingredient: {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 0
+      enableRatio: 0
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 1
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 0
+    targetRatioLevel: 0
+    targetOrderIndex: -1
+    targetCombinationKey: 
+    minGrindDuration: 10
+    maxGrindDuration: 16
+    levelTraitDescription: Tea leaves taste bitter at first and sweet later.
+    responseHintRules: []
+  successFeedback: "The tea tastes balanced: light bitterness first, then sweetness."
+  closeFeedback: Very close. Adjust the speed or grinding time a little.
+  wrongFeedback: The tea is too bitter. Check the speed and grinding time.

@@ -89,10 +89,16 @@ namespace TheTasteReviver
                 return null;
             }
 
-            string hint = BuildTraitDrivenHint(level, attempt, mechanic, targetIngredient);
+            string hint = mechanic == MechanicType.Combination
+                ? BuildCombinationHint(level, attempt, givenHints, targetIngredient)
+                : null;
             if (string.IsNullOrWhiteSpace(hint))
             {
                 hint = BuildCustomHint(level, mechanic, givenHints);
+            }
+            if (string.IsNullOrWhiteSpace(hint))
+            {
+                hint = BuildTraitDrivenHint(level, attempt, mechanic, targetIngredient);
             }
 
             if (string.IsNullOrWhiteSpace(hint))
@@ -125,22 +131,31 @@ namespace TheTasteReviver
 
         private static string BuildHint(RecipeLevelData level, RecipeAttemptManager attempt, MechanicType mechanic, IReadOnlyList<string> usedHints)
         {
+            if (mechanic == MechanicType.Combination)
+            {
+                string combinationHint = BuildCombinationHint(level, attempt, usedHints);
+                if (!string.IsNullOrWhiteSpace(combinationHint))
+                {
+                    return combinationHint;
+                }
+            }
+
             string responseHint = BuildIngredientResponseHint(level, attempt, mechanic, usedHints);
             if (!string.IsNullOrWhiteSpace(responseHint))
             {
                 return responseHint;
             }
 
-            string traitHint = BuildTraitDrivenHint(level, attempt, mechanic);
-            if (!string.IsNullOrWhiteSpace(traitHint))
-            {
-                return traitHint;
-            }
-
             string customHint = BuildCustomHint(level, mechanic, usedHints);
             if (!string.IsNullOrWhiteSpace(customHint))
             {
                 return customHint;
+            }
+
+            string traitHint = BuildTraitDrivenHint(level, attempt, mechanic);
+            if (!string.IsNullOrWhiteSpace(traitHint))
+            {
+                return traitHint;
             }
 
             switch (mechanic)
@@ -150,7 +165,7 @@ namespace TheTasteReviver
                 case MechanicType.Ratio:
                     return BuildRatioHint(level, attempt);
                 case MechanicType.Combination:
-                    return BuildCombinationHint(level);
+                    return BuildCombinationHint(level, attempt, usedHints);
                 case MechanicType.Speed:
                 case MechanicType.Force:
                     return BuildProcessHint(level, attempt);
@@ -267,13 +282,7 @@ namespace TheTasteReviver
                 return null;
             }
 
-            string trait = profile.ingredient.initialDescription;
-            if (string.IsNullOrWhiteSpace(trait))
-            {
-                trait = profile.ingredient.DisplayName + " has a distinct aroma behavior.";
-            }
-
-            return profile.ingredient.DisplayName + ": " + trait + " " + BuildDimensionNudge(profile, attempt, mechanic);
+            return profile.ingredient.DisplayName + ": " + BuildDimensionNudge(profile, attempt, mechanic);
         }
 
         private static LevelIngredientProfile FindFirstIncorrectProfile(RecipeLevelData level, RecipeAttemptManager attempt, MechanicType mechanic, IngredientData targetIngredient = null)
@@ -305,9 +314,9 @@ namespace TheTasteReviver
                 case MechanicType.Ratio:
                     return BuildRatioNudge(profile, attempt);
                 case MechanicType.Combination:
-                    return "Look again at whether it should work alone or share a batch with a related aroma.";
+                    return "Check whether this ingredient belongs in this batch.";
                 case MechanicType.IngredientOrder:
-                    return "Look again at whether its role belongs near the base, middle, or finish.";
+                    return "Check whether this ingredient should be added earlier or later.";
                 default:
                     return "Use its trait to rethink this attempt.";
             }
@@ -317,8 +326,8 @@ namespace TheTasteReviver
         {
             ForceLevel actual = attempt.forceController != null ? attempt.forceController.CurrentForceLevel : ForceLevel.Medium;
             return (int)actual < (int)profile.targetForceLevel
-                ? "It still feels closed; try opening it with more pressure."
-                : "It is being pushed too hard; try protecting the aroma with less pressure.";
+                ? "Try using more force."
+                : "Try using less force.";
         }
 
         private static string BuildSpeedNudge(LevelIngredientProfile profile, RecipeAttemptManager attempt)
@@ -334,8 +343,8 @@ namespace TheTasteReviver
             Dictionary<IngredientData, RatioLevel> actual = attempt.CalculateRatioPattern(out _);
             RatioLevel actualRatio = actual.TryGetValue(profile.ingredient, out RatioLevel ratio) ? ratio : RatioLevel.None;
             return (int)actualRatio < (int)profile.targetRatioLevel
-                ? "Its aroma is too quiet in the mix; reconsider its weight."
-                : "Its aroma is taking too much space; reconsider its weight.";
+                ? "Use a larger amount."
+                : "Use a smaller amount.";
         }
 
         private static string BuildCustomHint(RecipeLevelData level, MechanicType mechanic, IReadOnlyList<string> usedHints)
@@ -381,7 +390,7 @@ namespace TheTasteReviver
                 int actualAfter = actual.IndexOf(after);
                 if (actualBefore >= 0 && actualAfter >= 0 && actualBefore > actualAfter)
                 {
-                    return before.DisplayName + " should appear before " + after.DisplayName + ".";
+                    return "Add " + before.DisplayName + " before " + after.DisplayName + ".";
                 }
             }
 
@@ -406,35 +415,128 @@ namespace TheTasteReviver
                 .FirstOrDefault();
             if (target == null)
             {
-                return "The ratio pattern is close, but the hierarchy can be clearer.";
+                return "The amounts are close, but one ingredient still needs adjustment.";
             }
 
-            string direction = "needs review";
+            string direction = "needs a different amount";
             if (actual.TryGetValue(target.ingredient, out RatioLevel actualLevel))
             {
-                direction = (int)actualLevel < (int)target.ratioLevel ? "may be too low" : "may be too high";
+                direction = (int)actualLevel < (int)target.ratioLevel ? "needs more" : "needs less";
             }
 
             return target.ingredient.DisplayName + " " + direction + ".";
         }
 
-        private static string BuildCombinationHint(RecipeLevelData level)
+        private static string BuildCombinationHint(RecipeLevelData level, RecipeAttemptManager attempt, IReadOnlyList<string> usedHints, IngredientData targetIngredient = null)
         {
-            if (level.correctCombinationPattern == null || level.correctCombinationPattern.groups.Count == 0)
+            if (level == null || attempt == null || level.correctCombinationPattern == null || level.correctCombinationPattern.groups.Count == 0)
             {
                 return "Some ingredients may work together, while others may need separate handling.";
+            }
+
+            IEnumerable<CombinationGroup> targetGroups = level.correctCombinationPattern.groups
+                .Where(group => group != null && group.ingredients != null && group.ingredients.Any(ingredient => ingredient != null));
+
+            if (targetIngredient != null)
+            {
+                targetGroups = targetGroups
+                    .Where(group => group.ingredients.Contains(targetIngredient))
+                    .Concat(level.correctCombinationPattern.groups.Where(group => group != null && group.ingredients != null && !group.ingredients.Contains(targetIngredient)));
+            }
+
+            List<GrindingBatch> actualBatches = attempt.GrindingBatches != null
+                ? attempt.GrindingBatches.Where(batch => batch != null && batch.ingredientsInBatch != null).ToList()
+                : new List<GrindingBatch>();
+
+            foreach (CombinationGroup group in targetGroups)
+            {
+                List<IngredientData> target = group.ingredients.Where(x => x != null).Distinct().ToList();
+                if (target.Count == 0)
+                {
+                    continue;
+                }
+
+                List<GrindingBatch> containingBatches = actualBatches
+                    .Where(batch => target.Any(ingredient => batch.ingredientsInBatch.Contains(ingredient)))
+                    .ToList();
+
+                List<IngredientData> actualTogether = containingBatches
+                    .SelectMany(batch => batch.ingredientsInBatch)
+                    .Where(x => x != null)
+                    .Distinct()
+                    .ToList();
+
+                bool allTargetTogether = containingBatches.Count == 1 && target.All(ingredient => containingBatches[0].ingredientsInBatch.Contains(ingredient));
+                bool hasExtraIngredients = actualTogether.Any(ingredient => !target.Contains(ingredient));
+                if (target.Count == 1)
+                {
+                    IngredientData ingredient = target[0];
+                    if (hasExtraIngredients)
+                    {
+                        string hint = "Grind " + ingredient.DisplayName + " on its own.";
+                        if (IsUnusedHint(hint, usedHints))
+                        {
+                            return hint;
+                        }
+                    }
+
+                    continue;
+                }
+
+                if (!allTargetTogether)
+                {
+                    string hint = "Grind " + FormatIngredientNames(target) + " together in one batch.";
+                    if (IsUnusedHint(hint, usedHints))
+                    {
+                        return hint;
+                    }
+                }
+
+                if (hasExtraIngredients)
+                {
+                    List<IngredientData> extras = actualTogether.Where(ingredient => !target.Contains(ingredient)).ToList();
+                    string hint = "Keep " + FormatIngredientNames(target) + " separate from " + FormatIngredientNames(extras) + ".";
+                    if (IsUnusedHint(hint, usedHints))
+                    {
+                        return hint;
+                    }
+                }
             }
 
             CombinationGroup grouped = level.correctCombinationPattern.groups.FirstOrDefault(x => x.ingredients.Count > 1);
             if (grouped != null)
             {
-                return string.Join(" and ", grouped.ingredients.Where(x => x != null).Select(x => x.DisplayName)) + " may belong in the same batch.";
+                return "Grind " + FormatIngredientNames(grouped.ingredients.Where(x => x != null)) + " together in one batch.";
             }
 
             CombinationGroup single = level.correctCombinationPattern.groups.FirstOrDefault(x => x.ingredients.Count == 1);
             return single != null && single.ingredients[0] != null
-                ? single.ingredients[0].DisplayName + " may work better as a separate batch."
+                ? "Grind " + single.ingredients[0].DisplayName + " on its own."
                 : "Two ingredients may have been mixed too early.";
+        }
+
+        private static bool IsUnusedHint(string hint, IReadOnlyList<string> usedHints)
+        {
+            return !string.IsNullOrWhiteSpace(hint) && (usedHints == null || !usedHints.Contains(hint));
+        }
+
+        private static string FormatIngredientNames(IEnumerable<IngredientData> ingredients)
+        {
+            List<string> names = ingredients
+                .Where(ingredient => ingredient != null)
+                .Select(ingredient => ingredient.DisplayName)
+                .ToList();
+            if (names.Count == 0)
+            {
+                return "these ingredients";
+            }
+
+            if (names.Count == 1)
+            {
+                return names[0];
+            }
+
+            return string.Join(", ", names.Take(names.Count - 1)) + ", and " + names[names.Count - 1];
         }
 
         private static string BuildProcessHint(RecipeLevelData level, RecipeAttemptManager attempt)
@@ -455,7 +557,7 @@ namespace TheTasteReviver
 
             if (parts.Count == 0)
             {
-                return "The process is close. Check the remaining relationship.";
+                return "The grinding settings are close. Check the remaining mistake.";
             }
 
             return "For the current batch, " + string.Join(", and ", parts) + ".";

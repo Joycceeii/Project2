@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -15,6 +18,10 @@ namespace TheTasteReviver
         public Button backButton;
         public Button refreshButton;
         public Camera sceneCamera;
+        private const string ReturnToGameButtonName = "Return To Game";
+        private RectTransform ingredientListContent;
+        private GameObject detailBackdrop;
+        private Text detailText;
 
         private void Awake()
         {
@@ -27,6 +34,17 @@ namespace TheTasteReviver
         }
 
         private void OnEnable()
+        {
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+
+            EnsureSceneObjects();
+            Refresh();
+        }
+
+        private void Start()
         {
             if (!Application.isPlaying)
             {
@@ -58,12 +76,7 @@ namespace TheTasteReviver
                 return;
             }
 
-            if (logText == null)
-            {
-                return;
-            }
-
-            logText.text = ExperimentLogManager.BuildFullLogText();
+            BuildIngredientButtons();
             Canvas.ForceUpdateCanvases();
 
             if (scrollRect != null)
@@ -126,6 +139,7 @@ namespace TheTasteReviver
             if (IsAlive(background))
             {
                 background.color = new Color(0.94f, 0.91f, 0.84f, 1f);
+                background.transform.SetAsFirstSibling();
             }
 
             Text title = EnsureText(root, "Experiment Log Title", TextAnchor.MiddleCenter, 30, FontStyle.Bold);
@@ -147,8 +161,15 @@ namespace TheTasteReviver
 
             EnsureScrollView(root);
 
-            backButton = EnsureButton(root, "Back To Test Level", new Vector2(196f, 44f), new Vector2(24f, 24f), Vector2.zero, Vector2.zero);
-            refreshButton = EnsureButton(root, "Refresh Log", new Vector2(140f, 44f), new Vector2(-24f, 24f), Vector2.one, Vector2.one);
+            if (backButton == null)
+            {
+                backButton = FindButton(root, ReturnToGameButtonName);
+            }
+
+            if (refreshButton == null)
+            {
+                refreshButton = FindButton(root, "Refresh Log");
+            }
 
             if (canvasRect != null)
             {
@@ -204,6 +225,7 @@ namespace TheTasteReviver
             mask.showMaskGraphic = false;
 
             Transform contentTransform = EnsureChild(viewportTransform, "Content");
+            contentTransform.gameObject.SetActive(true);
             RectTransform contentRect = EnsureRectTransform(contentTransform);
             if (!IsAlive(contentRect))
             {
@@ -215,6 +237,7 @@ namespace TheTasteReviver
             contentRect.pivot = new Vector2(0.5f, 1f);
             contentRect.anchoredPosition = Vector2.zero;
             contentRect.sizeDelta = new Vector2(0f, 720f);
+            ingredientListContent = contentRect;
 
             logText = EnsureComponent<Text>(contentTransform);
             if (!IsAlive(logText))
@@ -230,6 +253,7 @@ namespace TheTasteReviver
             logText.horizontalOverflow = HorizontalWrapMode.Wrap;
             logText.verticalOverflow = VerticalWrapMode.Overflow;
             logText.raycastTarget = false;
+            logText.enabled = false;
 
             ContentSizeFitter fitter = EnsureComponent<ContentSizeFitter>(contentTransform);
             if (!IsAlive(fitter))
@@ -238,7 +262,7 @@ namespace TheTasteReviver
             }
 
             fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
-            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            fitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
 
             RectTransform textRect = EnsureComponent<RectTransform>(logText.transform);
             if (!IsAlive(textRect))
@@ -255,21 +279,288 @@ namespace TheTasteReviver
             scrollRect.vertical = true;
             scrollRect.movementType = ScrollRect.MovementType.Clamped;
             scrollRect.scrollSensitivity = 32f;
+
+            EnsureDetailPanel(root);
         }
 
         private void BindButtons()
         {
+            if (backButton == null && canvas != null)
+            {
+                backButton = FindButton(canvas.transform, ReturnToGameButtonName);
+            }
+
             if (backButton != null)
             {
+                backButton.gameObject.SetActive(true);
+                backButton.interactable = true;
                 backButton.onClick.RemoveListener(BackToTestLevel);
                 backButton.onClick.AddListener(BackToTestLevel);
+                backButton.transform.SetAsLastSibling();
             }
 
             if (refreshButton != null)
             {
+                refreshButton.gameObject.SetActive(true);
+                refreshButton.interactable = true;
                 refreshButton.onClick.RemoveListener(Refresh);
                 refreshButton.onClick.AddListener(Refresh);
             }
+        }
+
+        private static Button FindButton(Transform root, string name)
+        {
+            if (!IsAlive(root) || string.IsNullOrWhiteSpace(name))
+            {
+                return null;
+            }
+
+            Transform target = root.Find(name);
+            if (!IsAlive(target))
+            {
+                Button[] buttons = root.GetComponentsInChildren<Button>(true);
+                foreach (Button button in buttons)
+                {
+                    if (IsAlive(button) && button.gameObject.name == name)
+                    {
+                        return button;
+                    }
+                }
+
+                return null;
+            }
+
+            return target.GetComponent<Button>();
+        }
+
+        private void BuildIngredientButtons()
+        {
+            if (!IsAlive(ingredientListContent))
+            {
+                EnsureSceneObjects();
+            }
+
+            if (!IsAlive(ingredientListContent))
+            {
+                return;
+            }
+
+            ingredientListContent.gameObject.SetActive(true);
+            ClearChildrenExceptText(ingredientListContent);
+            List<IngredientLogEntry> entries = ExperimentLogManager.BuildIngredientLogEntries();
+            const float buttonWidth = 190f;
+            const float buttonHeight = 42f;
+            const float gapX = 14f;
+            const float gapY = 14f;
+            const int columns = 5;
+            for (int i = 0; i < entries.Count; i++)
+            {
+                IngredientLogEntry entry = entries[i];
+                int row = i / columns;
+                int column = i % columns;
+                Button button = CreateIngredientButton(ingredientListContent, entry.ingredientName, new Vector2(column * (buttonWidth + gapX), -row * (buttonHeight + gapY)), new Vector2(buttonWidth, buttonHeight));
+                if (button == null)
+                {
+                    continue;
+                }
+
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(() => ShowIngredientDetail(entry));
+            }
+
+            int rows = Mathf.CeilToInt(entries.Count / (float)columns);
+            ingredientListContent.sizeDelta = new Vector2(0f, Mathf.Max(720f, rows * (buttonHeight + gapY) + 48f));
+        }
+
+        private static void ClearChildrenExceptText(RectTransform parent)
+        {
+            if (!IsAlive(parent))
+            {
+                return;
+            }
+
+            List<GameObject> children = new List<GameObject>();
+            foreach (Transform child in parent)
+            {
+                if (child != null)
+                {
+                    children.Add(child.gameObject);
+                }
+            }
+
+            foreach (GameObject child in children)
+            {
+                UnityEngine.Object.Destroy(child);
+            }
+        }
+
+        private static Button CreateIngredientButton(Transform parent, string labelText, Vector2 position, Vector2 size)
+        {
+            Transform transform = CreateChild(parent, "Ingredient Tag - " + labelText);
+            RectTransform rect = EnsureRectTransform(transform);
+            if (!IsAlive(rect))
+            {
+                return null;
+            }
+
+            rect.anchorMin = new Vector2(0f, 1f);
+            rect.anchorMax = new Vector2(0f, 1f);
+            rect.pivot = new Vector2(0f, 1f);
+            rect.anchoredPosition = new Vector2(24f + position.x, -24f + position.y);
+            rect.sizeDelta = size;
+
+            Image image = EnsureComponent<Image>(transform);
+            if (!IsAlive(image))
+            {
+                return null;
+            }
+            image.color = new Color(0.98f, 0.95f, 0.88f, 1f);
+
+            Button button = EnsureComponent<Button>(transform);
+            if (!IsAlive(button))
+            {
+                return null;
+            }
+            button.targetGraphic = image;
+
+            Text label = EnsureText(transform, "Label", TextAnchor.MiddleCenter, 15, FontStyle.Bold);
+            if (!IsAlive(label))
+            {
+                return button;
+            }
+            RectTransform labelRect = EnsureRectTransform(label.transform);
+            StretchToParent(labelRect);
+            label.text = labelText;
+            label.color = new Color(0.16f, 0.12f, 0.08f, 1f);
+            label.raycastTarget = false;
+            return button;
+        }
+
+        private void EnsureDetailPanel(Transform root)
+        {
+            if (!IsAlive(root))
+            {
+                return;
+            }
+
+            if (IsAlive(detailBackdrop))
+            {
+                return;
+            }
+
+            Image backdropImage = EnsureImage(root, "Ingredient Detail Backdrop");
+            detailBackdrop = backdropImage != null ? backdropImage.gameObject : null;
+            if (!IsAlive(detailBackdrop))
+            {
+                return;
+            }
+
+            RectTransform backdropRect = EnsureRectTransform(detailBackdrop.transform);
+            StretchToParent(backdropRect);
+            backdropImage.color = new Color(0f, 0f, 0f, 0.28f);
+
+            Button backdropButton = EnsureComponent<Button>(detailBackdrop.transform);
+            backdropButton.transition = Selectable.Transition.None;
+            backdropButton.targetGraphic = backdropImage;
+            backdropButton.onClick.RemoveAllListeners();
+            backdropButton.onClick.AddListener(HideIngredientDetail);
+
+            Image panelImage = EnsureImage(detailBackdrop.transform, "Ingredient Detail Panel");
+            if (!IsAlive(panelImage))
+            {
+                return;
+            }
+            RectTransform panelRect = EnsureRectTransform(panelImage.transform);
+            if (IsAlive(panelRect))
+            {
+                panelRect.anchorMin = new Vector2(0.5f, 0.5f);
+                panelRect.anchorMax = new Vector2(0.5f, 0.5f);
+                panelRect.pivot = new Vector2(0.5f, 0.5f);
+                panelRect.anchoredPosition = Vector2.zero;
+                panelRect.sizeDelta = new Vector2(720f, 520f);
+            }
+
+            panelImage.color = new Color(1f, 0.98f, 0.92f, 1f);
+
+            detailText = EnsureText(panelImage.transform, "Ingredient Detail Text", TextAnchor.UpperLeft, 17, FontStyle.Normal);
+            if (!IsAlive(detailText))
+            {
+                return;
+            }
+            RectTransform textRect = EnsureRectTransform(detailText.transform);
+            if (IsAlive(textRect))
+            {
+                textRect.anchorMin = Vector2.zero;
+                textRect.anchorMax = Vector2.one;
+                textRect.offsetMin = new Vector2(28f, 24f);
+                textRect.offsetMax = new Vector2(-28f, -24f);
+                textRect.sizeDelta = Vector2.zero;
+            }
+
+            detailText.color = new Color(0.12f, 0.1f, 0.08f, 1f);
+            detailText.horizontalOverflow = HorizontalWrapMode.Wrap;
+            detailText.verticalOverflow = VerticalWrapMode.Overflow;
+            detailText.raycastTarget = false;
+            detailBackdrop.SetActive(false);
+        }
+
+        private void ShowIngredientDetail(IngredientLogEntry entry)
+        {
+            EnsureDetailPanel(canvas != null ? canvas.transform : null);
+            if (entry == null || detailText == null || detailBackdrop == null)
+            {
+                return;
+            }
+
+            detailText.text = BuildIngredientDetailText(entry);
+            detailBackdrop.SetActive(true);
+            detailBackdrop.transform.SetAsLastSibling();
+        }
+
+        private void HideIngredientDetail()
+        {
+            if (detailBackdrop != null)
+            {
+                detailBackdrop.SetActive(false);
+            }
+        }
+
+        private static string BuildIngredientDetailText(IngredientLogEntry entry)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine(entry.ingredientName);
+            builder.AppendLine();
+            builder.AppendLine("Ingredient Traits");
+            builder.AppendLine(string.IsNullOrWhiteSpace(entry.traitDescription) ? "No traits recorded yet." : entry.traitDescription);
+
+            if (entry.levelNotes.Count > 0)
+            {
+                builder.AppendLine();
+                builder.AppendLine("Experiment Notes");
+                foreach (ExperimentIngredientEntry note in entry.levelNotes)
+                {
+                    builder.AppendLine("[" + note.levelID + " " + note.levelName + "]");
+                    List<string> parts = new List<string>();
+                    if (note.checkedRatio) parts.Add("Amount: " + note.ratio);
+                    if (note.checkedOrder) parts.Add("Order: " + note.order);
+                    if (note.checkedForce) parts.Add("Force: " + note.force);
+                    if (note.checkedSpeed) parts.Add("Speed: " + note.speed);
+                    if (note.checkedCombination) parts.Add("Batch: " + note.combination);
+                    builder.AppendLine(parts.Count == 0 ? "Used in this recipe." : string.Join(" | ", parts));
+                    builder.AppendLine();
+                }
+            }
+
+            if (entry.clues.Count > 0)
+            {
+                builder.AppendLine("Unlocked Clues");
+                foreach (UnlockedClueRecord clue in entry.clues)
+                {
+                    builder.AppendLine("- " + clue.content);
+                }
+            }
+
+            return builder.ToString().Trim();
         }
 
         private void EnsureCamera()
@@ -289,11 +580,11 @@ namespace TheTasteReviver
                 GameObject cameraObject = new GameObject("Main Camera");
                 SceneManager.MoveGameObjectToScene(cameraObject, gameObject.scene);
                 sceneCamera = cameraObject.AddComponent<Camera>();
+            }
 
-                if (Camera.main == null)
-                {
-                    cameraObject.tag = "MainCamera";
-                }
+            if (Camera.main == null || Camera.main == sceneCamera)
+            {
+                sceneCamera.gameObject.tag = "MainCamera";
             }
 
             sceneCamera.gameObject.SetActive(true);
@@ -320,7 +611,12 @@ namespace TheTasteReviver
 
             if (UnityEngine.Object.FindFirstObjectByType<EventSystem>() != null)
             {
-                return;
+                EventSystem existing = FindInControllerScene<EventSystem>();
+                if (existing != null)
+                {
+                    existing.gameObject.SetActive(true);
+                    return;
+                }
             }
 
             GameObject eventSystem = new GameObject("EventSystem");
@@ -386,54 +682,6 @@ namespace TheTasteReviver
             {
                 sceneCamera = null;
             }
-        }
-
-        private static Button EnsureButton(Transform parent, string name, Vector2 size, Vector2 position, Vector2 anchorPoint, Vector2 pivot)
-        {
-            Image image = EnsureImage(parent, name);
-            if (!IsAlive(image))
-            {
-                return null;
-            }
-
-            RectTransform rect = EnsureComponent<RectTransform>(image.transform);
-            if (!IsAlive(rect))
-            {
-                return null;
-            }
-
-            rect.anchorMin = anchorPoint;
-            rect.anchorMax = anchorPoint;
-            rect.pivot = pivot;
-            rect.sizeDelta = size;
-            rect.anchoredPosition = position;
-            image.color = new Color(0.29f, 0.35f, 0.28f, 1f);
-
-            Button button = EnsureComponent<Button>(image.transform);
-            if (!IsAlive(button))
-            {
-                return null;
-            }
-            button.targetGraphic = image;
-
-            Text label = EnsureText(image.transform, name + " Text", TextAnchor.MiddleCenter, 16, FontStyle.Bold);
-            if (!IsAlive(label))
-            {
-                return button;
-            }
-
-            RectTransform labelRect = EnsureComponent<RectTransform>(label.transform);
-            StretchToParent(labelRect);
-            if (IsAlive(labelRect))
-            {
-                labelRect.offsetMin = new Vector2(8f, 0f);
-                labelRect.offsetMax = new Vector2(-8f, 0f);
-            }
-
-            label.text = name;
-            label.color = Color.white;
-            label.raycastTarget = false;
-            return button;
         }
 
         private static Image EnsureImage(Transform parent, string name)
@@ -572,7 +820,8 @@ namespace TheTasteReviver
                 return null;
             }
 
-            GameObject obj = new GameObject(name);
+            GameObject obj = new GameObject(name, typeof(RectTransform));
+            obj.layer = parent.gameObject.layer;
             obj.transform.SetParent(parent, false);
             return obj.transform;
         }

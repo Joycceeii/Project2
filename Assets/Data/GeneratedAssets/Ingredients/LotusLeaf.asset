@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: LotusLeaf
   m_EditorClassIdentifier: 
   ingredientID: LotusLeaf
-  ingredientNameCN: Lotus Leaf
+  ingredientNameCN:
   ingredientNameEN: Lotus Leaf
-  aromaType: leafy fresh
+  aromaType: Green leaf
   initialDescription: Light and fragile. It works as a fresh wrapper note and can
     be crushed by early, heavy, or excessive handling.
   ingredientColor: {r: 0.34, g: 0.58, b: 0.3, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 1138853494395333393, guid: 997f122ca21887945b9a88b679c3572d, type: 3}
-  defaultRatioValue: 1
+  defaultRatioValue: 0

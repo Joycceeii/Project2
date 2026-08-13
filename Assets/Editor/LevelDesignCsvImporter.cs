@@ -68,7 +68,7 @@ namespace TheTasteReviver.EditorTools
                 }
 
                 runtimeDefaults.TryGetValue(id, out IngredientData defaults);
-                asset.name = id;
+                asset.name = Path.GetFileNameWithoutExtension(path);
                 asset.ingredientID = id;
                 asset.ingredientNameCN = string.Empty;
                 asset.ingredientNameEN = Get(row, "EnglishName");
@@ -117,7 +117,7 @@ namespace TheTasteReviver.EditorTools
                     AssetDatabase.CreateAsset(asset, path);
                 }
 
-                asset.name = id;
+                asset.name = Path.GetFileNameWithoutExtension(path);
                 asset.levelID = id;
                 asset.cityName = Get(row, "City");
                 asset.levelName = levelName;
@@ -486,7 +486,7 @@ namespace TheTasteReviver.EditorTools
                 throw new FileNotFoundException("Missing CSV file: " + assetPath, fullPath);
             }
 
-            List<List<string>> rows = ParseCsv(File.ReadAllText(fullPath, Encoding.UTF8));
+            List<List<string>> rows = ParseCsv(ReadAllTextShared(fullPath));
             if (rows.Count == 0)
             {
                 return new List<Dictionary<string, string>>();
@@ -563,6 +563,15 @@ namespace TheTasteReviver.EditorTools
             }
 
             return rows.Where(x => x.Any(cell => !string.IsNullOrWhiteSpace(cell))).ToList();
+        }
+
+        private static string ReadAllTextShared(string fullPath)
+        {
+            using (FileStream stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (StreamReader reader = new StreamReader(stream, Encoding.UTF8, true))
+            {
+                return reader.ReadToEnd();
+            }
         }
 
         private static List<Dictionary<string, string>> ReadOptionalCsvAsset(string assetPath)

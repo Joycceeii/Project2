@@ -13,12 +13,11 @@ MonoBehaviour:
   m_Name: SandGinger
   m_EditorClassIdentifier: 
   ingredientID: SandGinger
-  ingredientNameCN: Sand Ginger
+  ingredientNameCN:
   ingredientNameEN: Sand Ginger
-  aromaType: sharp spicy
-  initialDescription: Deep, dry, and aromatic. It needs enough pressure to open,
-    but excessive pressure turns it harsh.
+  aromaType: Root spice
+  initialDescription: Sand ginger is deep and spicy. It needs enough force to bring out its flavor.
   ingredientColor: {r: 0.78, g: 0.58, b: 0.35, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 323564556018915533, guid: 081751ced98631e40939c6e87afd0381, type: 3}
-  defaultRatioValue: 1
+  defaultRatioValue: 2

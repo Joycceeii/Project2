@@ -1,5 +1,8 @@
 LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
-L07,WhitePepper,L07_WhitePepper,Speed,Medium,,,,,,,,,,,,"L07 White Pepper focuses on speed."
-L07,WhitePepper,L07_WhitePepper,GrindDuration,20-32,,,,,,,,,,,,"L07 White Pepper focuses on speed."
-L07,Peanut,L07_Peanut,GrindDuration,20-32,,,,,,,,,,,,"L07 Peanut supports the soup aroma."
-L07,DriedTangerinePeel,L07_DriedTangerinePeel,GrindDuration,20-32,,,,,,,,,,,,"L07 Dried Tangerine Peel supports the soup aroma."
+L07,SandGinger,L07_SandGinger,Force,Heavy,,,,,,,,,,,,"Sand ginger is dry, spicy, and strong."
+L07,SandGinger,L07_SandGinger,Ratio,More,,,,,,,,,,,,"Sand ginger is dry, spicy, and strong."
+L07,DriedTangerinePeel,L07_DriedTangerinePeel,Ratio,SlightlyMore,,,,,,,,,,,,"Dried tangerine peel adds a clean citrus taste."
+L07,CoarseSalt,L07_CoarseSalt,Ratio,Less,,,,,,,,,,,,"Coarse salt should support the recipe, not lead it."
+L07,SandGinger,L07_SandGinger,GrindDuration,20-32,,,,,,,,,,,,"Sand ginger is dry, spicy, and strong."
+L07,DriedTangerinePeel,L07_DriedTangerinePeel,GrindDuration,20-32,,,,,,,,,,,,"Dried tangerine peel adds a clean citrus taste."
+L07,CoarseSalt,L07_CoarseSalt,GrindDuration,20-32,,,,,,,,,,,,"Coarse salt should support the recipe, not lead it."

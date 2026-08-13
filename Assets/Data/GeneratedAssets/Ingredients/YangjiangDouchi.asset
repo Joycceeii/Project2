@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: YangjiangDouchi
   m_EditorClassIdentifier: 
   ingredientID: YangjiangDouchi
-  ingredientNameCN: Yangjiang Douchi
+  ingredientNameCN:
   ingredientNameEN: Yangjiang Douchi
-  aromaType: fermented savory
+  aromaType: Fermented bean
   initialDescription: Savory and fermented. It carries body, but rough handling can
     make it dull, bitter, or muddy.
   ingredientColor: {r: 0.18, g: 0.14, b: 0.1, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 7654612238255230900, guid: 8f650f1183ad74a4684d5a39c0efef52, type: 3}
-  defaultRatioValue: 1
+  defaultRatioValue: 2

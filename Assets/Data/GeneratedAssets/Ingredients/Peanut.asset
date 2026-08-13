@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Peanut
   m_EditorClassIdentifier: 
   ingredientID: Peanut
-  ingredientNameCN: Peanut
+  ingredientNameCN:
   ingredientNameEN: Peanut
-  aromaType: nutty
-  initialDescription: 
+  aromaType: Roasted nut
+  initialDescription: Peanut gives a warm roasted flavor. It works well with other nutty ingredients.
   ingredientColor: {r: 0.72, g: 0.48, b: 0.27, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 8015292716764687828, guid: 579fa77a6cde7af46be4efac10704002, type: 3}

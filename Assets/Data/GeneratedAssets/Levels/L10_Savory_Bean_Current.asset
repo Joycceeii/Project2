@@ -1,0 +1,230 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: L10_Savory_Bean_Current
+  m_EditorClassIdentifier: 
+  levelID: L10
+  levelName: Savory Bean Current
+  cityName: Yangjiang
+  targetTasteName: Force Speed Ratio And Order Challenge
+  levelIntro: "Yangjiang douchi should be the main savory flavor. Ginger, dried tangerine peel, and salt should support it."
+  maxIngredientCount: 4
+  availableIngredients:
+  - {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
+  - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+  requiredIngredients:
+  - {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
+  - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+  forbiddenIngredients: []
+  unlockedDimensions: 04000000050000000200000001000000
+  lockedDimensions: 03000000
+  correctIngredientOrder:
+  - {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
+  - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+  correctRatioPattern:
+  - ingredient: {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
+    ratioLevel: 5
+  - ingredient: {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+    ratioLevel: 4
+  - ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    ratioLevel: 2
+  - ingredient: {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+    ratioLevel: 1
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
+    - ingredients:
+      - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+    - ingredients:
+      - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    - ingredients:
+      - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+  targetForceLevel: 1
+  targetSpeedLevel: 1
+  minGrindDuration: 28
+  maxGrindDuration: 45
+  passingScore: 90
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 1
+    enableRatio: 1
+    enableCombination: 0
+    enableForce: 1
+    enableSpeed: 1
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 01000000020000000500000004000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L10_Douchi_Force
+    title: Yangjiang Douchi - Force Clue
+    content: "Yangjiang douchi works best with medium force. Too little is weak; too much makes it muddy."
+    relatedIngredients:
+    - {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
+    relatedDimension: 4
+  - clueId: L10_Douchi_Ratio
+    title: Yangjiang Douchi - Ratio Clue
+    content: "Yangjiang douchi can be the main savory flavor, but too much makes the recipe heavy."
+    relatedIngredients:
+    - {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
+    relatedDimension: 2
+  - clueId: L10_Ginger_Speed
+    title: Ginger - Speed Clue
+    content: Ginger works best at medium speed. Too fast can make it too sharp.
+    relatedIngredients:
+    - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+    relatedDimension: 5
+  - clueId: L10_Ginger_Order
+    title: Ginger - Order Clue
+    content: "Ginger works well in the middle, after the base flavor is set."
+    relatedIngredients:
+    - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+    relatedDimension: 1
+  fallbackHintText: No new hint for now. Keep what worked
+  progressiveHintRules:
+  - ruleId: L10_Hint_Douchi_Ratio
+    priority: 22
+    mechanic: 2
+    hintText: Yangjiang douchi should be the largest amount. It is the main savory flavor.
+  - ruleId: L10_Hint_CoarseSalt_Ratio
+    priority: 21
+    mechanic: 2
+    hintText: Coarse salt should be the smallest amount. It should only support the recipe.
+  - ruleId: L10_Hint_Douchi_Order
+    priority: 22
+    mechanic: 1
+    hintText: Start with Yangjiang douchi to build the savory base.
+  - ruleId: L10_Hint_Ginger_Order
+    priority: 21
+    mechanic: 1
+    hintText: Ginger should come after douchi and before dried tangerine peel.
+  - ruleId: L10_Hint_Tail_Order
+    priority: 20
+    mechanic: 1
+    hintText: Use dried tangerine peel near the end. Keep coarse salt very light.
+  ingredientProfiles:
+  - profileTag: L10_YangjiangDouchi
+    ingredient: {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 1
+      enableSpeed: 1
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 5
+    targetOrderIndex: 0
+    targetCombinationKey: 
+    minGrindDuration: 28
+    maxGrindDuration: 45
+    levelTraitDescription: "Yangjiang douchi is fermented, savory, and strong."
+    responseHintRules: []
+  - profileTag: L10_Ginger
+    ingredient: {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 1
+      enableGrindDuration: 0
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 4
+    targetOrderIndex: 1
+    targetCombinationKey: 
+    minGrindDuration: 3
+    maxGrindDuration: 6
+    levelTraitDescription: Ginger adds a fresh sharp taste.
+    responseHintRules: []
+  - profileTag: L10_DriedTangerinePeel
+    ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 0
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 2
+    targetOrderIndex: 2
+    targetCombinationKey: 
+    minGrindDuration: 3
+    maxGrindDuration: 6
+    levelTraitDescription: Dried tangerine peel adds a bright citrus taste.
+    responseHintRules: []
+  - profileTag: L10_CoarseSalt
+    ingredient: {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 1
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 0
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 1
+    targetOrderIndex: 3
+    targetCombinationKey: 
+    minGrindDuration: 3
+    maxGrindDuration: 6
+    levelTraitDescription: Coarse salt is a low mineral anchor.
+    responseHintRules: []
+  successFeedback: "Douchi is the main savory flavor, with ginger, citrus, and light salt behind it."
+  closeFeedback: Very close. Check one process or structure setting.
+  wrongFeedback: "Salt, ginger, or citrus is too strong, or the douchi flavor is unclear."

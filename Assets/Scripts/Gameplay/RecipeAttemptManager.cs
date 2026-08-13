@@ -16,6 +16,9 @@ namespace TheTasteReviver
         public List<RatioRequirement> selectedRatioPattern = new List<RatioRequirement>();
         public List<GrindingBatch> grindingBatches = new List<GrindingBatch>();
 
+        private readonly Dictionary<IngredientData, int> batchByIngredient = new Dictionary<IngredientData, int>();
+        private int currentBatchID = 1;
+
         public IReadOnlyList<IngredientData> IngredientOrder => ingredientOrder;
         public IReadOnlyList<IngredientInstance> IngredientAmounts => ingredientAmounts;
         public IReadOnlyList<GrindingBatch> GrindingBatches => grindingBatches;
@@ -47,7 +50,7 @@ namespace TheTasteReviver
 
             if (uiManager != null && uiManager.IsRatioSelectionOpen)
             {
-                uiManager.ShowHint("Choose the ratio for the current ingredient first.");
+                uiManager.ShowHint("Choose this ingredient's amount first.");
                 return false;
             }
 
@@ -87,6 +90,8 @@ namespace TheTasteReviver
             ingredientOrder.Clear();
             selectedRatioPattern.Clear();
             grindingBatches.Clear();
+            batchByIngredient.Clear();
+            currentBatchID = 1;
             HasEvaluated = false;
             HasAutoEvaluated = false;
             forceController?.ResetToDefault();
@@ -150,33 +155,56 @@ namespace TheTasteReviver
             return grindingBatches.Count > 0 ? grindingBatches[0] : null;
         }
 
+        public void StartNewBatch()
+        {
+            if (!HasIngredientsInBowl)
+            {
+                uiManager?.ShowHint("Add an ingredient before starting another batch.");
+                return;
+            }
+
+            bool currentBatchHasIngredients = batchByIngredient.Values.Any(batchID => batchID == currentBatchID);
+            if (!currentBatchHasIngredients)
+            {
+                uiManager?.ShowHint("The next batch is already empty.");
+                return;
+            }
+
+            currentBatchID++;
+            uiManager?.RefreshAttemptPanels(this);
+            uiManager?.ShowHint("Next ingredients will start a separate batch.");
+        }
+
         private void RebuildCurrentBatch()
         {
             grindingBatches.Clear();
-            GrindingBatch batch = new GrindingBatch
-            {
-                batchID = 1,
-                forceLevel = forceController != null ? forceController.CurrentForceLevel : ForceLevel.Medium,
-                speedLevel = pestleController != null ? pestleController.CurrentSpeedLevel : SpeedLevel.Medium,
-                grindDuration = pestleController != null ? pestleController.GrindDuration : 0f
-            };
 
-            foreach (IngredientInstance instance in ingredientAmounts)
-            {
-                if (instance.ingredient != null)
-                {
-                    batch.ingredientsInBatch.Add(instance.ingredient);
-                }
-            }
-
-            batch.ingredientOrderInBatch.AddRange(ingredientOrder);
             Dictionary<IngredientData, RatioLevel> pattern = CalculateRatioPattern(out _);
-            foreach (KeyValuePair<IngredientData, RatioLevel> pair in pattern)
-            {
-                batch.ratioPatternInBatch.Add(new RatioRequirement { ingredient = pair.Key, ratioLevel = pair.Value });
-            }
+            IEnumerable<IGrouping<int, IngredientInstance>> groups = ingredientAmounts
+                .Where(instance => instance != null && instance.ingredient != null)
+                .GroupBy(instance => batchByIngredient.TryGetValue(instance.ingredient, out int batchID) ? batchID : 1)
+                .OrderBy(group => group.Key);
 
-            grindingBatches.Add(batch);
+            foreach (IGrouping<int, IngredientInstance> group in groups)
+            {
+                GrindingBatch batch = new GrindingBatch
+                {
+                    batchID = group.Key,
+                    forceLevel = forceController != null ? forceController.CurrentForceLevel : ForceLevel.Medium,
+                    speedLevel = pestleController != null ? pestleController.CurrentSpeedLevel : SpeedLevel.Medium,
+                    grindDuration = pestleController != null ? pestleController.GrindDuration : 0f
+                };
+
+                HashSet<IngredientData> batchIngredients = new HashSet<IngredientData>(group.Select(instance => instance.ingredient));
+                batch.ingredientsInBatch.AddRange(batchIngredients);
+                batch.ingredientOrderInBatch.AddRange(ingredientOrder.Where(batchIngredients.Contains));
+                foreach (KeyValuePair<IngredientData, RatioLevel> pair in pattern.Where(pair => batchIngredients.Contains(pair.Key)))
+                {
+                    batch.ratioPatternInBatch.Add(new RatioRequirement { ingredient = pair.Key, ratioLevel = pair.Value });
+                }
+
+                grindingBatches.Add(batch);
+            }
         }
 
         private void AddIngredientWithRatio(IngredientData ingredient, RatioLevel ratio)
@@ -184,6 +212,7 @@ namespace TheTasteReviver
             ingredientAmounts.Add(new IngredientInstance(ingredient, 1));
             ingredientOrder.Add(ingredient);
             selectedRatioPattern.Add(new RatioRequirement { ingredient = ingredient, ratioLevel = ratio });
+            batchByIngredient[ingredient] = currentBatchID;
             RebuildCurrentBatch();
             uiManager?.RefreshAttemptPanels(this);
             if (uiManager != null
@@ -204,7 +233,7 @@ namespace TheTasteReviver
             }
             else if (limit == 2)
             {
-                choices = new List<RatioLevel> { RatioLevel.Less, RatioLevel.More };
+                choices = new List<RatioLevel> { RatioLevel.VeryLess, RatioLevel.Less };
             }
             else if (limit == 3)
             {

@@ -1,0 +1,170 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: L08_Pepper_Held_in_Balance
+  m_EditorClassIdentifier: 
+  levelID: L08
+  levelName: Pepper Held in Balance
+  cityName: Shantou
+  targetTasteName: Speed Challenge
+  levelIntro: "White pepper should stay clear without becoming harsh. Peanut and dried tangerine peel should support it."
+  maxIngredientCount: 3
+  availableIngredients:
+  - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
+  - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
+  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  requiredIngredients:
+  - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
+  - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
+  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  forbiddenIngredients: []
+  unlockedDimensions: 05000000
+  lockedDimensions: 04000000020000000300000001000000
+  correctIngredientOrder:
+  - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
+  - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
+  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  correctRatioPattern:
+  - ingredient: {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
+    ratioLevel: 5
+  - ingredient: {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
+    ratioLevel: 4
+  - ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    ratioLevel: 2
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
+    - ingredients:
+      - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
+    - ingredients:
+      - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  targetForceLevel: 1
+  targetSpeedLevel: 1
+  minGrindDuration: 20
+  maxGrindDuration: 32
+  passingScore: 90
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 0
+    enableRatio: 0
+    enableCombination: 0
+    enableForce: 0
+    enableSpeed: 1
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 05000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L08_WhitePepper_Speed
+    title: White Pepper - Speed Clue
+    content: "White pepper works best at medium speed. Too fast makes it harsh; too slow makes it weak."
+    relatedIngredients:
+    - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
+    relatedDimension: 5
+  fallbackHintText: No new hint for now. Keep what worked
+  progressiveHintRules:
+  - ruleId: L08_Hint_Speed
+    priority: 20
+    mechanic: 5
+    hintText: White pepper should stay at a medium grinding speed. Too fast makes it harsh.
+  ingredientProfiles:
+  - profileTag: L08_WhitePepper
+    ingredient: {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 0
+      enableRatio: 0
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 1
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 0
+    targetOrderIndex: -1
+    targetCombinationKey: 
+    minGrindDuration: 20
+    maxGrindDuration: 32
+    levelTraitDescription: White pepper is a clear sharp spice that spreads quickly.
+    responseHintRules: []
+  - profileTag: L08_Peanut
+    ingredient: {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 0
+      enableRatio: 0
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 0
+    targetOrderIndex: -1
+    targetCombinationKey: 
+    minGrindDuration: 20
+    maxGrindDuration: 32
+    levelTraitDescription: Peanut makes the soup taste warmer and rounder.
+    responseHintRules: []
+  - profileTag: L08_DriedTangerinePeel
+    ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 0
+      enableRatio: 0
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 0
+    targetOrderIndex: -1
+    targetCombinationKey: 
+    minGrindDuration: 20
+    maxGrindDuration: 32
+    levelTraitDescription: Dried tangerine peel keeps the soup light and citrusy.
+    responseHintRules: []
+  successFeedback: "White pepper is clear, peanut adds warmth, and citrus keeps it light."
+  closeFeedback: Very close. Check the speed or grinding time.
+  wrongFeedback: "White pepper is too harsh, or the support flavors are too weak."

@@ -1,0 +1,154 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: L06_Soft_Sesame_Paste
+  m_EditorClassIdentifier: 
+  levelID: L06
+  levelName: Soft Sesame Paste
+  cityName: Shunde
+  targetTasteName: Subtle Balance
+  levelIntro: A small change in amount can shift how the sesame paste feels.
+  maxIngredientCount: 2
+  availableIngredients:
+  - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
+  - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
+  requiredIngredients:
+  - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
+  - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
+  forbiddenIngredients: []
+  unlockedDimensions: 02000000
+  lockedDimensions: 04000000050000000300000001000000
+  correctIngredientOrder:
+  - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
+  - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
+  correctRatioPattern:
+  - ingredient: {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
+    ratioLevel: 2
+  - ingredient: {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
+    ratioLevel: 1
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
+    - ingredients:
+      - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
+  targetForceLevel: 1
+  targetSpeedLevel: 1
+  minGrindDuration: 14
+  maxGrindDuration: 22
+  passingScore: 100
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 0
+    enableRatio: 1
+    enableCombination: 0
+    enableForce: 0
+    enableSpeed: 0
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 02000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L06_BlackSesame_Ratio
+    title: Black Sesame - Ratio Clue
+    content: "Use a little black sesame. It should be stronger than glutinous rice, but not heavy."
+    relatedIngredients:
+    - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
+    relatedDimension: 2
+  - clueId: L06_GlutinousRice_Ratio
+    title: Glutinous Rice - Ratio Clue
+    content: Use the smallest amount of glutinous rice. It should only smooth the paste.
+    relatedIngredients:
+    - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
+    relatedDimension: 2
+  fallbackHintText: No new hint for now. Keep what worked
+  progressiveHintRules:
+  - ruleId: L06_Hint_BlackSesame_Ratio
+    priority: 21
+    mechanic: 2
+    hintText: Black sesame should use the larger of the two small amounts.
+  - ruleId: L06_Hint_GlutinousRice_Ratio
+    priority: 20
+    mechanic: 2
+    hintText: Glutinous rice should use the smallest amount.
+  ingredientProfiles:
+  - profileTag: L06_BlackSesame
+    ingredient: {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 0
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 2
+    targetOrderIndex: -1
+    targetCombinationKey: 
+    minGrindDuration: 14
+    maxGrindDuration: 22
+    levelTraitDescription: Black sesame gives the paste its strong roasted taste.
+    responseHintRules: []
+  - profileTag: L06_GlutinousRice
+    ingredient: {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 0
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 1
+    targetOrderIndex: -1
+    targetCombinationKey: 
+    minGrindDuration: 14
+    maxGrindDuration: 22
+    levelTraitDescription: Glutinous rice makes the paste smooth and soft.
+    responseHintRules: []
+  successFeedback: "Black sesame is slightly stronger, and glutinous rice keeps the paste smooth."
+  closeFeedback: Very close. Adjust the ratio or grinding time a little.
+  wrongFeedback: The sesame flavor is not clear enough. Check the ratio and grinding time.

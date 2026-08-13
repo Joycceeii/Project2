@@ -1,0 +1,184 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93d77098594300848a3dd7d79496bee5, type: 3}
+  m_Name: L07_Sand_Ginger_Core
+  m_EditorClassIdentifier: 
+  levelID: L07
+  levelName: Sand Ginger Core
+  cityName: Meizhou
+  targetTasteName: Force And Ratio Challenge
+  levelIntro: "Sand ginger should be the main flavor. Dried tangerine peel and coarse salt should support it."
+  maxIngredientCount: 3
+  availableIngredients:
+  - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
+  - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  requiredIngredients:
+  - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
+  - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  forbiddenIngredients: []
+  unlockedDimensions: 0400000002000000
+  lockedDimensions: 050000000300000001000000
+  correctIngredientOrder:
+  - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
+  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+  correctRatioPattern:
+  - ingredient: {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
+    ratioLevel: 5
+  - ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    ratioLevel: 4
+  - ingredient: {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+    ratioLevel: 2
+  correctCombinationPattern:
+    groups:
+    - ingredients:
+      - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
+    - ingredients:
+      - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    - ingredients:
+      - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+  targetForceLevel: 2
+  targetSpeedLevel: 1
+  minGrindDuration: 20
+  maxGrindDuration: 32
+  passingScore: 90
+  enabledMechanics:
+    enableIngredientSelection: 0
+    enableIngredientOrder: 0
+    enableRatio: 1
+    enableCombination: 0
+    enableForce: 1
+    enableSpeed: 0
+    enableGrindDuration: 1
+  feedbackTexts:
+    forceTooLight: Grinding force is too light.
+    forceTooHeavy: Grinding force is too heavy.
+    forceCorrect: Grinding force is correct.
+    speedTooSlow: Grinding speed is too slow.
+    speedTooFast: Grinding speed is too fast.
+    speedCorrect: Grinding speed is correct.
+    durationTooShort: Grinding duration is too short.
+    durationCorrect: Grinding duration is correct.
+    durationTooLong: Grinding duration is too long.
+    selectionCorrect: Ingredient selection is correct.
+    selectionWrong: Ingredient selection does not match the target.
+    orderCorrect: Ingredient order is correct.
+    orderPartial: Ingredient order is partially correct.
+    orderWrong: Ingredient order does not match the target.
+    ratioCorrect: Ratio pattern is correct.
+    ratioAmbiguous: Ratio pattern is still ambiguous.
+    combinationCorrect: Combination pattern is correct.
+    combinationWrong: Combination pattern does not match the target.
+  hintSettings:
+    hintPriority: 0200000004000000
+    maxOrderHints: 5
+    maxRatioHints: 5
+    maxCombinationHints: 3
+    maxProcessHints: 2
+  scoringWeights:
+    ingredientSelection: 20
+    ingredientOrder: 15
+    ratio: 20
+    combination: 15
+    force: 10
+    speed: 10
+    grindDuration: 10
+  unlockCluesOnComplete:
+  - clueId: L07_SandGinger_Force
+    title: Sand Ginger - Force Clue
+    content: "Sand ginger needs heavy force, but too much grinding can still make it harsh."
+    relatedIngredients:
+    - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
+    relatedDimension: 4
+  - clueId: L07_CoarseSalt_Ratio
+    title: Coarse Salt - Ratio Clue
+    content: Coarse salt should stay in the background. Do not make it the main flavor.
+    relatedIngredients:
+    - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+    relatedDimension: 2
+  fallbackHintText: No new hint for now. Keep what worked
+  progressiveHintRules:
+  - ruleId: L07_Hint_SandGinger_Ratio
+    priority: 22
+    mechanic: 2
+    hintText: Sand ginger should be the strongest flavor. Give it the highest amount.
+  - ruleId: L07_Hint_CoarseSalt_Ratio
+    priority: 21
+    mechanic: 2
+    hintText: Coarse salt should be the smallest amount. It should support the spice
+  - ruleId: L07_Hint_Peel_Ratio
+    priority: 20
+    mechanic: 2
+    hintText: "Use more dried tangerine peel than coarse salt, but less than sand ginger."
+  ingredientProfiles:
+  - profileTag: L07_SandGinger
+    ingredient: {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 0
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 1
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 2
+    targetSpeedLevel: 1
+    targetRatioLevel: 5
+    targetOrderIndex: -1
+    targetCombinationKey: 
+    minGrindDuration: 20
+    maxGrindDuration: 32
+    levelTraitDescription: "Sand ginger is dry, spicy, and strong."
+    responseHintRules: []
+  - profileTag: L07_DriedTangerinePeel
+    ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 0
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 4
+    targetOrderIndex: -1
+    targetCombinationKey: 
+    minGrindDuration: 20
+    maxGrindDuration: 32
+    levelTraitDescription: Dried tangerine peel adds a clean citrus taste.
+    responseHintRules: []
+  - profileTag: L07_CoarseSalt
+    ingredient: {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 0
+      enableRatio: 1
+      enableCombination: 0
+      enableForce: 0
+      enableSpeed: 0
+      enableGrindDuration: 1
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 2
+    targetOrderIndex: -1
+    targetCombinationKey: 
+    minGrindDuration: 20
+    maxGrindDuration: 32
+    levelTraitDescription: "Coarse salt should support the recipe, not lead it."
+    responseHintRules: []
+  successFeedback: "Sand ginger is clear, with a little citrus and salt behind it."
+  closeFeedback: "Very close. Check the force, ratio, or grinding time."
+  wrongFeedback: "Salt or citrus is too strong, and sand ginger is not the main flavor."

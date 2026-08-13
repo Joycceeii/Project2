@@ -13,12 +13,11 @@ MonoBehaviour:
   m_Name: WhitePepper
   m_EditorClassIdentifier: 
   ingredientID: WhitePepper
-  ingredientNameCN: White Pepper
+  ingredientNameCN:
   ingredientNameEN: White Pepper
-  aromaType: peppery
-  initialDescription: Clear and piercing. It needs a controlled release; rushing
-    it makes the spice harsh.
+  aromaType: Sharp spice
+  initialDescription: White pepper is sharp and quick to spread. Too much grinding can make it harsh.
   ingredientColor: {r: 0.8, g: 0.77, b: 0.68, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 199215721214909720, guid: 37922b068597d084497c94e676092047, type: 3}
-  defaultRatioValue: 1
+  defaultRatioValue: 2

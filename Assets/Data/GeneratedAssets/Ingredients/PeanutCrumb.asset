@@ -16,8 +16,7 @@ MonoBehaviour:
   ingredientNameCN: Peanut Crumb
   ingredientNameEN: Peanut Crumb
   aromaType: warm nutty
-  initialDescription: Warm roasted nut aroma. It is gentle and can be covered by
-    sharper spices.
+  initialDescription: Peanut crumb is warm and nutty. Stronger flavors can cover it easily.
   ingredientColor: {r: 0.68, g: 0.46, b: 0.25, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 8378243839497634870, guid: b227e026ab882d24d8e4a17bcaf4fcf7, type: 3}
