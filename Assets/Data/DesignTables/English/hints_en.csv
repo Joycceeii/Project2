@@ -40,14 +40,14 @@ L08,ProgressiveHint,L08_Hint_Speed,Evaluate hint,Speed,20,,,White pepper should 
 L08,PermanentClue,L08_WhitePepper_Speed,Unlocked after Correct,Speed,0,,,White pepper works best at medium speed. Too fast makes it harsh; too slow makes it weak.,White Pepper - Speed Clue,WhitePepper,Yes
 L09,ProgressiveHint,L09_Hint_RedBean_Ratio,Evaluate hint,Ratio,22,,,"Red bean should be the largest amount. It is the base of this recipe.",,RedBean,No
 L09,ProgressiveHint,L09_Hint_LotusLeaf_Ratio,Evaluate hint,Ratio,21,,,Lotus leaf should be the smallest amount. It is light and easy to cover.,,LotusLeaf,No
-L09,ProgressiveHint,L09_Hint_Rice_Lotus_Combination,Evaluate hint,Combination,20,,,Glutinous rice can hold the lotus leaf flavor. Grind them together in one batch.,,"GlutinousRice,LotusLeaf",No
+L09,ProgressiveHint,L09_Hint_Rice_Lotus_Combination,Evaluate hint,Combination,20,,,"Glutinous rice can hold the lotus leaf flavor. Add lotus leaf right after glutinous rice in the same batch.",,"GlutinousRice,LotusLeaf",No
 L09,ProgressiveHint,L09_Hint_Sesame_Lotus_Combination,Evaluate hint,Combination,19,,,Black sesame is strong. Keep it separate from lotus leaf.,,"BlackSesame,LotusLeaf",No
 L09,ProgressiveHint,L09_Hint_RedBean_Order,Evaluate hint,IngredientOrder,22,,,Red bean should go first. It builds the base.,,RedBean,No
-L09,ProgressiveHint,L09_Hint_LotusLeaf_Order,Evaluate hint,IngredientOrder,21,,,Lotus leaf should go last so its fresh flavor is not lost.,,LotusLeaf,No
-L09,ProgressiveHint,L09_Hint_Middle_Order,Evaluate hint,IngredientOrder,20,,,"After red bean, add glutinous rice, then a smaller amount of black sesame.",,"GlutinousRice,BlackSesame",No
+L09,ProgressiveHint,L09_Hint_LotusLeaf_Order,Evaluate hint,IngredientOrder,21,,,Lotus leaf should come right after glutinous rice, in the same batch.,,LotusLeaf,No
+L09,ProgressiveHint,L09_Hint_Middle_Order,Evaluate hint,IngredientOrder,20,,,"After red bean, add glutinous rice, then lotus leaf in that same batch. Add black sesame after that in its own batch.",,"GlutinousRice,BlackSesame",No
 L09,PermanentClue,L09_LotusLeaf_Ratio,Unlocked after Correct,Ratio,0,,,Lotus leaf works best in a very small amount.,Lotus Leaf - Ratio Clue,LotusLeaf,Yes
 L09,PermanentClue,L09_LotusLeaf_Combination,Unlocked after Correct,Combination,0,,,"Lotus leaf can be paired with glutinous rice, but black sesame is too strong for it.",Lotus Leaf - Combination Clue,LotusLeaf,Yes
-L09,PermanentClue,L09_LotusLeaf_Order,Unlocked after Correct,IngredientOrder,0,,,"Add lotus leaf near the end. If it is used too early, its fresh flavor gets covered.",Lotus Leaf - Order Clue,LotusLeaf,Yes
+L09,PermanentClue,L09_LotusLeaf_Order,Unlocked after Correct,IngredientOrder,0,,,"Add lotus leaf right after glutinous rice so it joins the rice batch without being added too early.",Lotus Leaf - Order Clue,LotusLeaf,Yes
 L10,ProgressiveHint,L10_Hint_Douchi_Ratio,Evaluate hint,Ratio,22,,,"Yangjiang douchi should be the largest amount. It is the main savory flavor.",,YangjiangDouchi,No
 L10,ProgressiveHint,L10_Hint_CoarseSalt_Ratio,Evaluate hint,Ratio,21,,,Coarse salt should be the smallest amount. It should only support the recipe.,,CoarseSalt,No
 L10,ProgressiveHint,L10_Hint_Douchi_Order,Evaluate hint,IngredientOrder,22,,,Start with Yangjiang douchi to build the savory base.,,YangjiangDouchi,No

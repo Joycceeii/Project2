@@ -1,8 +1,8 @@
 LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
 L09,RedBean,L09_RedBean,IngredientOrder,0,,,,,,,,,,,,"Red bean gives the dumpling a thick sweet base."
 L09,GlutinousRice,L09_GlutinousRice,IngredientOrder,1,,,,,,,,,,,,"Glutinous rice makes the dumpling sticky and soft."
-L09,BlackSesame,L09_BlackSesame,IngredientOrder,2,,,,,,,,,,,,"Black sesame adds a light roasted taste."
-L09,LotusLeaf,L09_LotusLeaf,IngredientOrder,3,,,,,,,,,,,,"Lotus leaf adds a light green taste."
+L09,LotusLeaf,L09_LotusLeaf,IngredientOrder,2,,,,,,,,,,,,"Lotus leaf adds a light green taste."
+L09,BlackSesame,L09_BlackSesame,IngredientOrder,3,,,,,,,,,,,,"Black sesame adds a light roasted taste."
 L09,RedBean,L09_RedBean,Ratio,More,,,,,,,,,,,,"Red bean gives the dumpling a thick sweet base."
 L09,GlutinousRice,L09_GlutinousRice,Ratio,SlightlyMore,,,,,,,,,,,,"Glutinous rice makes the dumpling sticky and soft."
 L09,BlackSesame,L09_BlackSesame,Ratio,Less,,,,,,,,,,,,"Black sesame adds a light roasted taste."

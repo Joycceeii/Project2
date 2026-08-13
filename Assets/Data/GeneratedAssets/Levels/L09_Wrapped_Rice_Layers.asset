@@ -34,8 +34,8 @@ MonoBehaviour:
   correctIngredientOrder:
   - {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
   - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
-  - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
   - {fileID: 11400000, guid: d9e3e41cc52bba94997680b94ac53836, type: 2}
+  - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
   correctRatioPattern:
   - ingredient: {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
     ratioLevel: 5
@@ -132,7 +132,7 @@ MonoBehaviour:
   - ruleId: L09_Hint_Rice_Lotus_Combination
     priority: 20
     mechanic: 3
-    hintText: Glutinous rice can hold the lotus leaf flavor. Grind them together in one batch.
+    hintText: Glutinous rice can hold the lotus leaf flavor. Add lotus leaf right after glutinous rice in the same batch.
   - ruleId: L09_Hint_Sesame_Lotus_Combination
     priority: 19
     mechanic: 3
@@ -144,11 +144,11 @@ MonoBehaviour:
   - ruleId: L09_Hint_LotusLeaf_Order
     priority: 21
     mechanic: 1
-    hintText: Lotus leaf should go last so its fresh flavor is not lost.
+    hintText: Lotus leaf should come right after glutinous rice, in the same batch.
   - ruleId: L09_Hint_Middle_Order
     priority: 20
     mechanic: 1
-    hintText: "After red bean, add glutinous rice, then a smaller amount of black sesame."
+    hintText: After red bean, add glutinous rice, then lotus leaf in that same batch. Add black sesame after that in its own batch.
   ingredientProfiles:
   - profileTag: L09_RedBean
     ingredient: {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
@@ -201,7 +201,7 @@ MonoBehaviour:
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 2
-    targetOrderIndex: 2
+    targetOrderIndex: 3
     targetCombinationKey: BlackSesame
     minGrindDuration: 25
     maxGrindDuration: 40
@@ -220,12 +220,12 @@ MonoBehaviour:
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 1
-    targetOrderIndex: 3
+    targetOrderIndex: 2
     targetCombinationKey: GlutinousRice+LotusLeaf
     minGrindDuration: 25
     maxGrindDuration: 40
     levelTraitDescription: Lotus leaf adds a light green taste.
     responseHintRules: []
-  successFeedback: "The dumpling flavor has clear layers: red bean, sticky rice, sesame, and lotus leaf."
+  successFeedback: "The dumpling flavor has clear layers: red bean, sticky rice, lotus leaf, and sesame."
   closeFeedback: "Very close. Check the ratio, grouping, order, or time."
   wrongFeedback: The layers are unclear. One flavor may be too strong or added at the wrong time.
