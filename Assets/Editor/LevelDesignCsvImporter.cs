@@ -46,10 +46,6 @@ namespace TheTasteReviver.EditorTools
 
         private static Dictionary<string, IngredientData> ImportIngredients(List<Dictionary<string, string>> rows)
         {
-            Dictionary<string, IngredientData> runtimeDefaults = TestLevelInitializer.CreateRuntimeIngredients()
-                .Where(x => x != null && !string.IsNullOrWhiteSpace(x.ingredientID))
-                .ToDictionary(x => x.ingredientID, x => x);
-
             Dictionary<string, IngredientData> created = new Dictionary<string, IngredientData>();
             foreach (Dictionary<string, string> row in rows)
             {
@@ -61,13 +57,15 @@ namespace TheTasteReviver.EditorTools
 
                 string path = IngredientsPath + "/" + Sanitize(id) + ".asset";
                 IngredientData asset = AssetDatabase.LoadAssetAtPath<IngredientData>(path);
+                Color existingColor = asset != null ? asset.ingredientColor : Color.white;
+                Sprite existingIcon = asset != null ? asset.icon : null;
+                GameObject existingPrefab = asset != null ? asset.prefab : null;
                 if (asset == null)
                 {
                     asset = ScriptableObject.CreateInstance<IngredientData>();
                     AssetDatabase.CreateAsset(asset, path);
                 }
 
-                runtimeDefaults.TryGetValue(id, out IngredientData defaults);
                 asset.name = Path.GetFileNameWithoutExtension(path);
                 asset.ingredientID = id;
                 asset.ingredientNameCN = string.Empty;
@@ -75,15 +73,9 @@ namespace TheTasteReviver.EditorTools
                 asset.aromaType = Get(row, "AromaType");
                 asset.initialDescription = Get(row, "InitialDescription");
                 asset.defaultRatioValue = DefaultRatioToInt(Get(row, "DefaultRatio"));
-                if (defaults != null)
-                {
-                    asset.ingredientColor = defaults.ingredientColor;
-                    asset.icon = defaults.icon;
-                    if (asset.prefab == null && defaults.prefab != null)
-                    {
-                        asset.prefab = defaults.prefab;
-                    }
-                }
+                asset.ingredientColor = existingColor;
+                asset.icon = existingIcon;
+                asset.prefab = existingPrefab;
 
                 EditorUtility.SetDirty(asset);
                 created[id] = asset;
@@ -361,7 +353,6 @@ namespace TheTasteReviver.EditorTools
             TestLevelInitializer initializer = UnityEngine.Object.FindFirstObjectByType<TestLevelInitializer>();
             if (initializer != null)
             {
-                initializer.useRuntimeTenLevelData = false;
                 initializer.ingredients = ingredients;
                 initializer.levels = levels;
                 EditorUtility.SetDirty(initializer);

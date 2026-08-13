@@ -471,9 +471,18 @@ namespace TheTasteReviver
                 if (target.Count == 1)
                 {
                     IngredientData ingredient = target[0];
+                    if (containingBatches.Count == 0)
+                    {
+                        string hint = BuildMissingSingleBatchHint(ingredient, actualBatches);
+                        if (IsUnusedHint(hint, usedHints))
+                        {
+                            return hint;
+                        }
+                    }
+
                     if (hasExtraIngredients)
                     {
-                        string hint = "Grind " + ingredient.DisplayName + " on its own.";
+                        string hint = BuildSeparateSingleBatchHint(ingredient);
                         if (IsUnusedHint(hint, usedHints))
                         {
                             return hint;
@@ -511,8 +520,35 @@ namespace TheTasteReviver
 
             CombinationGroup single = level.correctCombinationPattern.groups.FirstOrDefault(x => x.ingredients.Count == 1);
             return single != null && single.ingredients[0] != null
-                ? "Grind " + single.ingredients[0].DisplayName + " on its own."
+                ? "Each ingredient needs its own batch. Add one ingredient, grind it, press New Batch, then add and grind the next ingredient."
                 : "Two ingredients may have been mixed too early.";
+        }
+
+        private static string BuildMissingSingleBatchHint(IngredientData ingredient, IReadOnlyList<GrindingBatch> actualBatches)
+        {
+            string name = ingredient != null ? ingredient.DisplayName : "that ingredient";
+            bool hasStartedBatch = actualBatches != null && actualBatches.Any(batch => batch != null
+                && batch.ingredientsInBatch != null
+                && batch.ingredientsInBatch.Any(x => x != null));
+            bool hasEmptyCurrentBatch = actualBatches != null && actualBatches.Count > 0
+                && actualBatches[actualBatches.Count - 1] != null
+                && actualBatches[actualBatches.Count - 1].ingredientsInBatch != null
+                && !actualBatches[actualBatches.Count - 1].ingredientsInBatch.Any(x => x != null);
+
+            if (hasStartedBatch && hasEmptyCurrentBatch)
+            {
+                return "Add only " + name + " to the empty batch, then grind it on its own.";
+            }
+
+            return hasStartedBatch
+                ? "Press New Batch, add only " + name + ", then grind it on its own."
+                : "Add only " + name + " to the bowl, then grind it on its own.";
+        }
+
+        private static string BuildSeparateSingleBatchHint(IngredientData ingredient)
+        {
+            string name = ingredient != null ? ingredient.DisplayName : "that ingredient";
+            return "Put " + name + " in its own batch: press New Batch, add only " + name + ", then grind it.";
         }
 
         private static bool IsUnusedHint(string hint, IReadOnlyList<string> usedHints)

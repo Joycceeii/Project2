@@ -126,6 +126,11 @@ namespace TheTasteReviver
 
         public void OpenExperimentLog()
         {
+            if (levelManager != null)
+            {
+                GameSceneReturnState.SetPendingLevelIndex(levelManager.CurrentLevelIndex);
+            }
+
             SceneManager.LoadScene(experimentLogSceneName);
         }
 

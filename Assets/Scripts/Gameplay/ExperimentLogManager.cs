@@ -13,11 +13,23 @@ namespace TheTasteReviver
 
         private static readonly List<ExperimentRecord> sharedRecords = new List<ExperimentRecord>();
         private static readonly List<UnlockedClueRecord> unlockedClues = new List<UnlockedClueRecord>();
+        private static readonly List<IngredientData> ingredientCatalog = new List<IngredientData>();
         private const string CluePrefsKey = "TheTasteReviver.UnlockedClues";
 
         public IReadOnlyList<ExperimentRecord> Records => sharedRecords;
         public static IReadOnlyList<ExperimentRecord> SharedRecords => sharedRecords;
         public static IReadOnlyList<UnlockedClueRecord> UnlockedClues => unlockedClues;
+
+        public static void SetIngredientCatalog(IEnumerable<IngredientData> ingredients)
+        {
+            ingredientCatalog.Clear();
+            if (ingredients == null)
+            {
+                return;
+            }
+
+            ingredientCatalog.AddRange(ingredients.Where(x => x != null && !string.IsNullOrWhiteSpace(x.ingredientID)));
+        }
 
         private void Awake()
         {
@@ -322,7 +334,7 @@ namespace TheTasteReviver
         {
             LoadUnlockedClues();
             Dictionary<string, IngredientLogEntry> entries = new Dictionary<string, IngredientLogEntry>();
-            foreach (IngredientData ingredient in TestLevelInitializer.CreateRuntimeIngredients().Where(x => x != null))
+            foreach (IngredientData ingredient in ingredientCatalog)
             {
                 entries[ingredient.ingredientID] = new IngredientLogEntry
                 {

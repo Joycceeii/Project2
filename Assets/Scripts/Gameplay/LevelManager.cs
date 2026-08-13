@@ -16,7 +16,10 @@ namespace TheTasteReviver
 
         private void Start()
         {
-            LoadLevel(0);
+            int levelIndex = GameSceneReturnState.TryConsumePendingLevelIndex(out int pendingLevelIndex)
+                ? pendingLevelIndex
+                : CurrentLevelIndex;
+            LoadLevel(levelIndex);
         }
 
         public void LoadLevel(int index)

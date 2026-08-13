@@ -65,34 +65,22 @@ namespace TheTasteReviver.EditorTools
         private static Dictionary<string, IngredientData> LoadOrCreateIngredientAssets()
         {
             Dictionary<string, IngredientData> result = new Dictionary<string, IngredientData>();
-            foreach (IngredientData source in TestLevelInitializer.CreateRuntimeIngredients())
+            foreach (string guid in AssetDatabase.FindAssets("t:IngredientData", new[] { IngredientDataRoot }))
             {
-                if (source == null || string.IsNullOrWhiteSpace(source.ingredientID))
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                IngredientData asset = AssetDatabase.LoadAssetAtPath<IngredientData>(path);
+                if (asset == null || string.IsNullOrWhiteSpace(asset.ingredientID))
                 {
                     continue;
                 }
 
-                string path = IngredientDataRoot + "/" + source.ingredientID + ".asset";
-                IngredientData asset = AssetDatabase.LoadAssetAtPath<IngredientData>(path);
-                if (asset == null)
-                {
-                    asset = ScriptableObject.CreateInstance<IngredientData>();
-                    AssetDatabase.CreateAsset(asset, path);
-                }
-
-                if (string.IsNullOrWhiteSpace(asset.ingredientID))
-                {
-                    EditorUtility.CopySerialized(source, asset);
-                    asset.name = source.ingredientID;
-                }
-
-                if (asset.ingredientColor == default)
-                {
-                    asset.ingredientColor = source.ingredientColor;
-                }
-
                 EditorUtility.SetDirty(asset);
                 result[asset.ingredientID] = asset;
+            }
+
+            if (result.Count == 0)
+            {
+                Debug.LogWarning("No IngredientData assets found. Import design data into Assets/Data/GeneratedAssets/Ingredients first.");
             }
 
             return result;

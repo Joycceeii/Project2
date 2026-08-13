@@ -23,8 +23,8 @@ L03,PermanentClue,L03_RockSugar_Order,Unlocked after Correct,IngredientOrder,0,,
 L04,ProgressiveHint,L04_Hint_Combination,Evaluate hint,Combination,20,,,Peanut and black sesame are both nutty. Try grinding them together.,,"Peanut,BlackSesame",No
 L04,PermanentClue,L04_Peanut_Combination,Unlocked after Correct,Combination,0,,,Peanut works well with other nutty ingredients such as black sesame.,Peanut - Combination Clue,Peanut,Yes
 L04,PermanentClue,L04_BlackSesame_Combination,Unlocked after Correct,Combination,0,,,"Black sesame can blend with peanut, but too much handling can make it bitter.",Black Sesame - Combination Clue,BlackSesame,Yes
-L05,ProgressiveHint,L05_Hint_NewBatch,Evaluate hint,Combination,22,,,Use New Batch after white pepper so dried tangerine peel is ground separately.,,"WhitePepper,DriedTangerinePeel",No
-L05,ProgressiveHint,L05_Hint_Separate_Combination,Evaluate hint,Combination,21,,,"White pepper and dried tangerine peel should each have their own batch.",,"WhitePepper,DriedTangerinePeel",No
+L05,ProgressiveHint,L05_Hint_NewBatch,Evaluate hint,Combination,22,,,"After grinding white pepper by itself, press New Batch, add only dried tangerine peel, then grind again.",,"WhitePepper,DriedTangerinePeel",No
+L05,ProgressiveHint,L05_Hint_Separate_Combination,Evaluate hint,Combination,21,,,"White pepper and dried tangerine peel should each have their own batch. Do not put both ingredients in the same batch.",,"WhitePepper,DriedTangerinePeel",No
 L05,PermanentClue,L05_WhitePepper_Separate,Unlocked after Correct,Combination,0,,,White pepper is strong. It often works better away from other sharp ingredients.,White Pepper - Batch Clue,WhitePepper,Yes
 L05,PermanentClue,L05_Peel_Separate,Unlocked after Correct,Combination,0,,,Dried tangerine peel can turn bitter when it is ground with another sharp ingredient.,Dried Tangerine Peel - Batch Clue,DriedTangerinePeel,Yes
 L06,ProgressiveHint,L06_Hint_BlackSesame_Ratio,Evaluate hint,Ratio,21,,,Black sesame should use the larger of the two small amounts.,,"BlackSesame,GlutinousRice",No

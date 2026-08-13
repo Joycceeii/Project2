@@ -105,11 +105,11 @@ MonoBehaviour:
   - ruleId: L05_Hint_NewBatch
     priority: 22
     mechanic: 3
-    hintText: Use New Batch after white pepper so dried tangerine peel is ground separately.
+    hintText: After grinding white pepper by itself, press New Batch, add only dried tangerine peel, then grind again.
   - ruleId: L05_Hint_Separate_Combination
     priority: 21
     mechanic: 3
-    hintText: White pepper and dried tangerine peel should each have their own batch.
+    hintText: White pepper and dried tangerine peel should each have their own batch. Do not put both ingredients in the same batch.
   ingredientProfiles:
   - profileTag: L05_WhitePepper
     ingredient: {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
