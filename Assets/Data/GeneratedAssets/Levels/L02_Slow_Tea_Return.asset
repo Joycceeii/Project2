@@ -111,7 +111,7 @@ MonoBehaviour:
     targetCombinationKey: 
     minGrindDuration: 10
     maxGrindDuration: 16
-    levelTraitDescription: Tea leaves taste bitter at first and sweet later.
+    levelTraitDescription: Tea leaves release sweetness when ground slowly; fast grinding makes bitterness take over.
     responseHintRules: []
   successFeedback: "The tea tastes balanced: light bitterness first, then sweetness."
   closeFeedback: Very close. Adjust the speed or grinding time a little.

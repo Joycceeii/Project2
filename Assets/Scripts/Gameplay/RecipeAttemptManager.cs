@@ -188,9 +188,26 @@ namespace TheTasteReviver
                 return;
             }
 
+            ReturnCurrentBatchIngredientsHome();
             currentBatchID++;
             uiManager?.RefreshAttemptPanels(this);
             uiManager?.ShowHint("Next ingredients will start a separate batch.");
+        }
+
+        private void ReturnCurrentBatchIngredientsHome()
+        {
+            foreach (DraggableIngredient ingredient in FindObjectsByType<DraggableIngredient>(FindObjectsSortMode.None))
+            {
+                if (ingredient == null || !ingredient.gameObject.activeInHierarchy || ingredient.ingredientData == null)
+                {
+                    continue;
+                }
+
+                if (batchByIngredient.TryGetValue(ingredient.ingredientData, out int batchID) && batchID == currentBatchID)
+                {
+                    ingredient.ReturnHome(true);
+                }
+            }
         }
 
         private void RebuildCurrentBatch()

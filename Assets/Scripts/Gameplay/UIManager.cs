@@ -44,6 +44,7 @@ namespace TheTasteReviver
         private float lastEvaluationTime = -999f;
         private GameObject ingredientTraitPanel;
         private GameObject ingredientTraitBackdrop;
+        private static readonly HashSet<string> autoShownIngredientTraitLevels = new HashSet<string>();
 
         public bool IsRatioSelectionOpen => ratioSelectionPanel != null && ratioSelectionPanel.activeSelf;
 
@@ -414,7 +415,7 @@ namespace TheTasteReviver
                 return;
             }
 
-            SetIngredientTraitsExpanded(true);
+            SetIngredientTraitsExpanded(ShouldAutoExpandIngredientTraits(level));
         }
 
         public void ExpandIngredientTraits()
@@ -458,6 +459,27 @@ namespace TheTasteReviver
                     ingredientTraitToggleButton.transform.SetAsLastSibling();
                 }
             }
+        }
+
+        private static bool ShouldAutoExpandIngredientTraits(RecipeLevelData level)
+        {
+            string key = GetIngredientTraitLevelKey(level);
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return true;
+            }
+
+            return autoShownIngredientTraitLevels.Add(key);
+        }
+
+        private static string GetIngredientTraitLevelKey(RecipeLevelData level)
+        {
+            if (level == null)
+            {
+                return string.Empty;
+            }
+
+            return !string.IsNullOrWhiteSpace(level.levelID) ? level.levelID : level.name;
         }
 
         public void ShowRatioSelection(IngredientData ingredient, IReadOnlyList<RatioLevel> options, Action<RatioLevel> onSelected)
@@ -1178,7 +1200,7 @@ namespace TheTasteReviver
                 case ForceLevel.Heavy:
                     return "It needs firm pressure to come forward.";
                 default:
-                    return "It responds to steady pressure.";
+                    return "Medium pressure keeps it balanced.";
             }
         }
 
@@ -1187,7 +1209,7 @@ namespace TheTasteReviver
             switch (speed)
             {
                 case SpeedLevel.Slow:
-                    return "A slower rhythm keeps it clean.";
+                    return "A slow rhythm brings out sweetness without extra bitterness.";
                 case SpeedLevel.Fast:
                     return "A faster rhythm wakes it up.";
                 default:

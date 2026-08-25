@@ -111,7 +111,7 @@ MonoBehaviour:
     targetCombinationKey: 
     minGrindDuration: 8
     maxGrindDuration: 14
-    levelTraitDescription: Rice gives a soft grain base with mild congee warmth.
+    levelTraitDescription: Rice stays mild when the force is near the middle; too much pressure can make it taste burnt.
     responseHintRules: []
   successFeedback: "The rice tastes soft and clean, with no burnt flavor."
   closeFeedback: Very close. Adjust the force or grinding time a little.

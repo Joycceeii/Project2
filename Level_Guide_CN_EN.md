@@ -7,7 +7,7 @@
 | L01 | Gentle Grain Awakening | 温和米香唤醒 | 只用 `Rice`。Force 设 `Medium`，Speed 保持 `Medium`，研磨 `8-14s`。 |
 | L02 | Slow Tea Return | 慢磨茶香回甘 | 只用 `Tea Leaves`。Speed 设 `Slow`，Force 保持 `Medium`，研磨 `10-16s`。 |
 | L03 | Layered Dessert | 分层甜品 | 顺序：`Red Bean -> Dried Tangerine Peel -> Rock Sugar`。研磨 `18-28s`。 |
-| L04 | Joined Nut Crisp | 融合坚果酥 | `Peanut` 和 `Black Sesame` 放在同一个 batch 一起研磨。研磨 `15-24s`。 |
+| L04 | Joined Nut Crisp | 融合坚果酥 | `Peanut` 单独研磨；点 `New Batch` 后再单独研磨 `Black Sesame`。研磨 `15-24s`。 |
 | L05 | Clear Spice Split | 清晰辛香分离 | `White Pepper` 单独研磨；点 `New Batch`；再只放 `Dried Tangerine Peel` 单独研磨。研磨 `14-22s`。 |
 | L06 | Soft Sesame Paste | 柔滑芝麻糊 | 比例：`Black Sesame = Less`，`Glutinous Rice = VeryLess`。研磨 `14-22s`。 |
 | L07 | Sand Ginger Core | 沙姜主味 | 比例：`Sand Ginger` 最大，`Dried Tangerine Peel` 中等偏少，`Coarse Salt` 最少。Force 设 `Heavy`，研磨 `20-32s`。如果提示 force 太大，Heavy 不要拉满，约 `70%-80%`。 |

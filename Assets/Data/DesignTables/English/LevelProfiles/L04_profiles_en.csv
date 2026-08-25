@@ -1,5 +1,5 @@
 LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
-L04,Peanut,L04_Peanut,Combination,BlackSesame+Peanut,,,,,,,,,,,,"Peanut gives a warm roasted nut taste."
-L04,BlackSesame,L04_BlackSesame,Combination,BlackSesame+Peanut,,,,,,,,,,,,"Black sesame makes the nut flavor darker and more roasted."
+L04,Peanut,L04_Peanut,Combination,Peanut,,,,,,,,,,,,"Peanut keeps a warm roasted edge when it is ground separately."
+L04,BlackSesame,L04_BlackSesame,Combination,BlackSesame,,,,,,,,,,,,"Black sesame keeps its darker roasted taste when it has its own batch."
 L04,Peanut,L04_Peanut,GrindDuration,15-24,,,,,,,,,,,,"Peanut gives a warm roasted nut taste."
 L04,BlackSesame,L04_BlackSesame,GrindDuration,15-24,,,,,,,,,,,,"Black sesame makes the nut flavor darker and more roasted."

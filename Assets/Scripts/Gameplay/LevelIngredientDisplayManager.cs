@@ -132,8 +132,7 @@ namespace TheTasteReviver
             }
 
             item.gameObject.name = "Ingredient";
-            item.localPosition = Vector3.up * 0.45f;
-            item.localScale = Vector3.one * 0.38f;
+            FitIngredientItemToPlate(item, ingredient.prefab != null);
             if (ingredient.prefab == null)
             {
                 ApplyColor(item.gameObject, ingredient.ingredientColor);
@@ -195,6 +194,57 @@ namespace TheTasteReviver
             }
 
             return item.transform;
+        }
+
+        private static void FitIngredientItemToPlate(Transform item, bool usesPrefab)
+        {
+            if (!IsAlive(item))
+            {
+                return;
+            }
+
+            item.localPosition = Vector3.up * 0.45f;
+            item.localScale = Vector3.one * 0.38f;
+            if (!usesPrefab)
+            {
+                return;
+            }
+
+            Bounds bounds = CalculateLocalBounds(item);
+            float largestSize = Mathf.Max(bounds.size.x, bounds.size.y, bounds.size.z);
+            if (largestSize <= 0.0001f)
+            {
+                return;
+            }
+
+            float scale = Mathf.Clamp(0.72f / largestSize, 0.04f, 2.4f);
+            item.localScale = Vector3.one * scale;
+            Vector3 centerOffset = item.TransformVector(bounds.center);
+            item.localPosition = Vector3.up * 0.45f - centerOffset;
+        }
+
+        private static Bounds CalculateLocalBounds(Transform root)
+        {
+            Renderer[] renderers = root.GetComponentsInChildren<Renderer>(true);
+            if (renderers == null || renderers.Length == 0)
+            {
+                return new Bounds(Vector3.zero, Vector3.zero);
+            }
+
+            Bounds bounds = new Bounds(root.InverseTransformPoint(renderers[0].bounds.center), Vector3.zero);
+            foreach (Renderer renderer in renderers)
+            {
+                if (!IsAlive(renderer))
+                {
+                    continue;
+                }
+
+                Bounds worldBounds = renderer.bounds;
+                bounds.Encapsulate(root.InverseTransformPoint(worldBounds.min));
+                bounds.Encapsulate(root.InverseTransformPoint(worldBounds.max));
+            }
+
+            return bounds;
         }
 
         private void SetAllSlotsInactive(List<GameObject> slots)

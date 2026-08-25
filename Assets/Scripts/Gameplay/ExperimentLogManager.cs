@@ -50,6 +50,7 @@ namespace TheTasteReviver
                 attemptNumber = sharedRecords.Count + 1,
                 ingredientsUsed = string.Join(", ", attempt.IngredientAmounts.Where(x => x.ingredient != null).Select(x => x.ingredient.DisplayName)),
                 ingredientOrder = string.Join(" -> ", attempt.IngredientOrder.Where(x => x != null).Select(x => x.DisplayName)),
+                ingredientOrderDetails = BuildOrderRelationshipText(attempt.IngredientOrder),
                 ratioPattern = string.Join(" / ", ratio.Select(x => x.Key.DisplayName + "=" + UIManager.GetRatioDisplayName(x.Value))),
                 combinationPattern = BuildCombinationPatternText(attempt.GrindingBatches),
                 forceLevel = attempt.forceController != null ? attempt.forceController.CurrentForceLevel : ForceLevel.Medium,
@@ -64,7 +65,7 @@ namespace TheTasteReviver
                 forceStatus = BuildStatus(evaluation, MechanicType.Force),
                 speedStatus = BuildStatus(evaluation, MechanicType.Speed)
             };
-            record.ingredientEntries.AddRange(BuildIngredientEntries(attempt, ratio));
+            record.ingredientEntries.AddRange(BuildIngredientEntries(attempt, ratio, evaluation));
             sharedRecords.Add(record);
             RefreshUI();
         }
@@ -228,11 +229,16 @@ namespace TheTasteReviver
         {
             builder.AppendLine("Experiment #" + record.attemptNumber);
             builder.AppendLine("Ingredients: " + record.ingredientsUsed);
-            builder.AppendLine("Order: " + record.ingredientOrder + " [" + record.orderStatus + "]");
-            builder.AppendLine("Ratio: " + record.ratioPattern + " [" + record.ratioStatus + "]");
-            builder.AppendLine("Combination: " + record.combinationPattern + " [" + record.combinationStatus + "]");
-            builder.AppendLine("Force: " + record.forceLevel + " [" + record.forceStatus + "]");
-            builder.AppendLine("Speed: " + record.speedLevel + " [" + record.speedStatus + "]");
+            AppendCheckedRecordLine(builder, "Order", record.ingredientOrder, record.orderStatus);
+            if (record.orderStatus != "Not Checked" && !string.IsNullOrWhiteSpace(record.ingredientOrderDetails))
+            {
+                builder.AppendLine("Order Detail: " + record.ingredientOrderDetails);
+            }
+
+            AppendCheckedRecordLine(builder, "Ratio", record.ratioPattern, record.ratioStatus);
+            AppendCheckedRecordLine(builder, "Combination", record.combinationPattern, record.combinationStatus);
+            AppendCheckedRecordLine(builder, "Force", record.forceLevel.ToString(), record.forceStatus);
+            AppendCheckedRecordLine(builder, "Speed", record.speedLevel.ToString(), record.speedStatus);
             builder.AppendLine("Duration: " + record.grindDuration.ToString("0.0") + "s");
             builder.AppendLine("Feedback: " + record.mainFeedback);
             if (!string.IsNullOrWhiteSpace(record.permanentHint))
@@ -242,6 +248,16 @@ namespace TheTasteReviver
 
             builder.AppendLine("Hint: " + record.hintGiven);
             builder.AppendLine();
+        }
+
+        private static void AppendCheckedRecordLine(StringBuilder builder, string label, string value, string status)
+        {
+            if (status == "Not Checked")
+            {
+                return;
+            }
+
+            builder.AppendLine(label + ": " + value + " [" + status + "]");
         }
 
         private static string BuildStatus(EvaluationResult evaluation, MechanicType mechanic)
@@ -271,7 +287,7 @@ namespace TheTasteReviver
             return batchTexts.Count == 0 ? "None" : string.Join("; ", batchTexts);
         }
 
-        private static List<ExperimentIngredientEntry> BuildIngredientEntries(RecipeAttemptManager attempt, Dictionary<IngredientData, RatioLevel> ratio)
+        private static List<ExperimentIngredientEntry> BuildIngredientEntries(RecipeAttemptManager attempt, Dictionary<IngredientData, RatioLevel> ratio, EvaluationResult evaluation)
         {
             List<ExperimentIngredientEntry> entries = new List<ExperimentIngredientEntry>();
             if (attempt == null || attempt.IngredientAmounts == null)
@@ -291,6 +307,8 @@ namespace TheTasteReviver
             {
                 GrindingBatch batch = batches.FirstOrDefault(x => x.ingredientsInBatch.Contains(ingredient));
                 RatioLevel ratioLevel = ratio != null && ratio.TryGetValue(ingredient, out RatioLevel value) ? value : RatioLevel.None;
+                ForceLevel forceLevel = attempt.forceController != null ? attempt.forceController.CurrentForceLevel : ForceLevel.Medium;
+                SpeedLevel speedLevel = attempt.pestleController != null ? attempt.pestleController.CurrentSpeedLevel : SpeedLevel.Medium;
                 entries.Add(new ExperimentIngredientEntry
                 {
                     ingredientID = ingredient.ingredientID,
@@ -300,9 +318,14 @@ namespace TheTasteReviver
                     traitDescription = ingredient.initialDescription,
                     ratio = ratioLevel != RatioLevel.None ? UIManager.GetRatioDisplayName(ratioLevel) : "Not checked",
                     order = FormatOrder(order, ingredient),
-                    force = attempt.forceController != null ? attempt.forceController.CurrentForceLevel.ToString() : "Not checked",
-                    speed = attempt.pestleController != null ? attempt.pestleController.CurrentSpeedLevel.ToString() : "Not checked",
+                    force = attempt.forceController != null ? forceLevel.ToString() : "Not checked",
+                    speed = attempt.pestleController != null ? speedLevel.ToString() : "Not checked",
                     combination = FormatIngredientBatch(batch),
+                    ratioStatus = BuildIngredientRatioStatus(level, ingredient, ratioLevel, evaluation),
+                    orderStatus = BuildIngredientOrderStatus(level, ingredient, order, evaluation),
+                    forceStatus = BuildIngredientForceStatus(level, ingredient, forceLevel, evaluation),
+                    speedStatus = BuildIngredientSpeedStatus(level, ingredient, speedLevel, evaluation),
+                    combinationStatus = BuildIngredientCombinationStatus(level, ingredient, batch, evaluation),
                     checkedRatio = level != null && level.enabledMechanics != null && level.enabledMechanics.enableRatio,
                     checkedOrder = level != null && level.enabledMechanics != null && level.enabledMechanics.enableIngredientOrder,
                     checkedForce = level != null && level.enabledMechanics != null && level.enabledMechanics.enableForce,
@@ -314,10 +337,165 @@ namespace TheTasteReviver
             return entries;
         }
 
+        private static string BuildIngredientRatioStatus(RecipeLevelData level, IngredientData ingredient, RatioLevel actual, EvaluationResult evaluation)
+        {
+            if (!IsMechanicChecked(level, MechanicType.Ratio))
+            {
+                return "Not Checked";
+            }
+
+            LevelIngredientProfile profile = FindProfile(level, ingredient, MechanicType.Ratio);
+            if (profile != null)
+            {
+                return StatusFromBool(actual == profile.targetRatioLevel);
+            }
+
+            RatioRequirement requirement = level.correctRatioPattern != null
+                ? level.correctRatioPattern.FirstOrDefault(x => x != null && x.ingredient == ingredient)
+                : null;
+            return requirement != null ? StatusFromBool(actual == requirement.ratioLevel) : BuildStatus(evaluation, MechanicType.Ratio);
+        }
+
+        private static string BuildIngredientOrderStatus(RecipeLevelData level, IngredientData ingredient, List<IngredientData> order, EvaluationResult evaluation)
+        {
+            if (!IsMechanicChecked(level, MechanicType.IngredientOrder))
+            {
+                return "Not Checked";
+            }
+
+            int actualIndex = order != null ? order.IndexOf(ingredient) : -1;
+            LevelIngredientProfile profile = FindProfile(level, ingredient, MechanicType.IngredientOrder);
+            if (profile != null)
+            {
+                return StatusFromBool(actualIndex == profile.targetOrderIndex);
+            }
+
+            int targetIndex = level.correctIngredientOrder != null ? level.correctIngredientOrder.IndexOf(ingredient) : -1;
+            return targetIndex >= 0 ? StatusFromBool(actualIndex == targetIndex) : BuildStatus(evaluation, MechanicType.IngredientOrder);
+        }
+
+        private static string BuildIngredientForceStatus(RecipeLevelData level, IngredientData ingredient, ForceLevel actual, EvaluationResult evaluation)
+        {
+            if (!IsMechanicChecked(level, MechanicType.Force))
+            {
+                return "Not Checked";
+            }
+
+            LevelIngredientProfile profile = FindProfile(level, ingredient, MechanicType.Force);
+            if (profile != null)
+            {
+                return StatusFromBool(actual == profile.targetForceLevel);
+            }
+
+            return StatusFromBool(actual == level.targetForceLevel);
+        }
+
+        private static string BuildIngredientSpeedStatus(RecipeLevelData level, IngredientData ingredient, SpeedLevel actual, EvaluationResult evaluation)
+        {
+            if (!IsMechanicChecked(level, MechanicType.Speed))
+            {
+                return "Not Checked";
+            }
+
+            LevelIngredientProfile profile = FindProfile(level, ingredient, MechanicType.Speed);
+            if (profile != null)
+            {
+                return StatusFromBool(actual == profile.targetSpeedLevel);
+            }
+
+            return StatusFromBool(actual == level.targetSpeedLevel);
+        }
+
+        private static string BuildIngredientCombinationStatus(RecipeLevelData level, IngredientData ingredient, GrindingBatch batch, EvaluationResult evaluation)
+        {
+            if (!IsMechanicChecked(level, MechanicType.Combination))
+            {
+                return "Not Checked";
+            }
+
+            string actualKey = batch != null ? RecipeLevelData.BuildCombinationKey(batch.ingredientsInBatch) : string.Empty;
+            LevelIngredientProfile profile = FindProfile(level, ingredient, MechanicType.Combination);
+            if (profile != null)
+            {
+                return StatusFromBool(actualKey == profile.targetCombinationKey);
+            }
+
+            string targetKey = FindTargetCombinationKey(level, ingredient);
+            return !string.IsNullOrWhiteSpace(targetKey)
+                ? StatusFromBool(actualKey == targetKey)
+                : BuildStatus(evaluation, MechanicType.Combination);
+        }
+
+        private static bool IsMechanicChecked(RecipeLevelData level, MechanicType mechanic)
+        {
+            return level != null && level.enabledMechanics != null && level.enabledMechanics.IsEnabled(mechanic);
+        }
+
+        private static LevelIngredientProfile FindProfile(RecipeLevelData level, IngredientData ingredient, MechanicType mechanic)
+        {
+            return level != null && ingredient != null
+                ? level.GetProfilesForMechanic(mechanic).FirstOrDefault(x => x != null && x.ingredient == ingredient)
+                : null;
+        }
+
+        private static string FindTargetCombinationKey(RecipeLevelData level, IngredientData ingredient)
+        {
+            if (level == null || ingredient == null || level.correctCombinationPattern == null || level.correctCombinationPattern.groups == null)
+            {
+                return string.Empty;
+            }
+
+            CombinationGroup group = level.correctCombinationPattern.groups
+                .FirstOrDefault(x => x != null && x.ingredients != null && x.ingredients.Contains(ingredient));
+            return group != null ? RecipeLevelData.BuildCombinationKey(group.ingredients) : string.Empty;
+        }
+
+        private static string StatusFromBool(bool correct)
+        {
+            return correct ? "Correct" : "Needs Work";
+        }
+
         private static string FormatOrder(List<IngredientData> order, IngredientData ingredient)
         {
             int index = order != null ? order.IndexOf(ingredient) : -1;
-            return index >= 0 ? (index + 1).ToString() : "Not checked";
+            if (index < 0)
+            {
+                return "Not checked";
+            }
+
+            string position = "Position " + (index + 1);
+            string before = index > 0
+                ? "after " + string.Join(", ", order.Take(index).Where(x => x != null).Select(x => x.DisplayName))
+                : "first";
+            string after = index < order.Count - 1
+                ? "before " + string.Join(", ", order.Skip(index + 1).Where(x => x != null).Select(x => x.DisplayName))
+                : "last";
+
+            return position + " (" + before + "; " + after + ")";
+        }
+
+        private static string BuildOrderRelationshipText(IReadOnlyList<IngredientData> order)
+        {
+            List<IngredientData> cleanOrder = order != null
+                ? order.Where(x => x != null).ToList()
+                : new List<IngredientData>();
+            if (cleanOrder.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            if (cleanOrder.Count == 1)
+            {
+                return cleanOrder[0].DisplayName + " was added first and last.";
+            }
+
+            List<string> relationships = new List<string>();
+            for (int i = 0; i < cleanOrder.Count - 1; i++)
+            {
+                relationships.Add(cleanOrder[i].DisplayName + " before " + cleanOrder[i + 1].DisplayName);
+            }
+
+            return string.Join("; ", relationships);
         }
 
         private static string FormatIngredientBatch(GrindingBatch batch)
@@ -334,15 +512,6 @@ namespace TheTasteReviver
         {
             LoadUnlockedClues();
             Dictionary<string, IngredientLogEntry> entries = new Dictionary<string, IngredientLogEntry>();
-            foreach (IngredientData ingredient in ingredientCatalog)
-            {
-                entries[ingredient.ingredientID] = new IngredientLogEntry
-                {
-                    ingredientID = ingredient.ingredientID,
-                    ingredientName = ingredient.DisplayName,
-                    traitDescription = ingredient.initialDescription
-                };
-            }
 
             foreach (ExperimentRecord record in sharedRecords)
             {
@@ -402,6 +571,7 @@ namespace TheTasteReviver
         public int attemptNumber;
         public string ingredientsUsed;
         public string ingredientOrder;
+        public string ingredientOrderDetails;
         public string ratioPattern;
         public string combinationPattern;
         public ForceLevel forceLevel;
@@ -430,6 +600,11 @@ namespace TheTasteReviver
         public string force;
         public string speed;
         public string combination;
+        public string ratioStatus;
+        public string orderStatus;
+        public string forceStatus;
+        public string speedStatus;
+        public string combinationStatus;
         public bool checkedRatio;
         public bool checkedOrder;
         public bool checkedForce;

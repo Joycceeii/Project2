@@ -541,11 +541,11 @@ namespace TheTasteReviver
                 {
                     builder.AppendLine("[" + note.levelID + " " + note.levelName + "]");
                     List<string> parts = new List<string>();
-                    if (note.checkedRatio) parts.Add("Amount: " + note.ratio);
-                    if (note.checkedOrder) parts.Add("Order: " + note.order);
-                    if (note.checkedForce) parts.Add("Force: " + note.force);
-                    if (note.checkedSpeed) parts.Add("Speed: " + note.speed);
-                    if (note.checkedCombination) parts.Add("Batch: " + note.combination);
+                    if (note.checkedRatio) parts.Add(FormatCheckedNote("Amount", note.ratio, note.ratioStatus));
+                    if (note.checkedOrder) parts.Add(FormatCheckedNote("Order", note.order, note.orderStatus));
+                    if (note.checkedForce) parts.Add(FormatCheckedNote("Force", note.force, note.forceStatus));
+                    if (note.checkedSpeed) parts.Add(FormatCheckedNote("Speed", note.speed, note.speedStatus));
+                    if (note.checkedCombination) parts.Add(FormatCheckedNote("Batch", note.combination, note.combinationStatus));
                     builder.AppendLine(parts.Count == 0 ? "Used in this recipe." : string.Join(" | ", parts));
                     builder.AppendLine();
                 }
@@ -561,6 +561,11 @@ namespace TheTasteReviver
             }
 
             return builder.ToString().Trim();
+        }
+
+        private static string FormatCheckedNote(string label, string value, string status)
+        {
+            return label + ": " + value + " [" + (string.IsNullOrWhiteSpace(status) ? "Not Checked" : status) + "]";
         }
 
         private void EnsureCamera()

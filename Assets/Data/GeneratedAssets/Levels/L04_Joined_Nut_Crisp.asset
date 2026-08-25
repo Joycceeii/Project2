@@ -15,8 +15,8 @@ MonoBehaviour:
   levelID: L04
   levelName: Joined Nut Crisp
   cityName: Foshan
-  targetTasteName: Shared Grind
-  levelIntro: Peanut and black sesame are close in flavor. Try to find when they feel connected.
+  targetTasteName: Separate Nut Grind
+  levelIntro: Peanut and black sesame are both nutty, but each one should keep its own roasted edge. Use New Batch to grind them separately.
   maxIngredientCount: 2
   availableIngredients:
   - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
@@ -39,6 +39,7 @@ MonoBehaviour:
     groups:
     - ingredients:
       - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
+    - ingredients:
       - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
   targetForceLevel: 1
   targetSpeedLevel: 1
@@ -89,13 +90,13 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L04_Peanut_Combination
     title: Peanut - Combination Clue
-    content: Peanut works well with other nutty ingredients such as black sesame.
+    content: Peanut keeps its warm roasted taste when it is ground in its own batch.
     relatedIngredients:
     - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
     relatedDimension: 3
   - clueId: L04_BlackSesame_Combination
     title: Black Sesame - Combination Clue
-    content: "Black sesame can blend with peanut, but too much handling can make it bitter."
+    content: "Black sesame turns bitter when it gets muddied with peanut, so keep it in a separate batch."
     relatedIngredients:
     - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
     relatedDimension: 3
@@ -104,7 +105,7 @@ MonoBehaviour:
   - ruleId: L04_Hint_Combination
     priority: 20
     mechanic: 3
-    hintText: Peanut and black sesame are both nutty. Try grinding them together.
+    hintText: After grinding peanut by itself, press New Batch, add only black sesame, then grind again.
   ingredientProfiles:
   - profileTag: L04_Peanut
     ingredient: {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
@@ -120,10 +121,10 @@ MonoBehaviour:
     targetSpeedLevel: 1
     targetRatioLevel: 0
     targetOrderIndex: -1
-    targetCombinationKey: BlackSesame+Peanut
+    targetCombinationKey: Peanut
     minGrindDuration: 15
     maxGrindDuration: 24
-    levelTraitDescription: Peanut gives a warm roasted nut taste.
+    levelTraitDescription: Peanut keeps a warm roasted edge when it is ground separately.
     responseHintRules: []
   - profileTag: L04_BlackSesame
     ingredient: {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
@@ -139,11 +140,11 @@ MonoBehaviour:
     targetSpeedLevel: 1
     targetRatioLevel: 0
     targetOrderIndex: -1
-    targetCombinationKey: BlackSesame+Peanut
+    targetCombinationKey: BlackSesame
     minGrindDuration: 15
     maxGrindDuration: 24
-    levelTraitDescription: Black sesame makes the nut flavor darker and more roasted.
+    levelTraitDescription: Black sesame keeps its darker roasted taste when it has its own batch.
     responseHintRules: []
-  successFeedback: Peanut and black sesame blend into one warm nutty flavor.
-  closeFeedback: Very close. Check the grouping or grinding time.
-  wrongFeedback: The two nutty flavors feel separate. Try a different grouping.
+  successFeedback: Peanut and black sesame stay clear because each one was handled in its own batch.
+  closeFeedback: Very close. Check whether each nutty ingredient has its own batch.
+  wrongFeedback: The nutty flavors are muddy together. Try using a separate batch.

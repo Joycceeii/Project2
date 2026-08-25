@@ -9,9 +9,12 @@ namespace TheTasteReviver
         public Camera interactionCamera;
         public Text speedLabel;
         public UIManager uiManager;
-        public float slowThreshold = 360f;
-        public float fastThreshold = 720f;
-        public float speedResponseTime = 0.25f;
+        public float slowThreshold = 520f;
+        public float fastThreshold = 980f;
+        public float speedResponseTime = 0.45f;
+        public float speedDeadZone = 2.5f;
+        public float speedHysteresis = 90f;
+        public float maxInstantSpeed = 1400f;
 
         public SpeedLevel CurrentSpeedLevel { get; private set; } = SpeedLevel.Medium;
         public float AverageMouseSpeed => currentMouseSpeed;
@@ -102,7 +105,9 @@ namespace TheTasteReviver
         private void UpdateCurrentSpeed(float mouseDelta)
         {
             float deltaTime = Mathf.Max(Time.deltaTime, 0.0001f);
-            float instantSpeed = mouseDelta / deltaTime;
+            float instantSpeed = mouseDelta <= speedDeadZone
+                ? 0f
+                : Mathf.Min(mouseDelta / deltaTime, maxInstantSpeed);
             if (!hasSpeedSample)
             {
                 currentMouseSpeed = instantSpeed;
@@ -117,6 +122,16 @@ namespace TheTasteReviver
 
         private SpeedLevel SpeedToLevel(float speed)
         {
+            if (CurrentSpeedLevel == SpeedLevel.Slow && speed <= slowThreshold + speedHysteresis)
+            {
+                return SpeedLevel.Slow;
+            }
+
+            if (CurrentSpeedLevel == SpeedLevel.Fast && speed >= fastThreshold - speedHysteresis)
+            {
+                return SpeedLevel.Fast;
+            }
+
             if (speed <= slowThreshold) return SpeedLevel.Slow;
             if (speed >= fastThreshold) return SpeedLevel.Fast;
             return SpeedLevel.Medium;

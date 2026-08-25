@@ -20,9 +20,9 @@ L03,ProgressiveHint,L03_Hint_RockSugar_Order,Evaluate hint,IngredientOrder,20,,,
 L03,PermanentClue,L03_RedBean_Order,Unlocked after Correct,IngredientOrder,0,,,Red bean works well early because it builds the base flavor.,Red Bean - Order Clue,RedBean,Yes
 L03,PermanentClue,L03_Peel_Order,Unlocked after Correct,IngredientOrder,0,,,Dried tangerine peel works better after the base is set. Too early can make the recipe bitter.,Dried Tangerine Peel - Order Clue,DriedTangerinePeel,Yes
 L03,PermanentClue,L03_RockSugar_Order,Unlocked after Correct,IngredientOrder,0,,,Rock sugar works best at the end because it softens the final taste.,Rock Sugar - Order Clue,RockSugar,Yes
-L04,ProgressiveHint,L04_Hint_Combination,Evaluate hint,Combination,20,,,Peanut and black sesame are both nutty. Try grinding them together.,,"Peanut,BlackSesame",No
-L04,PermanentClue,L04_Peanut_Combination,Unlocked after Correct,Combination,0,,,Peanut works well with other nutty ingredients such as black sesame.,Peanut - Combination Clue,Peanut,Yes
-L04,PermanentClue,L04_BlackSesame_Combination,Unlocked after Correct,Combination,0,,,"Black sesame can blend with peanut, but too much handling can make it bitter.",Black Sesame - Combination Clue,BlackSesame,Yes
+L04,ProgressiveHint,L04_Hint_Combination,Evaluate hint,Combination,20,,,"After grinding peanut by itself, press New Batch, add only black sesame, then grind again.",,"Peanut,BlackSesame",No
+L04,PermanentClue,L04_Peanut_Combination,Unlocked after Correct,Combination,0,,,Peanut keeps its warm roasted taste when it is ground in its own batch.,Peanut - Combination Clue,Peanut,Yes
+L04,PermanentClue,L04_BlackSesame_Combination,Unlocked after Correct,Combination,0,,,"Black sesame turns bitter when it gets muddied with peanut, so keep it in a separate batch.",Black Sesame - Combination Clue,BlackSesame,Yes
 L05,ProgressiveHint,L05_Hint_NewBatch,Evaluate hint,Combination,22,,,"After grinding white pepper by itself, press New Batch, add only dried tangerine peel, then grind again.",,"WhitePepper,DriedTangerinePeel",No
 L05,ProgressiveHint,L05_Hint_Separate_Combination,Evaluate hint,Combination,21,,,"White pepper and dried tangerine peel should each have their own batch. Do not put both ingredients in the same batch.",,"WhitePepper,DriedTangerinePeel",No
 L05,PermanentClue,L05_WhitePepper_Separate,Unlocked after Correct,Combination,0,,,White pepper is strong. It often works better away from other sharp ingredients.,White Pepper - Batch Clue,WhitePepper,Yes

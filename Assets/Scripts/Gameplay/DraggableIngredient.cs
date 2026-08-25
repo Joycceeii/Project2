@@ -10,12 +10,15 @@ namespace TheTasteReviver
         public MortarArea mortarArea;
         public Camera interactionCamera;
         public GameObject sourcePrefab;
+        public float dragLiftHeight = 0.55f;
+        public float mortarDropHeight = 0.35f;
 
         private Vector3 startPosition;
         private bool dragging;
         private float dragPlaneY;
         private readonly List<Renderer> hiddenRenderers = new List<Renderer>();
         private GameObject groundVisualInstance;
+        private bool hasBeenGround;
 
         public bool IsInMortar { get; private set; }
 
@@ -38,16 +41,41 @@ namespace TheTasteReviver
 
         public void ReturnHome()
         {
+            ReturnHome(false);
+        }
+
+        public void ReturnHome(bool keepGroundState)
+        {
             dragging = false;
             IsInMortar = false;
-            ClearGroundState();
+            if (!keepGroundState)
+            {
+                ClearGroundState();
+                hasBeenGround = false;
+            }
+
             transform.position = startPosition;
             dragPlaneY = startPosition.y;
+            if (keepGroundState && hasBeenGround)
+            {
+                EnsureGroundVisual();
+            }
         }
 
         public void ShowGroundState()
         {
-            if (!IsInMortar || ingredientData == null || ingredientData.groundPrefab == null || groundVisualInstance != null)
+            if (!IsInMortar)
+            {
+                return;
+            }
+
+            hasBeenGround = true;
+            EnsureGroundVisual();
+        }
+
+        private void EnsureGroundVisual()
+        {
+            if (ingredientData == null || ingredientData.groundPrefab == null || groundVisualInstance != null)
             {
                 return;
             }
@@ -68,7 +96,8 @@ namespace TheTasteReviver
         private void OnMouseDown()
         {
             dragging = true;
-            dragPlaneY = transform.position.y;
+            dragPlaneY = transform.position.y + Mathf.Max(0f, dragLiftHeight);
+            transform.position = new Vector3(transform.position.x, dragPlaneY, transform.position.z);
         }
 
         private void OnMouseDrag()
@@ -87,10 +116,21 @@ namespace TheTasteReviver
         private void OnMouseUp()
         {
             dragging = false;
-            bool droppedInMortar = mortarArea != null && mortarArea.ContainsWorldPoint(transform.position);
+            bool droppedInMortar = mortarArea != null && mortarArea.ContainsWorldPoint(GetMortarCheckPoint());
             bool accepted = droppedInMortar && attemptManager != null && attemptManager.TryAddIngredient(ingredientData);
             IsInMortar = accepted;
-            transform.position = accepted && mortarArea != null ? mortarArea.transform.position + Vector3.up * 0.35f : startPosition;
+            transform.position = accepted && mortarArea != null ? mortarArea.transform.position + Vector3.up * mortarDropHeight : startPosition;
+            dragPlaneY = transform.position.y;
+        }
+
+        private Vector3 GetMortarCheckPoint()
+        {
+            if (mortarArea == null)
+            {
+                return transform.position;
+            }
+
+            return new Vector3(transform.position.x, mortarArea.transform.position.y, transform.position.z);
         }
 
         private void HideCurrentRenderers()
