@@ -13,6 +13,7 @@ namespace TheTasteReviver
         public Color ingredientColor = Color.white;
         public Sprite icon;
         public GameObject prefab;
+        public GameObject groundPrefab;
         public int defaultRatioValue = 1;
 
         public string DisplayName

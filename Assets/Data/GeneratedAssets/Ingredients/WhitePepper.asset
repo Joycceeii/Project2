@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: WhitePepper
   m_EditorClassIdentifier: 
   ingredientID: WhitePepper
-  ingredientNameCN:
+  ingredientNameCN: 白胡椒
   ingredientNameEN: White Pepper
   aromaType: Sharp spice
   initialDescription: White pepper is sharp and quick to spread. Too much grinding can make it harsh.
   ingredientColor: {r: 0.8, g: 0.77, b: 0.68, a: 1}
   icon: {fileID: 0}
-  prefab: {fileID: 199215721214909720, guid: 37922b068597d084497c94e676092047, type: 3}
+  prefab: {fileID: 1052279163172246164, guid: c1815a64291245109b01ae0afc276a1a, type: 3}
+  groundPrefab: {fileID: 1052279163172246164, guid: b8ad5f4327714f03a0e68fabbe2923b9, type: 3}
   defaultRatioValue: 2

@@ -65,6 +65,7 @@ namespace TheTasteReviver
                 UpdateCurrentSpeed(delta);
                 CurrentSpeedLevel = SpeedToLevel(currentMouseSpeed);
                 RefreshLabel();
+                uiManager?.attemptManager?.ShowGroundVisualsForCurrentBatch();
                 uiManager?.TryAutoEvaluateAfterGrinding();
             }
 

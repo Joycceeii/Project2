@@ -122,6 +122,24 @@ namespace TheTasteReviver
             HasEvaluated = true;
         }
 
+        public void ShowGroundVisualsForCurrentBatch()
+        {
+            foreach (DraggableIngredient ingredient in FindObjectsByType<DraggableIngredient>(FindObjectsSortMode.None))
+            {
+                if (ingredient == null || !ingredient.gameObject.activeInHierarchy || !ingredient.IsInMortar || ingredient.ingredientData == null)
+                {
+                    continue;
+                }
+
+                if (batchByIngredient.TryGetValue(ingredient.ingredientData, out int batchID) && batchID != currentBatchID)
+                {
+                    continue;
+                }
+
+                ingredient.ShowGroundState();
+            }
+        }
+
         private void ReturnIngredientsHome()
         {
             foreach (DraggableIngredient ingredient in FindObjectsByType<DraggableIngredient>(FindObjectsSortMode.None))

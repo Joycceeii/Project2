@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TheTasteReviver
@@ -13,6 +14,10 @@ namespace TheTasteReviver
         private Vector3 startPosition;
         private bool dragging;
         private float dragPlaneY;
+        private readonly List<Renderer> hiddenRenderers = new List<Renderer>();
+        private GameObject groundVisualInstance;
+
+        public bool IsInMortar { get; private set; }
 
         private void Awake()
         {
@@ -34,8 +39,30 @@ namespace TheTasteReviver
         public void ReturnHome()
         {
             dragging = false;
+            IsInMortar = false;
+            ClearGroundState();
             transform.position = startPosition;
             dragPlaneY = startPosition.y;
+        }
+
+        public void ShowGroundState()
+        {
+            if (!IsInMortar || ingredientData == null || ingredientData.groundPrefab == null || groundVisualInstance != null)
+            {
+                return;
+            }
+
+            HideCurrentRenderers();
+            groundVisualInstance = Instantiate(ingredientData.groundPrefab, transform);
+            groundVisualInstance.name = "Ground Visual";
+            groundVisualInstance.transform.localPosition = Vector3.zero;
+            groundVisualInstance.transform.localRotation = Quaternion.identity;
+            groundVisualInstance.transform.localScale = Vector3.one;
+
+            foreach (Collider collider in groundVisualInstance.GetComponentsInChildren<Collider>(true))
+            {
+                collider.enabled = false;
+            }
         }
 
         private void OnMouseDown()
@@ -62,7 +89,40 @@ namespace TheTasteReviver
             dragging = false;
             bool droppedInMortar = mortarArea != null && mortarArea.ContainsWorldPoint(transform.position);
             bool accepted = droppedInMortar && attemptManager != null && attemptManager.TryAddIngredient(ingredientData);
+            IsInMortar = accepted;
             transform.position = accepted && mortarArea != null ? mortarArea.transform.position + Vector3.up * 0.35f : startPosition;
+        }
+
+        private void HideCurrentRenderers()
+        {
+            hiddenRenderers.Clear();
+            foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
+            {
+                if (renderer.enabled)
+                {
+                    renderer.enabled = false;
+                    hiddenRenderers.Add(renderer);
+                }
+            }
+        }
+
+        private void ClearGroundState()
+        {
+            if (groundVisualInstance != null)
+            {
+                DestroyObject(groundVisualInstance);
+                groundVisualInstance = null;
+            }
+
+            foreach (Renderer renderer in hiddenRenderers)
+            {
+                if (renderer != null)
+                {
+                    renderer.enabled = true;
+                }
+            }
+
+            hiddenRenderers.Clear();
         }
 
         private bool TryGetMouseWorldPoint(out Vector3 worldPoint)
@@ -77,6 +137,23 @@ namespace TheTasteReviver
 
             worldPoint = transform.position;
             return false;
+        }
+
+        private static void DestroyObject(GameObject target)
+        {
+            if (target == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(target);
+            }
+            else
+            {
+                DestroyImmediate(target);
+            }
         }
     }
 }
