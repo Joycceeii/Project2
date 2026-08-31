@@ -11,7 +11,20 @@ namespace TheTasteReviver.EditorTools
         private const string ArtRoot = "Assets/Art/Ingredients";
         private const string EnvironmentRoot = "Assets/Art/Environment";
         private const string IngredientDataRoot = "Assets/Data/GeneratedAssets/Ingredients";
-        private const string BowlModelPath = "Assets/Art/Environment/Pestle/grinding_bowl_2DPlane.fbx";
+        private const string BowlModelPath = "Assets/Art/Environment/Mortar/Models/lod_basic_pbr.fbx";
+        private const string ImportedBowlMaterialPath = "Assets/Art/Environment/Mortar/Materials/M_Imported_Bowl_Stone.mat";
+        private const string GrindingPestleRoot = "Assets/Art/Tools/GrindingPestle";
+        private const string GrindingPestleModelPath = "Assets/Art/Tools/GrindingPestle/Models/lod_basic_pbr.fbx";
+        private const string GrindingPestleMaterialPath = "Assets/Art/Tools/GrindingPestle/Materials/MAT_GrindingPestle.mat";
+        private const string GrindingTableRoot = "Assets/Art/Tools/GrindingTable";
+        private const string GrindingTableModelPath = "Assets/Art/Tools/GrindingTable/Models/lod_basic_pbr.fbx";
+        private const string GrindingTableMaterialPath = "Assets/Art/Tools/GrindingTable/Materials/MAT_GrindingTable.mat";
+        private const string IngredientPlateRoot = "Assets/Art/Environment/IngredientPlate";
+        private const string IngredientPlateModelPath = "Assets/Art/Environment/IngredientPlate/Models/lod_basic_pbr.fbx";
+        private const string IngredientPlateMaterialPath = "Assets/Art/Environment/IngredientPlate/Materials/MAT_IngredientPlate.mat";
+        private const string GlutinousRiceModelPath = "Assets/Art/Ingredients/GlutinousRice/Models/lod_basic_pbr.fbx";
+        private const string YangjiangDouchiModelPath = "Assets/Art/Ingredients/YangjiangDouchi/Models/lod_basic_pbr.fbx";
+        private const string RockSugarModelPath = "Assets/Art/Ingredients/RockSugar/Models/lod_basic_pbr.fbx";
 
         [MenuItem("The Taste Reviver/Generate Visible Art Prefabs")]
         public static void GenerateVisibleArtPrefabs()
@@ -55,6 +68,7 @@ namespace TheTasteReviver.EditorTools
 
             CreateMortarPrefab();
             CreatePestlePrefab();
+            CreateGrindingTablePrefab();
             CreatePlatePrefab();
 
             AssetDatabase.SaveAssets();
@@ -95,7 +109,11 @@ namespace TheTasteReviver.EditorTools
             GameObject root = new GameObject("PF_" + ingredient.ingredientID);
             DraggableIngredient drag = root.AddComponent<DraggableIngredient>();
 
-            BuildVisual(root.transform, ingredient.ingredientID, material);
+            if (!TryBuildImportedIngredientVisual(root.transform, ingredient.ingredientID, material))
+            {
+                BuildVisual(root.transform, ingredient.ingredientID, material);
+            }
+
             ConfigureCollider(root, ingredient.ingredientID);
 
             string prefabPath = ingredientFolder + "/Prefabs/PF_" + ingredient.ingredientID + ".prefab";
@@ -120,62 +138,189 @@ namespace TheTasteReviver.EditorTools
             string rootFolder = EnvironmentRoot + "/Mortar";
             EnsureEnvironmentFolders(rootFolder);
 
-            Material stone = CreateOrUpdateMaterial("M_Mortar_Stone", new Color(0.72f, 0.68f, 0.6f), rootFolder + "/Materials/M_Mortar_Stone.mat");
             GameObject root = new GameObject("PF_Mortar");
 
             GameObject model = AssetDatabase.LoadAssetAtPath<GameObject>(BowlModelPath);
             if (model != null)
             {
                 GameObject visual = (GameObject)PrefabUtility.InstantiatePrefab(model);
-                visual.name = "Bowl Visual";
+                visual.name = "Mortar Bowl";
                 visual.transform.SetParent(root.transform, false);
-                visual.transform.localScale = Vector3.one * 0.75f;
-                ApplyMaterialToRenderers(visual, stone);
+                visual.transform.localScale = Vector3.one * 1.18422f;
+
+                Material importedStone = AssetDatabase.LoadAssetAtPath<Material>(ImportedBowlMaterialPath);
+                if (importedStone != null)
+                {
+                    ApplyMaterialToRenderers(visual, importedStone);
+                }
             }
             else
             {
-                GameObject bowl = AddPrimitive(root.transform, PrimitiveType.Cylinder, "Bowl Visual", stone);
-                bowl.transform.localScale = new Vector3(0.9f, 0.22f, 0.9f);
+                Debug.LogWarning("Imported bowl model was not found. Mortar prefab was created without a visual.");
             }
-
-            GameObject inner = AddPrimitive(root.transform, PrimitiveType.Cylinder, "Grinding Surface", stone);
-            inner.transform.localPosition = Vector3.up * 0.13f;
-            inner.transform.localScale = new Vector3(0.62f, 0.05f, 0.62f);
 
             SavePrefab(root, rootFolder + "/Prefabs/PF_Mortar.prefab");
         }
 
         private static void CreatePestlePrefab()
         {
-            string rootFolder = EnvironmentRoot + "/Pestle";
-            EnsureEnvironmentFolders(rootFolder);
+            EnsureNestedFolder(GrindingPestleRoot);
+            EnsureFolder(GrindingPestleRoot, "Materials");
+            EnsureFolder(GrindingPestleRoot, "Models");
+            EnsureFolder(GrindingPestleRoot, "Prefabs");
+            EnsureFolder(GrindingPestleRoot, "Textures");
 
-            Material wood = CreateOrUpdateMaterial("M_Pestle_Wood", new Color(0.56f, 0.38f, 0.22f), rootFolder + "/Materials/M_Pestle_Wood.mat");
-            GameObject root = new GameObject("PF_Pestle");
+            Material stone = AssetDatabase.LoadAssetAtPath<Material>(GrindingPestleMaterialPath);
+            GameObject model = AssetDatabase.LoadAssetAtPath<GameObject>(GrindingPestleModelPath);
+            GameObject root = new GameObject("GrindingPestle");
+            GameObject visualRoot = new GameObject("Visual");
+            visualRoot.transform.SetParent(root.transform, false);
 
-            GameObject handle = AddPrimitive(root.transform, PrimitiveType.Cylinder, "Handle", wood);
-            handle.transform.localRotation = Quaternion.Euler(0f, 0f, 16f);
-            handle.transform.localScale = new Vector3(0.13f, 0.58f, 0.13f);
+            if (model != null)
+            {
+                GameObject visual = (GameObject)PrefabUtility.InstantiatePrefab(model);
+                visual.name = "GrindingPestle_LOD0";
+                visual.transform.SetParent(visualRoot.transform, false);
+                visual.transform.localScale = Vector3.one * 0.92260665f;
+                visual.transform.localPosition = new Vector3(-0.0003530383f, -0.23870549f, -0.0002593696f);
+                if (stone != null)
+                {
+                    ApplyMaterialToRenderers(visual, stone);
+                }
+            }
+            else
+            {
+                Debug.LogWarning("GrindingPestle model was not found. Prefab was created without a visual.");
+            }
 
-            GameObject head = AddPrimitive(root.transform, PrimitiveType.Sphere, "Grinding Head", wood);
-            head.transform.localPosition = new Vector3(0.14f, -0.48f, 0f);
-            head.transform.localScale = new Vector3(0.22f, 0.16f, 0.22f);
+            GameObject grip = new GameObject("GripPoint");
+            grip.transform.SetParent(root.transform, false);
+            grip.transform.localPosition = Vector3.up * 0.72f;
+
+            GameObject tip = new GameObject("GrindingTip");
+            tip.transform.SetParent(root.transform, false);
+            tip.transform.localPosition = Vector3.down * 0.72f;
 
             root.AddComponent<PestleController>();
-            SavePrefab(root, rootFolder + "/Prefabs/PF_Pestle.prefab");
+            CapsuleCollider collider = root.AddComponent<CapsuleCollider>();
+            collider.direction = 1;
+            collider.radius = 0.16f;
+            collider.height = 1.85f;
+            SavePrefab(root, GrindingPestleRoot + "/Prefabs/GrindingPestle.prefab");
+        }
+
+        private static void CreateGrindingTablePrefab()
+        {
+            EnsureNestedFolder(GrindingTableRoot);
+            EnsureFolder(GrindingTableRoot, "Materials");
+            EnsureFolder(GrindingTableRoot, "Models");
+            EnsureFolder(GrindingTableRoot, "Prefabs");
+            EnsureFolder(GrindingTableRoot, "Textures");
+
+            Material wood = AssetDatabase.LoadAssetAtPath<Material>(GrindingTableMaterialPath);
+            GameObject model = AssetDatabase.LoadAssetAtPath<GameObject>(GrindingTableModelPath);
+            GameObject root = new GameObject("GrindingTable");
+            GameObject visualRoot = new GameObject("Visual");
+            visualRoot.transform.SetParent(root.transform, false);
+
+            Bounds visualBounds = new Bounds(Vector3.zero, new Vector3(5.6f, 0.9f, 3.5f));
+            if (model != null)
+            {
+                GameObject visual = (GameObject)PrefabUtility.InstantiatePrefab(model);
+                visual.name = "GrindingTable_LOD0";
+                visual.transform.SetParent(visualRoot.transform, false);
+
+                Bounds sourceBounds = CalculateRendererBounds(visual);
+                if (sourceBounds.size.x > 0f && sourceBounds.size.z > 0f)
+                {
+                    float scale = Mathf.Min(5.6f / sourceBounds.size.x, 3.5f / sourceBounds.size.z);
+                    visual.transform.localScale = Vector3.one * scale;
+                    visual.transform.localPosition = new Vector3(
+                        -sourceBounds.center.x * scale,
+                        -sourceBounds.min.y * scale,
+                        -sourceBounds.center.z * scale);
+                    visualBounds = new Bounds(
+                        new Vector3(0f, sourceBounds.size.y * scale * 0.5f, 0f),
+                        sourceBounds.size * scale);
+                }
+
+                if (wood != null)
+                {
+                    ApplyMaterialToRenderers(visual, wood);
+                }
+            }
+            else
+            {
+                Debug.LogWarning("GrindingTable model was not found. Prefab was created with colliders and anchors only.");
+            }
+
+            float tabletopTop = Mathf.Max(visualBounds.max.y, 0.75f);
+            float tabletopThickness = Mathf.Clamp(visualBounds.size.y * 0.16f, 0.12f, 0.22f);
+            float width = Mathf.Max(visualBounds.size.x, 5.6f);
+            float depth = Mathf.Max(visualBounds.size.z, 3.5f);
+
+            GameObject colliders = new GameObject("Colliders");
+            colliders.transform.SetParent(root.transform, false);
+            AddBoxCollider(colliders.transform, "TabletopCollider", new Vector3(0f, tabletopTop - tabletopThickness * 0.5f, 0f), new Vector3(width, tabletopThickness, depth));
+
+            float legHeight = Mathf.Max(tabletopTop - tabletopThickness, 0.45f);
+            float legInsetX = width * 0.42f;
+            float legInsetZ = depth * 0.42f;
+            Vector3 legSize = new Vector3(0.18f, legHeight, 0.18f);
+            AddBoxCollider(colliders.transform, "LegCollider_FL", new Vector3(-legInsetX, legHeight * 0.5f, legInsetZ), legSize);
+            AddBoxCollider(colliders.transform, "LegCollider_FR", new Vector3(legInsetX, legHeight * 0.5f, legInsetZ), legSize);
+            AddBoxCollider(colliders.transform, "LegCollider_BL", new Vector3(-legInsetX, legHeight * 0.5f, -legInsetZ), legSize);
+            AddBoxCollider(colliders.transform, "LegCollider_BR", new Vector3(legInsetX, legHeight * 0.5f, -legInsetZ), legSize);
+
+            GameObject bowlAnchor = new GameObject("GrindingBowlAnchor");
+            bowlAnchor.transform.SetParent(root.transform, false);
+            bowlAnchor.transform.localPosition = new Vector3(0f, tabletopTop + 0.03f, 0f);
+
+            GameObject pestleRest = new GameObject("PestleRestPoint");
+            pestleRest.transform.SetParent(root.transform, false);
+            pestleRest.transform.localPosition = new Vector3(width * 0.28f, tabletopTop + 0.05f, -depth * 0.22f);
+
+            SavePrefab(root, GrindingTableRoot + "/Prefabs/GrindingTable.prefab");
         }
 
         private static void CreatePlatePrefab()
         {
-            string rootFolder = EnvironmentRoot + "/Props";
-            EnsureEnvironmentFolders(rootFolder);
+            EnsureNestedFolder(IngredientPlateRoot);
+            EnsureFolder(IngredientPlateRoot, "Materials");
+            EnsureFolder(IngredientPlateRoot, "Models");
+            EnsureFolder(IngredientPlateRoot, "Prefabs");
+            EnsureFolder(IngredientPlateRoot, "Textures");
 
-            Material ceramic = CreateOrUpdateMaterial("M_IngredientPlate_Ceramic", Color.white, rootFolder + "/Materials/M_IngredientPlate_Ceramic.mat");
-            GameObject root = new GameObject("PF_IngredientPlate");
-            GameObject plate = AddPrimitive(root.transform, PrimitiveType.Cylinder, "Plate", ceramic);
-            plate.transform.localScale = new Vector3(0.75f, 0.08f, 0.75f);
+            Material ceramic = AssetDatabase.LoadAssetAtPath<Material>(IngredientPlateMaterialPath);
+            GameObject model = AssetDatabase.LoadAssetAtPath<GameObject>(IngredientPlateModelPath);
+            GameObject root = new GameObject("IngredientPlate");
 
-            SavePrefab(root, rootFolder + "/Prefabs/PF_IngredientPlate.prefab");
+            if (model != null)
+            {
+                GameObject visual = (GameObject)PrefabUtility.InstantiatePrefab(model);
+                visual.name = "IngredientPlate_LOD0";
+                visual.transform.SetParent(root.transform, false);
+                visual.transform.localPosition = Vector3.zero;
+                visual.transform.localRotation = Quaternion.identity;
+                visual.transform.localScale = Vector3.one;
+                RemoveLodGroups(visual);
+
+                if (ceramic != null)
+                {
+                    ApplyMaterialToRenderers(visual, ceramic);
+                }
+
+                FitVisualToFootprint(root.transform, visual.transform, 0.92f);
+            }
+            else
+            {
+                Material fallback = CreateOrUpdateMaterial("MAT_IngredientPlate_Fallback", Color.white, IngredientPlateRoot + "/Materials/MAT_IngredientPlate_Fallback.mat");
+                GameObject plate = AddPrimitive(root.transform, PrimitiveType.Cylinder, "Plate", fallback);
+                plate.transform.localScale = new Vector3(0.75f, 0.08f, 0.75f);
+                Debug.LogWarning("IngredientPlate model was not found. Prefab was created with a fallback cylinder.");
+            }
+
+            SavePrefab(root, IngredientPlateRoot + "/Prefabs/IngredientPlate.prefab");
         }
 
         private static Material CreateOrUpdateMaterial(IngredientData ingredient, string path)
@@ -202,6 +347,104 @@ namespace TheTasteReviver.EditorTools
             material.color = color;
             EditorUtility.SetDirty(material);
             return material;
+        }
+
+        private static bool TryBuildImportedIngredientVisual(Transform root, string id, Material material)
+        {
+            if (id == "GlutinousRice")
+            {
+                return TryBuildImportedIngredientVisual(
+                    root,
+                    material,
+                    GlutinousRiceModelPath,
+                    "GlutinousRice_LOD0",
+                    0.68f,
+                    "Assets/Art/Ingredients/GlutinousRice/Textures");
+            }
+
+            if (id == "YangjiangDouchi")
+            {
+                return TryBuildImportedIngredientVisual(
+                    root,
+                    material,
+                    YangjiangDouchiModelPath,
+                    "YangjiangDouchi_LOD0",
+                    0.72f,
+                    "Assets/Art/Ingredients/YangjiangDouchi/Textures");
+            }
+
+            if (id == "RockSugar")
+            {
+                return TryBuildImportedIngredientVisual(
+                    root,
+                    material,
+                    RockSugarModelPath,
+                    "RockSugar_LOD0",
+                    0.74f,
+                    "Assets/Art/Ingredients/RockSugar/Textures");
+            }
+
+            return false;
+        }
+
+        private static bool TryBuildImportedIngredientVisual(
+            Transform root,
+            Material material,
+            string modelPath,
+            string visualName,
+            float targetDiameter,
+            string textureRoot)
+        {
+            GameObject model = AssetDatabase.LoadAssetAtPath<GameObject>(modelPath);
+            if (model == null)
+            {
+                return false;
+            }
+
+            ConfigureImportedIngredientMaterial(material, textureRoot);
+            GameObject visual = (GameObject)PrefabUtility.InstantiatePrefab(model);
+            visual.name = visualName;
+            visual.transform.SetParent(root, false);
+            visual.transform.localPosition = Vector3.zero;
+            visual.transform.localRotation = Quaternion.identity;
+            visual.transform.localScale = Vector3.one;
+            RemoveLodGroups(visual);
+            ApplyMaterialToRenderers(visual, material);
+            FitVisualToFootprint(root, visual.transform, targetDiameter);
+            return true;
+        }
+
+        private static void ConfigureImportedIngredientMaterial(Material material, string textureRoot)
+        {
+            if (material == null)
+            {
+                return;
+            }
+
+            SetMaterialTexture(material, "_BaseMap", textureRoot + "/texture_diffuse.png");
+            SetMaterialTexture(material, "_BumpMap", textureRoot + "/texture_normal.png");
+            SetMaterialTexture(material, "_MetallicGlossMap", textureRoot + "/texture_pbr.png");
+            SetMaterialTexture(material, "_OcclusionMap", textureRoot + "/texture_pbr.png");
+            material.color = Color.white;
+            material.SetFloat("_Smoothness", 0.38f);
+            material.SetFloat("_Metallic", 0f);
+            material.EnableKeyword("_NORMALMAP");
+            material.EnableKeyword("_METALLICSPECGLOSSMAP");
+            EditorUtility.SetDirty(material);
+        }
+
+        private static void SetMaterialTexture(Material material, string propertyName, string path)
+        {
+            if (material == null || !material.HasProperty(propertyName))
+            {
+                return;
+            }
+
+            Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            if (texture != null)
+            {
+                material.SetTexture(propertyName, texture);
+            }
         }
 
         private static void BuildVisual(Transform root, string id, Material material)
@@ -366,6 +609,76 @@ namespace TheTasteReviver.EditorTools
             {
                 renderer.sharedMaterial = material;
             }
+        }
+
+        private static void RemoveLodGroups(GameObject root)
+        {
+            foreach (LODGroup lodGroup in root.GetComponentsInChildren<LODGroup>(true))
+            {
+                Object.DestroyImmediate(lodGroup);
+            }
+        }
+
+        private static void FitVisualToFootprint(Transform root, Transform visual, float targetDiameter)
+        {
+            Renderer[] renderers = root.GetComponentsInChildren<Renderer>(true);
+            if (renderers.Length == 0)
+            {
+                return;
+            }
+
+            Bounds bounds = renderers[0].bounds;
+            for (int i = 1; i < renderers.Length; i++)
+            {
+                bounds.Encapsulate(renderers[i].bounds);
+            }
+
+            float largestHorizontal = Mathf.Max(bounds.size.x, bounds.size.z);
+            if (largestHorizontal <= 0.0001f)
+            {
+                return;
+            }
+
+            float scale = targetDiameter / largestHorizontal;
+            visual.localScale = Vector3.one * scale;
+
+            renderers = root.GetComponentsInChildren<Renderer>(true);
+            bounds = renderers[0].bounds;
+            for (int i = 1; i < renderers.Length; i++)
+            {
+                bounds.Encapsulate(renderers[i].bounds);
+            }
+
+            Vector3 localCenter = root.InverseTransformPoint(bounds.center);
+            Vector3 localMin = root.InverseTransformPoint(bounds.min);
+            visual.localPosition -= new Vector3(localCenter.x, localMin.y, localCenter.z);
+        }
+
+        private static Bounds CalculateRendererBounds(GameObject root)
+        {
+            Renderer[] renderers = root.GetComponentsInChildren<Renderer>(true);
+            if (renderers.Length == 0)
+            {
+                return new Bounds(Vector3.zero, Vector3.zero);
+            }
+
+            Bounds bounds = renderers[0].bounds;
+            for (int i = 1; i < renderers.Length; i++)
+            {
+                bounds.Encapsulate(renderers[i].bounds);
+            }
+
+            return bounds;
+        }
+
+        private static BoxCollider AddBoxCollider(Transform parent, string name, Vector3 center, Vector3 size)
+        {
+            GameObject obj = new GameObject(name);
+            obj.transform.SetParent(parent, false);
+            BoxCollider collider = obj.AddComponent<BoxCollider>();
+            collider.center = center;
+            collider.size = size;
+            return collider;
         }
 
         private static GameObject SavePrefab(GameObject root, string path)

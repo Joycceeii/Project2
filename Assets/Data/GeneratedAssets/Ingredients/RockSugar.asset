@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: RockSugar
   m_EditorClassIdentifier: 
   ingredientID: RockSugar
-  ingredientNameCN:
+  ingredientNameCN: 
   ingredientNameEN: Rock Sugar
   aromaType: Clean sweetness
-  initialDescription: Rock sugar adds clean sweetness. It should round out the recipe instead of taking over.
+  initialDescription: Rock sugar adds clean sweetness. It should round out the recipe
+    instead of taking over.
   ingredientColor: {r: 0.88, g: 0.95, b: 1, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 3472144241530825209, guid: 119cd86ba7d404c41b6e74396747ddbd, type: 3}

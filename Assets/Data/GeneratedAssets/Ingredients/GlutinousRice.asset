@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: GlutinousRice
   m_EditorClassIdentifier: 
   ingredientID: GlutinousRice
-  ingredientNameCN:
+  ingredientNameCN: 
   ingredientNameEN: Glutinous Rice
   aromaType: Sticky grain
-  initialDescription: Glutinous rice makes the mixture smooth and thick. It should support stronger flavors.
+  initialDescription: Glutinous rice makes the mixture smooth and thick. It should
+    support stronger flavors.
   ingredientColor: {r: 0.92, g: 0.86, b: 0.68, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 2041220751842550196, guid: c25f9a1ea9c08c949a9077c9e1a64fbc, type: 3}
+  groundPrefab: {fileID: 0}
   defaultRatioValue: 1

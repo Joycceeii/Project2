@@ -9,20 +9,32 @@ namespace TheTasteReviver
         private const string ContainerName = "Ingredient Slots";
         private const string LabelName = "Ingredient Label";
         private const int MaxSlots = 4;
-        private const float TopDownLabelRollDegrees = 180f;
+        private const float LabelSurfaceOffset = 0.08f;
+        private const float PlateLabelYOffset = 0.105f;
 
         public MortarArea mortarArea;
         public RecipeAttemptManager attemptManager;
+        public GameObject platePrefab;
         public bool hideLegacyDisplaysOnFirstRefresh = true;
         public bool showIngredientLabels = true;
-        public Vector3 labelOffset = new Vector3(0f, 1.05f, 0f);
-        public int labelFontSize = 32;
-        public float labelCharacterSize = 0.045f;
+        public Vector3 labelOffset = new Vector3(0f, PlateLabelYOffset, 0f);
+        public int labelFontSize = 40;
+        public float labelCharacterSize = 0.055f;
 
         private bool legacyDisplaysHandled;
 
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            ResolvePlatePrefabInEditor();
+        }
+#endif
+
         public void ShowLevelIngredients(RecipeLevelData level)
         {
+#if UNITY_EDITOR
+            ResolvePlatePrefabInEditor();
+#endif
             List<GameObject> slots = EnsureSlots();
             HideLegacyIngredientDisplaysOnce();
             SetAllSlotsInactive(slots);
@@ -88,12 +100,7 @@ namespace TheTasteReviver
             GameObject slot = new GameObject(slotName);
             slot.transform.SetParent(container, false);
 
-            GameObject plate = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            plate.name = "Plate";
-            plate.transform.SetParent(slot.transform, false);
-            plate.transform.localPosition = Vector3.zero;
-            plate.transform.localScale = new Vector3(0.75f, 0.08f, 0.75f);
-            ApplyColor(plate, Color.white);
+            EnsurePlateVisual(slot.transform);
 
             GameObject item = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             item.name = "Ingredient";
@@ -118,12 +125,7 @@ namespace TheTasteReviver
             slot.transform.position = GetSlotPosition(index, activeCount);
             slot.transform.rotation = Quaternion.identity;
 
-            Transform plate = FindPlate(slot.transform);
-            if (IsAlive(plate))
-            {
-                plate.gameObject.name = "Plate";
-                ApplyColor(plate.gameObject, Color.white);
-            }
+            EnsurePlateVisual(slot.transform);
 
             Transform item = EnsureIngredientItem(slot.transform, ingredient);
             if (!IsAlive(item))
@@ -195,6 +197,71 @@ namespace TheTasteReviver
 
             return item.transform;
         }
+
+        private Transform EnsurePlateVisual(Transform slot)
+        {
+            Transform current = FindPlate(slot);
+            if (IsAlive(platePrefab))
+            {
+                if (IsAlive(current) && !IsImportedPlateInstance(current))
+                {
+                    DestroyObject(current.gameObject);
+                    current = null;
+                }
+
+                if (!IsAlive(current))
+                {
+                    GameObject importedPlate = Instantiate(platePrefab, slot, false);
+                    importedPlate.name = "Plate";
+                    importedPlate.transform.localPosition = Vector3.zero;
+                    importedPlate.transform.localRotation = Quaternion.identity;
+                    importedPlate.transform.localScale = Vector3.one;
+                    return importedPlate.transform;
+                }
+
+                current.name = "Plate";
+                current.localPosition = Vector3.zero;
+                current.localRotation = Quaternion.identity;
+                current.localScale = Vector3.one;
+                return current;
+            }
+
+            if (!IsAlive(current))
+            {
+                GameObject plate = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                plate.name = "Plate";
+                plate.transform.SetParent(slot, false);
+                plate.transform.localPosition = Vector3.zero;
+                plate.transform.localScale = new Vector3(0.75f, 0.08f, 0.75f);
+                ApplyColor(plate, Color.white);
+                return plate.transform;
+            }
+
+            current.name = "Plate";
+            ApplyColor(current.gameObject, Color.white);
+            return current;
+        }
+
+        private bool IsImportedPlateInstance(Transform plate)
+        {
+            if (!IsAlive(platePrefab) || !IsAlive(plate))
+            {
+                return false;
+            }
+
+            return IsAlive(plate.Find("IngredientPlate_LOD0"))
+                || plate.GetComponentsInChildren<MeshFilter>(true).Length > 1;
+        }
+
+#if UNITY_EDITOR
+        private void ResolvePlatePrefabInEditor()
+        {
+            if (platePrefab == null)
+            {
+                platePrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Art/Environment/IngredientPlate/Prefabs/IngredientPlate.prefab");
+            }
+        }
+#endif
 
         private static void FitIngredientItemToPlate(Transform item, bool usesPrefab)
         {
@@ -302,36 +369,18 @@ namespace TheTasteReviver
             label.fontSize = Mathf.Max(8, labelFontSize);
             label.characterSize = Mathf.Max(0.001f, labelCharacterSize);
             label.transform.localPosition = labelOffset;
-            FaceLabelToCamera(label.transform);
+            ConfigurePlateLabel(label.transform);
         }
 
-        private void LateUpdate()
+        private static void ConfigurePlateLabel(Transform label)
         {
-            Transform container = transform.Find(ContainerName);
-            if (!IsAlive(container))
+            if (!IsAlive(label))
             {
                 return;
             }
 
-            foreach (TextMesh label in container.GetComponentsInChildren<TextMesh>(false))
-            {
-                if (IsAlive(label))
-                {
-                    FaceLabelToCamera(label.transform);
-                }
-            }
-        }
-
-        private static void FaceLabelToCamera(Transform label)
-        {
-            Camera camera = Camera.main;
-            if (!IsAlive(label) || !IsAlive(camera))
-            {
-                return;
-            }
-
-            label.rotation = Quaternion.LookRotation(label.position - camera.transform.position)
-                * Quaternion.Euler(0f, 0f, TopDownLabelRollDegrees);
+            label.localRotation = Quaternion.Euler(-90f, 180f, 0f);
+            label.localScale = Vector3.one;
         }
 
         private static Transform FindSlot(Transform container, string slotName)
@@ -455,12 +504,77 @@ namespace TheTasteReviver
             }
         }
 
-        private static Vector3 GetSlotPosition(int index, int activeCount)
+        private Vector3 GetSlotPosition(int index, int activeCount)
         {
             int safeCount = Mathf.Max(1, activeCount);
+            if (TryGetGrindingTableSlotPosition(index, safeCount, out Vector3 tablePosition))
+            {
+                return tablePosition;
+            }
+
             float spacing = safeCount <= 3 ? 1.6f : 1.35f;
             float x = (index - (safeCount - 1) * 0.5f) * spacing;
-            return new Vector3(x, 0.15f, -1.6f);
+            return new Vector3(x, 0.43f, -1.6f);
+        }
+
+        private static bool TryGetGrindingTableSlotPosition(int index, int activeCount, out Vector3 position)
+        {
+            position = Vector3.zero;
+            GameObject table = GameObject.Find("GrindingTable");
+            if (!IsAlive(table) || !TryCalculateWorldBounds(table, out Bounds bounds))
+            {
+                return false;
+            }
+
+            float usableWidth = Mathf.Max(0.8f, bounds.size.x - 1.6f);
+            float spacing = Mathf.Min(1.35f, usableWidth / Mathf.Max(1, activeCount - 1));
+            float x = bounds.center.x + (index - (activeCount - 1) * 0.5f) * spacing;
+            float z = bounds.min.z + Mathf.Clamp(bounds.size.z * 0.26f, 0.6f, 1.05f);
+            float y = GetGrindingTableSurfaceY(table, bounds) + LabelSurfaceOffset;
+            position = new Vector3(x, y, z);
+            return true;
+        }
+
+        private static float GetGrindingTableSurfaceY(GameObject table, Bounds bounds)
+        {
+            Transform anchor = table.transform.Find("GrindingBowlAnchor");
+            if (IsAlive(anchor))
+            {
+                return anchor.position.y;
+            }
+
+            Transform tabletopCollider = table.transform.Find("TabletopCollider");
+            if (IsAlive(tabletopCollider))
+            {
+                Collider collider = tabletopCollider.GetComponent<Collider>();
+                if (IsAlive(collider))
+                {
+                    return collider.bounds.max.y;
+                }
+            }
+
+            return bounds.max.y;
+        }
+
+        private static bool TryCalculateWorldBounds(GameObject root, out Bounds bounds)
+        {
+            Renderer[] renderers = root.GetComponentsInChildren<Renderer>(true);
+            if (renderers == null || renderers.Length == 0)
+            {
+                bounds = new Bounds(root.transform.position, Vector3.zero);
+                return false;
+            }
+
+            bounds = renderers[0].bounds;
+            for (int i = 1; i < renderers.Length; i++)
+            {
+                if (IsAlive(renderers[i]))
+                {
+                    bounds.Encapsulate(renderers[i].bounds);
+                }
+            }
+
+            return true;
         }
 
         private static void ApplyColor(GameObject target, Color color)

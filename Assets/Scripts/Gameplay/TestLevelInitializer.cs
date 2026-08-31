@@ -10,7 +10,7 @@ public class TestLevelInitializer : MonoBehaviour
 {
     public List<IngredientData> ingredients = new List<IngredientData>();
     public List<RecipeLevelData> levels = new List<RecipeLevelData>();
-    public bool buildOnStart = true;
+    public bool buildOnStart = false;
     public bool buildInEditMode = true;
     private static Font cachedUIFont;
     private static readonly Dictionary<string, Material> cachedPlaceholderMaterials = new Dictionary<string, Material>();
@@ -19,7 +19,7 @@ public class TestLevelInitializer : MonoBehaviour
         {
             if (!Application.isPlaying && Camera.main != null)
             {
-                ConfigureTopDownCamera(Camera.main);
+                ConfigureDefaultCamera(Camera.main);
             }
 
             RepairRuntimeReferences();
@@ -64,17 +64,18 @@ public class TestLevelInitializer : MonoBehaviour
             {
                 Camera camera = new GameObject("Main Camera").AddComponent<Camera>();
                 camera.tag = "MainCamera";
-                ConfigureTopDownCamera(camera);
+                ConfigureDefaultCamera(camera);
             }
-            else
+            else if (!HasBuiltSceneObjects())
             {
-                ConfigureTopDownCamera(Camera.main);
+                ConfigureDefaultCamera(Camera.main);
             }
 
             EnsureCameraRaycaster(Camera.main);
 
             EnsureSingleEventSystem();
 
+            DestroyLegacyGeneratedObjects();
             CreateLight();
             CreateTable();
 
@@ -167,6 +168,8 @@ public class TestLevelInitializer : MonoBehaviour
             ExperimentLogManager log = FindFirstObjectByType<ExperimentLogManager>();
             MortarArea mortar = FindFirstObjectByType<MortarArea>();
 
+            ConfigureDefaultCamera(Camera.main);
+            ConfigureGrindingTable();
             EnsureAssignedData();
             ExperimentLogManager.SetIngredientCatalog(ingredients);
 
@@ -194,10 +197,17 @@ public class TestLevelInitializer : MonoBehaviour
 
             if (ui != null)
             {
+                Canvas canvas = ui.GetComponent<Canvas>();
+                if (canvas != null)
+                {
+                    ConfigureGameplayCanvas(canvas);
+                }
+
                 ui.EnsureRatioSelectionPanel();
                 ui.EnsureExperimentLogButton();
                 ui.EnsureActionButtons();
                 ui.EnsureIngredientTraitPanel();
+                ui.NormalizeHudLayout();
                 ui.attemptManager = attempt;
                 ui.evaluator = evaluator;
                 ui.hintManager = hint;
@@ -218,6 +228,10 @@ public class TestLevelInitializer : MonoBehaviour
             {
                 ingredientDisplay.mortarArea = mortar;
                 ingredientDisplay.attemptManager = attempt;
+                if (levelManager != null && levelManager.CurrentLevel != null)
+                {
+                    ingredientDisplay.ShowLevelIngredients(levelManager.CurrentLevel);
+                }
             }
         }
 
@@ -282,14 +296,61 @@ public class TestLevelInitializer : MonoBehaviour
 
         public static void ConfigureTopDownCamera(Camera camera)
         {
-            camera.transform.position = new Vector3(0f, 8.5f, 0f);
-            camera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            ConfigureDefaultCamera(camera);
+        }
+
+        public static void ConfigureDefaultCamera(Camera camera)
+        {
+            if (camera == null)
+            {
+                return;
+            }
+
+            camera.transform.position = new Vector3(0f, 6.45f, -4.85f);
+            camera.transform.rotation = Quaternion.Euler(55f, 0f, 0f);
             camera.orthographic = true;
-            camera.orthographicSize = 3.3f;
+            camera.orthographicSize = 3.85f;
             camera.nearClipPlane = 0.1f;
             camera.farClipPlane = 30f;
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = new Color(0.78f, 0.74f, 0.68f);
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                UnityEditor.EditorUtility.SetDirty(camera);
+                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(camera.gameObject.scene);
+            }
+#endif
+        }
+
+        private static void ConfigureGrindingTable()
+        {
+            GameObject table = GameObject.Find("GrindingTable");
+            if (table == null)
+            {
+                return;
+            }
+
+            const float tableScale = 1.55f;
+            const float tabletopY = 0.35f;
+            table.transform.localScale = Vector3.one * tableScale;
+
+            Transform anchor = table.transform.Find("GrindingBowlAnchor");
+            float rootY = table.transform.position.y;
+            if (anchor != null)
+            {
+                rootY = tabletopY - anchor.localPosition.y * tableScale;
+            }
+
+            table.transform.position = new Vector3(0f, rootY, 0f);
+            table.transform.rotation = Quaternion.identity;
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                UnityEditor.EditorUtility.SetDirty(table);
+                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(table.scene);
+            }
+#endif
         }
 
         private static void EnsureCameraRaycaster(Camera camera)
@@ -332,9 +393,27 @@ public class TestLevelInitializer : MonoBehaviour
 
         private static bool HasBuiltSceneObjects()
         {
-            return GameObject.Find("Placeholder Table") != null
+            return HasTableObject()
                 && GameObject.Find("Mortar Area") != null
                 && GameObject.Find("Test Level Canvas") != null;
+        }
+
+        private static bool HasTableObject()
+        {
+            return GameObject.Find("GrindingTable") != null || GameObject.Find("Placeholder Table") != null;
+        }
+
+        private static void DestroyLegacyGeneratedObjects()
+        {
+            if (GameObject.Find("GrindingTable") != null)
+            {
+                DestroyGeneratedObject("Placeholder Table");
+            }
+
+            if (GameObject.Find("GrindingPestle") != null)
+            {
+                DestroyGeneratedObject("Pestle");
+            }
         }
 
         private static void CreateLight()
@@ -348,6 +427,11 @@ public class TestLevelInitializer : MonoBehaviour
 
         private static void CreateTable()
         {
+            if (HasTableObject())
+            {
+                return;
+            }
+
             GameObject table = GameObject.CreatePrimitive(PrimitiveType.Cube);
             table.name = "Placeholder Table";
             table.transform.position = new Vector3(0f, -0.1f, 0f);
@@ -357,6 +441,12 @@ public class TestLevelInitializer : MonoBehaviour
 
         private static MortarArea CreateMortar()
         {
+            MortarArea existing = FindFirstObjectByType<MortarArea>();
+            if (existing != null)
+            {
+                return existing;
+            }
+
             GameObject mortar = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             mortar.name = "Mortar Area";
             mortar.transform.position = new Vector3(0f, 0.35f, 0.5f);
@@ -367,6 +457,13 @@ public class TestLevelInitializer : MonoBehaviour
 
         private static PestleController CreatePestle(MortarArea mortar)
         {
+            PestleController existing = FindFirstObjectByType<PestleController>();
+            if (existing != null)
+            {
+                existing.mortarArea = mortar;
+                return existing;
+            }
+
             GameObject pestle = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             pestle.name = "Pestle";
             pestle.transform.position = new Vector3(0.3f, 1.1f, 0.5f);
@@ -444,13 +541,11 @@ public class TestLevelInitializer : MonoBehaviour
         {
             GameObject canvasObject = new GameObject("Test Level Canvas");
             Canvas canvas = canvasObject.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.WorldSpace;
-            canvas.worldCamera = Camera.main;
             EnsureCameraRaycaster(Camera.main);
-            ConfigureWorldSpaceCanvas(canvasObject);
+            ConfigureGameplayCanvas(canvas);
             CanvasScaler scaler = canvasObject.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
-            scaler.referenceResolution = new Vector2(1366f, 768f);
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920f, 1080f);
             scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
             scaler.matchWidthOrHeight = 0.5f;
             canvasObject.AddComponent<GraphicRaycaster>();
@@ -488,16 +583,48 @@ public class TestLevelInitializer : MonoBehaviour
             ui.nextLevelButton = CreateButton(canvas.transform, "Next Level", new Vector2(132f, 36f), new Vector2(-24f, 24f), bottomRight, bottomRight, ui.NextLevel);
             ui.EnsureActionButtons();
             ui.EnsureIngredientTraitPanel();
+            ui.NormalizeHudLayout();
         }
 
-    private static void ConfigureWorldSpaceCanvas(GameObject canvasObject)
-    {
-        RectTransform canvasRect = canvasObject.GetComponent<RectTransform>();
-        canvasRect.sizeDelta = new Vector2(1366f, 768f);
-        canvasObject.transform.position = new Vector3(0f, 1.35f, 0f);
-        canvasObject.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
-        canvasObject.transform.localScale = Vector3.one * 0.008f;
-    }
+        private static void ConfigureGameplayCanvas(Canvas canvas)
+        {
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.worldCamera = null;
+            canvas.planeDistance = 100f;
+
+            CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
+            if (scaler != null)
+            {
+                scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                scaler.referenceResolution = new Vector2(1920f, 1080f);
+                scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+                scaler.matchWidthOrHeight = 0.5f;
+            }
+
+            Transform canvasTransform = canvas.transform;
+            canvasTransform.localPosition = Vector3.zero;
+            canvasTransform.localRotation = Quaternion.identity;
+            canvasTransform.localScale = Vector3.one;
+
+            RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+            if (canvasRect != null)
+            {
+                canvasRect.anchorMin = Vector2.zero;
+                canvasRect.anchorMax = Vector2.one;
+                canvasRect.pivot = new Vector2(0.5f, 0.5f);
+                canvasRect.anchoredPosition = Vector2.zero;
+                canvasRect.sizeDelta = Vector2.zero;
+            }
+        }
+
+        private static void ConfigureWorldSpaceCanvas(GameObject canvasObject)
+        {
+            Canvas canvas = canvasObject.GetComponent<Canvas>();
+            if (canvas != null)
+            {
+                ConfigureGameplayCanvas(canvas);
+            }
+        }
 
     private static Text CreateText(Transform parent, string name, Vector2 size, Vector2 position, TextAnchor anchor = TextAnchor.MiddleLeft)
     {

@@ -54,6 +54,7 @@ namespace TheTasteReviver
             EnsureExperimentLogButton();
             EnsureActionButtons();
             EnsureIngredientTraitPanel();
+            NormalizeHudLayout();
         }
 
         public void EvaluateCurrentAttempt()
@@ -463,13 +464,7 @@ namespace TheTasteReviver
 
         private static bool ShouldAutoExpandIngredientTraits(RecipeLevelData level)
         {
-            string key = GetIngredientTraitLevelKey(level);
-            if (string.IsNullOrWhiteSpace(key))
-            {
-                return true;
-            }
-
-            return autoShownIngredientTraitLevels.Add(key);
+            return false;
         }
 
         private static string GetIngredientTraitLevelKey(RecipeLevelData level)
@@ -644,6 +639,119 @@ namespace TheTasteReviver
                 newBatchButton.gameObject.SetActive(false);
             }
             nextLevelButton = BindButton(nextLevelButton, "Next Level", NextLevel);
+        }
+
+        public void NormalizeHudLayout()
+        {
+            ConfigureTextPanel(levelLabel, new Vector2(860f, 78f), new Vector2(0f, -34f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), TextAnchor.UpperCenter, 22);
+            ConfigureTextPanel(currentOrderLabel, new Vector2(360f, 92f), new Vector2(36f, -132f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft, 18);
+            ConfigureTextPanel(currentRatioLabel, new Vector2(360f, 112f), new Vector2(36f, -236f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft, 18);
+            ConfigureTextPanel(currentSpeedLabel, new Vector2(360f, 48f), new Vector2(36f, -360f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.MiddleLeft, 18);
+            ConfigureTextPanel(hintLabel, new Vector2(430f, 150f), new Vector2(-36f, -34f), new Vector2(1f, 1f), new Vector2(1f, 1f), TextAnchor.UpperLeft, 18);
+
+            ConfigureButton(experimentLogButton, new Vector2(180f, 46f), new Vector2(36f, 36f), new Vector2(0f, 0f), new Vector2(0f, 0f));
+            ConfigureButton(evaluateButton, new Vector2(176f, 46f), new Vector2(-36f, 136f), new Vector2(1f, 0f), new Vector2(1f, 0f));
+            ConfigureButton(resetAttemptButton, new Vector2(176f, 46f), new Vector2(-36f, 84f), new Vector2(1f, 0f), new Vector2(1f, 0f));
+            ConfigureButton(newBatchButton, new Vector2(176f, 46f), new Vector2(-36f, 32f), new Vector2(1f, 0f), new Vector2(1f, 0f));
+            ConfigureButton(nextLevelButton, new Vector2(176f, 46f), new Vector2(36f, 92f), new Vector2(0f, 0f), new Vector2(0f, 0f));
+            ConfigureButton(ingredientTraitToggleButton, new Vector2(160f, 46f), new Vector2(-36f, -206f), new Vector2(1f, 1f), new Vector2(1f, 1f));
+
+            ConfigureNamedRect("Force Slider", new Vector2(360f, 42f), new Vector2(36f, 136f), new Vector2(0f, 0f), new Vector2(0f, 0f));
+            ConfigureNamedRect("Force Label Panel", new Vector2(360f, 38f), new Vector2(36f, 184f), new Vector2(0f, 0f), new Vector2(0f, 0f));
+            ConfigureNamedRect("Ingredient Traits Panel", new Vector2(430f, 300f), new Vector2(-36f, -220f), new Vector2(1f, 1f), new Vector2(1f, 1f));
+            ConfigureNamedRect("Ratio Selection Panel", new Vector2(360f, 220f), Vector2.zero, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+            ConfigureTraitText();
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                UnityEditor.EditorUtility.SetDirty(this);
+                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(gameObject.scene);
+            }
+#endif
+        }
+
+        private void ConfigureTraitText()
+        {
+            if (!IsAlive(ingredientTraitLabel))
+            {
+                return;
+            }
+
+            ingredientTraitLabel.fontSize = 18;
+            ingredientTraitLabel.alignment = TextAnchor.UpperLeft;
+            ingredientTraitLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
+            ingredientTraitLabel.verticalOverflow = VerticalWrapMode.Overflow;
+
+            RectTransform rect = ingredientTraitLabel.GetComponent<RectTransform>();
+            if (IsAlive(rect))
+            {
+                rect.anchorMin = Vector2.zero;
+                rect.anchorMax = Vector2.one;
+                rect.offsetMin = new Vector2(14f, 12f);
+                rect.offsetMax = new Vector2(-14f, -12f);
+                rect.localRotation = Quaternion.identity;
+                rect.localScale = Vector3.one;
+            }
+        }
+
+        private static void ConfigureTextPanel(Text label, Vector2 size, Vector2 position, Vector2 anchor, Vector2 pivot, TextAnchor alignment, int fontSize)
+        {
+            if (!IsAlive(label))
+            {
+                return;
+            }
+
+            Transform panel = label.transform.parent;
+            if (IsAlive(panel))
+            {
+                ConfigureRect(panel as RectTransform, size, position, anchor, pivot);
+            }
+
+            label.alignment = alignment;
+            label.fontSize = fontSize;
+            label.horizontalOverflow = HorizontalWrapMode.Wrap;
+            label.verticalOverflow = VerticalWrapMode.Overflow;
+        }
+
+        private static void ConfigureButton(Button button, Vector2 size, Vector2 position, Vector2 anchor, Vector2 pivot)
+        {
+            if (!IsAlive(button))
+            {
+                return;
+            }
+
+            ConfigureRect(button.transform as RectTransform, size, position, anchor, pivot);
+            Text label = button.GetComponentInChildren<Text>(true);
+            if (IsAlive(label))
+            {
+                label.fontSize = 16;
+                label.alignment = TextAnchor.MiddleCenter;
+            }
+        }
+
+        private void ConfigureNamedRect(string objectName, Vector2 size, Vector2 position, Vector2 anchor, Vector2 pivot)
+        {
+            Transform target = transform.Find(objectName);
+            if (IsAlive(target))
+            {
+                ConfigureRect(target as RectTransform, size, position, anchor, pivot);
+            }
+        }
+
+        private static void ConfigureRect(RectTransform rect, Vector2 size, Vector2 position, Vector2 anchor, Vector2 pivot)
+        {
+            if (!IsAlive(rect))
+            {
+                return;
+            }
+
+            rect.anchorMin = anchor;
+            rect.anchorMax = anchor;
+            rect.pivot = pivot;
+            rect.sizeDelta = size;
+            rect.anchoredPosition = position;
+            rect.localRotation = Quaternion.identity;
+            rect.localScale = Vector3.one;
         }
 
         private Button BindButton(Button button, string objectName, UnityEngine.Events.UnityAction action)
