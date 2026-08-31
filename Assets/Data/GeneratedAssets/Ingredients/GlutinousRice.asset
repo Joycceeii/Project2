@@ -21,5 +21,5 @@ MonoBehaviour:
   ingredientColor: {r: 0.92, g: 0.86, b: 0.68, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 2041220751842550196, guid: c25f9a1ea9c08c949a9077c9e1a64fbc, type: 3}
-  groundPrefab: {fileID: 0}
+  groundPrefab: {fileID: 6736841194486943485, guid: 5a719b24df30d8e4083254de8b385481, type: 3}
   defaultRatioValue: 1
