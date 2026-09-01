@@ -788,7 +788,7 @@ namespace TheTasteReviver
                 return;
             }
 
-            label.localRotation = Quaternion.Euler(90f, 180f, 0f);
+            label.localRotation = Quaternion.Euler(90f, 0f, 0f);
             label.localScale = Vector3.one;
         }
 
