@@ -546,6 +546,7 @@ namespace TheTasteReviver
                     if (note.checkedForce) parts.Add(FormatCheckedNote("Force", note.force, note.forceStatus));
                     if (note.checkedSpeed) parts.Add(FormatCheckedNote("Speed", note.speed, note.speedStatus));
                     if (note.checkedCombination) parts.Add(FormatCheckedNote("Batch", note.combination, note.combinationStatus));
+                    if (!string.IsNullOrWhiteSpace(note.grindDuration)) parts.Add("Grinding Time: " + note.grindDuration);
                     builder.AppendLine(parts.Count == 0 ? "Used in this recipe." : string.Join(" | ", parts));
                     builder.AppendLine();
                 }

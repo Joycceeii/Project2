@@ -22,7 +22,6 @@ namespace TheTasteReviver
             AddMechanic(result, level, MechanicType.Combination, EvaluateCombination(level, attempt));
             AddMechanic(result, level, MechanicType.Force, EvaluateForce(level, attempt));
             AddMechanic(result, level, MechanicType.Speed, EvaluateSpeed(level, attempt));
-            AddMechanic(result, level, MechanicType.GrindDuration, EvaluateGrindDuration(level, attempt));
 
             result.judgement = BuildJudgement(result);
             result.passed = result.judgement == JudgementResult.Correct;
@@ -217,48 +216,6 @@ namespace TheTasteReviver
             return new DimensionEvaluation(score, false, feedback);
         }
 
-        private static DimensionEvaluation EvaluateGrindDuration(RecipeLevelData level, RecipeAttemptManager attempt)
-        {
-            IReadOnlyList<LevelIngredientProfile> profiles = level.GetProfilesForMechanic(MechanicType.GrindDuration);
-            IReadOnlyList<GrindingBatch> batches = attempt.GrindingBatches ?? Array.Empty<GrindingBatch>();
-            if (profiles.Count > 0)
-            {
-                int correctProfiles = 0;
-                int closeProfiles = 0;
-                foreach (LevelIngredientProfile profile in profiles)
-                {
-                    GrindingBatch batch = FindBatchContaining(profile.ingredient, batches);
-                    if (batch == null)
-                    {
-                        continue;
-                    }
-
-                    DurationMatch match = ClassifyDuration(batch.grindDuration, profile.minGrindDuration, profile.maxGrindDuration);
-                    if (match == DurationMatch.Correct)
-                    {
-                        correctProfiles++;
-                    }
-                    else if (match == DurationMatch.Close)
-                    {
-                        closeProfiles++;
-                    }
-                }
-
-                float score = (correctProfiles + closeProfiles * 0.5f) / Mathf.Max(1f, profiles.Count);
-                bool correct = correctProfiles == profiles.Count;
-                return new DimensionEvaluation(score, correct, correct ? "Grinding time is right." : BuildGrindDurationFeedback(level, batches));
-            }
-
-            if (batches.Count == 0)
-            {
-                return new DimensionEvaluation(0f, false, "No ground batch has been made yet.");
-            }
-
-            int correctBatches = batches.Count(batch => ClassifyDuration(batch.grindDuration, level.minGrindDuration, level.maxGrindDuration) == DurationMatch.Correct);
-            float fallbackScore = correctBatches / Mathf.Max(1f, batches.Count);
-            return new DimensionEvaluation(fallbackScore, fallbackScore >= 0.99f, fallbackScore >= 0.99f ? "Grinding time is right." : BuildGrindDurationFeedback(level, batches));
-        }
-
         private static GrindingBatch FindBatchContaining(IngredientData ingredient, IReadOnlyList<GrindingBatch> batches)
         {
             if (ingredient == null || batches == null)
@@ -269,52 +226,6 @@ namespace TheTasteReviver
             return batches.FirstOrDefault(batch => batch != null
                 && batch.ingredientsInBatch != null
                 && batch.ingredientsInBatch.Contains(ingredient));
-        }
-
-        private static DurationMatch ClassifyDuration(float seconds, float minSeconds, float maxSeconds)
-        {
-            minSeconds = Mathf.Max(0f, minSeconds);
-            maxSeconds = Mathf.Max(minSeconds, maxSeconds);
-            if (seconds >= minSeconds && seconds <= maxSeconds)
-            {
-                return DurationMatch.Correct;
-            }
-
-            float tolerance = Mathf.Max(1.5f, (maxSeconds - minSeconds) * 0.25f);
-            return seconds >= minSeconds - tolerance && seconds <= maxSeconds + tolerance
-                ? DurationMatch.Close
-                : DurationMatch.Wrong;
-        }
-
-        private static string BuildGrindDurationFeedback(RecipeLevelData level, IReadOnlyList<GrindingBatch> batches)
-        {
-            float minSeconds = Mathf.Max(0f, level.minGrindDuration);
-            float maxSeconds = Mathf.Max(minSeconds, level.maxGrindDuration);
-            if (batches == null || batches.Count == 0)
-            {
-                return "Grind the ingredients before evaluating.";
-            }
-
-            bool anyTooShort = batches.Any(batch => batch != null && batch.grindDuration < minSeconds);
-            bool anyTooLong = batches.Any(batch => batch != null && batch.grindDuration > maxSeconds);
-            if (anyTooShort && !anyTooLong)
-            {
-                return "This batch needs more grinding time.";
-            }
-
-            if (anyTooLong && !anyTooShort)
-            {
-                return "This batch has been ground too long.";
-            }
-
-            return "Grinding time is not balanced yet.";
-        }
-
-        private enum DurationMatch
-        {
-            Wrong,
-            Close,
-            Correct
         }
 
         private static JudgementResult BuildJudgement(EvaluationResult result)

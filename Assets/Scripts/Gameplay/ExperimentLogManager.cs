@@ -64,8 +64,7 @@ namespace TheTasteReviver
                 combinationStatus = BuildStatus(evaluation, MechanicType.Combination),
                 ratioStatus = BuildStatus(evaluation, MechanicType.Ratio),
                 forceStatus = BuildStatus(evaluation, MechanicType.Force),
-                speedStatus = BuildStatus(evaluation, MechanicType.Speed),
-                grindDurationStatus = BuildStatus(evaluation, MechanicType.GrindDuration)
+                speedStatus = BuildStatus(evaluation, MechanicType.Speed)
             };
             record.ingredientEntries.AddRange(BuildIngredientEntries(attempt, ratio, evaluation));
             sharedRecords.Add(record);
@@ -231,7 +230,7 @@ namespace TheTasteReviver
             AppendCheckedRecordLine(builder, "Combination", record.combinationPattern, record.combinationStatus);
             AppendCheckedRecordLine(builder, "Force", record.forceLevel.ToString(), record.forceStatus);
             AppendCheckedRecordLine(builder, "Speed", record.speedLevel.ToString(), record.speedStatus);
-            AppendCheckedRecordLine(builder, "Grinding Time", record.grindDuration.ToString("0.0") + "s", record.grindDurationStatus);
+            builder.AppendLine("Grinding Time: " + record.grindDuration.ToString("0.0") + "s");
             builder.AppendLine("Feedback: " + record.mainFeedback);
             if (!string.IsNullOrWhiteSpace(record.permanentHint))
             {
@@ -301,6 +300,7 @@ namespace TheTasteReviver
                 RatioLevel ratioLevel = ratio != null && ratio.TryGetValue(ingredient, out RatioLevel value) ? value : RatioLevel.None;
                 ForceLevel forceLevel = attempt.forceController != null ? attempt.forceController.CurrentForceLevel : ForceLevel.Medium;
                 SpeedLevel speedLevel = attempt.pestleController != null ? attempt.pestleController.CurrentSpeedLevel : SpeedLevel.Medium;
+                float grindDuration = batch != null ? batch.grindDuration : attempt.pestleController != null ? attempt.pestleController.GrindDuration : 0f;
                 entries.Add(new ExperimentIngredientEntry
                 {
                     ingredientID = ingredient.ingredientID,
@@ -312,6 +312,7 @@ namespace TheTasteReviver
                     order = FormatOrder(order, ingredient),
                     force = attempt.forceController != null ? forceLevel.ToString() : "Not checked",
                     speed = attempt.pestleController != null ? speedLevel.ToString() : "Not checked",
+                    grindDuration = grindDuration.ToString("0.0") + "s",
                     combination = FormatIngredientBatch(batch),
                     ratioStatus = BuildIngredientRatioStatus(level, ingredient, ratioLevel, evaluation),
                     orderStatus = BuildIngredientOrderStatus(level, ingredient, order, evaluation),
@@ -578,7 +579,6 @@ namespace TheTasteReviver
         public string ratioStatus;
         public string forceStatus;
         public string speedStatus;
-        public string grindDurationStatus;
         public List<ExperimentIngredientEntry> ingredientEntries = new List<ExperimentIngredientEntry>();
     }
 
@@ -593,6 +593,7 @@ namespace TheTasteReviver
         public string order;
         public string force;
         public string speed;
+        public string grindDuration;
         public string combination;
         public string ratioStatus;
         public string orderStatus;
