@@ -219,6 +219,7 @@ namespace TheTasteReviver
                     importedPlate.transform.localPosition = Vector3.zero;
                     importedPlate.transform.localRotation = Quaternion.identity;
                     importedPlate.transform.localScale = Vector3.one;
+                    DisablePlateColliders(importedPlate.transform);
                     return importedPlate.transform;
                 }
 
@@ -226,6 +227,7 @@ namespace TheTasteReviver
                 current.localPosition = Vector3.zero;
                 current.localRotation = Quaternion.identity;
                 current.localScale = Vector3.one;
+                DisablePlateColliders(current);
                 return current;
             }
 
@@ -237,12 +239,30 @@ namespace TheTasteReviver
                 plate.transform.localPosition = Vector3.zero;
                 plate.transform.localScale = new Vector3(0.75f, 0.08f, 0.75f);
                 ApplyColor(plate, Color.white);
+                DisablePlateColliders(plate.transform);
                 return plate.transform;
             }
 
             current.name = "Plate";
             ApplyColor(current.gameObject, Color.white);
+            DisablePlateColliders(current);
             return current;
+        }
+
+        private static void DisablePlateColliders(Transform plate)
+        {
+            if (!IsAlive(plate))
+            {
+                return;
+            }
+
+            foreach (Collider collider in plate.GetComponentsInChildren<Collider>(true))
+            {
+                if (IsAlive(collider))
+                {
+                    collider.enabled = false;
+                }
+            }
         }
 
         private bool IsImportedPlateInstance(Transform plate)
