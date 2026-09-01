@@ -11,7 +11,7 @@ namespace TheTasteReviver
         public Camera interactionCamera;
         public GameObject sourcePrefab;
         public float dragLiftHeight = 0.55f;
-        public float mortarDropHeight = 0.35f;
+        public float mortarDropHeight = 0.08f;
 
         private Vector3 startPosition;
         private bool dragging;

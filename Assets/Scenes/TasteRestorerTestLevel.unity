@@ -612,7 +612,7 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 0}
   dragLiftHeight: 0.55
-  mortarDropHeight: 0.35
+  mortarDropHeight: 0.08
 --- !u!23 &93932593
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2132,7 +2132,7 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 0}
   dragLiftHeight: 0.55
-  mortarDropHeight: 0.35
+  mortarDropHeight: 0.08
 --- !u!23 &487055993
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2275,7 +2275,7 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 0}
   dragLiftHeight: 0.55
-  mortarDropHeight: 0.35
+  mortarDropHeight: 0.08
 --- !u!23 &491311026
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2649,7 +2649,7 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 0}
   dragLiftHeight: 0.55
-  mortarDropHeight: 0.35
+  mortarDropHeight: 0.08
 --- !u!23 &521808635
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5516,7 +5516,7 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 5529012155505820837, guid: 3ac58dbef5492ca458080abe036ddbc2, type: 3}
   dragLiftHeight: 0.55
-  mortarDropHeight: 0.35
+  mortarDropHeight: 0.08
 --- !u!1 &1147524373
 GameObject:
   m_ObjectHideFlags: 0
@@ -6254,7 +6254,7 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 0}
   dragLiftHeight: 0.55
-  mortarDropHeight: 0.35
+  mortarDropHeight: 0.08
 --- !u!23 &1285675184
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6492,7 +6492,7 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 0}
   dragLiftHeight: 0.55
-  mortarDropHeight: 0.35
+  mortarDropHeight: 0.08
 --- !u!23 &1351301753
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6750,7 +6750,7 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 0}
   dragLiftHeight: 0.55
-  mortarDropHeight: 0.35
+  mortarDropHeight: 0.08
 --- !u!23 &1358544231
 MeshRenderer:
   m_ObjectHideFlags: 0
