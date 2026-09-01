@@ -131,9 +131,25 @@ namespace TheTasteReviver
         {
             LoadUnlockedClues();
             StringBuilder builder = new StringBuilder();
+
+            if (sharedRecords.Count > 0)
+            {
+                builder.AppendLine("Attempt History");
+                builder.AppendLine();
+                foreach (ExperimentRecord record in sharedRecords)
+                {
+                    AppendRecordSummary(builder, record);
+                }
+            }
+
             if (unlockedClues.Count > 0)
             {
-                builder.AppendLine("Experiment Manual");
+                if (builder.Length > 0)
+                {
+                    builder.AppendLine();
+                }
+
+                builder.AppendLine("Unlocked Clues");
                 builder.AppendLine();
                 foreach (UnlockedClueRecord clue in unlockedClues)
                 {
@@ -143,28 +159,7 @@ namespace TheTasteReviver
                 }
             }
 
-            if (sharedRecords.Count == 0)
-            {
-                if (builder.Length == 0)
-                {
-                    return "No experiment records yet.";
-                }
-
-                return builder.ToString();
-            }
-
-            if (builder.Length > 0)
-            {
-                builder.AppendLine("Attempt History");
-                builder.AppendLine();
-            }
-
-            foreach (ExperimentRecord record in sharedRecords)
-            {
-                AppendRecordSummary(builder, record);
-            }
-
-            return builder.ToString();
+            return builder.Length == 0 ? "No experiment records yet." : builder.ToString();
         }
 
         private static void LoadUnlockedClues()
