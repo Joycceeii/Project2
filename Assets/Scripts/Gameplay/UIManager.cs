@@ -596,6 +596,7 @@ namespace TheTasteReviver
             {
                 experimentLogButton.onClick.RemoveAllListeners();
                 experimentLogButton.onClick.AddListener(OpenExperimentLog);
+                EnsureButtonLabel(experimentLogButton, "Experiment Log");
                 return;
             }
 
@@ -607,6 +608,7 @@ namespace TheTasteReviver
                 {
                     experimentLogButton.onClick.RemoveAllListeners();
                     experimentLogButton.onClick.AddListener(OpenExperimentLog);
+                    EnsureButtonLabel(experimentLogButton, "Experiment Log");
                     return;
                 }
             }
@@ -649,7 +651,7 @@ namespace TheTasteReviver
             ConfigureTextPanel(currentSpeedLabel, new Vector2(420f, 54f), new Vector2(36f, -386f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.MiddleLeft, 21);
             ConfigureTextPanel(hintLabel, new Vector2(430f, 168f), new Vector2(-36f, -34f), new Vector2(1f, 1f), new Vector2(1f, 1f), TextAnchor.UpperLeft, 20);
 
-            ConfigureButton(experimentLogButton, new Vector2(204f, 52f), new Vector2(36f, 116f), new Vector2(0f, 0f), new Vector2(0f, 0f));
+            ConfigureButton(experimentLogButton, new Vector2(204f, 52f), new Vector2(36f, -34f), new Vector2(0f, 1f), new Vector2(0f, 1f));
             ConfigureButton(evaluateButton, new Vector2(190f, 52f), new Vector2(-36f, 166f), new Vector2(1f, 0f), new Vector2(1f, 0f));
             ConfigureButton(resetAttemptButton, new Vector2(190f, 52f), new Vector2(-36f, 108f), new Vector2(1f, 0f), new Vector2(1f, 0f));
             ConfigureButton(newBatchButton, new Vector2(190f, 52f), new Vector2(-36f, 50f), new Vector2(1f, 0f), new Vector2(1f, 0f));
