@@ -63,7 +63,17 @@ namespace TheTasteReviver
             }
 
             Bounds bounds = CalculateLocalBounds();
-            BoxCollider hitbox = GetComponent<BoxCollider>() ?? gameObject.AddComponent<BoxCollider>();
+            BoxCollider hitbox = GetComponent<BoxCollider>();
+            if (hitbox == null)
+            {
+                hitbox = gameObject.AddComponent<BoxCollider>();
+            }
+
+            if (hitbox == null)
+            {
+                return;
+            }
+
             hitbox.isTrigger = false;
             hitbox.enabled = true;
 

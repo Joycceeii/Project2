@@ -10,6 +10,7 @@ namespace TheTasteReviver
         public UIManager uiManager;
         public ForceSliderController forceController;
         public PestleController pestleController;
+        public LevelIngredientDisplayManager ingredientDisplayManager;
 
         public List<IngredientInstance> ingredientAmounts = new List<IngredientInstance>();
         public List<IngredientData> ingredientOrder = new List<IngredientData>();
@@ -17,11 +18,22 @@ namespace TheTasteReviver
         public List<GrindingBatch> grindingBatches = new List<GrindingBatch>();
 
         private readonly Dictionary<IngredientData, int> batchByIngredient = new Dictionary<IngredientData, int>();
+        private readonly Dictionary<int, float> finalizedBatchDurations = new Dictionary<int, float>();
+        private readonly Dictionary<int, ForceLevel> finalizedBatchForces = new Dictionary<int, ForceLevel>();
+        private readonly Dictionary<int, SpeedLevel> finalizedBatchSpeeds = new Dictionary<int, SpeedLevel>();
         private int currentBatchID = 1;
+        private float currentBatchStartGrindDuration;
 
         public IReadOnlyList<IngredientData> IngredientOrder => ingredientOrder;
         public IReadOnlyList<IngredientInstance> IngredientAmounts => ingredientAmounts;
-        public IReadOnlyList<GrindingBatch> GrindingBatches => grindingBatches;
+        public IReadOnlyList<GrindingBatch> GrindingBatches
+        {
+            get
+            {
+                RebuildCurrentBatch();
+                return grindingBatches;
+            }
+        }
         public bool HasIngredientsInBowl => ingredientAmounts.Any(x => x != null && x.ingredient != null);
         public bool HasEvaluated { get; private set; }
         public bool HasAutoEvaluated { get; private set; }
@@ -91,11 +103,16 @@ namespace TheTasteReviver
             selectedRatioPattern.Clear();
             grindingBatches.Clear();
             batchByIngredient.Clear();
+            finalizedBatchDurations.Clear();
+            finalizedBatchForces.Clear();
+            finalizedBatchSpeeds.Clear();
             currentBatchID = 1;
             HasEvaluated = false;
             HasAutoEvaluated = false;
             forceController?.ResetToDefault();
             pestleController?.ResetToDefault();
+            currentBatchStartGrindDuration = pestleController != null ? pestleController.GrindDuration : 0f;
+            ingredientDisplayManager?.ClearMixedPowderBatches();
             ReturnIngredientsHome();
             RebuildCurrentBatch();
             uiManager?.RefreshAttemptPanels(this);
@@ -188,10 +205,46 @@ namespace TheTasteReviver
                 return;
             }
 
+            float currentBatchDuration = GetCurrentBatchGrindDuration();
+            if (currentBatchDuration < GetMinimumBatchPowderSeconds())
+            {
+                uiManager?.ShowHint("Grind this batch until it becomes powder before starting a new batch.");
+                return;
+            }
+
+            finalizedBatchDurations[currentBatchID] = currentBatchDuration;
+            finalizedBatchForces[currentBatchID] = GetCurrentForceLevel();
+            finalizedBatchSpeeds[currentBatchID] = GetCurrentSpeedLevel();
+            ingredientDisplayManager?.ShowMixedPowderBatch(currentBatchID, GetCurrentBatchIngredients());
             ReturnCurrentBatchIngredientsHome();
             currentBatchID++;
+            currentBatchStartGrindDuration = pestleController != null ? pestleController.GrindDuration : 0f;
             uiManager?.RefreshAttemptPanels(this);
             uiManager?.ShowHint("Next ingredients will start a separate batch.");
+        }
+
+        private float GetCurrentBatchGrindDuration()
+        {
+            float totalDuration = pestleController != null ? pestleController.GrindDuration : 0f;
+            return Mathf.Max(0f, totalDuration - currentBatchStartGrindDuration);
+        }
+
+        private float GetMinimumBatchPowderSeconds()
+        {
+            if (pestleController == null)
+            {
+                return 0.5f;
+            }
+
+            return Mathf.Max(0.5f, pestleController.groundVisualDelaySeconds);
+        }
+
+        private List<IngredientData> GetCurrentBatchIngredients()
+        {
+            return batchByIngredient
+                .Where(pair => pair.Value == currentBatchID && pair.Key != null)
+                .Select(pair => pair.Key)
+                .ToList();
         }
 
         private void ReturnCurrentBatchIngredientsHome()
@@ -225,9 +278,9 @@ namespace TheTasteReviver
                 GrindingBatch batch = new GrindingBatch
                 {
                     batchID = group.Key,
-                    forceLevel = forceController != null ? forceController.CurrentForceLevel : ForceLevel.Medium,
-                    speedLevel = pestleController != null ? pestleController.CurrentSpeedLevel : SpeedLevel.Medium,
-                    grindDuration = pestleController != null ? pestleController.GrindDuration : 0f
+                    forceLevel = GetBatchForceLevel(group.Key),
+                    speedLevel = GetBatchSpeedLevel(group.Key),
+                    grindDuration = GetBatchGrindDuration(group.Key)
                 };
 
                 HashSet<IngredientData> batchIngredients = new HashSet<IngredientData>(group.Select(instance => instance.ingredient));
@@ -240,6 +293,46 @@ namespace TheTasteReviver
 
                 grindingBatches.Add(batch);
             }
+        }
+
+        private float GetBatchGrindDuration(int batchID)
+        {
+            if (batchID == currentBatchID)
+            {
+                return GetCurrentBatchGrindDuration();
+            }
+
+            return finalizedBatchDurations.TryGetValue(batchID, out float duration) ? duration : 0f;
+        }
+
+        private ForceLevel GetBatchForceLevel(int batchID)
+        {
+            if (batchID == currentBatchID)
+            {
+                return GetCurrentForceLevel();
+            }
+
+            return finalizedBatchForces.TryGetValue(batchID, out ForceLevel force) ? force : ForceLevel.Medium;
+        }
+
+        private SpeedLevel GetBatchSpeedLevel(int batchID)
+        {
+            if (batchID == currentBatchID)
+            {
+                return GetCurrentSpeedLevel();
+            }
+
+            return finalizedBatchSpeeds.TryGetValue(batchID, out SpeedLevel speed) ? speed : SpeedLevel.Medium;
+        }
+
+        private ForceLevel GetCurrentForceLevel()
+        {
+            return forceController != null ? forceController.CurrentForceLevel : ForceLevel.Medium;
+        }
+
+        private SpeedLevel GetCurrentSpeedLevel()
+        {
+            return pestleController != null ? pestleController.CurrentSpeedLevel : SpeedLevel.Medium;
         }
 
         private void AddIngredientWithRatio(IngredientData ingredient, RatioLevel ratio)

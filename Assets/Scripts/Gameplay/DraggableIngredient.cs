@@ -11,8 +11,9 @@ namespace TheTasteReviver
         public Camera interactionCamera;
         public GameObject sourcePrefab;
         public float dragLiftHeight = 0.55f;
-        public float mortarDropHeight = 0.08f;
-        public float groundVisualScale = 0.65f;
+        public float mortarDropHeight = 0.1f;
+        public float groundVisualLift = 0.04f;
+        public float groundVisualScale = 0.72f;
 
         private Vector3 startPosition;
         private bool dragging;
@@ -87,6 +88,7 @@ namespace TheTasteReviver
             groundVisualInstance.transform.localPosition = Vector3.zero;
             groundVisualInstance.transform.localRotation = Quaternion.identity;
             groundVisualInstance.transform.localScale = Vector3.one * Mathf.Clamp(groundVisualScale, 0.25f, 1.2f);
+            FitChildRenderersToAnchor(groundVisualInstance.transform, groundVisualLift);
 
             foreach (Collider collider in groundVisualInstance.GetComponentsInChildren<Collider>(true))
             {
@@ -120,7 +122,7 @@ namespace TheTasteReviver
             bool droppedInMortar = mortarArea != null && mortarArea.ContainsWorldPoint(GetMortarCheckPoint());
             bool accepted = droppedInMortar && attemptManager != null && attemptManager.TryAddIngredient(ingredientData);
             IsInMortar = accepted;
-            transform.position = accepted && mortarArea != null ? mortarArea.transform.position + Vector3.up * mortarDropHeight : startPosition;
+            transform.position = accepted && mortarArea != null ? GetMortarDropPosition() : startPosition;
             dragPlaneY = transform.position.y;
         }
 
@@ -132,6 +134,14 @@ namespace TheTasteReviver
             }
 
             return new Vector3(transform.position.x, mortarArea.transform.position.y, transform.position.z);
+        }
+
+        private Vector3 GetMortarDropPosition()
+        {
+            Collider mortarCollider = mortarArea.GetComponent<Collider>();
+            Vector3 center = IsAlive(mortarCollider) ? mortarCollider.bounds.center : mortarArea.transform.position;
+            float anchorY = mortarArea.transform.position.y;
+            return new Vector3(center.x, anchorY + Mathf.Max(0f, mortarDropHeight), center.z);
         }
 
         private void HideCurrentRenderers()
@@ -166,6 +176,48 @@ namespace TheTasteReviver
             hiddenRenderers.Clear();
         }
 
+        private static void FitChildRenderersToAnchor(Transform child, float lift)
+        {
+            if (!IsAlive(child) || child.parent == null)
+            {
+                return;
+            }
+
+            Bounds bounds;
+            if (!TryCalculateParentLocalBounds(child.parent, child, out bounds) || bounds.size.sqrMagnitude <= 0.0001f)
+            {
+                return;
+            }
+
+            Vector3 offset = new Vector3(-bounds.center.x, Mathf.Max(0f, lift) - bounds.min.y, -bounds.center.z);
+            child.localPosition += offset;
+        }
+
+        private static bool TryCalculateParentLocalBounds(Transform parent, Transform root, out Bounds bounds)
+        {
+            Renderer[] renderers = root.GetComponentsInChildren<Renderer>(true);
+            if (renderers == null || renderers.Length == 0)
+            {
+                bounds = new Bounds(Vector3.zero, Vector3.zero);
+                return false;
+            }
+
+            bounds = new Bounds(parent.InverseTransformPoint(renderers[0].bounds.center), Vector3.zero);
+            foreach (Renderer renderer in renderers)
+            {
+                if (!IsAlive(renderer))
+                {
+                    continue;
+                }
+
+                Bounds worldBounds = renderer.bounds;
+                bounds.Encapsulate(parent.InverseTransformPoint(worldBounds.min));
+                bounds.Encapsulate(parent.InverseTransformPoint(worldBounds.max));
+            }
+
+            return true;
+        }
+
         private bool TryGetMouseWorldPoint(out Vector3 worldPoint)
         {
             Ray ray = interactionCamera.ScreenPointToRay(Input.mousePosition);
@@ -182,7 +234,7 @@ namespace TheTasteReviver
 
         private static void DestroyObject(GameObject target)
         {
-            if (target == null)
+            if (!IsAlive(target))
             {
                 return;
             }
@@ -195,6 +247,11 @@ namespace TheTasteReviver
             {
                 DestroyImmediate(target);
             }
+        }
+
+        private static bool IsAlive(Object obj)
+        {
+            return obj != null;
         }
     }
 }

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4011262018843443022}
   - component: {fileID: 4011262018843443023}
-  - component: {fileID: 4011262018843443024}
   m_Layer: 0
   m_Name: Ginger_3D
   m_TagString: Untagged
@@ -55,41 +54,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.8990917, y: 0.7897988, z: 1.5375892}
   m_Center: {x: 0.0026500523, y: 0.3948994, z: 0.001419723}
---- !u!205 &4011262018843443024
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4011262018843443021}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: 0.0026500523, y: 0.3948994, z: 0.001419723}
-  m_Size: 1.8990917
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.6
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 4011262018843443031}
-  - screenRelativeHeight: 0.25
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 4011262018843443032}
-  - screenRelativeHeight: 0.08
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 4011262018843443033}
-  - screenRelativeHeight: 0.02
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 4011262018843443034}
-  - screenRelativeHeight: 0.01
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 4011262018843443035}
-  m_Enabled: 1
 --- !u!1001 &4011262018843443029
 PrefabInstance:
   m_ObjectHideFlags: 0

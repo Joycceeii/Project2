@@ -319,6 +319,11 @@ namespace TheTasteReviver
                 return;
             }
 
+            if (level.enabledMechanics != null && level.enabledMechanics.enableCombination)
+            {
+                return;
+            }
+
             if (!HasReachedEvaluationGate(level))
             {
                 return;

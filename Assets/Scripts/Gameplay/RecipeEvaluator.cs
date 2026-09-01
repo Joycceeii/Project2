@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -21,6 +22,7 @@ namespace TheTasteReviver
             AddMechanic(result, level, MechanicType.Combination, EvaluateCombination(level, attempt));
             AddMechanic(result, level, MechanicType.Force, EvaluateForce(level, attempt));
             AddMechanic(result, level, MechanicType.Speed, EvaluateSpeed(level, attempt));
+            AddMechanic(result, level, MechanicType.GrindDuration, EvaluateGrindDuration(level, attempt));
 
             result.judgement = BuildJudgement(result);
             result.passed = result.judgement == JudgementResult.Correct;
@@ -163,11 +165,16 @@ namespace TheTasteReviver
             IReadOnlyList<LevelIngredientProfile> profiles = level.GetProfilesForMechanic(MechanicType.Force);
             if (profiles.Count > 0)
             {
-                int exact = profiles.Count(profile => actual == profile.targetForceLevel);
-                int adjacent = profiles.Count(profile => actual != profile.targetForceLevel && Mathf.Abs((int)actual - (int)profile.targetForceLevel) == 1);
+                IReadOnlyList<GrindingBatch> batches = attempt.GrindingBatches ?? Array.Empty<GrindingBatch>();
+                int exact = profiles.Count(profile => GetForceForProfile(profile, batches, actual) == profile.targetForceLevel);
+                int adjacent = profiles.Count(profile =>
+                {
+                    ForceLevel profileForce = GetForceForProfile(profile, batches, actual);
+                    return profileForce != profile.targetForceLevel && Mathf.Abs((int)profileForce - (int)profile.targetForceLevel) == 1;
+                });
                 float profileScore = (exact + adjacent * 0.5f) / Mathf.Max(1f, profiles.Count);
                 bool correct = exact == profiles.Count;
-                string profileFeedback = correct ? level.feedbackTexts.forceCorrect : BuildProfileForceFeedback(actual, profiles);
+                string profileFeedback = correct ? level.feedbackTexts.forceCorrect : BuildProfileForceFeedback(profiles, batches, actual);
                 return new DimensionEvaluation(profileScore, correct, profileFeedback);
             }
 
@@ -187,11 +194,16 @@ namespace TheTasteReviver
             IReadOnlyList<LevelIngredientProfile> profiles = level.GetProfilesForMechanic(MechanicType.Speed);
             if (profiles.Count > 0)
             {
-                int exact = profiles.Count(profile => actual == profile.targetSpeedLevel);
-                int adjacent = profiles.Count(profile => actual != profile.targetSpeedLevel && Mathf.Abs((int)actual - (int)profile.targetSpeedLevel) == 1);
+                IReadOnlyList<GrindingBatch> batches = attempt.GrindingBatches ?? Array.Empty<GrindingBatch>();
+                int exact = profiles.Count(profile => GetSpeedForProfile(profile, batches, actual) == profile.targetSpeedLevel);
+                int adjacent = profiles.Count(profile =>
+                {
+                    SpeedLevel profileSpeed = GetSpeedForProfile(profile, batches, actual);
+                    return profileSpeed != profile.targetSpeedLevel && Mathf.Abs((int)profileSpeed - (int)profile.targetSpeedLevel) == 1;
+                });
                 float profileScore = (exact + adjacent * 0.5f) / Mathf.Max(1f, profiles.Count);
                 bool correct = exact == profiles.Count;
-                string profileFeedback = correct ? level.feedbackTexts.speedCorrect : BuildProfileSpeedFeedback(actual, profiles);
+                string profileFeedback = correct ? level.feedbackTexts.speedCorrect : BuildProfileSpeedFeedback(profiles, batches, actual);
                 return new DimensionEvaluation(profileScore, correct, profileFeedback);
             }
 
@@ -203,6 +215,106 @@ namespace TheTasteReviver
             float score = Mathf.Abs((int)actual - (int)level.targetSpeedLevel) == 1 ? 0.5f : 0f;
             string feedback = (int)actual < (int)level.targetSpeedLevel ? level.feedbackTexts.speedTooSlow : level.feedbackTexts.speedTooFast;
             return new DimensionEvaluation(score, false, feedback);
+        }
+
+        private static DimensionEvaluation EvaluateGrindDuration(RecipeLevelData level, RecipeAttemptManager attempt)
+        {
+            IReadOnlyList<LevelIngredientProfile> profiles = level.GetProfilesForMechanic(MechanicType.GrindDuration);
+            IReadOnlyList<GrindingBatch> batches = attempt.GrindingBatches ?? Array.Empty<GrindingBatch>();
+            if (profiles.Count > 0)
+            {
+                int correctProfiles = 0;
+                int closeProfiles = 0;
+                foreach (LevelIngredientProfile profile in profiles)
+                {
+                    GrindingBatch batch = FindBatchContaining(profile.ingredient, batches);
+                    if (batch == null)
+                    {
+                        continue;
+                    }
+
+                    DurationMatch match = ClassifyDuration(batch.grindDuration, profile.minGrindDuration, profile.maxGrindDuration);
+                    if (match == DurationMatch.Correct)
+                    {
+                        correctProfiles++;
+                    }
+                    else if (match == DurationMatch.Close)
+                    {
+                        closeProfiles++;
+                    }
+                }
+
+                float score = (correctProfiles + closeProfiles * 0.5f) / Mathf.Max(1f, profiles.Count);
+                bool correct = correctProfiles == profiles.Count;
+                return new DimensionEvaluation(score, correct, correct ? "Grinding time is right." : BuildGrindDurationFeedback(level, batches));
+            }
+
+            if (batches.Count == 0)
+            {
+                return new DimensionEvaluation(0f, false, "No ground batch has been made yet.");
+            }
+
+            int correctBatches = batches.Count(batch => ClassifyDuration(batch.grindDuration, level.minGrindDuration, level.maxGrindDuration) == DurationMatch.Correct);
+            float fallbackScore = correctBatches / Mathf.Max(1f, batches.Count);
+            return new DimensionEvaluation(fallbackScore, fallbackScore >= 0.99f, fallbackScore >= 0.99f ? "Grinding time is right." : BuildGrindDurationFeedback(level, batches));
+        }
+
+        private static GrindingBatch FindBatchContaining(IngredientData ingredient, IReadOnlyList<GrindingBatch> batches)
+        {
+            if (ingredient == null || batches == null)
+            {
+                return null;
+            }
+
+            return batches.FirstOrDefault(batch => batch != null
+                && batch.ingredientsInBatch != null
+                && batch.ingredientsInBatch.Contains(ingredient));
+        }
+
+        private static DurationMatch ClassifyDuration(float seconds, float minSeconds, float maxSeconds)
+        {
+            minSeconds = Mathf.Max(0f, minSeconds);
+            maxSeconds = Mathf.Max(minSeconds, maxSeconds);
+            if (seconds >= minSeconds && seconds <= maxSeconds)
+            {
+                return DurationMatch.Correct;
+            }
+
+            float tolerance = Mathf.Max(1.5f, (maxSeconds - minSeconds) * 0.25f);
+            return seconds >= minSeconds - tolerance && seconds <= maxSeconds + tolerance
+                ? DurationMatch.Close
+                : DurationMatch.Wrong;
+        }
+
+        private static string BuildGrindDurationFeedback(RecipeLevelData level, IReadOnlyList<GrindingBatch> batches)
+        {
+            float minSeconds = Mathf.Max(0f, level.minGrindDuration);
+            float maxSeconds = Mathf.Max(minSeconds, level.maxGrindDuration);
+            if (batches == null || batches.Count == 0)
+            {
+                return "Grind the ingredients before evaluating.";
+            }
+
+            bool anyTooShort = batches.Any(batch => batch != null && batch.grindDuration < minSeconds);
+            bool anyTooLong = batches.Any(batch => batch != null && batch.grindDuration > maxSeconds);
+            if (anyTooShort && !anyTooLong)
+            {
+                return "This batch needs more grinding time.";
+            }
+
+            if (anyTooLong && !anyTooShort)
+            {
+                return "This batch has been ground too long.";
+            }
+
+            return "Grinding time is not balanced yet.";
+        }
+
+        private enum DurationMatch
+        {
+            Wrong,
+            Close,
+            Correct
         }
 
         private static JudgementResult BuildJudgement(EvaluationResult result)
@@ -308,27 +420,41 @@ namespace TheTasteReviver
             return string.Empty;
         }
 
-        private static string BuildProfileForceFeedback(ForceLevel actual, IReadOnlyList<LevelIngredientProfile> profiles)
+        private static ForceLevel GetForceForProfile(LevelIngredientProfile profile, IReadOnlyList<GrindingBatch> batches, ForceLevel fallback)
         {
-            LevelIngredientProfile target = profiles.FirstOrDefault(profile => profile != null && profile.targetForceLevel != actual);
+            GrindingBatch batch = profile != null ? FindBatchContaining(profile.ingredient, batches) : null;
+            return batch != null ? batch.forceLevel : fallback;
+        }
+
+        private static SpeedLevel GetSpeedForProfile(LevelIngredientProfile profile, IReadOnlyList<GrindingBatch> batches, SpeedLevel fallback)
+        {
+            GrindingBatch batch = profile != null ? FindBatchContaining(profile.ingredient, batches) : null;
+            return batch != null ? batch.speedLevel : fallback;
+        }
+
+        private static string BuildProfileForceFeedback(IReadOnlyList<LevelIngredientProfile> profiles, IReadOnlyList<GrindingBatch> batches, ForceLevel fallback)
+        {
+            LevelIngredientProfile target = profiles.FirstOrDefault(profile => profile != null && profile.targetForceLevel != GetForceForProfile(profile, batches, fallback));
             if (target == null)
             {
                 return "The force does not match the ingredient profile target yet.";
             }
 
+            ForceLevel actual = GetForceForProfile(target, batches, fallback);
             return (int)actual < (int)target.targetForceLevel
                 ? target.ingredient.DisplayName + " needs more force in " + target.DisplayTag + "."
                 : target.ingredient.DisplayName + " needs less force in " + target.DisplayTag + ".";
         }
 
-        private static string BuildProfileSpeedFeedback(SpeedLevel actual, IReadOnlyList<LevelIngredientProfile> profiles)
+        private static string BuildProfileSpeedFeedback(IReadOnlyList<LevelIngredientProfile> profiles, IReadOnlyList<GrindingBatch> batches, SpeedLevel fallback)
         {
-            LevelIngredientProfile target = profiles.FirstOrDefault(profile => profile != null && profile.targetSpeedLevel != actual);
+            LevelIngredientProfile target = profiles.FirstOrDefault(profile => profile != null && profile.targetSpeedLevel != GetSpeedForProfile(profile, batches, fallback));
             if (target == null)
             {
                 return "The speed does not match the ingredient profile target yet.";
             }
 
+            SpeedLevel actual = GetSpeedForProfile(target, batches, fallback);
             return (int)actual < (int)target.targetSpeedLevel
                 ? target.ingredient.DisplayName + " needs faster grinding in " + target.DisplayTag + "."
                 : target.ingredient.DisplayName + " needs slower grinding in " + target.DisplayTag + ".";

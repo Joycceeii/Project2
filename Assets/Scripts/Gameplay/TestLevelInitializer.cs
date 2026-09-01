@@ -84,11 +84,11 @@ public class TestLevelInitializer : MonoBehaviour
             ForceSliderController force = null;
             UIManager ui = null;
             ExperimentLogManager log = null;
-            HintManager hint = gameObject.GetComponent<HintManager>() ?? gameObject.AddComponent<HintManager>();
-            RecipeEvaluator evaluator = gameObject.GetComponent<RecipeEvaluator>() ?? gameObject.AddComponent<RecipeEvaluator>();
-            RecipeAttemptManager attempt = gameObject.GetComponent<RecipeAttemptManager>() ?? gameObject.AddComponent<RecipeAttemptManager>();
-            LevelManager levelManager = gameObject.GetComponent<LevelManager>() ?? gameObject.AddComponent<LevelManager>();
-            LevelIngredientDisplayManager ingredientDisplay = gameObject.GetComponent<LevelIngredientDisplayManager>() ?? gameObject.AddComponent<LevelIngredientDisplayManager>();
+            HintManager hint = GetOrAddComponent<HintManager>(gameObject);
+            RecipeEvaluator evaluator = GetOrAddComponent<RecipeEvaluator>(gameObject);
+            RecipeAttemptManager attempt = GetOrAddComponent<RecipeAttemptManager>(gameObject);
+            LevelManager levelManager = GetOrAddComponent<LevelManager>(gameObject);
+            LevelIngredientDisplayManager ingredientDisplay = GetOrAddComponent<LevelIngredientDisplayManager>(gameObject);
 
             CreateCanvas(out ui, out force, out log, pestle);
             EnsureAssignedData();
@@ -97,6 +97,7 @@ public class TestLevelInitializer : MonoBehaviour
             attempt.uiManager = ui;
             attempt.forceController = force;
             attempt.pestleController = pestle;
+            attempt.ingredientDisplayManager = ingredientDisplay;
 
             ingredientDisplay.mortarArea = mortar;
             ingredientDisplay.attemptManager = attempt;
@@ -123,11 +124,11 @@ public class TestLevelInitializer : MonoBehaviour
             ForceSliderController force = null;
             UIManager ui = null;
             ExperimentLogManager log = null;
-            HintManager hint = gameObject.GetComponent<HintManager>() ?? gameObject.AddComponent<HintManager>();
-            RecipeEvaluator evaluator = gameObject.GetComponent<RecipeEvaluator>() ?? gameObject.AddComponent<RecipeEvaluator>();
-            RecipeAttemptManager attempt = gameObject.GetComponent<RecipeAttemptManager>() ?? gameObject.AddComponent<RecipeAttemptManager>();
-            LevelManager levelManager = gameObject.GetComponent<LevelManager>() ?? gameObject.AddComponent<LevelManager>();
-            LevelIngredientDisplayManager ingredientDisplay = gameObject.GetComponent<LevelIngredientDisplayManager>() ?? gameObject.AddComponent<LevelIngredientDisplayManager>();
+            HintManager hint = GetOrAddComponent<HintManager>(gameObject);
+            RecipeEvaluator evaluator = GetOrAddComponent<RecipeEvaluator>(gameObject);
+            RecipeAttemptManager attempt = GetOrAddComponent<RecipeAttemptManager>(gameObject);
+            LevelManager levelManager = GetOrAddComponent<LevelManager>(gameObject);
+            LevelIngredientDisplayManager ingredientDisplay = GetOrAddComponent<LevelIngredientDisplayManager>(gameObject);
 
             CreateCanvas(out ui, out force, out log, pestle);
 
@@ -137,6 +138,7 @@ public class TestLevelInitializer : MonoBehaviour
             attempt.uiManager = ui;
             attempt.forceController = force;
             attempt.pestleController = pestle;
+            attempt.ingredientDisplayManager = ingredientDisplay;
 
             ingredientDisplay.mortarArea = FindFirstObjectByType<MortarArea>();
             ingredientDisplay.attemptManager = attempt;
@@ -162,7 +164,7 @@ public class TestLevelInitializer : MonoBehaviour
             ForceSliderController force = FindFirstObjectByType<ForceSliderController>();
             PestleController pestle = FindFirstObjectByType<PestleController>();
             LevelManager levelManager = gameObject.GetComponent<LevelManager>();
-            LevelIngredientDisplayManager ingredientDisplay = gameObject.GetComponent<LevelIngredientDisplayManager>() ?? gameObject.AddComponent<LevelIngredientDisplayManager>();
+            LevelIngredientDisplayManager ingredientDisplay = GetOrAddComponent<LevelIngredientDisplayManager>(gameObject);
             HintManager hint = gameObject.GetComponent<HintManager>();
             RecipeEvaluator evaluator = gameObject.GetComponent<RecipeEvaluator>();
             ExperimentLogManager log = FindFirstObjectByType<ExperimentLogManager>();
@@ -193,6 +195,7 @@ public class TestLevelInitializer : MonoBehaviour
                 attempt.uiManager = ui;
                 attempt.forceController = force;
                 attempt.pestleController = pestle;
+                attempt.ingredientDisplayManager = ingredientDisplay;
             }
 
             if (ui != null)
@@ -733,6 +736,12 @@ public class TestLevelInitializer : MonoBehaviour
         text.text = label;
         return button;
     }
+
+        private static T GetOrAddComponent<T>(GameObject target) where T : Component
+        {
+            T component = target.GetComponent<T>();
+            return component != null ? component : target.AddComponent<T>();
+        }
 
         private static Slider CreateSlider(Transform parent, string name, Vector2 size, Vector2 position)
         {

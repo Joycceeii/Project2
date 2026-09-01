@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4229446074793206665}
   - component: {fileID: 4174227373188958709}
-  - component: {fileID: 2642828688045698503}
   m_Layer: 0
   m_Name: GroundBlackSesame
   m_TagString: Untagged
@@ -55,41 +54,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.9261245, y: 0.6257758, z: 1.9010994}
   m_Center: {x: -0.011853427, y: 0.3128879, z: 0.0013536513}
---- !u!205 &2642828688045698503
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1052279163172246164}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: -0.011853427, y: 0.3128879, z: 0.0013536513}
-  m_Size: 1.9261245
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.55
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 1675524695089966070}
-  - screenRelativeHeight: 0.25
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 4917941890026178199}
-  - screenRelativeHeight: 0.08
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 4531259480578523855}
-  - screenRelativeHeight: 0.02
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 8796721565142324235}
-  - screenRelativeHeight: 0.01
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 2449031622202713098}
-  m_Enabled: 1
 --- !u!1001 &1376209540952187086
 PrefabInstance:
   m_ObjectHideFlags: 0
