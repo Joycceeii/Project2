@@ -14,7 +14,7 @@ namespace TheTasteReviver
         private static readonly List<ExperimentRecord> sharedRecords = new List<ExperimentRecord>();
         private static readonly List<UnlockedClueRecord> unlockedClues = new List<UnlockedClueRecord>();
         private static readonly List<IngredientData> ingredientCatalog = new List<IngredientData>();
-        private const string CluePrefsKey = "TheTasteReviver.UnlockedClues";
+        private const string CluePrefsKey = "TheTasteReviver.UnlockedClues.v2";
 
         public IReadOnlyList<ExperimentRecord> Records => sharedRecords;
         public static IReadOnlyList<ExperimentRecord> SharedRecords => sharedRecords;

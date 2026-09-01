@@ -75,6 +75,12 @@ namespace TheTasteReviver
                 return;
             }
 
+            if (attemptManager.HasEvaluated)
+            {
+                ShowHint(resetRequiredHint);
+                return;
+            }
+
             if (!HasReachedEvaluationGate(attemptManager.currentLevel))
             {
                 ShowHint(BuildEvaluationGateHint(attemptManager.currentLevel));
