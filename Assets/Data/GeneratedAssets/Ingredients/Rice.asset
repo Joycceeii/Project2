@@ -19,6 +19,6 @@ MonoBehaviour:
   initialDescription: Rice is mild and clean. It needs steady grinding, but too much force can make it taste burnt.
   ingredientColor: {r: 0.95, g: 0.9, b: 0.75, a: 1}
   icon: {fileID: 0}
-  prefab: {fileID: 5529012155505820837, guid: 3ac58dbef5492ca458080abe036ddbc2, type: 3}
+  prefab: {fileID: 1052279163172246164, guid: 41348a586781fbf41956fc73bdbbdc2b, type: 3}
   groundPrefab: {fileID: 1052279163172246164, guid: 8e111111111111111111111111111111, type: 3}
   defaultRatioValue: 1

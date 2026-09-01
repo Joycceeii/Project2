@@ -19,6 +19,6 @@ MonoBehaviour:
   initialDescription: Peanut gives a warm roasted flavor. It works well with other nutty ingredients.
   ingredientColor: {r: 0.72, g: 0.48, b: 0.27, a: 1}
   icon: {fileID: 0}
-  prefab: {fileID: 8015292716764687828, guid: 579fa77a6cde7af46be4efac10704002, type: 3}
+  prefab: {fileID: 3011262018843442921, guid: 9d0de144f4cf4fa09dc3834208d8ad99, type: 3}
   groundPrefab: {fileID: 4011262018843442921, guid: 4fa834648b1340b78a6720d68c63e160, type: 3}
   defaultRatioValue: 1

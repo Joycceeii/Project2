@@ -19,6 +19,6 @@ MonoBehaviour:
   initialDescription: Ginger is fresh and sharp. It can brighten a recipe, but it can also become too strong.
   ingredientColor: {r: 0.9, g: 0.75, b: 0.38, a: 1}
   icon: {fileID: 0}
-  prefab: {fileID: 3007866673199938548, guid: 48005bb15b19240409b3b38c12b66a16, type: 3}
+  prefab: {fileID: 4011262018843443021, guid: 75a236359e054fd2969a1259c057cbc6, type: 3}
   groundPrefab: {fileID: 1052279163172246164, guid: 8d0b7f103c4442eaa6442171f3755c3d, type: 3}
   defaultRatioValue: 1

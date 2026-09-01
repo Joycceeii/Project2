@@ -17,6 +17,9 @@ namespace TheTasteReviver
         public float maxInstantSpeed = 1400f;
         public float groundVisualDelaySeconds = 1.2f;
         [Range(0f, 1f)] public float groundVisualGateRatio = 0.35f;
+        public bool expandClickHitbox = true;
+        public Vector3 clickHitboxPadding = new Vector3(0.45f, 0.28f, 0.45f);
+        public Vector3 minimumClickHitboxSize = new Vector3(0.9f, 0.45f, 0.9f);
 
         public SpeedLevel CurrentSpeedLevel { get; private set; } = SpeedLevel.Medium;
         public float AverageMouseSpeed => currentMouseSpeed;
@@ -32,6 +35,7 @@ namespace TheTasteReviver
 
         private void Awake()
         {
+            ConfigureClickHitbox();
             startPosition = transform.position;
             startRotation = transform.rotation;
             if (interactionCamera == null)
@@ -41,6 +45,64 @@ namespace TheTasteReviver
 
             dragPlaneY = transform.position.y;
             RefreshLabel();
+        }
+
+        private void ConfigureClickHitbox()
+        {
+            if (!expandClickHitbox)
+            {
+                return;
+            }
+
+            foreach (Collider collider in GetComponentsInChildren<Collider>(true))
+            {
+                if (collider != null && collider.transform != transform)
+                {
+                    collider.enabled = false;
+                }
+            }
+
+            Bounds bounds = CalculateLocalBounds();
+            BoxCollider hitbox = GetComponent<BoxCollider>() ?? gameObject.AddComponent<BoxCollider>();
+            hitbox.isTrigger = false;
+            hitbox.enabled = true;
+
+            if (bounds.size.sqrMagnitude <= 0.0001f)
+            {
+                hitbox.center = Vector3.zero;
+                hitbox.size = minimumClickHitboxSize;
+                return;
+            }
+
+            hitbox.center = bounds.center;
+            hitbox.size = new Vector3(
+                Mathf.Max(bounds.size.x + clickHitboxPadding.x, minimumClickHitboxSize.x),
+                Mathf.Max(bounds.size.y + clickHitboxPadding.y, minimumClickHitboxSize.y),
+                Mathf.Max(bounds.size.z + clickHitboxPadding.z, minimumClickHitboxSize.z));
+        }
+
+        private Bounds CalculateLocalBounds()
+        {
+            Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+            if (renderers == null || renderers.Length == 0)
+            {
+                return new Bounds(Vector3.zero, Vector3.zero);
+            }
+
+            Bounds bounds = new Bounds(transform.InverseTransformPoint(renderers[0].bounds.center), Vector3.zero);
+            foreach (Renderer renderer in renderers)
+            {
+                if (renderer == null)
+                {
+                    continue;
+                }
+
+                Bounds worldBounds = renderer.bounds;
+                bounds.Encapsulate(transform.InverseTransformPoint(worldBounds.min));
+                bounds.Encapsulate(transform.InverseTransformPoint(worldBounds.max));
+            }
+
+            return bounds;
         }
 
         private void OnMouseDown()

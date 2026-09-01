@@ -10,19 +10,22 @@ namespace TheTasteReviver
         private const string LabelName = "Ingredient Label";
         private const int MaxSlots = 4;
         private const float LabelSurfaceOffset = 0.08f;
-        private const float PlateLabelYOffset = 0.13f;
+        private const float PlateLabelYOffset = 0.018f;
         private const float PlateIngredientSurfaceY = 0.16f;
-        private const float IngredientPlateFootprint = 0.46f;
-        private const float IngredientPlateMaxHeight = 0.28f;
+        private const float IngredientPlateFootprint = 0.54f;
+        private const float IngredientPlateMaxHeight = 0.3f;
+        private const float MortarDropHeight = 0.08f;
+        private const float GroundVisualScale = 0.65f;
+        private const string PortionClusterName = "Portion Cluster";
 
         public MortarArea mortarArea;
         public RecipeAttemptManager attemptManager;
         public GameObject platePrefab;
         public bool hideLegacyDisplaysOnFirstRefresh = true;
         public bool showIngredientLabels = true;
-        public Vector3 labelOffset = new Vector3(0f, PlateLabelYOffset, -0.18f);
-        public int labelFontSize = 52;
-        public float labelCharacterSize = 0.045f;
+        public Vector3 labelOffset = new Vector3(0f, PlateLabelYOffset, -0.28f);
+        public int labelFontSize = 60;
+        public float labelCharacterSize = 0.035f;
 
         private bool legacyDisplaysHandled;
 
@@ -124,7 +127,6 @@ namespace TheTasteReviver
                 return;
             }
 
-            slot.SetActive(true);
             slot.transform.position = GetSlotPosition(index, activeCount);
             slot.transform.rotation = Quaternion.identity;
 
@@ -137,6 +139,8 @@ namespace TheTasteReviver
             }
 
             item.gameObject.name = "Ingredient";
+            StripLodGroups(item.gameObject);
+            ConfigurePortionCluster(item, ingredient);
             FitIngredientItemToPlate(item, ingredient.prefab != null);
             ConfigureIngredientDragCollider(item, ingredient.prefab != null);
             if (ingredient.prefab == null)
@@ -149,9 +153,12 @@ namespace TheTasteReviver
             drag.mortarArea = mortarArea;
             drag.attemptManager = attemptManager;
             drag.sourcePrefab = ingredient.prefab;
+            drag.mortarDropHeight = MortarDropHeight;
+            drag.groundVisualScale = GroundVisualScale;
             drag.ResetHomePosition();
 
             ConfigureLabel(slot.transform, ingredient);
+            slot.SetActive(true);
         }
 
         private Transform EnsureIngredientItem(Transform slot, IngredientData ingredient)
@@ -241,6 +248,180 @@ namespace TheTasteReviver
                 Mathf.Max(bounds.size.y, 0.12f),
                 Mathf.Max(bounds.size.z, 0.2f));
             boxCollider.enabled = true;
+        }
+
+        private static void ConfigurePortionCluster(Transform item, IngredientData ingredient)
+        {
+            if (!IsAlive(item) || ingredient == null || !ShouldBuildPortionCluster(ingredient))
+            {
+                ClearPortionCluster(item);
+                return;
+            }
+
+            if (IsAlive(item.Find(PortionClusterName)))
+            {
+                return;
+            }
+
+            Transform source = FindVisualSource(item);
+            if (!IsAlive(source))
+            {
+                return;
+            }
+
+            GameObject cluster = new GameObject(PortionClusterName);
+            cluster.transform.SetParent(item, false);
+
+            int count = GetPortionCopyCount(ingredient);
+            for (int i = 0; i < count; i++)
+            {
+                GameObject copy = CreatePortionCopy(source, item, cluster.transform);
+                if (!IsAlive(copy))
+                {
+                    continue;
+                }
+
+                copy.name = "Portion Piece " + (i + 1);
+                copy.transform.localPosition += GetPortionOffset(i, count);
+                copy.transform.localRotation *= Quaternion.Euler(0f, i * 37f, 0f);
+                float scale = 0.72f + (i % 5) * 0.06f;
+                copy.transform.localScale = Vector3.Scale(copy.transform.localScale, Vector3.one * scale);
+                StripInteractionComponents(copy);
+            }
+        }
+
+        private static void ClearPortionCluster(Transform item)
+        {
+            if (!IsAlive(item))
+            {
+                return;
+            }
+
+            Transform cluster = item.Find(PortionClusterName);
+            if (IsAlive(cluster))
+            {
+                DestroyObject(cluster.gameObject);
+            }
+        }
+
+        private static bool ShouldBuildPortionCluster(IngredientData ingredient)
+        {
+            string id = ingredient.ingredientID;
+            return id == "Rice"
+                || id == "GlutinousRice"
+                || id == "RedBean"
+                || id == "BlackSesame"
+                || id == "WhitePepper"
+                || id == "CoarseSalt"
+                || id == "YangjiangDouchi"
+                || id == "DriedTangerinePeel"
+                || id == "Ginger"
+                || id == "SandGinger"
+                || id == "Chili";
+        }
+
+        private static int GetPortionCopyCount(IngredientData ingredient)
+        {
+            string id = ingredient.ingredientID;
+            if (id == "Rice" || id == "GlutinousRice" || id == "RedBean" || id == "BlackSesame" || id == "WhitePepper")
+            {
+                return 18;
+            }
+
+            if (id == "CoarseSalt" || id == "YangjiangDouchi")
+            {
+                return 12;
+            }
+
+            return 6;
+        }
+
+        private static Vector3 GetPortionOffset(int index, int count)
+        {
+            float radius = count > 12 ? 0.34f : 0.24f;
+            float angle = index * 137.5f * Mathf.Deg2Rad;
+            float ring = Mathf.Sqrt((index + 0.5f) / Mathf.Max(1f, count)) * radius;
+            float y = 0.005f * (index % 4);
+            return new Vector3(Mathf.Cos(angle) * ring, y, Mathf.Sin(angle) * ring);
+        }
+
+        private static GameObject CreatePortionCopy(Transform source, Transform item, Transform parent)
+        {
+            if (!IsAlive(source) || !IsAlive(parent))
+            {
+                return null;
+            }
+
+            if (source != item)
+            {
+                return Instantiate(source.gameObject, parent, false);
+            }
+
+            MeshFilter sourceMesh = source.GetComponent<MeshFilter>();
+            Renderer sourceRenderer = source.GetComponent<Renderer>();
+            if (!IsAlive(sourceMesh) || !IsAlive(sourceRenderer))
+            {
+                return null;
+            }
+
+            GameObject copy = new GameObject("Portion Piece");
+            copy.transform.SetParent(parent, false);
+            copy.transform.localPosition = Vector3.zero;
+            copy.transform.localRotation = Quaternion.identity;
+            copy.transform.localScale = Vector3.one;
+
+            MeshFilter meshFilter = copy.AddComponent<MeshFilter>();
+            meshFilter.sharedMesh = sourceMesh.sharedMesh;
+
+            MeshRenderer meshRenderer = copy.AddComponent<MeshRenderer>();
+            meshRenderer.sharedMaterials = sourceRenderer.sharedMaterials;
+            return copy;
+        }
+
+        private static Transform FindVisualSource(Transform item)
+        {
+            Renderer renderer = item.GetComponentsInChildren<Renderer>(true)
+                .FirstOrDefault(x => IsAlive(x) && !IsChildOf(x.transform, item.Find(PortionClusterName)));
+            if (!IsAlive(renderer))
+            {
+                return null;
+            }
+
+            Transform source = renderer.transform;
+            while (source.parent != null && source.parent != item)
+            {
+                source = source.parent;
+            }
+
+            return source;
+        }
+
+        private static void StripInteractionComponents(GameObject copy)
+        {
+            StripLodGroups(copy);
+
+            foreach (Collider collider in copy.GetComponentsInChildren<Collider>(true))
+            {
+                collider.enabled = false;
+            }
+
+            foreach (DraggableIngredient drag in copy.GetComponentsInChildren<DraggableIngredient>(true))
+            {
+                DestroyComponent(drag);
+            }
+        }
+
+        private static void StripLodGroups(GameObject target)
+        {
+            if (!IsAlive(target))
+            {
+                return;
+            }
+
+            foreach (LODGroup lodGroup in target.GetComponentsInChildren<LODGroup>(true))
+            {
+                DestroyComponent(lodGroup);
+            }
         }
 
         private Transform EnsurePlateVisual(Transform slot)
@@ -438,8 +619,8 @@ namespace TheTasteReviver
             label.text = ingredient != null ? ingredient.DisplayName : string.Empty;
             label.color = Color.black;
             label.fontSize = Mathf.Max(8, labelFontSize);
-            label.characterSize = Mathf.Max(0.001f, labelCharacterSize);
-            label.transform.localPosition = labelOffset;
+            label.characterSize = GetLabelCharacterSize(label.text);
+            label.transform.localPosition = GetLabelPosition(label.text);
             ConfigurePlateLabel(label.transform);
         }
 
@@ -450,8 +631,31 @@ namespace TheTasteReviver
                 return;
             }
 
-            label.localRotation = Quaternion.Euler(-90f, 0f, 0f);
+            label.localRotation = Quaternion.Euler(90f, 180f, 0f);
             label.localScale = Vector3.one;
+        }
+
+        private float GetLabelCharacterSize(string text)
+        {
+            int length = string.IsNullOrWhiteSpace(text) ? 0 : text.Length;
+            float size = Mathf.Max(0.001f, labelCharacterSize);
+            if (length > 16)
+            {
+                size *= 0.72f;
+            }
+            else if (length > 10)
+            {
+                size *= 0.84f;
+            }
+
+            return size;
+        }
+
+        private Vector3 GetLabelPosition(string text)
+        {
+            int length = string.IsNullOrWhiteSpace(text) ? 0 : text.Length;
+            float z = length > 16 ? -0.34f : labelOffset.z;
+            return new Vector3(labelOffset.x, Mathf.Max(0.006f, labelOffset.y), z);
         }
 
         private static Transform FindSlot(Transform container, string slotName)
@@ -559,6 +763,23 @@ namespace TheTasteReviver
         }
 
         private static void DestroyObject(GameObject target)
+        {
+            if (!IsAlive(target))
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(target);
+            }
+            else
+            {
+                DestroyImmediate(target);
+            }
+        }
+
+        private static void DestroyComponent(Component target)
         {
             if (!IsAlive(target))
             {

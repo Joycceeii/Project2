@@ -12,6 +12,7 @@ namespace TheTasteReviver
         public GameObject sourcePrefab;
         public float dragLiftHeight = 0.55f;
         public float mortarDropHeight = 0.08f;
+        public float groundVisualScale = 0.65f;
 
         private Vector3 startPosition;
         private bool dragging;
@@ -85,7 +86,7 @@ namespace TheTasteReviver
             groundVisualInstance.name = "Ground Visual";
             groundVisualInstance.transform.localPosition = Vector3.zero;
             groundVisualInstance.transform.localRotation = Quaternion.identity;
-            groundVisualInstance.transform.localScale = Vector3.one;
+            groundVisualInstance.transform.localScale = Vector3.one * Mathf.Clamp(groundVisualScale, 0.25f, 1.2f);
 
             foreach (Collider collider in groundVisualInstance.GetComponentsInChildren<Collider>(true))
             {

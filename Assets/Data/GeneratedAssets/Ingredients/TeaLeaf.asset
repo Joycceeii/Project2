@@ -19,6 +19,6 @@ MonoBehaviour:
   initialDescription: Tea leaves taste bitter at first and sweet later. Slow grinding helps the sweetness come out.
   ingredientColor: {r: 0.25, g: 0.5, b: 0.22, a: 1}
   icon: {fileID: 0}
-  prefab: {fileID: 7697071128784244215, guid: 7903e0f1efe5b8b46b3d658e9b2a57e7, type: 3}
+  prefab: {fileID: 1052279163172246164, guid: 821adfab6c694a32952b0e49f82db8e0, type: 3}
   groundPrefab: {fileID: 1052279163172246164, guid: 7327588d065d479a92b1789dddfeaa57, type: 3}
   defaultRatioValue: 1
