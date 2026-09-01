@@ -15,6 +15,7 @@ namespace TheTasteReviver
         private static readonly List<UnlockedClueRecord> unlockedClues = new List<UnlockedClueRecord>();
         private static readonly List<IngredientData> ingredientCatalog = new List<IngredientData>();
         private const string CluePrefsKey = "TheTasteReviver.UnlockedClues.v2";
+        private const string OrderArrow = " \u2192 ";
 
         public IReadOnlyList<ExperimentRecord> Records => sharedRecords;
         public static IReadOnlyList<ExperimentRecord> SharedRecords => sharedRecords;
@@ -49,7 +50,7 @@ namespace TheTasteReviver
             {
                 attemptNumber = sharedRecords.Count + 1,
                 ingredientsUsed = string.Join(", ", attempt.IngredientAmounts.Where(x => x.ingredient != null).Select(x => x.ingredient.DisplayName)),
-                ingredientOrder = string.Join(" -> ", attempt.IngredientOrder.Where(x => x != null).Select(x => x.DisplayName)),
+                ingredientOrder = BuildOrderArrowText(attempt.IngredientOrder),
                 ingredientOrderDetails = BuildOrderRelationshipText(attempt.IngredientOrder),
                 ratioPattern = string.Join(" / ", ratio.Select(x => x.Key.DisplayName + "=" + UIManager.GetRatioDisplayName(x.Value))),
                 combinationPattern = BuildCombinationPatternText(attempt.GrindingBatches),
@@ -222,7 +223,7 @@ namespace TheTasteReviver
             AppendCheckedRecordLine(builder, "Order", record.ingredientOrder, record.orderStatus);
             if (record.orderStatus != "Not Checked" && !string.IsNullOrWhiteSpace(record.ingredientOrderDetails))
             {
-                builder.AppendLine("Order Detail: " + record.ingredientOrderDetails);
+                builder.AppendLine("Order Steps: " + record.ingredientOrderDetails);
             }
 
             AppendCheckedRecordLine(builder, "Ratio", record.ratioPattern, record.ratioStatus);
@@ -476,16 +477,17 @@ namespace TheTasteReviver
 
             if (cleanOrder.Count == 1)
             {
-                return cleanOrder[0].DisplayName + " was added first and last.";
+                return "1. " + cleanOrder[0].DisplayName;
             }
 
-            List<string> relationships = new List<string>();
-            for (int i = 0; i < cleanOrder.Count - 1; i++)
-            {
-                relationships.Add(cleanOrder[i].DisplayName + " before " + cleanOrder[i + 1].DisplayName);
-            }
+            return string.Join(OrderArrow, cleanOrder.Select((ingredient, index) => (index + 1) + ". " + ingredient.DisplayName));
+        }
 
-            return string.Join("; ", relationships);
+        private static string BuildOrderArrowText(IReadOnlyList<IngredientData> order)
+        {
+            return order != null
+                ? string.Join(OrderArrow, order.Where(x => x != null).Select(x => x.DisplayName))
+                : string.Empty;
         }
 
         private static string FormatIngredientBatch(GrindingBatch batch)

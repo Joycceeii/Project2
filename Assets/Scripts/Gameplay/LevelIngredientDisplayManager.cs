@@ -138,6 +138,7 @@ namespace TheTasteReviver
 
             item.gameObject.name = "Ingredient";
             FitIngredientItemToPlate(item, ingredient.prefab != null);
+            ConfigureIngredientDragCollider(item, ingredient.prefab != null);
             if (ingredient.prefab == null)
             {
                 ApplyColor(item.gameObject, ingredient.ingredientColor);
@@ -199,6 +200,47 @@ namespace TheTasteReviver
             }
 
             return item.transform;
+        }
+
+        private static void ConfigureIngredientDragCollider(Transform item, bool usesPrefab)
+        {
+            if (!IsAlive(item))
+            {
+                return;
+            }
+
+            foreach (Collider collider in item.GetComponentsInChildren<Collider>(true))
+            {
+                if (IsAlive(collider) && collider.transform != item)
+                {
+                    collider.enabled = false;
+                }
+            }
+
+            if (!usesPrefab)
+            {
+                Collider fallbackCollider = item.GetComponent<Collider>();
+                if (IsAlive(fallbackCollider))
+                {
+                    fallbackCollider.enabled = true;
+                }
+
+                return;
+            }
+
+            Bounds bounds = CalculateLocalBounds(item);
+            if (bounds.size.sqrMagnitude <= 0.0001f)
+            {
+                return;
+            }
+
+            BoxCollider boxCollider = item.GetComponent<BoxCollider>() ?? item.gameObject.AddComponent<BoxCollider>();
+            boxCollider.center = bounds.center;
+            boxCollider.size = new Vector3(
+                Mathf.Max(bounds.size.x, 0.2f),
+                Mathf.Max(bounds.size.y, 0.12f),
+                Mathf.Max(bounds.size.z, 0.2f));
+            boxCollider.enabled = true;
         }
 
         private Transform EnsurePlateVisual(Transform slot)

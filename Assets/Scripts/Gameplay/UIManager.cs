@@ -206,7 +206,7 @@ namespace TheTasteReviver
 
             if (currentOrderLabel != null)
             {
-                string order = string.Join(" -> ", attempt.IngredientOrder.Where(x => x != null).Select(x => x.DisplayName));
+                string order = string.Join(" \u2192 ", attempt.IngredientOrder.Where(x => x != null).Select(x => x.DisplayName));
                 currentOrderLabel.text = "Ingredient Order:\n" + (string.IsNullOrWhiteSpace(order) ? "None" : order);
                 SetTextPanelVisible(currentOrderLabel, hasIngredients && (mechanics == null || mechanics.enableIngredientOrder));
             }
