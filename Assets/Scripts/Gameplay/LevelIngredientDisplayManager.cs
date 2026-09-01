@@ -17,8 +17,8 @@ namespace TheTasteReviver
         private const float PlateIngredientSurfaceY = 0.16f;
         private const float IngredientPlateFootprint = 0.54f;
         private const float IngredientPlateMaxHeight = 0.3f;
-        private const float MortarDropHeight = 0.1f;
-        private const float GroundVisualScale = 0.72f;
+        private const float MortarDropHeight = 0.2f;
+        private const float GroundVisualScale = 0.8f;
         private const string PortionClusterName = "Portion Cluster";
 
         public MortarArea mortarArea;

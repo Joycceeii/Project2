@@ -11,9 +11,9 @@ namespace TheTasteReviver
         public Camera interactionCamera;
         public GameObject sourcePrefab;
         public float dragLiftHeight = 0.55f;
-        public float mortarDropHeight = 0.1f;
-        public float groundVisualLift = 0.04f;
-        public float groundVisualScale = 0.72f;
+        public float mortarDropHeight = 0.2f;
+        public float groundVisualLift = 0.1f;
+        public float groundVisualScale = 0.8f;
 
         private Vector3 startPosition;
         private bool dragging;
@@ -26,6 +26,7 @@ namespace TheTasteReviver
 
         private void Awake()
         {
+            NormalizeRuntimeVisualSettings();
             ResetHomePosition();
             if (interactionCamera == null)
             {
@@ -122,7 +123,15 @@ namespace TheTasteReviver
             bool droppedInMortar = mortarArea != null && mortarArea.ContainsWorldPoint(GetMortarCheckPoint());
             bool accepted = droppedInMortar && attemptManager != null && attemptManager.TryAddIngredient(ingredientData);
             IsInMortar = accepted;
-            transform.position = accepted && mortarArea != null ? GetMortarDropPosition() : startPosition;
+            if (accepted && mortarArea != null)
+            {
+                MoveIntoMortar();
+            }
+            else
+            {
+                transform.position = startPosition;
+            }
+
             dragPlaneY = transform.position.y;
         }
 
@@ -136,12 +145,25 @@ namespace TheTasteReviver
             return new Vector3(transform.position.x, mortarArea.transform.position.y, transform.position.z);
         }
 
-        private Vector3 GetMortarDropPosition()
+        private void NormalizeRuntimeVisualSettings()
+        {
+            mortarDropHeight = Mathf.Clamp(mortarDropHeight, 0.18f, 0.22f);
+            groundVisualLift = Mathf.Clamp(groundVisualLift, 0.08f, 0.14f);
+            groundVisualScale = Mathf.Clamp(groundVisualScale, 0.72f, 0.9f);
+        }
+
+        private void MoveIntoMortar()
         {
             Collider mortarCollider = mortarArea.GetComponent<Collider>();
             Vector3 center = IsAlive(mortarCollider) ? mortarCollider.bounds.center : mortarArea.transform.position;
-            float anchorY = mortarArea.transform.position.y;
-            return new Vector3(center.x, anchorY + Mathf.Max(0f, mortarDropHeight), center.z);
+            float visibleY = mortarArea.transform.position.y + mortarDropHeight;
+            if (IsAlive(mortarCollider))
+            {
+                visibleY = Mathf.Max(visibleY, mortarCollider.bounds.max.y + 0.015f);
+            }
+
+            transform.position = new Vector3(center.x, visibleY, center.z);
+            FitSelfRenderersToWorldAnchor(new Vector3(center.x, visibleY, center.z));
         }
 
         private void HideCurrentRenderers()
@@ -174,6 +196,43 @@ namespace TheTasteReviver
             }
 
             hiddenRenderers.Clear();
+        }
+
+        private void FitSelfRenderersToWorldAnchor(Vector3 worldAnchor)
+        {
+            Bounds bounds;
+            if (!TryCalculateWorldBounds(transform, out bounds) || bounds.size.sqrMagnitude <= 0.0001f)
+            {
+                transform.position = worldAnchor;
+                return;
+            }
+
+            Vector3 offset = new Vector3(
+                worldAnchor.x - bounds.center.x,
+                worldAnchor.y - bounds.min.y,
+                worldAnchor.z - bounds.center.z);
+            transform.position += offset;
+        }
+
+        private static bool TryCalculateWorldBounds(Transform root, out Bounds bounds)
+        {
+            Renderer[] renderers = root.GetComponentsInChildren<Renderer>(true);
+            if (renderers == null || renderers.Length == 0)
+            {
+                bounds = new Bounds(Vector3.zero, Vector3.zero);
+                return false;
+            }
+
+            bounds = renderers[0].bounds;
+            foreach (Renderer renderer in renderers)
+            {
+                if (IsAlive(renderer))
+                {
+                    bounds.Encapsulate(renderer.bounds);
+                }
+            }
+
+            return true;
         }
 
         private static void FitChildRenderersToAnchor(Transform child, float lift)
