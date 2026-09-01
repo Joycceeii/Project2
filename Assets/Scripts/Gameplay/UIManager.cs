@@ -570,7 +570,7 @@ namespace TheTasteReviver
             Image panelImage = ratioSelectionPanel.AddComponent<Image>();
             panelImage.color = new Color(1f, 1f, 1f, 0.94f);
 
-            ratioSelectionTitle = CreateRuntimeText(ratioSelectionPanel.transform, "Ratio Selection Title", new Vector2(320f, 44f), new Vector2(0f, 72f), TextAnchor.MiddleCenter, 16);
+            ratioSelectionTitle = CreateRuntimeText(ratioSelectionPanel.transform, "Ratio Selection Title", new Vector2(320f, 44f), new Vector2(0f, 72f), TextAnchor.MiddleCenter, 22);
             ratioSelectionButtons = new Button[4];
 
             for (int i = 0; i < ratioSelectionButtons.Length; i++)
@@ -645,23 +645,23 @@ namespace TheTasteReviver
 
         public void NormalizeHudLayout()
         {
-            ConfigureTextPanel(levelLabel, new Vector2(900f, 86f), new Vector2(0f, -34f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), TextAnchor.UpperCenter, 25);
-            ConfigureTextPanel(currentOrderLabel, new Vector2(420f, 104f), new Vector2(36f, -132f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft, 21);
-            ConfigureTextPanel(currentRatioLabel, new Vector2(420f, 126f), new Vector2(36f, -248f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft, 21);
-            ConfigureTextPanel(currentSpeedLabel, new Vector2(420f, 54f), new Vector2(36f, -386f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.MiddleLeft, 21);
-            ConfigureTextPanel(hintLabel, new Vector2(430f, 168f), new Vector2(-36f, -34f), new Vector2(1f, 1f), new Vector2(1f, 1f), TextAnchor.UpperLeft, 20);
+            ConfigureTextPanel(levelLabel, new Vector2(960f, 96f), new Vector2(0f, -34f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), TextAnchor.UpperCenter, 30);
+            ConfigureTextPanel(currentOrderLabel, new Vector2(470f, 120f), new Vector2(36f, -132f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft, 25);
+            ConfigureTextPanel(currentRatioLabel, new Vector2(470f, 144f), new Vector2(36f, -264f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft, 25);
+            ConfigureTextPanel(currentSpeedLabel, new Vector2(470f, 64f), new Vector2(36f, -420f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.MiddleLeft, 25);
+            ConfigureTextPanel(hintLabel, new Vector2(470f, 190f), new Vector2(-36f, -34f), new Vector2(1f, 1f), new Vector2(1f, 1f), TextAnchor.UpperLeft, 23);
 
-            ConfigureButton(experimentLogButton, new Vector2(204f, 52f), new Vector2(36f, -34f), new Vector2(0f, 1f), new Vector2(0f, 1f));
-            ConfigureButton(evaluateButton, new Vector2(190f, 52f), new Vector2(-36f, 166f), new Vector2(1f, 0f), new Vector2(1f, 0f));
-            ConfigureButton(resetAttemptButton, new Vector2(190f, 52f), new Vector2(-36f, 108f), new Vector2(1f, 0f), new Vector2(1f, 0f));
-            ConfigureButton(newBatchButton, new Vector2(190f, 52f), new Vector2(-36f, 50f), new Vector2(1f, 0f), new Vector2(1f, 0f));
-            ConfigureButton(nextLevelButton, new Vector2(190f, 52f), new Vector2(36f, 146f), new Vector2(0f, 0f), new Vector2(0f, 0f));
-            ConfigureButton(ingredientTraitToggleButton, new Vector2(176f, 52f), new Vector2(-36f, -226f), new Vector2(1f, 1f), new Vector2(1f, 1f));
+            ConfigureButton(experimentLogButton, new Vector2(236f, 60f), new Vector2(36f, -34f), new Vector2(0f, 1f), new Vector2(0f, 1f));
+            ConfigureButton(evaluateButton, new Vector2(220f, 60f), new Vector2(-36f, 184f), new Vector2(1f, 0f), new Vector2(1f, 0f));
+            ConfigureButton(resetAttemptButton, new Vector2(220f, 60f), new Vector2(-36f, 118f), new Vector2(1f, 0f), new Vector2(1f, 0f));
+            ConfigureButton(newBatchButton, new Vector2(220f, 60f), new Vector2(-36f, 52f), new Vector2(1f, 0f), new Vector2(1f, 0f));
+            ConfigureButton(nextLevelButton, new Vector2(220f, 60f), new Vector2(36f, 160f), new Vector2(0f, 0f), new Vector2(0f, 0f));
+            ConfigureButton(ingredientTraitToggleButton, new Vector2(204f, 60f), new Vector2(-36f, -250f), new Vector2(1f, 1f), new Vector2(1f, 1f));
 
-            ConfigureNamedRect("Force Slider", new Vector2(380f, 46f), new Vector2(36f, 196f), new Vector2(0f, 0f), new Vector2(0f, 0f));
-            ConfigureNamedRect("Force Label Panel", new Vector2(380f, 44f), new Vector2(36f, 250f), new Vector2(0f, 0f), new Vector2(0f, 0f));
-            ConfigureNamedRect("Ingredient Traits Panel", new Vector2(430f, 330f), new Vector2(-36f, -240f), new Vector2(1f, 1f), new Vector2(1f, 1f));
-            ConfigureNamedRect("Ratio Selection Panel", new Vector2(360f, 220f), Vector2.zero, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+            ConfigureNamedRect("Force Slider", new Vector2(430f, 52f), new Vector2(36f, 220f), new Vector2(0f, 0f), new Vector2(0f, 0f));
+            ConfigureNamedRect("Force Label Panel", new Vector2(430f, 52f), new Vector2(36f, 282f), new Vector2(0f, 0f), new Vector2(0f, 0f));
+            ConfigureNamedRect("Ingredient Traits Panel", new Vector2(470f, 360f), new Vector2(-36f, -270f), new Vector2(1f, 1f), new Vector2(1f, 1f));
+            ConfigureNamedRect("Ratio Selection Panel", new Vector2(420f, 260f), Vector2.zero, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
             ConfigureTraitText();
 #if UNITY_EDITOR
             if (!Application.isPlaying)
@@ -679,7 +679,7 @@ namespace TheTasteReviver
                 return;
             }
 
-            ingredientTraitLabel.fontSize = 20;
+            ingredientTraitLabel.fontSize = 23;
             ingredientTraitLabel.alignment = TextAnchor.UpperLeft;
             ingredientTraitLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
             ingredientTraitLabel.verticalOverflow = VerticalWrapMode.Overflow;
@@ -726,7 +726,7 @@ namespace TheTasteReviver
             Text label = button.GetComponentInChildren<Text>(true);
             if (IsAlive(label))
             {
-                label.fontSize = label.text != null && label.text.Length > 12 ? 19 : 21;
+                label.fontSize = label.text != null && label.text.Length > 12 ? 22 : 24;
                 label.alignment = TextAnchor.MiddleCenter;
             }
         }
@@ -796,7 +796,7 @@ namespace TheTasteReviver
             text.color = Color.black;
             text.alignment = TextAnchor.MiddleCenter;
             text.font = GetRuntimeFont();
-            text.fontSize = label.Length > 12 ? 19 : 21;
+            text.fontSize = label.Length > 12 ? 22 : 24;
             text.horizontalOverflow = HorizontalWrapMode.Wrap;
             text.verticalOverflow = VerticalWrapMode.Overflow;
             text.raycastTarget = false;
@@ -974,7 +974,7 @@ namespace TheTasteReviver
             if (IsAlive(label))
             {
                 label.text = "Traits";
-                label.fontSize = 15;
+                label.fontSize = 22;
             }
 
             ingredientTraitToggleButton.onClick.RemoveAllListeners();

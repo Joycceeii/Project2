@@ -630,7 +630,7 @@ public class TestLevelInitializer : MonoBehaviour
     {
         GameObject panel = CreatePanel(parent, name + " Panel", size, position);
         Text text = CreateTextChild(panel.transform, name, Vector2.zero, Vector2.zero, anchor);
-        text.fontSize = 15;
+        text.fontSize = 20;
         text.horizontalOverflow = HorizontalWrapMode.Wrap;
         text.verticalOverflow = VerticalWrapMode.Overflow;
         text.text = name;
@@ -641,7 +641,7 @@ public class TestLevelInitializer : MonoBehaviour
     {
         GameObject panel = CreatePanel(parent, name + " Panel", size, position, anchorPoint, pivot);
         Text text = CreateTextChild(panel.transform, name, Vector2.zero, Vector2.zero, anchor);
-        text.fontSize = 15;
+        text.fontSize = 20;
         text.horizontalOverflow = HorizontalWrapMode.Wrap;
         text.verticalOverflow = VerticalWrapMode.Overflow;
         text.text = name;
@@ -717,7 +717,7 @@ public class TestLevelInitializer : MonoBehaviour
         button.targetGraphic = buttonObject.GetComponent<Image>();
         button.onClick.AddListener(action);
         Text text = CreateTextChild(buttonObject.transform, label, new Vector2(6f, 0f), new Vector2(-6f, 0f), TextAnchor.MiddleCenter);
-        text.fontSize = 14;
+        text.fontSize = 22;
         text.text = label;
         return button;
     }
@@ -729,7 +729,7 @@ public class TestLevelInitializer : MonoBehaviour
         button.targetGraphic = buttonObject.GetComponent<Image>();
         button.onClick.AddListener(action);
         Text text = CreateTextChild(buttonObject.transform, label, new Vector2(6f, 0f), new Vector2(-6f, 0f), TextAnchor.MiddleCenter);
-        text.fontSize = 14;
+        text.fontSize = 22;
         text.text = label;
         return button;
     }
