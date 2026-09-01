@@ -371,8 +371,14 @@ namespace TheTasteReviver
             AddMechanicState(level, MechanicType.IngredientOrder, "ingredient order", checkedMechanics, notCheckedMechanics);
             AddMechanicState(level, MechanicType.Ratio, "amounts", checkedMechanics, notCheckedMechanics);
 
-            return "This level checks: " + FormatList(checkedMechanics) + ".\n"
+            string text = "This level checks: " + FormatList(checkedMechanics) + ".\n"
                 + "Not checked yet: " + FormatList(notCheckedMechanics) + ".";
+            if (level.enabledMechanics.enableCombination)
+            {
+                text += "\nUse New Batch when ingredients should be ground separately.";
+            }
+
+            return text;
         }
 
         private static void AddMechanicState(RecipeLevelData level, MechanicType mechanic, string label, List<string> checkedMechanics, List<string> notCheckedMechanics)
