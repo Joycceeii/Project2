@@ -15,6 +15,8 @@ namespace TheTasteReviver
         public float speedDeadZone = 2.5f;
         public float speedHysteresis = 90f;
         public float maxInstantSpeed = 1400f;
+        public float groundVisualDelaySeconds = 1.2f;
+        [Range(0f, 1f)] public float groundVisualGateRatio = 0.35f;
 
         public SpeedLevel CurrentSpeedLevel { get; private set; } = SpeedLevel.Medium;
         public float AverageMouseSpeed => currentMouseSpeed;
@@ -68,7 +70,11 @@ namespace TheTasteReviver
                 UpdateCurrentSpeed(delta);
                 CurrentSpeedLevel = SpeedToLevel(currentMouseSpeed);
                 RefreshLabel();
-                uiManager?.attemptManager?.ShowGroundVisualsForCurrentBatch();
+                if (ShouldShowGroundVisuals())
+                {
+                    uiManager?.attemptManager?.ShowGroundVisualsForCurrentBatch();
+                }
+
                 uiManager?.TryAutoEvaluateAfterGrinding();
             }
 
@@ -143,6 +149,20 @@ namespace TheTasteReviver
             {
                 speedLabel.text = "Current Grind Speed: " + CurrentSpeedLevel;
             }
+        }
+
+        private bool ShouldShowGroundVisuals()
+        {
+            float requiredSeconds = Mathf.Max(0f, groundVisualDelaySeconds);
+            RecipeLevelData level = uiManager != null && uiManager.attemptManager != null
+                ? uiManager.attemptManager.currentLevel
+                : null;
+            if (level != null)
+            {
+                requiredSeconds = Mathf.Max(requiredSeconds, Mathf.Max(0f, level.minGrindDuration) * groundVisualGateRatio);
+            }
+
+            return GrindDuration >= requiredSeconds;
         }
 
         private bool TryGetMouseWorldPoint(out Vector3 worldPoint)

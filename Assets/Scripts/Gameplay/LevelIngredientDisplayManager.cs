@@ -10,16 +10,19 @@ namespace TheTasteReviver
         private const string LabelName = "Ingredient Label";
         private const int MaxSlots = 4;
         private const float LabelSurfaceOffset = 0.08f;
-        private const float PlateLabelYOffset = 0.105f;
+        private const float PlateLabelYOffset = 0.13f;
+        private const float PlateIngredientSurfaceY = 0.16f;
+        private const float IngredientPlateFootprint = 0.46f;
+        private const float IngredientPlateMaxHeight = 0.28f;
 
         public MortarArea mortarArea;
         public RecipeAttemptManager attemptManager;
         public GameObject platePrefab;
         public bool hideLegacyDisplaysOnFirstRefresh = true;
         public bool showIngredientLabels = true;
-        public Vector3 labelOffset = new Vector3(0f, PlateLabelYOffset, 0f);
-        public int labelFontSize = 40;
-        public float labelCharacterSize = 0.055f;
+        public Vector3 labelOffset = new Vector3(0f, PlateLabelYOffset, -0.18f);
+        public int labelFontSize = 52;
+        public float labelCharacterSize = 0.045f;
 
         private bool legacyDisplaysHandled;
 
@@ -105,8 +108,8 @@ namespace TheTasteReviver
             GameObject item = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             item.name = "Ingredient";
             item.transform.SetParent(slot.transform, false);
-            item.transform.localPosition = Vector3.up * 0.45f;
-            item.transform.localScale = Vector3.one * 0.38f;
+            item.transform.localPosition = Vector3.up * PlateIngredientSurfaceY;
+            item.transform.localScale = Vector3.one * 0.26f;
             item.AddComponent<DraggableIngredient>();
 
             EnsureLabel(slot.transform);
@@ -270,24 +273,30 @@ namespace TheTasteReviver
                 return;
             }
 
-            item.localPosition = Vector3.up * 0.45f;
-            item.localScale = Vector3.one * 0.38f;
+            item.localPosition = Vector3.up * PlateIngredientSurfaceY;
+            item.localScale = Vector3.one * 0.26f;
             if (!usesPrefab)
             {
                 return;
             }
 
             Bounds bounds = CalculateLocalBounds(item);
-            float largestSize = Mathf.Max(bounds.size.x, bounds.size.y, bounds.size.z);
-            if (largestSize <= 0.0001f)
+            float largestFootprint = Mathf.Max(bounds.size.x, bounds.size.z);
+            if (largestFootprint <= 0.0001f || bounds.size.y <= 0.0001f)
             {
                 return;
             }
 
-            float scale = Mathf.Clamp(0.72f / largestSize, 0.04f, 2.4f);
+            float footprintScale = IngredientPlateFootprint / largestFootprint;
+            float heightScale = IngredientPlateMaxHeight / bounds.size.y;
+            float scale = Mathf.Clamp(Mathf.Min(footprintScale, heightScale), 0.04f, 2.4f);
             item.localScale = Vector3.one * scale;
-            Vector3 centerOffset = item.TransformVector(bounds.center);
-            item.localPosition = Vector3.up * 0.45f - centerOffset;
+            Vector3 horizontalCenterOffset = item.TransformVector(new Vector3(bounds.center.x, 0f, bounds.center.z));
+            float bottomOffsetY = item.TransformVector(Vector3.up * bounds.min.y).y;
+            item.localPosition = new Vector3(
+                -horizontalCenterOffset.x,
+                PlateIngredientSurfaceY - bottomOffsetY,
+                -horizontalCenterOffset.z);
         }
 
         private static Bounds CalculateLocalBounds(Transform root)
@@ -379,7 +388,7 @@ namespace TheTasteReviver
                 return;
             }
 
-            label.localRotation = Quaternion.Euler(-90f, 180f, 0f);
+            label.localRotation = Quaternion.Euler(-90f, 0f, 0f);
             label.localScale = Vector3.one;
         }
 

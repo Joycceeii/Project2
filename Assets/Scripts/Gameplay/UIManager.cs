@@ -643,22 +643,22 @@ namespace TheTasteReviver
 
         public void NormalizeHudLayout()
         {
-            ConfigureTextPanel(levelLabel, new Vector2(860f, 78f), new Vector2(0f, -34f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), TextAnchor.UpperCenter, 22);
-            ConfigureTextPanel(currentOrderLabel, new Vector2(360f, 92f), new Vector2(36f, -132f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft, 18);
-            ConfigureTextPanel(currentRatioLabel, new Vector2(360f, 112f), new Vector2(36f, -236f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft, 18);
-            ConfigureTextPanel(currentSpeedLabel, new Vector2(360f, 48f), new Vector2(36f, -360f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.MiddleLeft, 18);
-            ConfigureTextPanel(hintLabel, new Vector2(430f, 150f), new Vector2(-36f, -34f), new Vector2(1f, 1f), new Vector2(1f, 1f), TextAnchor.UpperLeft, 18);
+            ConfigureTextPanel(levelLabel, new Vector2(900f, 86f), new Vector2(0f, -34f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), TextAnchor.UpperCenter, 25);
+            ConfigureTextPanel(currentOrderLabel, new Vector2(420f, 104f), new Vector2(36f, -132f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft, 21);
+            ConfigureTextPanel(currentRatioLabel, new Vector2(420f, 126f), new Vector2(36f, -248f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft, 21);
+            ConfigureTextPanel(currentSpeedLabel, new Vector2(420f, 54f), new Vector2(36f, -386f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.MiddleLeft, 21);
+            ConfigureTextPanel(hintLabel, new Vector2(430f, 168f), new Vector2(-36f, -34f), new Vector2(1f, 1f), new Vector2(1f, 1f), TextAnchor.UpperLeft, 20);
 
-            ConfigureButton(experimentLogButton, new Vector2(180f, 46f), new Vector2(36f, 36f), new Vector2(0f, 0f), new Vector2(0f, 0f));
-            ConfigureButton(evaluateButton, new Vector2(176f, 46f), new Vector2(-36f, 136f), new Vector2(1f, 0f), new Vector2(1f, 0f));
-            ConfigureButton(resetAttemptButton, new Vector2(176f, 46f), new Vector2(-36f, 84f), new Vector2(1f, 0f), new Vector2(1f, 0f));
-            ConfigureButton(newBatchButton, new Vector2(176f, 46f), new Vector2(-36f, 32f), new Vector2(1f, 0f), new Vector2(1f, 0f));
-            ConfigureButton(nextLevelButton, new Vector2(176f, 46f), new Vector2(36f, 92f), new Vector2(0f, 0f), new Vector2(0f, 0f));
-            ConfigureButton(ingredientTraitToggleButton, new Vector2(160f, 46f), new Vector2(-36f, -206f), new Vector2(1f, 1f), new Vector2(1f, 1f));
+            ConfigureButton(experimentLogButton, new Vector2(204f, 52f), new Vector2(36f, 116f), new Vector2(0f, 0f), new Vector2(0f, 0f));
+            ConfigureButton(evaluateButton, new Vector2(190f, 52f), new Vector2(-36f, 166f), new Vector2(1f, 0f), new Vector2(1f, 0f));
+            ConfigureButton(resetAttemptButton, new Vector2(190f, 52f), new Vector2(-36f, 108f), new Vector2(1f, 0f), new Vector2(1f, 0f));
+            ConfigureButton(newBatchButton, new Vector2(190f, 52f), new Vector2(-36f, 50f), new Vector2(1f, 0f), new Vector2(1f, 0f));
+            ConfigureButton(nextLevelButton, new Vector2(190f, 52f), new Vector2(36f, 146f), new Vector2(0f, 0f), new Vector2(0f, 0f));
+            ConfigureButton(ingredientTraitToggleButton, new Vector2(176f, 52f), new Vector2(-36f, -226f), new Vector2(1f, 1f), new Vector2(1f, 1f));
 
-            ConfigureNamedRect("Force Slider", new Vector2(360f, 42f), new Vector2(36f, 136f), new Vector2(0f, 0f), new Vector2(0f, 0f));
-            ConfigureNamedRect("Force Label Panel", new Vector2(360f, 38f), new Vector2(36f, 184f), new Vector2(0f, 0f), new Vector2(0f, 0f));
-            ConfigureNamedRect("Ingredient Traits Panel", new Vector2(430f, 300f), new Vector2(-36f, -220f), new Vector2(1f, 1f), new Vector2(1f, 1f));
+            ConfigureNamedRect("Force Slider", new Vector2(380f, 46f), new Vector2(36f, 196f), new Vector2(0f, 0f), new Vector2(0f, 0f));
+            ConfigureNamedRect("Force Label Panel", new Vector2(380f, 44f), new Vector2(36f, 250f), new Vector2(0f, 0f), new Vector2(0f, 0f));
+            ConfigureNamedRect("Ingredient Traits Panel", new Vector2(430f, 330f), new Vector2(-36f, -240f), new Vector2(1f, 1f), new Vector2(1f, 1f));
             ConfigureNamedRect("Ratio Selection Panel", new Vector2(360f, 220f), Vector2.zero, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
             ConfigureTraitText();
 #if UNITY_EDITOR
@@ -677,7 +677,7 @@ namespace TheTasteReviver
                 return;
             }
 
-            ingredientTraitLabel.fontSize = 18;
+            ingredientTraitLabel.fontSize = 20;
             ingredientTraitLabel.alignment = TextAnchor.UpperLeft;
             ingredientTraitLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
             ingredientTraitLabel.verticalOverflow = VerticalWrapMode.Overflow;
@@ -687,8 +687,8 @@ namespace TheTasteReviver
             {
                 rect.anchorMin = Vector2.zero;
                 rect.anchorMax = Vector2.one;
-                rect.offsetMin = new Vector2(14f, 12f);
-                rect.offsetMax = new Vector2(-14f, -12f);
+                rect.offsetMin = new Vector2(16f, 14f);
+                rect.offsetMax = new Vector2(-16f, -14f);
                 rect.localRotation = Quaternion.identity;
                 rect.localScale = Vector3.one;
             }
@@ -724,7 +724,7 @@ namespace TheTasteReviver
             Text label = button.GetComponentInChildren<Text>(true);
             if (IsAlive(label))
             {
-                label.fontSize = 16;
+                label.fontSize = label.text != null && label.text.Length > 12 ? 19 : 21;
                 label.alignment = TextAnchor.MiddleCenter;
             }
         }
@@ -794,7 +794,7 @@ namespace TheTasteReviver
             text.color = Color.black;
             text.alignment = TextAnchor.MiddleCenter;
             text.font = GetRuntimeFont();
-            text.fontSize = label.Length > 12 ? 16 : 18;
+            text.fontSize = label.Length > 12 ? 19 : 21;
             text.horizontalOverflow = HorizontalWrapMode.Wrap;
             text.verticalOverflow = VerticalWrapMode.Overflow;
             text.raycastTarget = false;

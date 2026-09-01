@@ -78,7 +78,6 @@ namespace TheTasteReviver
             }
 
             LoadUnlockedClues();
-            bool changed = false;
             List<UnlockedClueRecord> newlyUnlocked = new List<UnlockedClueRecord>();
             foreach (LevelClueData clue in level.unlockCluesOnComplete)
             {
@@ -104,13 +103,9 @@ namespace TheTasteReviver
                 };
                 unlockedClues.Add(unlocked);
                 newlyUnlocked.Add(unlocked);
-                changed = true;
-            }
-
-            if (changed)
-            {
                 SaveUnlockedClues();
                 RefreshUI();
+                break;
             }
 
             return newlyUnlocked;
