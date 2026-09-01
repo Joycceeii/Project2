@@ -219,6 +219,7 @@ namespace TheTasteReviver
             ReturnCurrentBatchIngredientsHome();
             currentBatchID++;
             currentBatchStartGrindDuration = pestleController != null ? pestleController.GrindDuration : 0f;
+            pestleController?.ResetSpeedAveraging();
             uiManager?.RefreshAttemptPanels(this);
             uiManager?.ShowHint("Next ingredients will start a separate batch.");
         }
@@ -332,7 +333,7 @@ namespace TheTasteReviver
 
         private SpeedLevel GetCurrentSpeedLevel()
         {
-            return pestleController != null ? pestleController.CurrentSpeedLevel : SpeedLevel.Medium;
+            return pestleController != null ? pestleController.EvaluatedSpeedLevel : SpeedLevel.Medium;
         }
 
         private void AddIngredientWithRatio(IngredientData ingredient, RatioLevel ratio)

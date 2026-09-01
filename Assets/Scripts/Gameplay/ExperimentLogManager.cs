@@ -64,7 +64,8 @@ namespace TheTasteReviver
                 combinationStatus = BuildStatus(evaluation, MechanicType.Combination),
                 ratioStatus = BuildStatus(evaluation, MechanicType.Ratio),
                 forceStatus = BuildStatus(evaluation, MechanicType.Force),
-                speedStatus = BuildStatus(evaluation, MechanicType.Speed)
+                speedStatus = BuildStatus(evaluation, MechanicType.Speed),
+                grindDurationStatus = BuildStatus(evaluation, MechanicType.GrindDuration)
             };
             record.ingredientEntries.AddRange(BuildIngredientEntries(attempt, ratio, evaluation));
             sharedRecords.Add(record);
@@ -230,7 +231,7 @@ namespace TheTasteReviver
             AppendCheckedRecordLine(builder, "Combination", record.combinationPattern, record.combinationStatus);
             AppendCheckedRecordLine(builder, "Force", record.forceLevel.ToString(), record.forceStatus);
             AppendCheckedRecordLine(builder, "Speed", record.speedLevel.ToString(), record.speedStatus);
-            builder.AppendLine("Duration: " + record.grindDuration.ToString("0.0") + "s");
+            AppendCheckedRecordLine(builder, "Grinding Time", record.grindDuration.ToString("0.0") + "s", record.grindDurationStatus);
             builder.AppendLine("Feedback: " + record.mainFeedback);
             if (!string.IsNullOrWhiteSpace(record.permanentHint))
             {
@@ -577,6 +578,7 @@ namespace TheTasteReviver
         public string ratioStatus;
         public string forceStatus;
         public string speedStatus;
+        public string grindDurationStatus;
         public List<ExperimentIngredientEntry> ingredientEntries = new List<ExperimentIngredientEntry>();
     }
 

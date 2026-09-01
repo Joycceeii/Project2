@@ -22,6 +22,9 @@ namespace TheTasteReviver
         public Vector3 minimumClickHitboxSize = new Vector3(0.9f, 0.45f, 0.9f);
 
         public SpeedLevel CurrentSpeedLevel { get; private set; } = SpeedLevel.Medium;
+        public SpeedLevel EvaluatedSpeedLevel => hasSpeedSample && speedSampleSeconds > 0.05f
+            ? ClassifySpeed(speedSampleTotal / speedSampleSeconds)
+            : CurrentSpeedLevel;
         public float AverageMouseSpeed => currentMouseSpeed;
         public float GrindDuration { get; private set; }
 
@@ -29,6 +32,8 @@ namespace TheTasteReviver
         private Vector3 lastMousePosition;
         private float currentMouseSpeed;
         private bool hasSpeedSample;
+        private float speedSampleSeconds;
+        private float speedSampleTotal;
         private float dragPlaneY;
         private Vector3 startPosition;
         private Quaternion startRotation;
@@ -140,6 +145,7 @@ namespace TheTasteReviver
                 float delta = Vector3.Distance(Input.mousePosition, lastMousePosition);
                 GrindDuration += Time.deltaTime;
                 UpdateCurrentSpeed(delta);
+                RecordSpeedSample(Time.deltaTime);
                 CurrentSpeedLevel = SpeedToLevel(currentMouseSpeed);
                 RefreshLabel();
                 if (ShouldShowGroundVisuals())
@@ -167,9 +173,16 @@ namespace TheTasteReviver
             dragging = false;
             currentMouseSpeed = 0f;
             hasSpeedSample = false;
+            ResetSpeedAveraging();
             GrindDuration = 0f;
             CurrentSpeedLevel = SpeedLevel.Medium;
             RefreshLabel();
+        }
+
+        public void ResetSpeedAveraging()
+        {
+            speedSampleSeconds = 0f;
+            speedSampleTotal = 0f;
         }
 
         public void ResetToDefault()
@@ -198,6 +211,17 @@ namespace TheTasteReviver
             currentMouseSpeed = Mathf.Lerp(currentMouseSpeed, instantSpeed, blend);
         }
 
+        private void RecordSpeedSample(float deltaTime)
+        {
+            if (!hasSpeedSample)
+            {
+                return;
+            }
+
+            speedSampleSeconds += Mathf.Max(0f, deltaTime);
+            speedSampleTotal += currentMouseSpeed * Mathf.Max(0f, deltaTime);
+        }
+
         private SpeedLevel SpeedToLevel(float speed)
         {
             if (CurrentSpeedLevel == SpeedLevel.Slow && speed <= slowThreshold + speedHysteresis)
@@ -210,6 +234,13 @@ namespace TheTasteReviver
                 return SpeedLevel.Fast;
             }
 
+            if (speed <= slowThreshold) return SpeedLevel.Slow;
+            if (speed >= fastThreshold) return SpeedLevel.Fast;
+            return SpeedLevel.Medium;
+        }
+
+        private SpeedLevel ClassifySpeed(float speed)
+        {
             if (speed <= slowThreshold) return SpeedLevel.Slow;
             if (speed >= fastThreshold) return SpeedLevel.Fast;
             return SpeedLevel.Medium;

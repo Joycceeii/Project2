@@ -375,6 +375,7 @@ namespace TheTasteReviver
             AddMechanicState(level, MechanicType.Speed, "speed", checkedMechanics, notCheckedMechanics);
             AddMechanicState(level, MechanicType.IngredientOrder, "ingredient order", checkedMechanics, notCheckedMechanics);
             AddMechanicState(level, MechanicType.Ratio, "amounts", checkedMechanics, notCheckedMechanics);
+            AddMechanicState(level, MechanicType.GrindDuration, "grinding time", checkedMechanics, notCheckedMechanics);
 
             string text = "This level checks: " + FormatList(checkedMechanics) + ".\n"
                 + "Not checked yet: " + FormatList(notCheckedMechanics) + ".";

@@ -26,6 +26,7 @@ namespace TheTasteReviver
 
         private void Awake()
         {
+            RemoveRedundantLodModels(transform);
             NormalizeRuntimeVisualSettings();
             ResetHomePosition();
             if (interactionCamera == null)
@@ -86,6 +87,7 @@ namespace TheTasteReviver
             HideCurrentRenderers();
             groundVisualInstance = Instantiate(ingredientData.groundPrefab, transform);
             groundVisualInstance.name = "Ground Visual";
+            RemoveRedundantLodModels(groundVisualInstance.transform);
             groundVisualInstance.transform.localPosition = Vector3.zero;
             groundVisualInstance.transform.localRotation = Quaternion.identity;
             groundVisualInstance.transform.localScale = Vector3.one * Mathf.Clamp(groundVisualScale, 0.25f, 1.2f);
@@ -275,6 +277,76 @@ namespace TheTasteReviver
             }
 
             return true;
+        }
+
+        private static void RemoveRedundantLodModels(Transform root)
+        {
+            if (!IsAlive(root))
+            {
+                return;
+            }
+
+            Transform lodRoot = FindChildRecursive(root, "lod");
+            if (!IsAlive(lodRoot))
+            {
+                return;
+            }
+
+            Transform keep = lodRoot.Find("model_LOD0");
+            List<GameObject> remove = new List<GameObject>();
+            foreach (Transform child in lodRoot)
+            {
+                if (!IsAlive(child) || !child.name.StartsWith("model_LOD"))
+                {
+                    continue;
+                }
+
+                if (IsAlive(keep) && child == keep)
+                {
+                    child.gameObject.SetActive(true);
+                    continue;
+                }
+
+                remove.Add(child.gameObject);
+            }
+
+            foreach (GameObject target in remove)
+            {
+                if (IsAlive(target))
+                {
+                    target.SetActive(false);
+                    DestroyObject(target);
+                }
+            }
+        }
+
+        private static Transform FindChildRecursive(Transform root, string childName)
+        {
+            if (!IsAlive(root))
+            {
+                return null;
+            }
+
+            foreach (Transform child in root)
+            {
+                if (!IsAlive(child))
+                {
+                    continue;
+                }
+
+                if (child.name == childName)
+                {
+                    return child;
+                }
+
+                Transform match = FindChildRecursive(child, childName);
+                if (IsAlive(match))
+                {
+                    return match;
+                }
+            }
+
+            return null;
         }
 
         private bool TryGetMouseWorldPoint(out Vector3 worldPoint)

@@ -494,6 +494,7 @@ namespace TheTasteReviver
         private static void StripInteractionComponents(GameObject copy)
         {
             StripLodGroups(copy);
+            RemoveRedundantLodModels(copy.transform);
 
             foreach (Collider collider in copy.GetComponentsInChildren<Collider>(true))
             {
@@ -513,10 +514,81 @@ namespace TheTasteReviver
                 return;
             }
 
+            RemoveRedundantLodModels(target.transform);
             foreach (LODGroup lodGroup in target.GetComponentsInChildren<LODGroup>(true))
             {
                 DestroyComponent(lodGroup);
             }
+        }
+
+        private static void RemoveRedundantLodModels(Transform root)
+        {
+            if (!IsAlive(root))
+            {
+                return;
+            }
+
+            Transform lodRoot = FindChildRecursive(root, "lod");
+            if (!IsAlive(lodRoot))
+            {
+                return;
+            }
+
+            Transform keep = lodRoot.Find("model_LOD0");
+            List<GameObject> remove = new List<GameObject>();
+            foreach (Transform child in lodRoot)
+            {
+                if (!IsAlive(child) || !child.name.StartsWith("model_LOD"))
+                {
+                    continue;
+                }
+
+                if (IsAlive(keep) && child == keep)
+                {
+                    child.gameObject.SetActive(true);
+                    continue;
+                }
+
+                remove.Add(child.gameObject);
+            }
+
+            foreach (GameObject target in remove)
+            {
+                if (IsAlive(target))
+                {
+                    target.SetActive(false);
+                    DestroyObject(target);
+                }
+            }
+        }
+
+        private static Transform FindChildRecursive(Transform root, string childName)
+        {
+            if (!IsAlive(root))
+            {
+                return null;
+            }
+
+            foreach (Transform child in root)
+            {
+                if (!IsAlive(child))
+                {
+                    continue;
+                }
+
+                if (child.name == childName)
+                {
+                    return child;
+                }
+
+                Transform match = FindChildRecursive(child, childName);
+                if (IsAlive(match))
+                {
+                    return match;
+                }
+            }
+
+            return null;
         }
 
         private void ConfigureMixedPowderVisuals(Transform slot, IReadOnlyList<IngredientData> ingredients)
