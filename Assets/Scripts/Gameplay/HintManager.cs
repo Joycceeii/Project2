@@ -154,6 +154,12 @@ namespace TheTasteReviver
                 return responseHint;
             }
 
+            string stateHint = BuildStateSpecificHint(level, attempt, mechanic, usedHints);
+            if (!string.IsNullOrWhiteSpace(stateHint))
+            {
+                return stateHint;
+            }
+
             string customHint = BuildCustomHint(level, mechanic, usedHints);
             if (!string.IsNullOrWhiteSpace(customHint))
             {
@@ -179,6 +185,22 @@ namespace TheTasteReviver
                     return BuildProcessHint(level, attempt);
                 default:
                     return "One key relationship still needs checking.";
+            }
+        }
+
+        private static string BuildStateSpecificHint(RecipeLevelData level, RecipeAttemptManager attempt, MechanicType mechanic, IReadOnlyList<string> usedHints)
+        {
+            switch (mechanic)
+            {
+                case MechanicType.IngredientOrder:
+                    return BuildOrderHint(level, attempt);
+                case MechanicType.Ratio:
+                    return BuildRatioHint(level, attempt);
+                case MechanicType.Speed:
+                case MechanicType.Force:
+                    return BuildProcessHint(level, attempt);
+                default:
+                    return null;
             }
         }
 
@@ -413,6 +435,35 @@ namespace TheTasteReviver
         {
             List<IngredientData> target = level.correctIngredientOrder.Where(x => x != null).ToList();
             List<IngredientData> actual = attempt.IngredientOrder.Where(x => x != null).Distinct().ToList();
+            if (target.Count == 0)
+            {
+                return "One ingredient may be placed too early.";
+            }
+
+            if (actual.Count == 0)
+            {
+                return target[0].DisplayName + " should be the starting ingredient.";
+            }
+
+            for (int i = 0; i < target.Count; i++)
+            {
+                IngredientData expected = target[i];
+                int actualIndex = actual.IndexOf(expected);
+                if (actualIndex < 0)
+                {
+                    return i == 0
+                        ? expected.DisplayName + " should be the starting ingredient."
+                        : "Add " + expected.DisplayName + " after " + target[i - 1].DisplayName + ".";
+                }
+
+                if (i < actual.Count && actual[i] != expected)
+                {
+                    return i == 0
+                        ? expected.DisplayName + " should be the starting ingredient."
+                        : "Move " + expected.DisplayName + " after " + target[i - 1].DisplayName + ".";
+                }
+            }
+
             for (int i = 0; i < target.Count - 1; i++)
             {
                 IngredientData before = target[i];
@@ -425,12 +476,7 @@ namespace TheTasteReviver
                 }
             }
 
-            if (target.Count > 0)
-            {
-                return target[0].DisplayName + " should be the starting ingredient.";
-            }
-
-            return "One ingredient may be placed too early.";
+            return "The order looks close. Check the amount or grinding settings.";
         }
 
         private static string BuildRatioHint(RecipeLevelData level, RecipeAttemptManager attempt)
@@ -840,7 +886,8 @@ namespace TheTasteReviver
                 return "The grinding settings are close. Check the remaining mistake.";
             }
 
-            return "For the current batch, " + string.Join(", and ", parts) + ".";
+            string scope = IsEnabled(level, MechanicType.Combination) ? "For the current batch, " : "For the whole recipe, ";
+            return scope + string.Join(", and ", parts) + ".";
         }
 
         private static string FindActualCombinationKey(IngredientData ingredient, IReadOnlyList<GrindingBatch> batches)

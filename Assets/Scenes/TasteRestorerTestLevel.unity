@@ -1757,7 +1757,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -56, y: -264}
+  m_AnchoredPosition: {x: -56, y: -334}
   m_SizeDelta: {x: 178, y: 54}
   m_Pivot: {x: 1, y: 1}
 --- !u!1 &166308858
@@ -7924,6 +7924,17 @@ MonoBehaviour:
   pestleController: {fileID: 2019048555}
   ingredientDisplayManager: {fileID: 912469146}
   batchPowderSeconds: 1.5
+  finalCraftLevelID: L09
+  finalCraftWrapperIngredientID: LotusLeaf
+  finalCraftPrefabResourcePath: Zhongzi/lod_basic_pbr
+  finalCraftDiffuseResourcePath: Zhongzi/texture_diffuse
+  finalCraftNormalResourcePath: Zhongzi/texture_normal
+  finalCraftMetallicResourcePath: Zhongzi/texture_metallic
+  finalCraftRoughnessResourcePath: Zhongzi/texture_roughness
+  finalCraftMotionSeconds: 0.15
+  finalCraftPositionOffset: {x: 0, y: 0.18, z: 0}
+  finalCraftEulerAngles: {x: 0, y: 35, z: 0}
+  finalCraftScale: {x: 0.42, y: 0.42, z: 0.42}
   ingredientAmounts: []
   ingredientOrder: []
   selectedRatioPattern: []
@@ -17988,7 +17999,7 @@ MonoBehaviour:
     fontSize: 22
   ingredientTraitToggleButtonLayout:
     size: {x: 178, y: 54}
-    position: {x: -56, y: -264}
+    position: {x: -56, y: -334}
     fontSize: 22
   forceSliderLayout:
     size: {x: 390, y: 52}
@@ -18006,6 +18017,17 @@ MonoBehaviour:
     size: {x: 420, y: 260}
     position: {x: 0, y: 0}
     fontSize: 22
+  ingredientTraitsExpandedPanelLayout:
+    size: {x: 820, y: 520}
+    position: {x: 0, y: -12}
+    fontSize: 30
+  ingredientTraitExpandedTextInsetMin: {x: 150, y: 104}
+  ingredientTraitExpandedTextInsetMax: {x: -150, y: -126}
+  ingredientTraitBackdropAlpha: 0.34
+  hudTextInsetMin: {x: 90, y: 46}
+  hudTextInsetMax: {x: -90, y: -66}
+  buttonTextInsetMin: {x: 46, y: 12}
+  buttonTextInsetMax: {x: -46, y: -14}
   forceLabelTextInsetMin: {x: 58, y: 13}
   forceLabelTextInsetMax: {x: -58, y: -13}
   showOpeningLevelTitle: 1

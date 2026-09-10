@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: Wrapped Rice Layers
   cityName: Zhaoqing
   targetTasteName: Ratio Combination And Order Challenge
-  levelIntro: "Make a layered rice dumpling flavor with red bean, glutinous rice, black sesame, and lotus leaf."
+  levelIntro: "Make a layered rice dumpling flavor with red bean, glutinous rice, black sesame, and lotus leaf. Grind the first three into filling, then use lotus leaf to wrap it into zongzi."
   maxIngredientCount: 4
   availableIngredients:
   - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
@@ -101,7 +101,8 @@ MonoBehaviour:
     relatedDimension: 2
   - clueId: L09_LotusLeaf_Combination
     title: Lotus Leaf - Combination Clue
-    content: "Lotus leaf should stay separate and be ground after the main batch."
+    title: Lotus Leaf - Wrapping Clue
+    content: "Lotus leaf should stay separate from the filling batch, then wrap the prepared filling instead of becoming powder."
     relatedIngredients:
     - {fileID: 11400000, guid: d9e3e41cc52bba94997680b94ac53836, type: 2}
     relatedDimension: 3
@@ -136,7 +137,7 @@ MonoBehaviour:
   - ruleId: L09_Hint_Lotus_Separate_Combination
     priority: 19
     mechanic: 3
-    hintText: Lotus leaf should be ground last in its own separate batch.
+    hintText: After the first three ingredients become filling, add lotus leaf last and move the pestle briefly to wrap them into zongzi.
   - ruleId: L09_Hint_RedBean_Order
     priority: 22
     mechanic: 1
@@ -148,7 +149,7 @@ MonoBehaviour:
   - ruleId: L09_Hint_Middle_Order
     priority: 20
     mechanic: 1
-    hintText: Start with red bean, glutinous rice, and black sesame together. Add lotus leaf last in its own batch.
+    hintText: Start with red bean, glutinous rice, and black sesame together. Add lotus leaf last to wrap the filling.
   ingredientProfiles:
   - profileTag: L09_RedBean
     ingredient: {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
@@ -214,6 +215,6 @@ MonoBehaviour:
     targetCombinationKey: LotusLeaf
     levelTraitDescription: Lotus leaf adds a light green taste.
     responseHintRules: []
-  successFeedback: "The dumpling flavor has clear layers: sticky rice leads, sesame supports it, red bean sits lighter, and lotus leaf finishes at the end."
-  closeFeedback: "Very close. Check the ratio, grouping, or order."
-  wrongFeedback: The layers are unclear. One flavor may be too strong or added in the wrong order.
+  successFeedback: "The filling is wrapped cleanly: sticky rice leads, sesame supports it, red bean sits lighter, and lotus leaf finishes the zongzi."
+  closeFeedback: "Very close. Check the ratio, first filling batch, or lotus leaf wrapping step."
+  wrongFeedback: The zongzi layers are unclear. One flavor may be too strong or the lotus leaf may be used too early.

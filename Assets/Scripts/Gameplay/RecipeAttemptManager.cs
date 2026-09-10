@@ -14,6 +14,22 @@ namespace TheTasteReviver
         [Header("Grinding Completion")]
         [Tooltip("How many seconds of valid grinding this batch needs before ingredients become powder. Adjust this in the Inspector to tune the whole batch powder pace.")]
         public float batchPowderSeconds = 1.5f;
+        [Header("Final Crafted Object")]
+        [Tooltip("Level ID that should craft a final object instead of turning the final wrapper ingredient into powder.")]
+        public string finalCraftLevelID = "L09";
+        [Tooltip("Ingredient ID that triggers final wrapping/crafting after the main prepared batch exists.")]
+        public string finalCraftWrapperIngredientID = "LotusLeaf";
+        [Tooltip("Resources path for the final crafted model, without file extension.")]
+        public string finalCraftPrefabResourcePath = "Zhongzi/lod_basic_pbr";
+        public string finalCraftDiffuseResourcePath = "Zhongzi/texture_diffuse";
+        public string finalCraftNormalResourcePath = "Zhongzi/texture_normal";
+        public string finalCraftMetallicResourcePath = "Zhongzi/texture_metallic";
+        public string finalCraftRoughnessResourcePath = "Zhongzi/texture_roughness";
+        [Tooltip("How many seconds of valid pestle motion the final wrapper needs before it becomes the crafted object.")]
+        public float finalCraftMotionSeconds = 0.15f;
+        public Vector3 finalCraftPositionOffset = new Vector3(0f, 0.18f, 0f);
+        public Vector3 finalCraftEulerAngles = new Vector3(0f, 35f, 0f);
+        public Vector3 finalCraftScale = new Vector3(0.42f, 0.42f, 0.42f);
 
         public List<IngredientInstance> ingredientAmounts = new List<IngredientInstance>();
         public List<IngredientData> ingredientOrder = new List<IngredientData>();
@@ -28,6 +44,8 @@ namespace TheTasteReviver
         private readonly Dictionary<string, int> preparedBatchIDsByKey = new Dictionary<string, int>();
         private int currentBatchID = 1;
         private float currentBatchStartGrindDuration;
+        private GameObject finalCraftedObjectInstance;
+        private bool finalCraftCompleted;
 
         public IReadOnlyList<IngredientData> IngredientOrder => ingredientOrder;
         public IReadOnlyList<IngredientInstance> IngredientAmounts => ingredientAmounts;
@@ -201,6 +219,8 @@ namespace TheTasteReviver
             finalizedBatchSpeeds.Clear();
             preparedBatchIDsByKey.Clear();
             currentBatchID = 1;
+            finalCraftCompleted = false;
+            ClearFinalCraftedObject();
             HasEvaluated = false;
             HasAutoEvaluated = false;
             forceController?.ResetToDefault();
@@ -331,6 +351,11 @@ namespace TheTasteReviver
 
         public bool ShowGroundVisualsForCurrentBatch()
         {
+            if (TryShowFinalCraftedObject())
+            {
+                return true;
+            }
+
             if (!HasCurrentBatchReachedPowderTime())
             {
                 return false;
@@ -364,7 +389,252 @@ namespace TheTasteReviver
 
         public bool HasCurrentBatchReachedPowderTime()
         {
+            if (IsFinalCraftBatchReady())
+            {
+                return true;
+            }
+
             return GetCurrentBatchGrindDuration() >= GetMinimumBatchPowderSeconds();
+        }
+
+        public float GetCurrentBatchRequiredCompletionSeconds()
+        {
+            if (IsFinalCraftLevel() && HasFinalCraftWrapperInCurrentBatch() && HasRequiredPreparedMainBatch())
+            {
+                return Mathf.Max(0.01f, finalCraftMotionSeconds);
+            }
+
+            return GetMinimumBatchPowderSeconds();
+        }
+
+        private bool TryShowFinalCraftedObject()
+        {
+            if (!IsFinalCraftBatchReady() || finalCraftCompleted)
+            {
+                return false;
+            }
+
+            HideCurrentBatchIngredientsInMortar();
+            ingredientDisplayManager?.ClearMixedPowderBatches();
+            SpawnFinalCraftedObject();
+            finalCraftCompleted = finalCraftedObjectInstance != null;
+            if (finalCraftCompleted)
+            {
+                uiManager?.ShowHint("The filling is wrapped. You can Evaluate when the recipe is ready.");
+            }
+
+            return finalCraftCompleted;
+        }
+
+        private bool IsFinalCraftBatchReady()
+        {
+            return IsFinalCraftLevel()
+                && HasFinalCraftWrapperInCurrentBatch()
+                && HasRequiredPreparedMainBatch()
+                && GetCurrentBatchGrindDuration() >= GetCurrentBatchRequiredCompletionSeconds();
+        }
+
+        private bool IsFinalCraftLevel()
+        {
+            return currentLevel != null
+                && !string.IsNullOrWhiteSpace(finalCraftLevelID)
+                && string.Equals(currentLevel.levelID, finalCraftLevelID, System.StringComparison.OrdinalIgnoreCase);
+        }
+
+        private bool HasFinalCraftWrapperInCurrentBatch()
+        {
+            List<IngredientData> currentIngredients = GetCurrentBatchIngredients();
+            return currentIngredients.Count == 1
+                && currentIngredients.Any(ingredient => ingredient != null
+                    && string.Equals(ingredient.ingredientID, finalCraftWrapperIngredientID, System.StringComparison.OrdinalIgnoreCase));
+        }
+
+        private bool HasRequiredPreparedMainBatch()
+        {
+            if (currentLevel == null || currentLevel.correctCombinationPattern == null)
+            {
+                return false;
+            }
+
+            List<IngredientData> currentIngredients = GetCurrentBatchIngredients();
+            foreach (CombinationGroup group in currentLevel.correctCombinationPattern.groups)
+            {
+                List<IngredientData> groupIngredients = group != null && group.ingredients != null
+                    ? group.ingredients.Where(ingredient => ingredient != null).ToList()
+                    : new List<IngredientData>();
+                if (groupIngredients.Count <= 1 || groupIngredients.Any(currentIngredients.Contains))
+                {
+                    continue;
+                }
+
+                string key = RecipeLevelData.BuildCombinationKey(groupIngredients);
+                if (!string.IsNullOrWhiteSpace(key) && preparedBatchIDsByKey.ContainsKey(key))
+                {
+                    return true;
+                }
+
+                if (HasCompletedBatchWithExactIngredients(groupIngredients))
+                {
+                    return true;
+                }
+
+                if (grindingBatches.Any(batch => batch != null
+                    && batch.batchID != currentBatchID
+                    && batch.ingredientsInBatch != null
+                    && new HashSet<IngredientData>(batch.ingredientsInBatch.Where(ingredient => ingredient != null)).SetEquals(groupIngredients)))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool HasCompletedBatchWithExactIngredients(IReadOnlyList<IngredientData> groupIngredients)
+        {
+            if (groupIngredients == null || groupIngredients.Count == 0)
+            {
+                return false;
+            }
+
+            HashSet<IngredientData> target = new HashSet<IngredientData>(groupIngredients.Where(ingredient => ingredient != null));
+            return ingredientBatchEntries
+                .Where(entry => entry != null && entry.ingredient != null && entry.batchID != currentBatchID)
+                .GroupBy(entry => entry.batchID, entry => entry.ingredient)
+                .Any(group =>
+                {
+                    HashSet<IngredientData> ingredients = new HashSet<IngredientData>(group);
+                    return ingredients.SetEquals(target)
+                        && finalizedBatchDurations.TryGetValue(group.Key, out float duration)
+                        && duration >= GetMinimumBatchPowderSeconds();
+                });
+        }
+
+        private void HideCurrentBatchIngredientsInMortar()
+        {
+            List<IngredientData> currentBatchIngredients = GetCurrentBatchIngredients();
+            foreach (DraggableIngredient ingredient in FindObjectsByType<DraggableIngredient>(FindObjectsSortMode.None))
+            {
+                if (ingredient == null || !ingredient.gameObject.activeInHierarchy || ingredient.ingredientData == null)
+                {
+                    continue;
+                }
+
+                if (ingredient.IsInMortar && currentBatchIngredients.Contains(ingredient.ingredientData))
+                {
+                    ingredient.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        private void SpawnFinalCraftedObject()
+        {
+            ClearFinalCraftedObject();
+            GameObject prefab = !string.IsNullOrWhiteSpace(finalCraftPrefabResourcePath)
+                ? Resources.Load<GameObject>(finalCraftPrefabResourcePath)
+                : null;
+            if (prefab == null)
+            {
+                uiManager?.ShowHint("Final model is missing. Check the final craft prefab path.");
+                return;
+            }
+
+            Vector3 anchor = GetMortarCenterWorldPosition();
+            finalCraftedObjectInstance = Instantiate(prefab, anchor + finalCraftPositionOffset, Quaternion.Euler(finalCraftEulerAngles));
+            finalCraftedObjectInstance.name = "Final Crafted Zhongzi";
+            finalCraftedObjectInstance.transform.localScale = finalCraftScale;
+            ApplyFinalCraftedObjectMaterial(finalCraftedObjectInstance);
+            foreach (Collider collider in finalCraftedObjectInstance.GetComponentsInChildren<Collider>(true))
+            {
+                collider.enabled = false;
+            }
+        }
+
+        private void ApplyFinalCraftedObjectMaterial(GameObject instance)
+        {
+            if (instance == null)
+            {
+                return;
+            }
+
+            Texture2D diffuse = LoadTexture(finalCraftDiffuseResourcePath);
+            Texture2D normal = LoadTexture(finalCraftNormalResourcePath);
+            Texture2D metallic = LoadTexture(finalCraftMetallicResourcePath);
+            Texture2D roughness = LoadTexture(finalCraftRoughnessResourcePath);
+
+            foreach (Renderer renderer in instance.GetComponentsInChildren<Renderer>(true))
+            {
+                if (renderer == null)
+                {
+                    continue;
+                }
+
+                Material material = new Material(Shader.Find("Standard"));
+                if (diffuse != null)
+                {
+                    material.mainTexture = diffuse;
+                }
+
+                if (normal != null)
+                {
+                    material.SetTexture("_BumpMap", normal);
+                    material.EnableKeyword("_NORMALMAP");
+                }
+
+                if (metallic != null)
+                {
+                    material.SetTexture("_MetallicGlossMap", metallic);
+                    material.SetFloat("_Metallic", 0.1f);
+                    material.EnableKeyword("_METALLICGLOSSMAP");
+                }
+
+                if (roughness != null)
+                {
+                    material.SetTexture("_SpecGlossMap", roughness);
+                    material.SetFloat("_Glossiness", 0.35f);
+                    material.EnableKeyword("_SPECGLOSSMAP");
+                }
+
+                renderer.material = material;
+            }
+        }
+
+        private static Texture2D LoadTexture(string resourcePath)
+        {
+            return !string.IsNullOrWhiteSpace(resourcePath)
+                ? Resources.Load<Texture2D>(resourcePath)
+                : null;
+        }
+
+        private Vector3 GetMortarCenterWorldPosition()
+        {
+            MortarArea activeMortar = ingredientDisplayManager != null && ingredientDisplayManager.mortarArea != null
+                ? ingredientDisplayManager.mortarArea
+                : FindFirstObjectByType<MortarArea>();
+            if (activeMortar == null)
+            {
+                return transform.position;
+            }
+
+            Collider mortarCollider = activeMortar.GetComponent<Collider>();
+            if (mortarCollider == null)
+            {
+                return activeMortar.transform.position;
+            }
+
+            Bounds bounds = mortarCollider.bounds;
+            return new Vector3(bounds.center.x, bounds.max.y, bounds.center.z);
+        }
+
+        private void ClearFinalCraftedObject()
+        {
+            if (finalCraftedObjectInstance == null)
+            {
+                return;
+            }
+
+            Destroy(finalCraftedObjectInstance);
+            finalCraftedObjectInstance = null;
         }
 
         private void ReturnIngredientsHome()

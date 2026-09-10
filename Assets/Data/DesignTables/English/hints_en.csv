@@ -47,21 +47,21 @@ L09,ProgressiveHint,L09_Hint_BlackSesame_Ratio,Evaluate hint,Ratio,21,,,Black se
 L09,ProgressiveHint,L09_Hint_RedBean_Ratio,Evaluate hint,Ratio,20,,,Red bean should use the Small amount.,,RedBean,No
 L09,ProgressiveHint,L09_Hint_LotusLeaf_Ratio,Evaluate hint,Ratio,19,,,Lotus leaf should use the Very Small amount. It is light and easy to cover.,,LotusLeaf,No
 L09,ProgressiveHint,L09_Hint_Main_Batch_Combination,Evaluate hint,Combination,20,,,"Red bean, glutinous rice, and black sesame should be ground together in the first batch.",,"RedBean,GlutinousRice,BlackSesame",No
-L09,ProgressiveHint,L09_Hint_Lotus_Separate_Combination,Evaluate hint,Combination,19,,,Lotus leaf should be ground last in its own separate batch.,,LotusLeaf,No
+L09,ProgressiveHint,L09_Hint_Lotus_Separate_Combination,Evaluate hint,Combination,19,,,After the first three ingredients become filling, add lotus leaf last and move the pestle briefly to wrap them into zongzi.,,LotusLeaf,No
 L09,ProgressiveHint,L09_Hint_RedBean_Order,Evaluate hint,IngredientOrder,22,,,Red bean should go first. It builds the base.,,RedBean,No
 L09,ProgressiveHint,L09_Hint_LotusLeaf_Order,Evaluate hint,IngredientOrder,21,,,Lotus leaf should be last, after the first three ingredients have formed the main batch.,,LotusLeaf,No
-L09,ProgressiveHint,L09_Hint_Middle_Order,Evaluate hint,IngredientOrder,20,,,"Start with red bean, glutinous rice, and black sesame together. Add lotus leaf last in its own batch.",,"GlutinousRice,BlackSesame,LotusLeaf",No
+L09,ProgressiveHint,L09_Hint_Middle_Order,Evaluate hint,IngredientOrder,20,,,"Start with red bean, glutinous rice, and black sesame together. Add lotus leaf last to wrap the filling.",,"GlutinousRice,BlackSesame,LotusLeaf",No
 L09,PermanentClue,L09_LotusLeaf_Ratio,Unlocked after Correct,Ratio,0,,,Lotus leaf works best in a very small amount.,Lotus Leaf - Ratio Clue,LotusLeaf,Yes
-L09,PermanentClue,L09_LotusLeaf_Combination,Unlocked after Correct,Combination,0,,,"Lotus leaf should stay separate and be ground after the main batch.",Lotus Leaf - Combination Clue,LotusLeaf,Yes
+L09,PermanentClue,L09_LotusLeaf_Combination,Unlocked after Correct,Combination,0,,,"Lotus leaf should stay separate from the filling batch, then wrap the prepared filling instead of becoming powder.",Lotus Leaf - Wrapping Clue,LotusLeaf,Yes
 L09,PermanentClue,L09_LotusLeaf_Order,Unlocked after Correct,IngredientOrder,0,,,"Add lotus leaf last so its fresh flavor is not covered by the main batch.",Lotus Leaf - Order Clue,LotusLeaf,Yes
 L10,ProgressiveHint,L10_Hint_Douchi_Ratio,Evaluate hint,Ratio,22,,,"Yangjiang douchi should use the Large amount. It is the main savory flavor.",,YangjiangDouchi,No
 L10,ProgressiveHint,L10_Hint_CoarseSalt_Ratio,Evaluate hint,Ratio,21,,,Coarse salt should use the Very Small amount. It should only support the recipe.,,CoarseSalt,No
 L10,ProgressiveHint,L10_Hint_Douchi_Order,Evaluate hint,IngredientOrder,22,,,Start with Yangjiang douchi to build the savory base.,,YangjiangDouchi,No
 L10,ProgressiveHint,L10_Hint_Ginger_Order,Evaluate hint,IngredientOrder,21,,,"Ginger should come after douchi and before dried tangerine peel.",,Ginger,No
 L10,ProgressiveHint,L10_Hint_Tail_Order,Evaluate hint,IngredientOrder,20,,,"Use dried tangerine peel near the end. Keep coarse salt very light.",,"DriedTangerinePeel,CoarseSalt",No
-L10,PermanentClue,L10_Douchi_Force,Unlocked after Correct,Force,0,,,Yangjiang douchi works best with medium force. Too little is weak; too much makes it muddy.,Yangjiang Douchi - Force Clue,YangjiangDouchi,Yes
+L10,PermanentClue,L10_Douchi_Force,Unlocked after Correct,Force,0,,,Use heavy force for this whole recipe. The bean base needs clear pressure to wake up its savory depth.,Grinding Force - Process Clue,,Yes
 L10,PermanentClue,L10_Douchi_Ratio,Unlocked after Correct,Ratio,0,,,"Yangjiang douchi can be the main savory flavor, but too much makes the recipe heavy.",Yangjiang Douchi - Ratio Clue,YangjiangDouchi,Yes
-L10,PermanentClue,L10_Ginger_Speed,Unlocked after Correct,Speed,0,,,Ginger works best at medium speed. Too fast can make it too sharp.,Ginger - Speed Clue,Ginger,Yes
+L10,PermanentClue,L10_Ginger_Speed,Unlocked after Correct,Speed,0,,,Use slow speed for this whole recipe. A slower grind keeps the savory base steady and prevents the support flavors from turning sharp.,Grinding Speed - Process Clue,,Yes
 L10,PermanentClue,L10_Ginger_Order,Unlocked after Correct,IngredientOrder,0,,,"Ginger works well in the middle, after the base flavor is set.",Ginger - Order Clue,Ginger,Yes
 L11,ProgressiveHint,L11_Hint_SandGinger_Ratio,Evaluate hint,Ratio,22,,,Sand ginger should use the Large amount. It is the main ginger flavor.,,SandGinger,No
 L11,ProgressiveHint,L11_Hint_CoarseSalt_Ratio,Evaluate hint,Ratio,21,,,"Coarse salt should use the Very Small amount. It should not taste salty.",,CoarseSalt,No

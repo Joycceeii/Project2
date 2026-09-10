@@ -55,8 +55,8 @@ MonoBehaviour:
       - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
     - ingredients:
       - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
-  targetForceLevel: 1
-  targetSpeedLevel: 1
+  targetForceLevel: 2
+  targetSpeedLevel: 0
   passingScore: 90
   enabledMechanics:
     enableIngredientSelection: 0
@@ -96,10 +96,9 @@ MonoBehaviour:
     speed: 10
   unlockCluesOnComplete:
   - clueId: L10_Douchi_Force
-    title: Yangjiang Douchi - Force Clue
-    content: "Yangjiang douchi works best with medium force. Too little is weak; too much makes it muddy."
-    relatedIngredients:
-    - {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
+    title: Grinding Force - Process Clue
+    content: "Use heavy force for this whole recipe. The bean base needs clear pressure to wake up its savory depth."
+    relatedIngredients: []
     relatedDimension: 4
   - clueId: L10_Douchi_Ratio
     title: Yangjiang Douchi - Ratio Clue
@@ -108,10 +107,9 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
     relatedDimension: 2
   - clueId: L10_Ginger_Speed
-    title: Ginger - Speed Clue
-    content: Ginger works best at medium speed. Too fast can make it too sharp.
-    relatedIngredients:
-    - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+    title: Grinding Speed - Process Clue
+    content: Use slow speed for this whole recipe. A slower grind keeps the savory base steady and prevents the support flavors from turning sharp.
+    relatedIngredients: []
     relatedDimension: 5
   - clueId: L10_Ginger_Order
     title: Ginger - Order Clue
@@ -149,10 +147,10 @@ MonoBehaviour:
       enableIngredientOrder: 1
       enableRatio: 1
       enableCombination: 0
-      enableForce: 1
-      enableSpeed: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
+      enableForce: 0
+      enableSpeed: 0
+    targetForceLevel: 2
+    targetSpeedLevel: 0
     targetRatioLevel: 5
     targetOrderIndex: 0
     targetCombinationKey: 
@@ -166,9 +164,9 @@ MonoBehaviour:
       enableRatio: 1
       enableCombination: 0
       enableForce: 0
-      enableSpeed: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
+      enableSpeed: 0
+    targetForceLevel: 2
+    targetSpeedLevel: 0
     targetRatioLevel: 4
     targetOrderIndex: 1
     targetCombinationKey: 
@@ -183,8 +181,8 @@ MonoBehaviour:
       enableCombination: 0
       enableForce: 0
       enableSpeed: 0
-    targetForceLevel: 1
-    targetSpeedLevel: 1
+    targetForceLevel: 2
+    targetSpeedLevel: 0
     targetRatioLevel: 2
     targetOrderIndex: 2
     targetCombinationKey: 
@@ -199,8 +197,8 @@ MonoBehaviour:
       enableCombination: 0
       enableForce: 0
       enableSpeed: 0
-    targetForceLevel: 1
-    targetSpeedLevel: 1
+    targetForceLevel: 2
+    targetSpeedLevel: 0
     targetRatioLevel: 1
     targetOrderIndex: 3
     targetCombinationKey: 

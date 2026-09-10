@@ -1,7 +1,4 @@
 LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
-L10,YangjiangDouchi,L10_YangjiangDouchi,Force,Medium,,,,,,,,,,,,"Yangjiang douchi is fermented, savory, and strong."
-L10,YangjiangDouchi,L10_YangjiangDouchi,Speed,Medium,,,,,,,,,,,,"Yangjiang douchi is fermented, savory, and strong."
-L10,Ginger,L10_Ginger,Speed,Medium,,,,,,,,,,,,"Ginger adds a fresh sharp taste."
 L10,YangjiangDouchi,L10_YangjiangDouchi,IngredientOrder,0,,,,,,,,,,,,"Yangjiang douchi is fermented, savory, and strong."
 L10,Ginger,L10_Ginger,IngredientOrder,1,,,,,,,,,,,,"Ginger adds a fresh sharp taste."
 L10,DriedTangerinePeel,L10_DriedTangerinePeel,IngredientOrder,2,,,,,,,,,,,,"Dried tangerine peel adds a bright citrus taste."
