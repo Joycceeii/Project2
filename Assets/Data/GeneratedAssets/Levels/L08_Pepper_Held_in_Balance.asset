@@ -15,8 +15,8 @@ MonoBehaviour:
   levelID: L08
   levelName: Pepper Held in Balance
   cityName: Shantou
-  targetTasteName: Speed Challenge
-  levelIntro: "White pepper should stay clear without becoming harsh. Peanut and dried tangerine peel should support it."
+  targetTasteName: Force Batch Challenge
+  levelIntro: "White pepper should stay clear without becoming harsh. Peanut and dried tangerine peel should support it. Grind each ingredient in its own batch and adjust the force for each one."
   maxIngredientCount: 3
   availableIngredients:
   - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
@@ -27,8 +27,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
   - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
   forbiddenIngredients: []
-  unlockedDimensions: 05000000
-  lockedDimensions: 04000000020000000300000001000000
+  unlockedDimensions: 040000000500000003000000
+  lockedDimensions: 0200000001000000
   correctIngredientOrder:
   - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
   - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
@@ -50,17 +50,14 @@ MonoBehaviour:
       - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
   targetForceLevel: 1
   targetSpeedLevel: 1
-  minGrindDuration: 20
-  maxGrindDuration: 32
   passingScore: 90
   enabledMechanics:
     enableIngredientSelection: 0
     enableIngredientOrder: 0
     enableRatio: 0
-    enableCombination: 0
-    enableForce: 0
+    enableCombination: 1
+    enableForce: 1
     enableSpeed: 1
-    enableGrindDuration: 1
   feedbackTexts:
     forceTooLight: Grinding force is too light.
     forceTooHeavy: Grinding force is too heavy.
@@ -68,9 +65,6 @@ MonoBehaviour:
     speedTooSlow: Grinding speed is too slow.
     speedTooFast: Grinding speed is too fast.
     speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
     selectionCorrect: Ingredient selection is correct.
     selectionWrong: Ingredient selection does not match the target.
     orderCorrect: Ingredient order is correct.
@@ -81,11 +75,11 @@ MonoBehaviour:
     combinationCorrect: Combination pattern is correct.
     combinationWrong: Combination pattern does not match the target.
   hintSettings:
-    hintPriority: 05000000
+    hintPriority: 030000000400000005000000
     maxOrderHints: 5
     maxRatioHints: 5
     maxCombinationHints: 3
-    maxProcessHints: 2
+    maxProcessHints: 6
   scoringWeights:
     ingredientSelection: 20
     ingredientOrder: 15
@@ -93,20 +87,31 @@ MonoBehaviour:
     combination: 15
     force: 10
     speed: 10
-    grindDuration: 10
   unlockCluesOnComplete:
   - clueId: L08_WhitePepper_Speed
     title: White Pepper - Speed Clue
-    content: "White pepper works best at medium speed. Too fast makes it harsh; too slow makes it weak."
+    content: "White pepper works best at Medium speed. Peanut needs Slow speed, while dried tangerine peel needs Fast speed."
     relatedIngredients:
     - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
     relatedDimension: 5
   fallbackHintText: No new hint for now. Keep what worked
   progressiveHintRules:
-  - ruleId: L08_Hint_Speed
+  - ruleId: L08_Hint_WhitePepper_Speed
     priority: 20
     mechanic: 5
-    hintText: White pepper should stay at a medium grinding speed. Too fast makes it harsh.
+    hintText: White Pepper needs Medium speed and Light force. Too fast makes it harsh.
+  - ruleId: L08_Hint_Peanut_Speed
+    priority: 19
+    mechanic: 5
+    hintText: Peanut needs Slow speed and Heavy force so it stays warm instead of heavy.
+  - ruleId: L08_Hint_DriedTangerinePeel_Speed
+    priority: 18
+    mechanic: 5
+    hintText: Dried Tangerine Peel needs Fast speed and Medium force so the citrus releases clearly.
+  - ruleId: L08_Hint_Combination
+    priority: 22
+    mechanic: 3
+    hintText: Grind white pepper, peanut, and dried tangerine peel in separate batches. Press New Batch before changing ingredients.
   ingredientProfiles:
   - profileTag: L08_WhitePepper
     ingredient: {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
@@ -114,17 +119,14 @@ MonoBehaviour:
       enableIngredientSelection: 1
       enableIngredientOrder: 0
       enableRatio: 0
-      enableCombination: 0
-      enableForce: 0
+      enableCombination: 1
+      enableForce: 1
       enableSpeed: 1
-      enableGrindDuration: 1
-    targetForceLevel: 1
+    targetForceLevel: 0
     targetSpeedLevel: 1
     targetRatioLevel: 0
     targetOrderIndex: -1
-    targetCombinationKey: 
-    minGrindDuration: 20
-    maxGrindDuration: 32
+    targetCombinationKey: WhitePepper
     levelTraitDescription: White pepper is a clear sharp spice that spreads quickly.
     responseHintRules: []
   - profileTag: L08_Peanut
@@ -133,17 +135,14 @@ MonoBehaviour:
       enableIngredientSelection: 1
       enableIngredientOrder: 0
       enableRatio: 0
-      enableCombination: 0
-      enableForce: 0
-      enableSpeed: 0
-      enableGrindDuration: 1
-    targetForceLevel: 1
-    targetSpeedLevel: 1
+      enableCombination: 1
+      enableForce: 1
+      enableSpeed: 1
+    targetForceLevel: 2
+    targetSpeedLevel: 0
     targetRatioLevel: 0
     targetOrderIndex: -1
-    targetCombinationKey: 
-    minGrindDuration: 20
-    maxGrindDuration: 32
+    targetCombinationKey: Peanut
     levelTraitDescription: Peanut makes the soup taste warmer and rounder.
     responseHintRules: []
   - profileTag: L08_DriedTangerinePeel
@@ -152,19 +151,16 @@ MonoBehaviour:
       enableIngredientSelection: 1
       enableIngredientOrder: 0
       enableRatio: 0
-      enableCombination: 0
-      enableForce: 0
-      enableSpeed: 0
-      enableGrindDuration: 1
+      enableCombination: 1
+      enableForce: 1
+      enableSpeed: 1
     targetForceLevel: 1
-    targetSpeedLevel: 1
+    targetSpeedLevel: 2
     targetRatioLevel: 0
     targetOrderIndex: -1
-    targetCombinationKey: 
-    minGrindDuration: 20
-    maxGrindDuration: 32
+    targetCombinationKey: DriedTangerinePeel
     levelTraitDescription: Dried tangerine peel keeps the soup light and citrusy.
     responseHintRules: []
   successFeedback: "White pepper is clear, peanut adds warmth, and citrus keeps it light."
-  closeFeedback: Very close. Check the speed or grinding time.
+  closeFeedback: Very close. Check the separate batches, force, speed, or grinding time.
   wrongFeedback: "White pepper is too harsh, or the support flavors are too weak."

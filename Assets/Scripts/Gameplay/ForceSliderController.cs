@@ -8,29 +8,51 @@ namespace TheTasteReviver
         public Slider forceSlider;
         public Text forceLabel;
         public UIManager uiManager;
+        [Header("Slider Style")]
+        [Tooltip("Off lets you adjust the slider fill, handle, and label RectTransforms directly in the Scene view.")]
+        public bool driveSliderStyleFromInspector = false;
+        public Vector2 fillAreaAnchorMin = new Vector2(0f, 0.36f);
+        public Vector2 fillAreaAnchorMax = new Vector2(1f, 0.64f);
+        public Vector2 fillAreaOffsetMin = new Vector2(48f, 0f);
+        public Vector2 fillAreaOffsetMax = new Vector2(-48f, 0f);
+        public Vector2 handleSize = new Vector2(34f, 56f);
+        public Vector2 handleAreaOffsetMin = new Vector2(38f, -2f);
+        public Vector2 handleAreaOffsetMax = new Vector2(-38f, 2f);
+        public Color fillColor = new Color(0.72f, 0.52f, 0.32f, 0.82f);
+        public Vector2 labelTextInsetMin = new Vector2(58f, 13f);
+        public Vector2 labelTextInsetMax = new Vector2(-58f, -13f);
+        public Vector2 labelPanelSize = new Vector2(390f, 52f);
+        public Vector2 labelPanelPosition = new Vector2(56f, 282f);
+        public int labelFontSize = 15;
         public ForceLevel CurrentForceLevel { get; private set; } = ForceLevel.Medium;
+
+#if UNITY_EDITOR
+        private bool editorStyleQueued;
+#endif
 
         private void Awake()
         {
-            TryInitialize();
+            TryInitialize(false);
         }
 
         private void OnEnable()
         {
-            TryInitialize();
+            TryInitialize(false);
+            QueueStyleSlider();
         }
 
         private void Start()
         {
-            TryInitialize();
+            TryInitialize(true);
         }
 
         private void OnValidate()
         {
-            TryInitialize();
+            TryInitialize(false);
+            QueueStyleSlider();
         }
 
-        private void TryInitialize()
+        private void TryInitialize(bool applyStyle)
         {
             if (forceSlider != null)
             {
@@ -39,6 +61,12 @@ namespace TheTasteReviver
 
                 forceSlider.minValue = 0f;
                 forceSlider.maxValue = 1f;
+                if (applyStyle && driveSliderStyleFromInspector)
+                {
+                    StyleSlider();
+                    StyleLabel();
+                }
+
                 OnSliderChanged(forceSlider.value);
             }
         }
@@ -47,7 +75,8 @@ namespace TheTasteReviver
         {
             forceSlider = slider;
             forceLabel = label;
-            TryInitialize();
+            TryInitialize(false);
+            QueueStyleSlider();
         }
 
         public void SetValue(float value)
@@ -73,7 +102,7 @@ namespace TheTasteReviver
             CurrentForceLevel = ForceLevel.Medium;
             if (forceLabel != null)
             {
-                forceLabel.text = "Current Force: " + CurrentForceLevel;
+                forceLabel.text = FormatForceLabel(CurrentForceLevel);
             }
         }
 
@@ -83,7 +112,7 @@ namespace TheTasteReviver
             CurrentForceLevel = ValueToForce(value);
             if (forceLabel != null)
             {
-                forceLabel.text = "Current Force: " + CurrentForceLevel;
+                forceLabel.text = FormatForceLabel(CurrentForceLevel);
             }
 
             if (!Application.isPlaying)
@@ -102,6 +131,154 @@ namespace TheTasteReviver
             if (value < 0.34f) return ForceLevel.Light;
             if (value < 0.67f) return ForceLevel.Medium;
             return ForceLevel.Heavy;
+        }
+
+        private void StyleSlider()
+        {
+            if (forceSlider == null)
+            {
+                return;
+            }
+
+            Image background = forceSlider.GetComponent<Image>();
+            PanelBackgroundStyle.Apply(background, 0.9f);
+
+            if (forceSlider.fillRect != null)
+            {
+                Image fill = forceSlider.fillRect.GetComponent<Image>();
+                if (fill != null)
+                {
+                    fill.sprite = null;
+                    fill.type = Image.Type.Simple;
+                    fill.color = fillColor;
+                }
+
+                RectTransform fillArea = forceSlider.fillRect.parent as RectTransform;
+                if (fillArea != null)
+                {
+                    fillArea.anchorMin = fillAreaAnchorMin;
+                    fillArea.anchorMax = fillAreaAnchorMax;
+                    fillArea.offsetMin = fillAreaOffsetMin;
+                    fillArea.offsetMax = fillAreaOffsetMax;
+                }
+            }
+
+            if (forceSlider.handleRect != null)
+            {
+                forceSlider.handleRect.sizeDelta = handleSize;
+                Image handle = forceSlider.handleRect.GetComponent<Image>();
+                if (handle != null)
+                {
+                    PanelBackgroundStyle.Apply(handle);
+                    forceSlider.targetGraphic = handle;
+                }
+
+                RectTransform handleArea = forceSlider.handleRect.parent as RectTransform;
+                if (handleArea != null)
+                {
+                    handleArea.anchorMin = Vector2.zero;
+                    handleArea.anchorMax = Vector2.one;
+                    handleArea.offsetMin = handleAreaOffsetMin;
+                    handleArea.offsetMax = handleAreaOffsetMax;
+                }
+            }
+        }
+
+        private void QueueStyleSlider()
+        {
+            if (forceSlider == null || !driveSliderStyleFromInspector)
+            {
+                return;
+            }
+
+#if UNITY_EDITOR
+            if (editorStyleQueued)
+            {
+                return;
+            }
+
+            editorStyleQueued = true;
+            UnityEditor.EditorApplication.delayCall += ApplyQueuedEditorStyle;
+#endif
+        }
+
+#if UNITY_EDITOR
+        private void ApplyQueuedEditorStyle()
+        {
+            editorStyleQueued = false;
+            if (this == null || forceSlider == null)
+            {
+                return;
+            }
+
+            StyleSlider();
+            StyleLabel();
+            if (!Application.isPlaying)
+            {
+                UnityEditor.EditorUtility.SetDirty(this);
+            }
+        }
+#endif
+
+        private void StyleLabel()
+        {
+            if (forceLabel == null)
+            {
+                return;
+            }
+
+            HudPanelLayout managerLabelLayout = uiManager != null ? uiManager.forceLabelPanelLayout : null;
+            bool updateLabelRectTransforms = uiManager == null || uiManager.driveHudLayoutFromInspector;
+            Vector2 insetMin = uiManager != null ? uiManager.forceLabelTextInsetMin : labelTextInsetMin;
+            Vector2 insetMax = uiManager != null ? uiManager.forceLabelTextInsetMax : labelTextInsetMax;
+            Vector2 panelSize = managerLabelLayout != null ? managerLabelLayout.size : labelPanelSize;
+            Vector2 panelPosition = managerLabelLayout != null ? managerLabelLayout.position : labelPanelPosition;
+            int fontSize = managerLabelLayout != null && managerLabelLayout.fontSize > 0 ? managerLabelLayout.fontSize : labelFontSize;
+
+            forceLabel.font = ThemeFontProvider.GetFont(14);
+            forceLabel.fontSize = fontSize;
+            forceLabel.fontStyle = FontStyle.Normal;
+            forceLabel.resizeTextForBestFit = true;
+            forceLabel.resizeTextMinSize = 10;
+            forceLabel.resizeTextMaxSize = fontSize;
+            forceLabel.alignment = TextAnchor.MiddleCenter;
+            forceLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
+            forceLabel.verticalOverflow = VerticalWrapMode.Truncate;
+
+            RectTransform labelRect = forceLabel.GetComponent<RectTransform>();
+            if (updateLabelRectTransforms && labelRect != null)
+            {
+                labelRect.anchorMin = Vector2.zero;
+                labelRect.anchorMax = Vector2.one;
+                labelRect.pivot = new Vector2(0.5f, 0.5f);
+                labelRect.anchoredPosition = Vector2.zero;
+                labelRect.offsetMin = insetMin;
+                labelRect.offsetMax = insetMax;
+                labelRect.localRotation = Quaternion.identity;
+                labelRect.localScale = Vector3.one;
+            }
+
+            RectTransform panelRect = forceLabel.transform.parent as RectTransform;
+            if (updateLabelRectTransforms && panelRect != null)
+            {
+                panelRect.anchorMin = Vector2.zero;
+                panelRect.anchorMax = Vector2.zero;
+                panelRect.pivot = Vector2.zero;
+                panelRect.sizeDelta = panelSize;
+                panelRect.anchoredPosition = panelPosition;
+                panelRect.localRotation = Quaternion.identity;
+                panelRect.localScale = Vector3.one;
+            }
+
+            Image panelImage = forceLabel.transform.parent != null
+                ? forceLabel.transform.parent.GetComponent<Image>()
+                : null;
+            PanelBackgroundStyle.Apply(panelImage, 0.9f);
+        }
+
+        private static string FormatForceLabel(ForceLevel force)
+        {
+            return "Force: " + force;
         }
     }
 }

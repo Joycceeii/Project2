@@ -7,6 +7,12 @@ namespace TheTasteReviver
 {
     public class RecipeEvaluator : MonoBehaviour
     {
+        [Header("Process Judgement")]
+        [Tooltip("Force still treats one adjacent level as close.")]
+        public bool adjacentForceCountsAsClose = true;
+        [Tooltip("Speed treats only neighboring levels as close; Slow vs Fast is always wrong.")]
+        public bool adjacentSpeedCountsAsClose = true;
+
         public EvaluationResult Evaluate(RecipeLevelData level, RecipeAttemptManager attempt)
         {
             EvaluationResult result = new EvaluationResult();
@@ -138,6 +144,11 @@ namespace TheTasteReviver
             IReadOnlyList<LevelIngredientProfile> profiles = level.GetProfilesForMechanic(MechanicType.Combination);
             if (profiles.Count > 0)
             {
+                if (level.requireFinalCombinedBatch)
+                {
+                    return EvaluatePreparedThenCombinedCombination(level, attempt, profiles);
+                }
+
                 int correctProfiles = 0;
                 foreach (LevelIngredientProfile profile in profiles)
                 {
@@ -158,7 +169,34 @@ namespace TheTasteReviver
             return new DimensionEvaluation(correct ? 1f : 0f, correct, correct ? level.feedbackTexts.combinationCorrect : level.feedbackTexts.combinationWrong);
         }
 
-        private static DimensionEvaluation EvaluateForce(RecipeLevelData level, RecipeAttemptManager attempt)
+        private static DimensionEvaluation EvaluatePreparedThenCombinedCombination(RecipeLevelData level, RecipeAttemptManager attempt, IReadOnlyList<LevelIngredientProfile> profiles)
+        {
+            IReadOnlyList<GrindingBatch> batches = attempt.GrindingBatches ?? Array.Empty<GrindingBatch>();
+            List<IngredientData> requiredIngredients = GetRequiredCombinationIngredients(level, profiles);
+            int prepared;
+            int requiredPreparationCount;
+            bool hasFinalCombinedBatch;
+
+            if (level.allowAnyPairPreparation)
+            {
+                prepared = CountAnyPairPreparationBatches(attempt, batches, requiredIngredients);
+                requiredPreparationCount = requiredIngredients.Count >= 3 ? 2 : requiredIngredients.Count;
+                hasFinalCombinedBatch = HasAnyPairCombinedBatchAfterPreparation(attempt, batches, requiredIngredients);
+            }
+            else
+            {
+                List<List<IngredientData>> preparationGroups = GetRequiredPreparationGroups(level, requiredIngredients);
+                prepared = CountPreparationBatches(attempt, batches, preparationGroups);
+                requiredPreparationCount = preparationGroups.Count;
+                hasFinalCombinedBatch = HasCombinedBatchAfterPreparation(attempt, batches, preparationGroups, requiredIngredients);
+            }
+
+            float score = ((prepared / Mathf.Max(1f, requiredPreparationCount)) + (hasFinalCombinedBatch ? 1f : 0f)) * 0.5f;
+            bool correct = prepared == requiredPreparationCount && hasFinalCombinedBatch;
+            return new DimensionEvaluation(score, correct, correct ? level.feedbackTexts.combinationCorrect : level.feedbackTexts.combinationWrong);
+        }
+
+        private DimensionEvaluation EvaluateForce(RecipeLevelData level, RecipeAttemptManager attempt)
         {
             ForceLevel actual = attempt.forceController != null ? attempt.forceController.CurrentForceLevel : ForceLevel.Medium;
             IReadOnlyList<LevelIngredientProfile> profiles = level.GetProfilesForMechanic(MechanicType.Force);
@@ -166,11 +204,11 @@ namespace TheTasteReviver
             {
                 IReadOnlyList<GrindingBatch> batches = attempt.GrindingBatches ?? Array.Empty<GrindingBatch>();
                 int exact = profiles.Count(profile => GetForceForProfile(profile, batches, actual) == profile.targetForceLevel);
-                int adjacent = profiles.Count(profile =>
+                int adjacent = adjacentForceCountsAsClose ? profiles.Count(profile =>
                 {
                     ForceLevel profileForce = GetForceForProfile(profile, batches, actual);
                     return profileForce != profile.targetForceLevel && Mathf.Abs((int)profileForce - (int)profile.targetForceLevel) == 1;
-                });
+                }) : 0;
                 float profileScore = (exact + adjacent * 0.5f) / Mathf.Max(1f, profiles.Count);
                 bool correct = exact == profiles.Count;
                 string profileFeedback = correct ? level.feedbackTexts.forceCorrect : BuildProfileForceFeedback(profiles, batches, actual);
@@ -182,24 +220,24 @@ namespace TheTasteReviver
                 return new DimensionEvaluation(1f, true, level.feedbackTexts.forceCorrect);
             }
 
-            float score = Mathf.Abs((int)actual - (int)level.targetForceLevel) == 1 ? 0.5f : 0f;
+            float score = adjacentForceCountsAsClose && Mathf.Abs((int)actual - (int)level.targetForceLevel) == 1 ? 0.5f : 0f;
             string feedback = (int)actual < (int)level.targetForceLevel ? level.feedbackTexts.forceTooLight : level.feedbackTexts.forceTooHeavy;
             return new DimensionEvaluation(score, false, feedback);
         }
 
-        private static DimensionEvaluation EvaluateSpeed(RecipeLevelData level, RecipeAttemptManager attempt)
+        private DimensionEvaluation EvaluateSpeed(RecipeLevelData level, RecipeAttemptManager attempt)
         {
-            SpeedLevel actual = attempt.pestleController != null ? attempt.pestleController.CurrentSpeedLevel : SpeedLevel.Medium;
+            SpeedLevel actual = attempt.pestleController != null ? attempt.pestleController.EvaluatedSpeedLevel : SpeedLevel.Medium;
             IReadOnlyList<LevelIngredientProfile> profiles = level.GetProfilesForMechanic(MechanicType.Speed);
             if (profiles.Count > 0)
             {
                 IReadOnlyList<GrindingBatch> batches = attempt.GrindingBatches ?? Array.Empty<GrindingBatch>();
                 int exact = profiles.Count(profile => GetSpeedForProfile(profile, batches, actual) == profile.targetSpeedLevel);
-                int adjacent = profiles.Count(profile =>
+                int adjacent = adjacentSpeedCountsAsClose ? profiles.Count(profile =>
                 {
                     SpeedLevel profileSpeed = GetSpeedForProfile(profile, batches, actual);
-                    return profileSpeed != profile.targetSpeedLevel && Mathf.Abs((int)profileSpeed - (int)profile.targetSpeedLevel) == 1;
-                });
+                    return IsAdjacentSpeedLevel(profileSpeed, profile.targetSpeedLevel);
+                }) : 0;
                 float profileScore = (exact + adjacent * 0.5f) / Mathf.Max(1f, profiles.Count);
                 bool correct = exact == profiles.Count;
                 string profileFeedback = correct ? level.feedbackTexts.speedCorrect : BuildProfileSpeedFeedback(profiles, batches, actual);
@@ -211,9 +249,14 @@ namespace TheTasteReviver
                 return new DimensionEvaluation(1f, true, level.feedbackTexts.speedCorrect);
             }
 
-            float score = Mathf.Abs((int)actual - (int)level.targetSpeedLevel) == 1 ? 0.5f : 0f;
+            float score = adjacentSpeedCountsAsClose && IsAdjacentSpeedLevel(actual, level.targetSpeedLevel) ? 0.5f : 0f;
             string feedback = (int)actual < (int)level.targetSpeedLevel ? level.feedbackTexts.speedTooSlow : level.feedbackTexts.speedTooFast;
             return new DimensionEvaluation(score, false, feedback);
+        }
+
+        private static bool IsAdjacentSpeedLevel(SpeedLevel actual, SpeedLevel target)
+        {
+            return actual != target && Mathf.Abs((int)actual - (int)target) == 1;
         }
 
         private static GrindingBatch FindBatchContaining(IngredientData ingredient, IReadOnlyList<GrindingBatch> batches)
@@ -311,6 +354,180 @@ namespace TheTasteReviver
             }
 
             return string.Join("|", groups.OrderBy(x => x));
+        }
+
+        private static bool HasCombinedBatchAfterPreparation(RecipeAttemptManager attempt, IReadOnlyList<GrindingBatch> batches, IReadOnlyList<List<IngredientData>> preparationGroups, IReadOnlyList<IngredientData> requiredIngredients)
+        {
+            if (batches == null || preparationGroups == null || preparationGroups.Count == 0 || requiredIngredients == null || requiredIngredients.Count <= 1)
+            {
+                return false;
+            }
+
+            int lastPreparationBatchID = 0;
+            foreach (List<IngredientData> group in preparationGroups)
+            {
+                int preparationBatchID = GetPreparationBatchID(attempt, batches, group);
+                if (preparationBatchID <= 0)
+                {
+                    return false;
+                }
+
+                lastPreparationBatchID = Mathf.Max(lastPreparationBatchID, preparationBatchID);
+            }
+
+            return batches.Any(batch => batch != null
+                && batch.batchID >= lastPreparationBatchID
+                && batch.ingredientsInBatch != null
+                && HasExactIngredientSet(batch.ingredientsInBatch, requiredIngredients));
+        }
+
+        private static bool HasAnyPairCombinedBatchAfterPreparation(RecipeAttemptManager attempt, IReadOnlyList<GrindingBatch> batches, IReadOnlyList<IngredientData> requiredIngredients)
+        {
+            return TryFindAnyPairPreparation(attempt, batches, requiredIngredients, out int lastPreparationBatchID, out int _)
+                && batches.Any(batch => batch != null
+                    && batch.batchID >= lastPreparationBatchID
+                    && batch.ingredientsInBatch != null
+                    && HasExactIngredientSet(batch.ingredientsInBatch, requiredIngredients));
+        }
+
+        private static List<IngredientData> GetRequiredCombinationIngredients(RecipeLevelData level, IReadOnlyList<LevelIngredientProfile> profiles)
+        {
+            List<IngredientData> ingredients = profiles != null
+                ? profiles
+                    .Where(profile => profile != null && profile.ingredient != null)
+                    .Select(profile => profile.ingredient)
+                    .Distinct()
+                    .ToList()
+                : new List<IngredientData>();
+
+            if (ingredients.Count > 0 || level == null || level.correctCombinationPattern == null || level.correctCombinationPattern.groups == null)
+            {
+                return ingredients;
+            }
+
+            return level.correctCombinationPattern.groups
+                .Where(group => group != null && group.ingredients != null)
+                .SelectMany(group => group.ingredients)
+                .Where(ingredient => ingredient != null)
+                .Distinct()
+                .ToList();
+        }
+
+        private static List<List<IngredientData>> GetRequiredPreparationGroups(RecipeLevelData level, IReadOnlyList<IngredientData> requiredIngredients)
+        {
+            List<List<IngredientData>> groups = level != null
+                && level.correctCombinationPattern != null
+                && level.correctCombinationPattern.groups != null
+                ? level.correctCombinationPattern.groups
+                    .Where(group => group != null && group.ingredients != null)
+                    .Select(group => group.ingredients.Where(ingredient => ingredient != null).Distinct().ToList())
+                    .Where(group => group.Count > 0)
+                    .ToList()
+                : new List<List<IngredientData>>();
+
+            if (groups.Count > 0)
+            {
+                return groups;
+            }
+
+            return requiredIngredients != null
+                ? requiredIngredients.Where(ingredient => ingredient != null).Select(ingredient => new List<IngredientData> { ingredient }).ToList()
+                : new List<List<IngredientData>>();
+        }
+
+        private static int CountPreparationBatches(RecipeAttemptManager attempt, IReadOnlyList<GrindingBatch> batches, IReadOnlyList<List<IngredientData>> preparationGroups)
+        {
+            if (batches == null || preparationGroups == null)
+            {
+                return 0;
+            }
+
+            return preparationGroups.Count(group => GetPreparationBatchID(attempt, batches, group) > 0);
+        }
+
+        private static int CountAnyPairPreparationBatches(RecipeAttemptManager attempt, IReadOnlyList<GrindingBatch> batches, IReadOnlyList<IngredientData> requiredIngredients)
+        {
+            TryFindAnyPairPreparation(attempt, batches, requiredIngredients, out int _, out int preparedCount);
+            return preparedCount;
+        }
+
+        private static bool TryFindAnyPairPreparation(RecipeAttemptManager attempt, IReadOnlyList<GrindingBatch> batches, IReadOnlyList<IngredientData> requiredIngredients, out int lastPreparationBatchID, out int preparedCount)
+        {
+            lastPreparationBatchID = 0;
+            preparedCount = 0;
+            List<IngredientData> ingredients = requiredIngredients != null
+                ? requiredIngredients.Where(ingredient => ingredient != null).Distinct().ToList()
+                : new List<IngredientData>();
+            if (ingredients.Count < 3)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < ingredients.Count - 1; i++)
+            {
+                for (int j = i + 1; j < ingredients.Count; j++)
+                {
+                    List<IngredientData> pair = new List<IngredientData> { ingredients[i], ingredients[j] };
+                    List<IngredientData> remaining = ingredients.Where(ingredient => !pair.Contains(ingredient)).ToList();
+                    int pairBatchID = GetPreparationBatchID(attempt, batches, pair);
+                    int remainingBatchID = remaining.Count == 1 ? GetPreparationBatchID(attempt, batches, remaining) : 0;
+                    int candidatePreparedCount = (pairBatchID > 0 ? 1 : 0) + (remainingBatchID > 0 ? 1 : 0);
+                    if (candidatePreparedCount > preparedCount)
+                    {
+                        preparedCount = candidatePreparedCount;
+                    }
+
+                    if (pairBatchID > 0 && remainingBatchID > 0)
+                    {
+                        lastPreparationBatchID = Mathf.Max(pairBatchID, remainingBatchID);
+                        preparedCount = 2;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static int GetPreparationBatchID(RecipeAttemptManager attempt, IReadOnlyList<GrindingBatch> batches, IEnumerable<IngredientData> ingredients)
+        {
+            if (attempt != null && attempt.TryGetPreparedBatchID(ingredients, out int recordedBatchID))
+            {
+                return recordedBatchID;
+            }
+
+            GrindingBatch preparationBatch = FindPreparationBatch(batches, ingredients);
+            return preparationBatch != null ? preparationBatch.batchID : 0;
+        }
+
+        private static GrindingBatch FindPreparationBatch(IReadOnlyList<GrindingBatch> batches, IEnumerable<IngredientData> ingredients)
+        {
+            List<IngredientData> target = ingredients != null
+                ? ingredients.Where(ingredient => ingredient != null).Distinct().ToList()
+                : new List<IngredientData>();
+            if (batches == null || target.Count == 0)
+            {
+                return null;
+            }
+
+            return batches
+                .Where(batch => batch != null
+                    && batch.ingredientsInBatch != null
+                    && HasExactIngredientSet(batch.ingredientsInBatch, target))
+                .OrderBy(batch => batch.batchID)
+                .FirstOrDefault();
+        }
+
+        private static bool HasExactIngredientSet(IReadOnlyList<IngredientData> actual, IReadOnlyList<IngredientData> target)
+        {
+            if (actual == null || target == null)
+            {
+                return false;
+            }
+
+            HashSet<IngredientData> actualSet = new HashSet<IngredientData>(actual.Where(ingredient => ingredient != null));
+            HashSet<IngredientData> targetSet = new HashSet<IngredientData>(target.Where(ingredient => ingredient != null));
+            return actualSet.SetEquals(targetSet);
         }
 
         private static string FindActualCombinationKey(IngredientData ingredient, IReadOnlyList<GrindingBatch> batches)

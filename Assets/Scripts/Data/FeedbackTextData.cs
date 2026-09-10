@@ -11,9 +11,6 @@ namespace TheTasteReviver
         public string speedTooSlow = "Grinding speed is too slow.";
         public string speedTooFast = "Grinding speed is too fast.";
         public string speedCorrect = "Grinding speed is correct.";
-        public string durationTooShort = "Grinding duration is too short.";
-        public string durationCorrect = "Grinding duration is correct.";
-        public string durationTooLong = "Grinding duration is too long.";
         public string selectionCorrect = "Ingredient selection is correct.";
         public string selectionWrong = "Ingredient selection does not match the target.";
         public string orderCorrect = "Ingredient order is correct.";

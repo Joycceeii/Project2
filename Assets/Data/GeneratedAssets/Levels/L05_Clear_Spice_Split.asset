@@ -15,36 +15,32 @@ MonoBehaviour:
   levelID: L05
   levelName: Clear Spice Split
   cityName: Shantou
-  targetTasteName: Separate Grind
-  levelIntro: "White pepper and dried tangerine peel are both sharp. Find a way to keep their edges clear."
-  maxIngredientCount: 2
+  targetTasteName: Flexible Batch Blend
+  levelIntro: "White pepper, dried tangerine peel, and ginger are all sharp. Prepare any two together, prepare the remaining spice alone, then combine the prepared powders."
+  maxIngredientCount: 3
   availableIngredients:
   - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
   - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
   requiredIngredients:
   - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
   - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+  - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
   forbiddenIngredients: []
   unlockedDimensions: 03000000
   lockedDimensions: 04000000050000000200000001000000
-  correctIngredientOrder:
-  - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
-  - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
-  correctRatioPattern:
-  - ingredient: {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
-    ratioLevel: 5
-  - ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
-    ratioLevel: 2
+  correctIngredientOrder: []
+  correctRatioPattern: []
   correctCombinationPattern:
     groups:
     - ingredients:
       - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
-    - ingredients:
       - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+      - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+  requireFinalCombinedBatch: 1
+  allowAnyPairPreparation: 1
   targetForceLevel: 1
   targetSpeedLevel: 1
-  minGrindDuration: 14
-  maxGrindDuration: 22
   passingScore: 100
   enabledMechanics:
     enableIngredientSelection: 0
@@ -53,7 +49,6 @@ MonoBehaviour:
     enableCombination: 1
     enableForce: 0
     enableSpeed: 0
-    enableGrindDuration: 1
   feedbackTexts:
     forceTooLight: Grinding force is too light.
     forceTooHeavy: Grinding force is too heavy.
@@ -61,9 +56,6 @@ MonoBehaviour:
     speedTooSlow: Grinding speed is too slow.
     speedTooFast: Grinding speed is too fast.
     speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
     selectionCorrect: Ingredient selection is correct.
     selectionWrong: Ingredient selection does not match the target.
     orderCorrect: Ingredient order is correct.
@@ -71,8 +63,8 @@ MonoBehaviour:
     orderWrong: Ingredient order does not match the target.
     ratioCorrect: Ratio pattern is correct.
     ratioAmbiguous: Ratio pattern is still ambiguous.
-    combinationCorrect: Combination pattern is correct.
-    combinationWrong: Combination pattern does not match the target.
+    combinationCorrect: Any two spices were prepared together, the remaining spice was prepared alone, and the prepared powders joined in the final batch.
+    combinationWrong: Prepare any two spices together, prepare the remaining spice alone, then put the prepared powders into one final batch.
   hintSettings:
     hintPriority: 03000000
     maxOrderHints: 5
@@ -86,30 +78,35 @@ MonoBehaviour:
     combination: 15
     force: 10
     speed: 10
-    grindDuration: 10
   unlockCluesOnComplete:
-  - clueId: L05_WhitePepper_Separate
+  - clueId: L05_WhitePepper_Flexible
     title: White Pepper - Batch Clue
-    content: White pepper is strong. It often works better away from other sharp ingredients.
+    content: White pepper can either join one sharp spice or stay as the separate powder.
     relatedIngredients:
     - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
     relatedDimension: 3
-  - clueId: L05_Peel_Separate
+  - clueId: L05_Peel_Flexible
     title: Dried Tangerine Peel - Batch Clue
-    content: Dried tangerine peel can turn bitter when it is ground with another sharp ingredient.
+    content: Dried tangerine peel can either join one sharp spice or stay as the separate powder.
     relatedIngredients:
     - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
+    relatedDimension: 3
+  - clueId: L05_Ginger_Flexible
+    title: Ginger - Batch Clue
+    content: Ginger can be part of the paired powder or the spice that stays alone before the final blend.
+    relatedIngredients:
+    - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
     relatedDimension: 3
   fallbackHintText: No new hint for now. Keep what worked
   progressiveHintRules:
   - ruleId: L05_Hint_NewBatch
     priority: 22
     mechanic: 3
-    hintText: After grinding white pepper by itself, press New Batch, add only dried tangerine peel, then grind again.
-  - ruleId: L05_Hint_Separate_Combination
+    hintText: Grind any two spices together first, press New Batch, then grind the remaining spice on its own.
+  - ruleId: L05_Hint_Final_Blend
     priority: 21
     mechanic: 3
-    hintText: White pepper and dried tangerine peel should each have their own batch. Do not put both ingredients in the same batch.
+    hintText: After the paired powder and single powder are prepared, put all prepared powders back into the mortar together.
   ingredientProfiles:
   - profileTag: L05_WhitePepper
     ingredient: {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
@@ -120,15 +117,12 @@ MonoBehaviour:
       enableCombination: 1
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: WhitePepper
-    minGrindDuration: 14
-    maxGrindDuration: 22
-    levelTraitDescription: White pepper is sharp and spreads quickly.
+    levelTraitDescription: White pepper is sharp and can either join one spice or stay as the separate powder.
     responseHintRules: []
   - profileTag: L05_DriedTangerinePeel
     ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
@@ -139,16 +133,29 @@ MonoBehaviour:
       enableCombination: 1
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: DriedTangerinePeel
-    minGrindDuration: 14
-    maxGrindDuration: 22
-    levelTraitDescription: Dried tangerine peel adds a bright citrus edge.
+    levelTraitDescription: Dried tangerine peel adds a bright citrus edge and can work in either preparation role.
     responseHintRules: []
-  successFeedback: White pepper and dried tangerine peel stay clear because they were handled separately.
-  closeFeedback: Very close. Check whether each ingredient has its own batch.
-  wrongFeedback: The sharp flavors are tangled together. Try using a separate batch.
+  - profileTag: L05_Ginger
+    ingredient: {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
+    checkedMechanics:
+      enableIngredientSelection: 1
+      enableIngredientOrder: 0
+      enableRatio: 0
+      enableCombination: 1
+      enableForce: 0
+      enableSpeed: 0
+    targetForceLevel: 1
+    targetSpeedLevel: 1
+    targetRatioLevel: 0
+    targetOrderIndex: -1
+    targetCombinationKey: Ginger
+    levelTraitDescription: Ginger is fresh and sharp, so it can pair with one spice or stand alone before the final blend.
+    responseHintRules: []
+  successFeedback: The spices stay clear: one paired powder, one single powder, then one final blend.
+  closeFeedback: Very close. Make sure any two spices become one powder, the remaining spice becomes another powder, then the prepared powders meet at the end.
+  wrongFeedback: The spice batches need a clearer structure: two together, one alone, then both powders together.

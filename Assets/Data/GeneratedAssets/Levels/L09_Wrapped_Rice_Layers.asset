@@ -34,30 +34,27 @@ MonoBehaviour:
   correctIngredientOrder:
   - {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
   - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
-  - {fileID: 11400000, guid: d9e3e41cc52bba94997680b94ac53836, type: 2}
   - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
+  - {fileID: 11400000, guid: d9e3e41cc52bba94997680b94ac53836, type: 2}
   correctRatioPattern:
-  - ingredient: {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
-    ratioLevel: 5
   - ingredient: {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
-    ratioLevel: 4
+    ratioLevel: 5
   - ingredient: {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
+    ratioLevel: 4
+  - ingredient: {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
     ratioLevel: 2
   - ingredient: {fileID: 11400000, guid: d9e3e41cc52bba94997680b94ac53836, type: 2}
     ratioLevel: 1
   correctCombinationPattern:
     groups:
     - ingredients:
-      - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
-      - {fileID: 11400000, guid: d9e3e41cc52bba94997680b94ac53836, type: 2}
-    - ingredients:
       - {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
-    - ingredients:
+      - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
       - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
+    - ingredients:
+      - {fileID: 11400000, guid: d9e3e41cc52bba94997680b94ac53836, type: 2}
   targetForceLevel: 1
   targetSpeedLevel: 1
-  minGrindDuration: 25
-  maxGrindDuration: 40
   passingScore: 90
   enabledMechanics:
     enableIngredientSelection: 0
@@ -66,7 +63,6 @@ MonoBehaviour:
     enableCombination: 1
     enableForce: 0
     enableSpeed: 0
-    enableGrindDuration: 1
   feedbackTexts:
     forceTooLight: Grinding force is too light.
     forceTooHeavy: Grinding force is too heavy.
@@ -74,9 +70,6 @@ MonoBehaviour:
     speedTooSlow: Grinding speed is too slow.
     speedTooFast: Grinding speed is too fast.
     speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
     selectionCorrect: Ingredient selection is correct.
     selectionWrong: Ingredient selection does not match the target.
     orderCorrect: Ingredient order is correct.
@@ -99,7 +92,6 @@ MonoBehaviour:
     combination: 15
     force: 10
     speed: 10
-    grindDuration: 10
   unlockCluesOnComplete:
   - clueId: L09_LotusLeaf_Ratio
     title: Lotus Leaf - Ratio Clue
@@ -109,34 +101,42 @@ MonoBehaviour:
     relatedDimension: 2
   - clueId: L09_LotusLeaf_Combination
     title: Lotus Leaf - Combination Clue
-    content: "Lotus leaf can be paired with glutinous rice, but black sesame is too strong for it."
+    content: "Lotus leaf should stay separate and be ground after the main batch."
     relatedIngredients:
     - {fileID: 11400000, guid: d9e3e41cc52bba94997680b94ac53836, type: 2}
     relatedDimension: 3
   - clueId: L09_LotusLeaf_Order
     title: Lotus Leaf - Order Clue
-    content: "Add lotus leaf near the end. If it is used too early, its fresh flavor gets covered."
+    content: "Add lotus leaf last so its fresh flavor is not covered by the main batch."
     relatedIngredients:
     - {fileID: 11400000, guid: d9e3e41cc52bba94997680b94ac53836, type: 2}
     relatedDimension: 1
   fallbackHintText: No new hint for now. Keep what worked
   progressiveHintRules:
-  - ruleId: L09_Hint_RedBean_Ratio
+  - ruleId: L09_Hint_GlutinousRice_Ratio
     priority: 22
     mechanic: 2
-    hintText: Red bean should be the largest amount. It is the base of this recipe.
-  - ruleId: L09_Hint_LotusLeaf_Ratio
+    hintText: Glutinous rice should use the Large amount. It is the base of this recipe.
+  - ruleId: L09_Hint_BlackSesame_Ratio
     priority: 21
     mechanic: 2
-    hintText: Lotus leaf should be the smallest amount. It is light and easy to cover.
-  - ruleId: L09_Hint_Rice_Lotus_Combination
+    hintText: Black sesame should use the Medium amount, just below glutinous rice.
+  - ruleId: L09_Hint_RedBean_Ratio
+    priority: 20
+    mechanic: 2
+    hintText: Red bean should use the Small amount.
+  - ruleId: L09_Hint_LotusLeaf_Ratio
+    priority: 19
+    mechanic: 2
+    hintText: Lotus leaf should use the Very Small amount. It is light and easy to cover.
+  - ruleId: L09_Hint_Main_Batch_Combination
     priority: 20
     mechanic: 3
-    hintText: Glutinous rice can hold the lotus leaf flavor. Add lotus leaf right after glutinous rice in the same batch.
-  - ruleId: L09_Hint_Sesame_Lotus_Combination
+    hintText: Red bean, glutinous rice, and black sesame should be ground together in the first batch.
+  - ruleId: L09_Hint_Lotus_Separate_Combination
     priority: 19
     mechanic: 3
-    hintText: Black sesame is strong. Keep it separate from lotus leaf.
+    hintText: Lotus leaf should be ground last in its own separate batch.
   - ruleId: L09_Hint_RedBean_Order
     priority: 22
     mechanic: 1
@@ -144,11 +144,11 @@ MonoBehaviour:
   - ruleId: L09_Hint_LotusLeaf_Order
     priority: 21
     mechanic: 1
-    hintText: Lotus leaf should come right after glutinous rice, in the same batch.
+    hintText: Lotus leaf should be last, after the first three ingredients have formed the main batch.
   - ruleId: L09_Hint_Middle_Order
     priority: 20
     mechanic: 1
-    hintText: After red bean, add glutinous rice, then lotus leaf in that same batch. Add black sesame after that in its own batch.
+    hintText: Start with red bean, glutinous rice, and black sesame together. Add lotus leaf last in its own batch.
   ingredientProfiles:
   - profileTag: L09_RedBean
     ingredient: {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
@@ -159,14 +159,11 @@ MonoBehaviour:
       enableCombination: 1
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
-    targetRatioLevel: 5
+    targetRatioLevel: 2
     targetOrderIndex: 0
-    targetCombinationKey: RedBean
-    minGrindDuration: 25
-    maxGrindDuration: 40
+    targetCombinationKey: BlackSesame+GlutinousRice+RedBean
     levelTraitDescription: Red bean gives the dumpling a thick sweet base.
     responseHintRules: []
   - profileTag: L09_GlutinousRice
@@ -178,14 +175,11 @@ MonoBehaviour:
       enableCombination: 1
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
-    targetRatioLevel: 4
+    targetRatioLevel: 5
     targetOrderIndex: 1
-    targetCombinationKey: GlutinousRice+LotusLeaf
-    minGrindDuration: 25
-    maxGrindDuration: 40
+    targetCombinationKey: BlackSesame+GlutinousRice+RedBean
     levelTraitDescription: Glutinous rice makes the dumpling sticky and soft.
     responseHintRules: []
   - profileTag: L09_BlackSesame
@@ -197,14 +191,11 @@ MonoBehaviour:
       enableCombination: 1
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
-    targetRatioLevel: 2
-    targetOrderIndex: 3
-    targetCombinationKey: BlackSesame
-    minGrindDuration: 25
-    maxGrindDuration: 40
+    targetRatioLevel: 4
+    targetOrderIndex: 2
+    targetCombinationKey: BlackSesame+GlutinousRice+RedBean
     levelTraitDescription: Black sesame adds a light roasted taste.
     responseHintRules: []
   - profileTag: L09_LotusLeaf
@@ -216,16 +207,13 @@ MonoBehaviour:
       enableCombination: 1
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 1
-    targetOrderIndex: 2
-    targetCombinationKey: GlutinousRice+LotusLeaf
-    minGrindDuration: 25
-    maxGrindDuration: 40
+    targetOrderIndex: 3
+    targetCombinationKey: LotusLeaf
     levelTraitDescription: Lotus leaf adds a light green taste.
     responseHintRules: []
-  successFeedback: "The dumpling flavor has clear layers: red bean, sticky rice, lotus leaf, and sesame."
-  closeFeedback: "Very close. Check the ratio, grouping, order, or time."
-  wrongFeedback: The layers are unclear. One flavor may be too strong or added at the wrong time.
+  successFeedback: "The dumpling flavor has clear layers: sticky rice leads, sesame supports it, red bean sits lighter, and lotus leaf finishes at the end."
+  closeFeedback: "Very close. Check the ratio, grouping, or order."
+  wrongFeedback: The layers are unclear. One flavor may be too strong or added in the wrong order.

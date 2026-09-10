@@ -34,7 +34,8 @@ namespace TheTasteReviver
 
                 if ((mechanic == MechanicType.Speed || mechanic == MechanicType.Force)
                     && IsEnabled(level, MechanicType.Combination)
-                    && !evaluation.IsCorrect(MechanicType.Combination))
+                    && !evaluation.IsCorrect(MechanicType.Combination)
+                    && !HasIngredientProfilesForMechanic(level, mechanic))
                 {
                     continue;
                 }
@@ -94,7 +95,7 @@ namespace TheTasteReviver
                 : null;
             if (string.IsNullOrWhiteSpace(hint))
             {
-                hint = BuildCustomHint(level, mechanic, givenHints);
+                hint = BuildCustomHint(level, mechanic, givenHints, targetIngredient);
             }
             if (string.IsNullOrWhiteSpace(hint))
             {
@@ -117,6 +118,13 @@ namespace TheTasteReviver
             if (mechanic == MechanicType.Combination) return current < level.hintSettings.maxCombinationHints;
             if (mechanic == MechanicType.Speed || mechanic == MechanicType.Force) return current < level.hintSettings.maxProcessHints;
             return false;
+        }
+
+        private static bool HasIngredientProfilesForMechanic(RecipeLevelData level, MechanicType mechanic)
+        {
+            return level != null
+                && level.ingredientProfiles != null
+                && level.ingredientProfiles.Any(profile => profile != null && profile.IsEnabled(mechanic));
         }
 
         private void Increment(MechanicType mechanic)
@@ -182,14 +190,14 @@ namespace TheTasteReviver
             }
 
             ForceLevel actualForce = attempt.forceController != null ? attempt.forceController.CurrentForceLevel : ForceLevel.Medium;
-            SpeedLevel actualSpeed = attempt.pestleController != null ? attempt.pestleController.CurrentSpeedLevel : SpeedLevel.Medium;
+            SpeedLevel actualSpeed = attempt.pestleController != null ? attempt.pestleController.EvaluatedSpeedLevel : SpeedLevel.Medium;
             Dictionary<IngredientData, RatioLevel> actualRatios = attempt.CalculateRatioPattern(out _);
 
             return level.ingredientProfiles
                 .Where(profile => profile != null
                     && profile.ingredient != null
                     && profile.IsEnabled(mechanic)
-                    && IsProfileIncorrect(profile, mechanic, attempt, actualForce, actualSpeed, actualRatios))
+                    && IsProfileIncorrect(level, profile, mechanic, attempt, actualForce, actualSpeed, actualRatios))
                 .SelectMany(profile => profile.responseHintRules != null
                     ? profile.responseHintRules.Where(rule => MatchesRule(rule, profile, mechanic, attempt, actualForce, actualSpeed, actualRatios))
                     : Enumerable.Empty<IngredientResponseHintRule>())
@@ -201,17 +209,23 @@ namespace TheTasteReviver
                 .FirstOrDefault();
         }
 
-        private static bool IsProfileIncorrect(LevelIngredientProfile profile, MechanicType mechanic, RecipeAttemptManager attempt, ForceLevel actualForce, SpeedLevel actualSpeed, Dictionary<IngredientData, RatioLevel> actualRatios)
+        private static bool IsProfileIncorrect(RecipeLevelData level, LevelIngredientProfile profile, MechanicType mechanic, RecipeAttemptManager attempt, ForceLevel actualForce, SpeedLevel actualSpeed, Dictionary<IngredientData, RatioLevel> actualRatios)
         {
             switch (mechanic)
             {
                 case MechanicType.Force:
-                    return actualForce != profile.targetForceLevel;
+                    return GetForceForProfile(profile, attempt, actualForce) != profile.targetForceLevel;
                 case MechanicType.Speed:
-                    return actualSpeed != profile.targetSpeedLevel;
+                    return GetSpeedForProfile(profile, attempt, actualSpeed) != profile.targetSpeedLevel;
                 case MechanicType.Ratio:
                     return !actualRatios.TryGetValue(profile.ingredient, out RatioLevel ratio) || ratio != profile.targetRatioLevel;
                 case MechanicType.Combination:
+                    if (level != null && level.requireFinalCombinedBatch)
+                    {
+                        List<IngredientData> requiredIngredients = GetRequiredCombinationIngredients(level);
+                        return !HasPreparedThenFinalCombinedBatches(level, attempt, attempt.GrindingBatches, requiredIngredients);
+                    }
+
                     return FindActualCombinationKey(profile.ingredient, attempt.GrindingBatches) != profile.targetCombinationKey;
                 case MechanicType.IngredientOrder:
                     return attempt.IngredientOrder.Where(x => x != null).Distinct().ToList().IndexOf(profile.ingredient) != profile.targetOrderIndex;
@@ -282,7 +296,10 @@ namespace TheTasteReviver
                 return null;
             }
 
-            return profile.ingredient.DisplayName + ": " + BuildDimensionNudge(profile, attempt, mechanic);
+            string nudge = BuildDimensionNudge(profile, attempt, mechanic);
+            return mechanic == MechanicType.Force || mechanic == MechanicType.Speed
+                ? nudge
+                : profile.ingredient.DisplayName + ": " + nudge;
         }
 
         private static LevelIngredientProfile FindFirstIncorrectProfile(RecipeLevelData level, RecipeAttemptManager attempt, MechanicType mechanic, IngredientData targetIngredient = null)
@@ -293,14 +310,14 @@ namespace TheTasteReviver
             }
 
             ForceLevel actualForce = attempt.forceController != null ? attempt.forceController.CurrentForceLevel : ForceLevel.Medium;
-            SpeedLevel actualSpeed = attempt.pestleController != null ? attempt.pestleController.CurrentSpeedLevel : SpeedLevel.Medium;
+            SpeedLevel actualSpeed = attempt.pestleController != null ? attempt.pestleController.EvaluatedSpeedLevel : SpeedLevel.Medium;
             Dictionary<IngredientData, RatioLevel> actualRatios = attempt.CalculateRatioPattern(out _);
             IEnumerable<LevelIngredientProfile> profiles = level.ingredientProfiles
                 .Where(profile => profile != null && profile.ingredient != null && profile.IsEnabled(mechanic))
                 .Where(profile => targetIngredient == null || profile.ingredient == targetIngredient);
 
             return profiles
-                .FirstOrDefault(profile => IsProfileIncorrect(profile, mechanic, attempt, actualForce, actualSpeed, actualRatios));
+                .FirstOrDefault(profile => IsProfileIncorrect(level, profile, mechanic, attempt, actualForce, actualSpeed, actualRatios));
         }
 
         private static string BuildDimensionNudge(LevelIngredientProfile profile, RecipeAttemptManager attempt, MechanicType mechanic)
@@ -325,29 +342,32 @@ namespace TheTasteReviver
         private static string BuildForceNudge(LevelIngredientProfile profile, RecipeAttemptManager attempt)
         {
             ForceLevel actual = attempt.forceController != null ? attempt.forceController.CurrentForceLevel : ForceLevel.Medium;
-            return (int)actual < (int)profile.targetForceLevel
-                ? "Try using more force."
-                : "Try using less force.";
+            actual = GetForceForProfile(profile, attempt, actual);
+            string name = profile.ingredient != null ? profile.ingredient.DisplayName : "This ingredient";
+            return name + " needs " + profile.targetForceLevel + " force.";
         }
 
         private static string BuildSpeedNudge(LevelIngredientProfile profile, RecipeAttemptManager attempt)
         {
-            SpeedLevel actual = attempt.pestleController != null ? attempt.pestleController.CurrentSpeedLevel : SpeedLevel.Medium;
-            return (int)actual < (int)profile.targetSpeedLevel
-                ? "It is releasing too slowly; try a more active grinding rhythm."
-                : "It is rushing out too sharply; try a more controlled grinding rhythm.";
+            SpeedLevel actual = attempt.pestleController != null ? attempt.pestleController.EvaluatedSpeedLevel : SpeedLevel.Medium;
+            actual = GetSpeedForProfile(profile, attempt, actual);
+            string name = profile.ingredient != null ? profile.ingredient.DisplayName : "This ingredient";
+            if (profile.IsEnabled(MechanicType.Force))
+            {
+                return name + " needs " + profile.targetSpeedLevel + " speed and " + profile.targetForceLevel + " force.";
+            }
+
+            return name + " needs " + profile.targetSpeedLevel + " speed.";
         }
 
         private static string BuildRatioNudge(LevelIngredientProfile profile, RecipeAttemptManager attempt)
         {
             Dictionary<IngredientData, RatioLevel> actual = attempt.CalculateRatioPattern(out _);
             RatioLevel actualRatio = actual.TryGetValue(profile.ingredient, out RatioLevel ratio) ? ratio : RatioLevel.None;
-            return (int)actualRatio < (int)profile.targetRatioLevel
-                ? "Use a larger amount."
-                : "Use a smaller amount.";
+            return "Choose " + UIManager.GetRatioDisplayName(profile.targetRatioLevel) + " amount.";
         }
 
-        private static string BuildCustomHint(RecipeLevelData level, MechanicType mechanic, IReadOnlyList<string> usedHints)
+        private static string BuildCustomHint(RecipeLevelData level, MechanicType mechanic, IReadOnlyList<string> usedHints, IngredientData targetIngredient = null)
         {
             if (level == null || level.progressiveHintRules == null || level.progressiveHintRules.Count == 0)
             {
@@ -358,10 +378,21 @@ namespace TheTasteReviver
                 .Where(rule => rule != null
                     && rule.mechanic == mechanic
                     && !string.IsNullOrWhiteSpace(rule.hintText)
+                    && MatchesTargetIngredient(rule, targetIngredient)
                     && (usedHints == null || !usedHints.Contains(rule.hintText)))
                 .OrderByDescending(rule => rule.priority)
                 .Select(rule => rule.hintText)
                 .FirstOrDefault();
+        }
+
+        private static bool MatchesTargetIngredient(ProgressiveHintRule rule, IngredientData targetIngredient)
+        {
+            if (targetIngredient == null || rule == null || string.IsNullOrWhiteSpace(rule.ruleId))
+            {
+                return true;
+            }
+
+            return rule.ruleId.Contains(targetIngredient.ingredientID);
         }
 
         private static string GetReusableLevelHint(RecipeLevelData level)
@@ -418,10 +449,12 @@ namespace TheTasteReviver
                 return "The amounts are close, but one ingredient still needs adjustment.";
             }
 
-            string direction = "needs a different amount";
+            string direction = "needs " + UIManager.GetRatioDisplayName(target.ratioLevel) + " amount";
             if (actual.TryGetValue(target.ingredient, out RatioLevel actualLevel))
             {
-                direction = (int)actualLevel < (int)target.ratioLevel ? "needs more" : "needs less";
+                direction = actualLevel == target.ratioLevel
+                    ? "has the right amount"
+                    : "needs " + UIManager.GetRatioDisplayName(target.ratioLevel) + " amount";
             }
 
             return target.ingredient.DisplayName + " " + direction + ".";
@@ -447,6 +480,58 @@ namespace TheTasteReviver
             List<GrindingBatch> actualBatches = attempt.GrindingBatches != null
                 ? attempt.GrindingBatches.Where(batch => batch != null && batch.ingredientsInBatch != null).ToList()
                 : new List<GrindingBatch>();
+
+            if (level.requireFinalCombinedBatch)
+            {
+                List<IngredientData> requiredIngredients = GetRequiredCombinationIngredients(level);
+                if (level.allowAnyPairPreparation)
+                {
+                    if (!TryFindAnyPairPreparation(attempt, actualBatches, requiredIngredients, out _, out int preparedCount))
+                    {
+                        string hint = preparedCount == 0
+                            ? "Choose any two ingredients and grind them together until they become one prepared powder."
+                            : "Press New Batch, then grind the remaining ingredient on its own until it becomes powder.";
+                        if (IsUnusedHint(hint, usedHints))
+                        {
+                            return hint;
+                        }
+                    }
+
+                    if (!HasFinalCombinedBatchAfterPreparation(level, attempt, actualBatches, requiredIngredients))
+                    {
+                        string hint = "Put all prepared powders back into the mortar together.";
+                        if (IsUnusedHint(hint, usedHints))
+                        {
+                            return hint;
+                        }
+                    }
+
+                    return "The ingredient order does not matter; any two can be prepared together, then the remaining powder joins them at the end.";
+                }
+
+                foreach (IngredientData ingredient in requiredIngredients)
+                {
+                    if (!HasIngredientPreparedAlone(attempt, actualBatches, ingredient))
+                    {
+                        string hint = BuildMissingSingleBatchHint(ingredient, actualBatches);
+                        if (IsUnusedHint(hint, usedHints))
+                        {
+                            return hint;
+                        }
+                    }
+                }
+
+                if (!HasFinalCombinedBatchAfterPreparation(level, attempt, actualBatches, requiredIngredients))
+                {
+                    string hint = "Put the prepared powders for " + FormatIngredientNames(requiredIngredients) + " back into the mortar, then grind them together.";
+                    if (IsUnusedHint(hint, usedHints))
+                    {
+                        return hint;
+                    }
+                }
+
+                return "The order of the prepared powders does not matter; what matters is separate preparation followed by one final combined grind.";
+            }
 
             foreach (CombinationGroup group in targetGroups)
             {
@@ -556,6 +641,165 @@ namespace TheTasteReviver
             return !string.IsNullOrWhiteSpace(hint) && (usedHints == null || !usedHints.Contains(hint));
         }
 
+        private static List<IngredientData> GetRequiredCombinationIngredients(RecipeLevelData level)
+        {
+            List<IngredientData> ingredients = level != null && level.ingredientProfiles != null
+                ? level.ingredientProfiles
+                    .Where(profile => profile != null && profile.ingredient != null && profile.IsEnabled(MechanicType.Combination))
+                    .Select(profile => profile.ingredient)
+                    .Distinct()
+                    .ToList()
+                : new List<IngredientData>();
+
+            if (ingredients.Count > 0 || level == null || level.correctCombinationPattern == null || level.correctCombinationPattern.groups == null)
+            {
+                return ingredients;
+            }
+
+            return level.correctCombinationPattern.groups
+                .Where(group => group != null && group.ingredients != null)
+                .SelectMany(group => group.ingredients)
+                .Where(ingredient => ingredient != null)
+                .Distinct()
+                .ToList();
+        }
+
+        private static bool HasPreparedThenFinalCombinedBatches(RecipeLevelData level, RecipeAttemptManager attempt, IReadOnlyList<GrindingBatch> batches, IReadOnlyList<IngredientData> requiredIngredients)
+        {
+            if (level != null && level.allowAnyPairPreparation)
+            {
+                return TryFindAnyPairPreparation(attempt, batches, requiredIngredients, out _, out _)
+                    && HasFinalCombinedBatchAfterPreparation(level, attempt, batches, requiredIngredients);
+            }
+
+            return HasSinglePreparationBatches(attempt, batches, requiredIngredients) && HasFinalCombinedBatchAfterPreparation(level, attempt, batches, requiredIngredients);
+        }
+
+        private static bool HasSinglePreparationBatches(RecipeAttemptManager attempt, IReadOnlyList<GrindingBatch> batches, IReadOnlyList<IngredientData> requiredIngredients)
+        {
+            if (batches == null || requiredIngredients == null || requiredIngredients.Count <= 1)
+            {
+                return false;
+            }
+
+            return requiredIngredients.All(ingredient => HasIngredientPreparedAlone(attempt, batches, ingredient));
+        }
+
+        private static bool HasFinalCombinedBatchAfterPreparation(RecipeLevelData level, RecipeAttemptManager attempt, IReadOnlyList<GrindingBatch> batches, IReadOnlyList<IngredientData> requiredIngredients)
+        {
+            if (batches == null || requiredIngredients == null || requiredIngredients.Count <= 1)
+            {
+                return false;
+            }
+
+            if (level != null && level.allowAnyPairPreparation)
+            {
+                return TryFindAnyPairPreparation(attempt, batches, requiredIngredients, out int lastPreparedBatchID, out _)
+                    && batches.Any(batch => batch != null
+                        && batch.batchID >= lastPreparedBatchID
+                        && batch.ingredientsInBatch != null
+                        && HasExactIngredientSet(batch.ingredientsInBatch, requiredIngredients));
+            }
+
+            int lastPreparationBatchID = 0;
+            foreach (IngredientData ingredient in requiredIngredients)
+            {
+                int preparationBatchID = GetPreparationBatchID(attempt, batches, new[] { ingredient });
+                if (preparationBatchID <= 0)
+                {
+                    return false;
+                }
+
+                lastPreparationBatchID = Mathf.Max(lastPreparationBatchID, preparationBatchID);
+            }
+
+            return batches.Any(batch => batch != null
+                && batch.batchID >= lastPreparationBatchID
+                && batch.ingredientsInBatch != null
+                && HasExactIngredientSet(batch.ingredientsInBatch, requiredIngredients));
+        }
+
+        private static bool HasIngredientPreparedAlone(RecipeAttemptManager attempt, IReadOnlyList<GrindingBatch> batches, IngredientData ingredient)
+        {
+            return GetPreparationBatchID(attempt, batches, new[] { ingredient }) > 0;
+        }
+
+        private static bool TryFindAnyPairPreparation(RecipeAttemptManager attempt, IReadOnlyList<GrindingBatch> batches, IReadOnlyList<IngredientData> requiredIngredients, out int lastPreparationBatchID, out int preparedCount)
+        {
+            lastPreparationBatchID = 0;
+            preparedCount = 0;
+            List<IngredientData> ingredients = requiredIngredients != null
+                ? requiredIngredients.Where(ingredient => ingredient != null).Distinct().ToList()
+                : new List<IngredientData>();
+            if (ingredients.Count < 3)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < ingredients.Count - 1; i++)
+            {
+                for (int j = i + 1; j < ingredients.Count; j++)
+                {
+                    List<IngredientData> pair = new List<IngredientData> { ingredients[i], ingredients[j] };
+                    List<IngredientData> remaining = ingredients.Where(ingredient => !pair.Contains(ingredient)).ToList();
+                    int pairBatchID = GetPreparationBatchID(attempt, batches, pair);
+                    int remainingBatchID = remaining.Count == 1 ? GetPreparationBatchID(attempt, batches, remaining) : 0;
+                    int candidatePreparedCount = (pairBatchID > 0 ? 1 : 0) + (remainingBatchID > 0 ? 1 : 0);
+                    if (candidatePreparedCount > preparedCount)
+                    {
+                        preparedCount = candidatePreparedCount;
+                    }
+
+                    if (pairBatchID > 0 && remainingBatchID > 0)
+                    {
+                        lastPreparationBatchID = Mathf.Max(pairBatchID, remainingBatchID);
+                        preparedCount = 2;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private static int GetPreparationBatchID(RecipeAttemptManager attempt, IReadOnlyList<GrindingBatch> batches, IEnumerable<IngredientData> ingredients)
+        {
+            List<IngredientData> target = ingredients != null
+                ? ingredients.Where(ingredient => ingredient != null).Distinct().ToList()
+                : new List<IngredientData>();
+            if (target.Count == 0)
+            {
+                return 0;
+            }
+
+            if (attempt != null && attempt.TryGetPreparedBatchID(ingredients, out int recordedBatchID))
+            {
+                return recordedBatchID;
+            }
+
+            GrindingBatch batch = batches != null
+                ? batches
+                    .Where(candidate => candidate != null
+                        && candidate.ingredientsInBatch != null
+                        && HasExactIngredientSet(candidate.ingredientsInBatch, target))
+                    .OrderBy(candidate => candidate.batchID)
+                    .FirstOrDefault()
+                : null;
+            return batch != null ? batch.batchID : 0;
+        }
+
+        private static bool HasExactIngredientSet(IReadOnlyList<IngredientData> actual, IReadOnlyList<IngredientData> target)
+        {
+            if (actual == null || target == null)
+            {
+                return false;
+            }
+
+            HashSet<IngredientData> actualSet = new HashSet<IngredientData>(actual.Where(ingredient => ingredient != null));
+            HashSet<IngredientData> targetSet = new HashSet<IngredientData>(target.Where(ingredient => ingredient != null));
+            return actualSet.SetEquals(targetSet);
+        }
+
         private static string FormatIngredientNames(IEnumerable<IngredientData> ingredients)
         {
             List<string> names = ingredients
@@ -578,7 +822,7 @@ namespace TheTasteReviver
         private static string BuildProcessHint(RecipeLevelData level, RecipeAttemptManager attempt)
         {
             ForceLevel actualForce = attempt.forceController != null ? attempt.forceController.CurrentForceLevel : ForceLevel.Medium;
-            SpeedLevel actualSpeed = attempt.pestleController != null ? attempt.pestleController.CurrentSpeedLevel : SpeedLevel.Medium;
+            SpeedLevel actualSpeed = attempt.pestleController != null ? attempt.pestleController.EvaluatedSpeedLevel : SpeedLevel.Medium;
 
             List<string> parts = new List<string>();
             if (IsEnabled(level, MechanicType.Force) && actualForce != level.targetForceLevel)
@@ -615,6 +859,34 @@ namespace TheTasteReviver
             }
 
             return string.Empty;
+        }
+
+        private static GrindingBatch FindBatchContaining(IngredientData ingredient, IReadOnlyList<GrindingBatch> batches)
+        {
+            if (ingredient == null || batches == null)
+            {
+                return null;
+            }
+
+            return batches.FirstOrDefault(batch => batch != null
+                && batch.ingredientsInBatch != null
+                && batch.ingredientsInBatch.Contains(ingredient));
+        }
+
+        private static ForceLevel GetForceForProfile(LevelIngredientProfile profile, RecipeAttemptManager attempt, ForceLevel fallback)
+        {
+            GrindingBatch batch = profile != null && attempt != null
+                ? FindBatchContaining(profile.ingredient, attempt.GrindingBatches)
+                : null;
+            return batch != null ? batch.forceLevel : fallback;
+        }
+
+        private static SpeedLevel GetSpeedForProfile(LevelIngredientProfile profile, RecipeAttemptManager attempt, SpeedLevel fallback)
+        {
+            GrindingBatch batch = profile != null && attempt != null
+                ? FindBatchContaining(profile.ingredient, attempt.GrindingBatches)
+                : null;
+            return batch != null ? batch.speedLevel : fallback;
         }
 
         private static bool IsEnabled(RecipeLevelData level, MechanicType mechanic)

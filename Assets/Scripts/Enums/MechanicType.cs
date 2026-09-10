@@ -7,7 +7,6 @@ namespace TheTasteReviver
         Ratio,
         Combination,
         Force,
-        Speed,
-        GrindDuration
+        Speed
     }
 }

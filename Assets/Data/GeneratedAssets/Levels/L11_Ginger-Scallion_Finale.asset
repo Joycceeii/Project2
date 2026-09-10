@@ -56,8 +56,6 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
   targetForceLevel: 2
   targetSpeedLevel: 1
-  minGrindDuration: 30
-  maxGrindDuration: 50
   passingScore: 90
   enabledMechanics:
     enableIngredientSelection: 0
@@ -66,7 +64,6 @@ MonoBehaviour:
     enableCombination: 1
     enableForce: 1
     enableSpeed: 1
-    enableGrindDuration: 1
   feedbackTexts:
     forceTooLight: Grinding force is too light.
     forceTooHeavy: Grinding force is too heavy.
@@ -74,9 +71,6 @@ MonoBehaviour:
     speedTooSlow: Grinding speed is too slow.
     speedTooFast: Grinding speed is too fast.
     speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
     selectionCorrect: Ingredient selection is correct.
     selectionWrong: Ingredient selection does not match the target.
     orderCorrect: Ingredient order is correct.
@@ -99,7 +93,6 @@ MonoBehaviour:
     combination: 15
     force: 10
     speed: 10
-    grindDuration: 10
   unlockCluesOnComplete:
   - clueId: L11_Ginger_Combination
     title: Ginger Combination Clue
@@ -119,11 +112,11 @@ MonoBehaviour:
   - ruleId: L11_Hint_SandGinger_Ratio
     priority: 22
     mechanic: 2
-    hintText: Sand ginger should be the largest amount. It is the main ginger flavor.
+    hintText: Sand ginger should use the Large amount. It is the main ginger flavor.
   - ruleId: L11_Hint_CoarseSalt_Ratio
     priority: 21
     mechanic: 2
-    hintText: Coarse salt should be the smallest amount. It should not taste salty.
+    hintText: Coarse salt should use the Very Small amount. It should not taste salty.
   - ruleId: L11_Hint_Scallion_Ratio
     priority: 20
     mechanic: 2
@@ -162,14 +155,11 @@ MonoBehaviour:
       enableCombination: 1
       enableForce: 1
       enableSpeed: 0
-      enableGrindDuration: 1
     targetForceLevel: 2
     targetSpeedLevel: 1
     targetRatioLevel: 5
     targetOrderIndex: 1
     targetCombinationKey: Ginger+SandGinger
-    minGrindDuration: 30
-    maxGrindDuration: 50
     levelTraitDescription: Sand ginger gives the recipe a dry spicy base.
     responseHintRules: []
   - profileTag: L11_Ginger
@@ -181,14 +171,11 @@ MonoBehaviour:
       enableCombination: 1
       enableForce: 0
       enableSpeed: 1
-      enableGrindDuration: 0
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 4
     targetOrderIndex: 2
     targetCombinationKey: Ginger+SandGinger
-    minGrindDuration: 3
-    maxGrindDuration: 6
     levelTraitDescription: Ginger brings a fresher sharper spice layer.
     responseHintRules: []
   - profileTag: L11_CoarseSalt
@@ -200,14 +187,11 @@ MonoBehaviour:
       enableCombination: 1
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 0
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 1
     targetOrderIndex: 0
     targetCombinationKey: CoarseSalt
-    minGrindDuration: 3
-    maxGrindDuration: 6
     levelTraitDescription: Coarse salt is a quiet mineral base.
     responseHintRules: []
   - profileTag: L11_ScallionWhite
@@ -219,14 +203,11 @@ MonoBehaviour:
       enableCombination: 1
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 0
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 2
     targetOrderIndex: 3
     targetCombinationKey: ScallionWhite
-    minGrindDuration: 3
-    maxGrindDuration: 6
     levelTraitDescription: Scallion white adds a fresh green taste.
     responseHintRules: []
   successFeedback: "The sauce is balanced: light salt, strong ginger, and fresh scallion at the end."

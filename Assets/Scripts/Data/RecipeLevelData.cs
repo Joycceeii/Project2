@@ -14,7 +14,6 @@ namespace TheTasteReviver
         public bool enableCombination;
         public bool enableForce;
         public bool enableSpeed;
-        public bool enableGrindDuration;
 
         public bool IsEnabled(MechanicType mechanic)
         {
@@ -26,7 +25,6 @@ namespace TheTasteReviver
                 case MechanicType.Combination: return enableCombination;
                 case MechanicType.Force: return enableForce;
                 case MechanicType.Speed: return enableSpeed;
-                case MechanicType.GrindDuration: return enableGrindDuration;
                 default: return false;
             }
         }
@@ -91,7 +89,6 @@ namespace TheTasteReviver
         [Range(0, 100)] public float combination = 15f;
         [Range(0, 100)] public float force = 10f;
         [Range(0, 100)] public float speed = 10f;
-        [Range(0, 100)] public float grindDuration = 10f;
 
         public float GetWeight(MechanicType mechanic)
         {
@@ -103,7 +100,6 @@ namespace TheTasteReviver
                 case MechanicType.Combination: return combination;
                 case MechanicType.Force: return force;
                 case MechanicType.Speed: return speed;
-                case MechanicType.GrindDuration: return grindDuration;
                 default: return 0f;
             }
         }
@@ -166,8 +162,6 @@ namespace TheTasteReviver
         public RatioLevel targetRatioLevel = RatioLevel.None;
         public int targetOrderIndex = -1;
         public string targetCombinationKey;
-        public float minGrindDuration = 3f;
-        public float maxGrindDuration = 6f;
         [TextArea] public string levelTraitDescription;
         public List<IngredientResponseHintRule> responseHintRules = new List<IngredientResponseHintRule>();
 
@@ -208,10 +202,10 @@ namespace TheTasteReviver
         public List<IngredientData> correctIngredientOrder = new List<IngredientData>();
         public List<RatioRequirement> correctRatioPattern = new List<RatioRequirement>();
         public CombinationPattern correctCombinationPattern = new CombinationPattern();
+        public bool requireFinalCombinedBatch;
+        public bool allowAnyPairPreparation;
         public ForceLevel targetForceLevel = ForceLevel.Medium;
         public SpeedLevel targetSpeedLevel = SpeedLevel.Medium;
-        public float minGrindDuration = 3f;
-        public float maxGrindDuration = 6f;
         [Range(0, 100)] public int passingScore = 80;
         public EnabledMechanics enabledMechanics = new EnabledMechanics();
         public FeedbackTextData feedbackTexts = new FeedbackTextData();
@@ -303,8 +297,6 @@ namespace TheTasteReviver
                     targetRatioLevel = FindTargetRatio(ingredient),
                     targetOrderIndex = FindTargetOrderIndex(ingredient),
                     targetCombinationKey = FindTargetCombinationKey(ingredient),
-                    minGrindDuration = minGrindDuration,
-                    maxGrindDuration = maxGrindDuration,
                     levelTraitDescription = ingredient.initialDescription
                 };
 
@@ -314,7 +306,6 @@ namespace TheTasteReviver
                 profile.checkedMechanics.enableCombination = enabledMechanics != null && enabledMechanics.enableCombination && !string.IsNullOrWhiteSpace(profile.targetCombinationKey);
                 profile.checkedMechanics.enableForce = enabledMechanics != null && enabledMechanics.enableForce;
                 profile.checkedMechanics.enableSpeed = enabledMechanics != null && enabledMechanics.enableSpeed;
-                profile.checkedMechanics.enableGrindDuration = enabledMechanics != null && enabledMechanics.enableGrindDuration;
                 AddDefaultProfileHints(profile);
                 ingredientProfiles.Add(profile);
             }

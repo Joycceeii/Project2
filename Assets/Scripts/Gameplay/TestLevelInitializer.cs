@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,16 +13,30 @@ public class TestLevelInitializer : MonoBehaviour
     public List<RecipeLevelData> levels = new List<RecipeLevelData>();
     public bool buildOnStart = false;
     public bool buildInEditMode = true;
+
+    [Header("Layout Control")]
+    [Tooltip("Off lets you move Camera and GrindingTable directly in the Scene view without this script overwriting them.")]
+    public bool driveSceneLayoutFromInspector = false;
+
+    [Header("Camera Layout")]
+    public Vector3 gameplayCameraPosition = new Vector3(0f, 6.45f, -4.85f);
+    public Vector3 gameplayCameraEulerAngles = new Vector3(55f, 0f, 0f);
+    public float gameplayCameraOrthographicSize = 3.85f;
+    public Color gameplayCameraBackgroundColor = new Color(0.78f, 0.74f, 0.68f);
+
+    [Header("Table Layout")]
+    public float grindingTableScale = 1.55f;
+    public float grindingTabletopY = 0.35f;
+    public Vector3 grindingTablePositionOffset = Vector3.zero;
+
     private static Font cachedUIFont;
     private static readonly Dictionary<string, Material> cachedPlaceholderMaterials = new Dictionary<string, Material>();
+#if UNITY_EDITOR
+    private bool inspectorLayoutQueued;
+#endif
 
         private void OnEnable()
         {
-            if (!Application.isPlaying && Camera.main != null)
-            {
-                ConfigureDefaultCamera(Camera.main);
-            }
-
             RepairRuntimeReferences();
             TryBuildInEditMode();
         }
@@ -29,14 +44,27 @@ public class TestLevelInitializer : MonoBehaviour
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if (Application.isPlaying || !buildInEditMode)
+            QueueInspectorLayoutRefresh();
+        }
+
+        private void QueueInspectorLayoutRefresh()
+        {
+            if (inspectorLayoutQueued)
             {
                 return;
             }
 
+            inspectorLayoutQueued = true;
             UnityEditor.EditorApplication.delayCall += () =>
             {
-                if (this == null || Application.isPlaying)
+                inspectorLayoutQueued = false;
+                if (this == null)
+                {
+                    return;
+                }
+
+                ApplyInspectorLayout();
+                if (Application.isPlaying || !buildInEditMode)
                 {
                     return;
                 }
@@ -64,11 +92,11 @@ public class TestLevelInitializer : MonoBehaviour
             {
                 Camera camera = new GameObject("Main Camera").AddComponent<Camera>();
                 camera.tag = "MainCamera";
-                ConfigureDefaultCamera(camera);
+                ConfigureSceneCamera(camera);
             }
             else if (!HasBuiltSceneObjects())
             {
-                ConfigureDefaultCamera(Camera.main);
+                ConfigureSceneCamera(Camera.main);
             }
 
             EnsureCameraRaycaster(Camera.main);
@@ -140,7 +168,13 @@ public class TestLevelInitializer : MonoBehaviour
             attempt.pestleController = pestle;
             attempt.ingredientDisplayManager = ingredientDisplay;
 
-            ingredientDisplay.mortarArea = FindFirstObjectByType<MortarArea>();
+            MortarArea mortar = ResolvePrimaryMortarArea(ingredientDisplay, pestle);
+            if (pestle != null)
+            {
+                pestle.mortarArea = mortar;
+            }
+
+            ingredientDisplay.mortarArea = mortar;
             ingredientDisplay.attemptManager = attempt;
 
             ui.attemptManager = attempt;
@@ -155,6 +189,7 @@ public class TestLevelInitializer : MonoBehaviour
             levelManager.hintManager = hint;
             levelManager.ingredientDisplayManager = ingredientDisplay;
             levelManager.LoadLevel(0);
+            ApplyMortarToDraggableIngredients(mortar, attempt);
         }
 
         public void RepairRuntimeReferences()
@@ -168,10 +203,9 @@ public class TestLevelInitializer : MonoBehaviour
             HintManager hint = gameObject.GetComponent<HintManager>();
             RecipeEvaluator evaluator = gameObject.GetComponent<RecipeEvaluator>();
             ExperimentLogManager log = FindFirstObjectByType<ExperimentLogManager>();
-            MortarArea mortar = FindFirstObjectByType<MortarArea>();
+            MortarArea mortar = ResolvePrimaryMortarArea(ingredientDisplay, pestle);
 
-            ConfigureDefaultCamera(Camera.main);
-            ConfigureGrindingTable();
+            ApplyInspectorLayout();
             EnsureAssignedData();
             ExperimentLogManager.SetIngredientCatalog(ingredients);
 
@@ -188,6 +222,7 @@ public class TestLevelInitializer : MonoBehaviour
             if (pestle != null)
             {
                 pestle.uiManager = ui;
+                pestle.mortarArea = mortar;
             }
 
             if (attempt != null)
@@ -210,7 +245,10 @@ public class TestLevelInitializer : MonoBehaviour
                 ui.EnsureExperimentLogButton();
                 ui.EnsureActionButtons();
                 ui.EnsureIngredientTraitPanel();
-                ui.NormalizeHudLayout();
+                if (ui.driveHudLayoutFromInspector)
+                {
+                    ui.NormalizeHudLayout();
+                }
                 ui.attemptManager = attempt;
                 ui.evaluator = evaluator;
                 ui.hintManager = hint;
@@ -236,6 +274,8 @@ public class TestLevelInitializer : MonoBehaviour
                     ingredientDisplay.ShowLevelIngredients(levelManager.CurrentLevel);
                 }
             }
+
+            ApplyMortarToDraggableIngredients(mortar, attempt);
         }
 
         private void EnsureAssignedData()
@@ -326,7 +366,42 @@ public class TestLevelInitializer : MonoBehaviour
 #endif
         }
 
-        private static void ConfigureGrindingTable()
+        private void ApplyInspectorLayout()
+        {
+            if (!driveSceneLayoutFromInspector)
+            {
+                return;
+            }
+
+            ConfigureSceneCamera(Camera.main);
+            ConfigureGrindingTable();
+        }
+
+        private void ConfigureSceneCamera(Camera camera)
+        {
+            if (camera == null)
+            {
+                return;
+            }
+
+            camera.transform.position = gameplayCameraPosition;
+            camera.transform.rotation = Quaternion.Euler(gameplayCameraEulerAngles);
+            camera.orthographic = true;
+            camera.orthographicSize = Mathf.Max(0.1f, gameplayCameraOrthographicSize);
+            camera.nearClipPlane = 0.1f;
+            camera.farClipPlane = 30f;
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = gameplayCameraBackgroundColor;
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                UnityEditor.EditorUtility.SetDirty(camera);
+                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(camera.gameObject.scene);
+            }
+#endif
+        }
+
+        private void ConfigureGrindingTable()
         {
             GameObject table = GameObject.Find("GrindingTable");
             if (table == null)
@@ -334,8 +409,8 @@ public class TestLevelInitializer : MonoBehaviour
                 return;
             }
 
-            const float tableScale = 1.55f;
-            const float tabletopY = 0.35f;
+            float tableScale = Mathf.Max(0.1f, grindingTableScale);
+            float tabletopY = grindingTabletopY;
             table.transform.localScale = Vector3.one * tableScale;
 
             Transform anchor = table.transform.Find("GrindingBowlAnchor");
@@ -345,7 +420,7 @@ public class TestLevelInitializer : MonoBehaviour
                 rootY = tabletopY - anchor.localPosition.y * tableScale;
             }
 
-            table.transform.position = new Vector3(0f, rootY, 0f);
+            table.transform.position = new Vector3(0f, rootY, 0f) + grindingTablePositionOffset;
             table.transform.rotation = Quaternion.identity;
 #if UNITY_EDITOR
             if (!Application.isPlaying)
@@ -444,7 +519,7 @@ public class TestLevelInitializer : MonoBehaviour
 
         private static MortarArea CreateMortar()
         {
-            MortarArea existing = FindFirstObjectByType<MortarArea>();
+            MortarArea existing = ResolvePrimaryMortarArea(null, FindFirstObjectByType<PestleController>());
             if (existing != null)
             {
                 return existing;
@@ -456,6 +531,51 @@ public class TestLevelInitializer : MonoBehaviour
             mortar.transform.localScale = new Vector3(1.7f, 0.35f, 1.7f);
             ApplyColor(mortar, new Color(0.45f, 0.45f, 0.48f));
             return mortar.AddComponent<MortarArea>();
+        }
+
+        private static MortarArea ResolvePrimaryMortarArea(LevelIngredientDisplayManager ingredientDisplay, PestleController pestle)
+        {
+            if (ingredientDisplay != null && ingredientDisplay.mortarArea != null && ingredientDisplay.mortarArea.gameObject.activeInHierarchy)
+            {
+                return ingredientDisplay.mortarArea;
+            }
+
+            if (pestle != null && pestle.mortarArea != null && pestle.mortarArea.gameObject.activeInHierarchy)
+            {
+                return pestle.mortarArea;
+            }
+
+            return FindObjectsByType<MortarArea>(FindObjectsSortMode.None)
+                .FirstOrDefault(area => area != null && area.gameObject.activeInHierarchy);
+        }
+
+        private static void ApplyMortarToDraggableIngredients(MortarArea mortar, RecipeAttemptManager attempt)
+        {
+            if (mortar == null)
+            {
+                return;
+            }
+
+            foreach (DraggableIngredient ingredient in FindObjectsByType<DraggableIngredient>(FindObjectsSortMode.None))
+            {
+                if (ingredient == null)
+                {
+                    continue;
+                }
+
+                ingredient.mortarArea = mortar;
+                ingredient.mortarDropHeight = 0.2f;
+                ingredient.mortarGroundVisualLift = 0.04f;
+                ingredient.groundVisualLift = 0.1f;
+                ingredient.homeGroundVisualLift = 0.24f;
+                ingredient.groundVisualScale = 0.8f;
+                ingredient.groundVisualFootprint = 0.7f;
+                ingredient.groundVisualMaxHeight = 0.14f;
+                if (attempt != null)
+                {
+                    ingredient.attemptManager = attempt;
+                }
+            }
         }
 
         private static PestleController CreatePestle(MortarArea mortar)
@@ -499,6 +619,13 @@ public class TestLevelInitializer : MonoBehaviour
                 drag.ingredientData = ingredient;
                 drag.mortarArea = mortar;
                 drag.attemptManager = attempt;
+                drag.mortarDropHeight = 0.2f;
+                drag.mortarGroundVisualLift = 0.04f;
+                drag.groundVisualLift = 0.1f;
+                drag.homeGroundVisualLift = 0.24f;
+                drag.groundVisualScale = 0.8f;
+                drag.groundVisualFootprint = 0.7f;
+                drag.groundVisualMaxHeight = 0.14f;
             }
         }
 
@@ -586,7 +713,10 @@ public class TestLevelInitializer : MonoBehaviour
             ui.nextLevelButton = CreateButton(canvas.transform, "Next Level", new Vector2(132f, 36f), new Vector2(-24f, 24f), bottomRight, bottomRight, ui.NextLevel);
             ui.EnsureActionButtons();
             ui.EnsureIngredientTraitPanel();
-            ui.NormalizeHudLayout();
+            if (ui.driveHudLayoutFromInspector)
+            {
+                ui.NormalizeHudLayout();
+            }
         }
 
         private static void ConfigureGameplayCanvas(Canvas canvas)
@@ -632,7 +762,7 @@ public class TestLevelInitializer : MonoBehaviour
     private static Text CreateText(Transform parent, string name, Vector2 size, Vector2 position, TextAnchor anchor = TextAnchor.MiddleLeft)
     {
         GameObject panel = CreatePanel(parent, name + " Panel", size, position);
-        Text text = CreateTextChild(panel.transform, name, Vector2.zero, Vector2.zero, anchor);
+        Text text = CreateTextChild(panel.transform, name, GetTextInsetMin(anchor), GetTextInsetMax(anchor), anchor);
         text.fontSize = 20;
         text.horizontalOverflow = HorizontalWrapMode.Wrap;
         text.verticalOverflow = VerticalWrapMode.Overflow;
@@ -643,12 +773,28 @@ public class TestLevelInitializer : MonoBehaviour
     private static Text CreateText(Transform parent, string name, Vector2 size, Vector2 position, Vector2 anchorPoint, Vector2 pivot, TextAnchor anchor = TextAnchor.MiddleLeft)
     {
         GameObject panel = CreatePanel(parent, name + " Panel", size, position, anchorPoint, pivot);
-        Text text = CreateTextChild(panel.transform, name, Vector2.zero, Vector2.zero, anchor);
+        Text text = CreateTextChild(panel.transform, name, GetTextInsetMin(anchor), GetTextInsetMax(anchor), anchor);
         text.fontSize = 20;
         text.horizontalOverflow = HorizontalWrapMode.Wrap;
         text.verticalOverflow = VerticalWrapMode.Overflow;
         text.text = name;
         return text;
+    }
+
+    private static Vector2 GetTextInsetMin(TextAnchor anchor)
+    {
+        bool leftAligned = anchor == TextAnchor.UpperLeft || anchor == TextAnchor.MiddleLeft || anchor == TextAnchor.LowerLeft;
+        float horizontalInset = leftAligned ? 52f : 60f;
+        float bottomInset = anchor == TextAnchor.MiddleLeft || anchor == TextAnchor.MiddleCenter ? 18f : 28f;
+        return new Vector2(horizontalInset, bottomInset);
+    }
+
+    private static Vector2 GetTextInsetMax(TextAnchor anchor)
+    {
+        Vector2 min = GetTextInsetMin(anchor);
+        bool upperAligned = anchor == TextAnchor.UpperLeft || anchor == TextAnchor.UpperCenter || anchor == TextAnchor.UpperRight;
+        float topInset = upperAligned ? 42f : 24f;
+        return new Vector2(-min.x, -topInset);
     }
 
     private static Text CreateTextChild(Transform parent, string name, Vector2 offsetMin, Vector2 offsetMax, TextAnchor anchor)
@@ -675,21 +821,7 @@ public class TestLevelInitializer : MonoBehaviour
             return cachedUIFont;
         }
 
-        try
-        {
-            cachedUIFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        }
-        catch (System.ArgumentException)
-        {
-            cachedUIFont = null;
-        }
-
-        if (cachedUIFont != null)
-        {
-            return cachedUIFont;
-        }
-
-        cachedUIFont = Font.CreateDynamicFontFromOSFont(new[] { "Microsoft YaHei", "Arial", "Helvetica" }, 14);
+        cachedUIFont = ThemeFontProvider.GetFont(14);
         return cachedUIFont;
     }
 
@@ -709,7 +841,7 @@ public class TestLevelInitializer : MonoBehaviour
             rect.sizeDelta = size;
             rect.anchoredPosition = position;
             Image image = panel.AddComponent<Image>();
-            image.color = new Color(1f, 1f, 1f, 0.82f);
+            PanelBackgroundStyle.Apply(image, 0.82f);
             return panel;
         }
 
@@ -721,6 +853,7 @@ public class TestLevelInitializer : MonoBehaviour
         button.onClick.AddListener(action);
         Text text = CreateTextChild(buttonObject.transform, label, new Vector2(6f, 0f), new Vector2(-6f, 0f), TextAnchor.MiddleCenter);
         text.fontSize = 22;
+        text.fontStyle = FontStyle.Bold;
         text.text = label;
         return button;
     }
@@ -733,6 +866,7 @@ public class TestLevelInitializer : MonoBehaviour
         button.onClick.AddListener(action);
         Text text = CreateTextChild(buttonObject.transform, label, new Vector2(6f, 0f), new Vector2(-6f, 0f), TextAnchor.MiddleCenter);
         text.fontSize = 22;
+        text.fontStyle = FontStyle.Bold;
         text.text = label;
         return button;
     }
@@ -769,7 +903,7 @@ public class TestLevelInitializer : MonoBehaviour
             fillRect.anchorMax = Vector2.one;
             fillRect.offsetMin = Vector2.zero;
             fillRect.offsetMax = Vector2.zero;
-            fill.AddComponent<Image>().color = new Color(0.35f, 0.65f, 0.95f);
+            fill.AddComponent<Image>().color = new Color(0.72f, 0.52f, 0.32f, 0.82f);
 
             GameObject handleArea = new GameObject("Handle Slide Area");
             handleArea.transform.SetParent(root.transform, false);
@@ -782,9 +916,9 @@ public class TestLevelInitializer : MonoBehaviour
             GameObject handle = new GameObject("Handle");
             handle.transform.SetParent(handleArea.transform, false);
             RectTransform handleRect = handle.AddComponent<RectTransform>();
-            handleRect.sizeDelta = new Vector2(22f, 32f);
+            handleRect.sizeDelta = new Vector2(34f, 56f);
             Image handleImage = handle.AddComponent<Image>();
-            handleImage.color = Color.white;
+            PanelBackgroundStyle.Apply(handleImage);
 
             Slider slider = root.AddComponent<Slider>();
             slider.fillRect = fillRect;

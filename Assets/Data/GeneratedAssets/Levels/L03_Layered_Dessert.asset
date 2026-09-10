@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: Layered Dessert
   cityName: Jiangmen
   targetTasteName: Layer Timing
-  levelIntro: "Red bean, dried tangerine peel, and rock sugar each change the dessert at a different moment."
+  levelIntro: "Tutorial complete. Challenge levels begin now. Red bean, dried tangerine peel, and rock sugar each change the dessert at a different moment."
   maxIngredientCount: 3
   availableIngredients:
   - {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
@@ -50,8 +50,6 @@ MonoBehaviour:
       - {fileID: 11400000, guid: f8de9a412976d494dbf0864972bd41a3, type: 2}
   targetForceLevel: 1
   targetSpeedLevel: 1
-  minGrindDuration: 18
-  maxGrindDuration: 28
   passingScore: 100
   enabledMechanics:
     enableIngredientSelection: 0
@@ -60,7 +58,6 @@ MonoBehaviour:
     enableCombination: 0
     enableForce: 0
     enableSpeed: 0
-    enableGrindDuration: 1
   feedbackTexts:
     forceTooLight: Grinding force is too light.
     forceTooHeavy: Grinding force is too heavy.
@@ -68,9 +65,6 @@ MonoBehaviour:
     speedTooSlow: Grinding speed is too slow.
     speedTooFast: Grinding speed is too fast.
     speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
     selectionCorrect: Ingredient selection is correct.
     selectionWrong: Ingredient selection does not match the target.
     orderCorrect: Ingredient order is correct.
@@ -93,7 +87,6 @@ MonoBehaviour:
     combination: 15
     force: 10
     speed: 10
-    grindDuration: 10
   unlockCluesOnComplete:
   - clueId: L03_RedBean_Order
     title: Red Bean - Order Clue
@@ -137,14 +130,11 @@ MonoBehaviour:
       enableCombination: 0
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 0
     targetOrderIndex: 0
     targetCombinationKey: 
-    minGrindDuration: 18
-    maxGrindDuration: 28
     levelTraitDescription: Red bean is a thick warm dessert base.
     responseHintRules: []
   - profileTag: L03_DriedTangerinePeel
@@ -156,14 +146,11 @@ MonoBehaviour:
       enableCombination: 0
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 0
     targetOrderIndex: 1
     targetCombinationKey: 
-    minGrindDuration: 18
-    maxGrindDuration: 28
     levelTraitDescription: Dried tangerine peel gives a bright citrus lift.
     responseHintRules: []
   - profileTag: L03_RockSugar
@@ -175,16 +162,13 @@ MonoBehaviour:
       enableCombination: 0
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 0
     targetOrderIndex: 2
     targetCombinationKey: 
-    minGrindDuration: 18
-    maxGrindDuration: 28
     levelTraitDescription: Rock sugar adds a clean sweetness at the end.
     responseHintRules: []
   successFeedback: "The dessert has a clear order: red bean first, citrus next, sweetness last."
-  closeFeedback: Very close. Check the order or grinding time.
+  closeFeedback: Very close. Check the order.
   wrongFeedback: The dessert tastes out of order. Check when each ingredient is added.

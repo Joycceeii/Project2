@@ -119,23 +119,23 @@ namespace TheTasteReviver.EditorTools
                 asset.requiredIngredients = ResolveIngredients(Get(row, "RequiredIngredients"), ingredients);
                 asset.forbiddenIngredients.Clear();
                 asset.maxIngredientCount = Mathf.Clamp(asset.availableIngredients.Count, 1, 4);
+                asset.enabledMechanics = ParseMechanics(Get(row, "EnabledMechanics"));
                 asset.correctIngredientOrder = ResolveIngredients(Get(row, "CorrectIngredientOrder"), ingredients);
-                if (asset.correctIngredientOrder.Count == 0)
+                if (asset.correctIngredientOrder.Count == 0 && asset.enabledMechanics != null && asset.enabledMechanics.enableIngredientOrder)
                 {
                     asset.correctIngredientOrder.AddRange(asset.requiredIngredients);
                 }
 
                 asset.correctRatioPattern = ParseRatioPattern(Get(row, "CorrectRatioPattern"), ingredients);
                 asset.correctCombinationPattern = ParseCombinationPattern(Get(row, "CorrectCombinationPattern"), ingredients);
+                asset.requireFinalCombinedBatch = ParseBool(Get(row, "RequireFinalCombinedBatch"));
+                asset.allowAnyPairPreparation = ParseBool(Get(row, "AllowAnyPairPreparation"));
                 asset.targetForceLevel = ParseEnum(Get(row, "TargetForceLevel"), ForceLevel.Medium);
                 asset.targetSpeedLevel = ParseEnum(Get(row, "TargetSpeedLevel"), SpeedLevel.Medium);
-                asset.minGrindDuration = ParseFloat(Get(row, "MinGrindDuration"), 3f);
-                asset.maxGrindDuration = ParseFloat(Get(row, "MaxGrindDuration"), 6f);
                 asset.passingScore = ParseInt(Get(row, "PassingScore"), 90);
                 asset.successFeedback = Get(row, "SuccessFeedback");
                 asset.closeFeedback = Get(row, "CloseFeedback");
                 asset.wrongFeedback = Get(row, "WrongFeedback");
-                asset.enabledMechanics = ParseMechanics(Get(row, "EnabledMechanics"));
                 asset.SyncDimensionsFromEnabledMechanics();
                 asset.hintSettings.hintPriority = BuildHintPriority(asset.enabledMechanics);
                 asset.unlockCluesOnComplete.Clear();
@@ -228,10 +228,19 @@ namespace TheTasteReviver.EditorTools
                     continue;
                 }
 
+                if (!TryParseMechanic(Get(row, "Mechanic"), out MechanicType mechanic))
+                {
+                    continue;
+                }
+
                 LevelIngredientProfile profile = level.ingredientProfiles.FirstOrDefault(x => x != null && x.ingredient == ingredient);
                 if (profile == null)
                 {
-                    profile = new LevelIngredientProfile { ingredient = ingredient };
+                    profile = new LevelIngredientProfile
+                    {
+                        ingredient = ingredient,
+                        checkedMechanics = new EnabledMechanics { enableIngredientSelection = false }
+                    };
                     level.ingredientProfiles.Add(profile);
                 }
 
@@ -247,7 +256,6 @@ namespace TheTasteReviver.EditorTools
                     profile.levelTraitDescription = trait;
                 }
 
-                MechanicType mechanic = ParseEnum(Get(row, "Mechanic"), MechanicType.IngredientSelection);
                 EnableProfileMechanic(profile, mechanic);
                 ApplyProfileTarget(profile, row, mechanic);
 
@@ -300,9 +308,6 @@ namespace TheTasteReviver.EditorTools
                 case MechanicType.Speed:
                     profile.checkedMechanics.enableSpeed = true;
                     break;
-                case MechanicType.GrindDuration:
-                    profile.checkedMechanics.enableGrindDuration = true;
-                    break;
             }
         }
 
@@ -325,27 +330,7 @@ namespace TheTasteReviver.EditorTools
                 case MechanicType.Combination:
                     profile.targetCombinationKey = Get(row, "TargetValue");
                     break;
-                case MechanicType.GrindDuration:
-                    ApplyDurationTarget(profile, Get(row, "TargetValue"));
-                    break;
             }
-        }
-
-        private static void ApplyDurationTarget(LevelIngredientProfile profile, string value)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return;
-            }
-
-            string[] parts = value.Split('-');
-            if (parts.Length != 2)
-            {
-                return;
-            }
-
-            profile.minGrindDuration = ParseFloat(parts[0], profile.minGrindDuration);
-            profile.maxGrindDuration = ParseFloat(parts[1], profile.maxGrindDuration);
         }
 
         private static void AssignOpenSceneReferences(List<IngredientData> ingredients, List<RecipeLevelData> levels)
@@ -378,8 +363,7 @@ namespace TheTasteReviver.EditorTools
                 enableRatio = mechanics.Contains(MechanicType.Ratio),
                 enableCombination = mechanics.Contains(MechanicType.Combination),
                 enableForce = mechanics.Contains(MechanicType.Force),
-                enableSpeed = mechanics.Contains(MechanicType.Speed),
-                enableGrindDuration = mechanics.Contains(MechanicType.GrindDuration)
+                enableSpeed = mechanics.Contains(MechanicType.Speed)
             };
         }
 
@@ -460,13 +444,18 @@ namespace TheTasteReviver.EditorTools
             List<MechanicType> result = new List<MechanicType>();
             foreach (string part in SplitList(value, ','))
             {
-                if (Enum.TryParse(part.Trim(), out MechanicType mechanic))
+                if (TryParseMechanic(part, out MechanicType mechanic))
                 {
                     result.Add(mechanic);
                 }
             }
 
             return result;
+        }
+
+        private static bool TryParseMechanic(string value, out MechanicType mechanic)
+        {
+            return Enum.TryParse(value.Trim(), true, out mechanic);
         }
 
         private static List<Dictionary<string, string>> ReadCsvAsset(string assetPath)

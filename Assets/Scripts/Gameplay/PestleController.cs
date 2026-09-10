@@ -9,22 +9,34 @@ namespace TheTasteReviver
         public Camera interactionCamera;
         public Text speedLabel;
         public UIManager uiManager;
-        public float slowThreshold = 520f;
-        public float fastThreshold = 980f;
-        public float speedResponseTime = 0.45f;
+        [Header("Speed Calibration")]
+        public bool applyPlayerFriendlySpeedCalibration = true;
+        public float slowThreshold = 470f;
+        public float fastThreshold = 1370f;
+        public float speedResponseTime = 0.22f;
+        [Tooltip("A speed level must be held this long before it is used for evaluation.")]
+        public float speedHoldSeconds = 0.3f;
         public float speedDeadZone = 2.5f;
         public float speedHysteresis = 90f;
-        public float maxInstantSpeed = 1400f;
-        public float groundVisualDelaySeconds = 1.2f;
-        [Range(0f, 1f)] public float groundVisualGateRatio = 0.35f;
+        public float maxInstantSpeed = 2400f;
+        [Header("Grinding Completion")]
+        [Tooltip("The pestle must be moving at least this many screen pixels per frame before the motion counts as grinding.")]
+        public float minimumGrindingMouseDelta = 1f;
+        [HideInInspector]
+        [Tooltip("Fallback only when no RecipeAttemptManager is connected. Use RecipeAttemptManager.batchPowderSeconds for gameplay tuning.")]
+        public float groundVisualDelaySeconds = 1.5f;
         public bool expandClickHitbox = true;
         public Vector3 clickHitboxPadding = new Vector3(0.45f, 0.28f, 0.45f);
         public Vector3 minimumClickHitboxSize = new Vector3(0.9f, 0.45f, 0.9f);
 
         public SpeedLevel CurrentSpeedLevel { get; private set; } = SpeedLevel.Medium;
-        public SpeedLevel EvaluatedSpeedLevel => hasSpeedSample && speedSampleSeconds > 0.05f
-            ? ClassifySpeed(speedSampleTotal / speedSampleSeconds)
-            : CurrentSpeedLevel;
+        public SpeedLevel EvaluatedSpeedLevel => hasStableSpeedLevel ? stableSpeedLevel : CurrentSpeedLevel;
+        public bool HasEvaluatedSpeedLevel => hasStableSpeedLevel;
+        public bool HasSpeedReading => hasSpeedSample && GrindDuration > 0f;
+        public float CurrentSpeedHoldSeconds => candidateSpeedSeconds;
+        public float RequiredSpeedHoldSeconds => Mathf.Max(0f, speedHoldSeconds);
+        public float RequiredGrindingSeconds => Mathf.Max(0f, groundVisualDelaySeconds);
+        public float RequiredBatchPowderSeconds => Mathf.Max(0.5f, RequiredGrindingSeconds);
         public float AverageMouseSpeed => currentMouseSpeed;
         public float GrindDuration { get; private set; }
 
@@ -32,14 +44,17 @@ namespace TheTasteReviver
         private Vector3 lastMousePosition;
         private float currentMouseSpeed;
         private bool hasSpeedSample;
-        private float speedSampleSeconds;
-        private float speedSampleTotal;
+        private SpeedLevel candidateSpeedLevel = SpeedLevel.Medium;
+        private float candidateSpeedSeconds;
+        private SpeedLevel stableSpeedLevel = SpeedLevel.Medium;
+        private bool hasStableSpeedLevel;
         private float dragPlaneY;
         private Vector3 startPosition;
         private Quaternion startRotation;
 
         private void Awake()
         {
+            ApplyPlayerFriendlySpeedCalibration();
             ConfigureClickHitbox();
             startPosition = transform.position;
             startRotation = transform.rotation;
@@ -50,6 +65,22 @@ namespace TheTasteReviver
 
             dragPlaneY = transform.position.y;
             RefreshLabel();
+        }
+
+        private void ApplyPlayerFriendlySpeedCalibration()
+        {
+            if (!applyPlayerFriendlySpeedCalibration)
+            {
+                return;
+            }
+
+            slowThreshold = Mathf.Clamp(slowThreshold, 320f, 560f);
+            fastThreshold = Mathf.Clamp(fastThreshold, 1300f, 1900f);
+            maxInstantSpeed = Mathf.Max(maxInstantSpeed, fastThreshold + 450f);
+            speedResponseTime = Mathf.Clamp(speedResponseTime, 0.12f, 0.35f);
+            speedHoldSeconds = Mathf.Clamp(speedHoldSeconds, 0.15f, 1.2f);
+            minimumGrindingMouseDelta = Mathf.Clamp(minimumGrindingMouseDelta, 0.5f, 24f);
+            groundVisualDelaySeconds = Mathf.Clamp(groundVisualDelaySeconds, 1.2f, 6f);
         }
 
         private void ConfigureClickHitbox()
@@ -143,17 +174,24 @@ namespace TheTasteReviver
             if (validGrinding)
             {
                 float delta = Vector3.Distance(Input.mousePosition, lastMousePosition);
-                GrindDuration += Time.deltaTime;
                 UpdateCurrentSpeed(delta);
-                RecordSpeedSample(Time.deltaTime);
                 CurrentSpeedLevel = SpeedToLevel(currentMouseSpeed);
-                RefreshLabel();
-                if (ShouldShowGroundVisuals())
+                if (IsEffectiveGrindingMotion(delta))
                 {
-                    uiManager?.attemptManager?.ShowGroundVisualsForCurrentBatch();
-                }
+                    GrindDuration += Time.deltaTime;
+                    UpdateEvaluatedSpeedLevel(CurrentSpeedLevel, Time.deltaTime);
+                    RefreshLabel();
+                    if (ShouldShowGroundVisualsForCurrentBatch())
+                    {
+                        uiManager?.attemptManager?.ShowGroundVisualsForCurrentBatch();
+                    }
 
-                uiManager?.TryAutoEvaluateAfterGrinding();
+                    uiManager?.TryAutoEvaluateAfterGrinding();
+                }
+                else
+                {
+                    RefreshLabel();
+                }
             }
 
             lastMousePosition = Input.mousePosition;
@@ -173,7 +211,7 @@ namespace TheTasteReviver
             dragging = false;
             currentMouseSpeed = 0f;
             hasSpeedSample = false;
-            ResetSpeedAveraging();
+            ResetSpeedEvaluation();
             GrindDuration = 0f;
             CurrentSpeedLevel = SpeedLevel.Medium;
             RefreshLabel();
@@ -181,8 +219,19 @@ namespace TheTasteReviver
 
         public void ResetSpeedAveraging()
         {
-            speedSampleSeconds = 0f;
-            speedSampleTotal = 0f;
+            currentMouseSpeed = 0f;
+            hasSpeedSample = false;
+            CurrentSpeedLevel = SpeedLevel.Medium;
+            ResetSpeedEvaluation();
+            RefreshLabel();
+        }
+
+        public void ResetSpeedEvaluation()
+        {
+            candidateSpeedLevel = SpeedLevel.Medium;
+            candidateSpeedSeconds = 0f;
+            stableSpeedLevel = SpeedLevel.Medium;
+            hasStableSpeedLevel = false;
         }
 
         public void ResetToDefault()
@@ -211,15 +260,29 @@ namespace TheTasteReviver
             currentMouseSpeed = Mathf.Lerp(currentMouseSpeed, instantSpeed, blend);
         }
 
-        private void RecordSpeedSample(float deltaTime)
+        private void UpdateEvaluatedSpeedLevel(SpeedLevel observedLevel, float deltaTime)
         {
             if (!hasSpeedSample)
             {
                 return;
             }
 
-            speedSampleSeconds += Mathf.Max(0f, deltaTime);
-            speedSampleTotal += currentMouseSpeed * Mathf.Max(0f, deltaTime);
+            if (observedLevel != candidateSpeedLevel)
+            {
+                candidateSpeedLevel = observedLevel;
+                candidateSpeedSeconds = 0f;
+            }
+
+            candidateSpeedSeconds += Mathf.Max(0f, deltaTime);
+            if (candidateSpeedSeconds >= Mathf.Max(0f, speedHoldSeconds))
+            {
+                if (!hasStableSpeedLevel || (int)candidateSpeedLevel > (int)stableSpeedLevel)
+                {
+                    stableSpeedLevel = candidateSpeedLevel;
+                }
+
+                hasStableSpeedLevel = true;
+            }
         }
 
         private SpeedLevel SpeedToLevel(float speed)
@@ -239,33 +302,27 @@ namespace TheTasteReviver
             return SpeedLevel.Medium;
         }
 
-        private SpeedLevel ClassifySpeed(float speed)
-        {
-            if (speed <= slowThreshold) return SpeedLevel.Slow;
-            if (speed >= fastThreshold) return SpeedLevel.Fast;
-            return SpeedLevel.Medium;
-        }
-
         private void RefreshLabel()
         {
             if (speedLabel != null)
             {
-                speedLabel.text = "Current Grind Speed: " + CurrentSpeedLevel;
+                speedLabel.text = HasSpeedReading ? "Current Grind Speed: " + CurrentSpeedLevel : string.Empty;
             }
         }
 
-        private bool ShouldShowGroundVisuals()
+        private bool ShouldShowGroundVisualsForCurrentBatch()
         {
-            float requiredSeconds = Mathf.Max(0f, groundVisualDelaySeconds);
-            RecipeLevelData level = uiManager != null && uiManager.attemptManager != null
-                ? uiManager.attemptManager.currentLevel
-                : null;
-            if (level != null)
+            if (uiManager != null && uiManager.attemptManager != null)
             {
-                requiredSeconds = Mathf.Max(requiredSeconds, Mathf.Max(0f, level.minGrindDuration) * groundVisualGateRatio);
+                return uiManager.attemptManager.HasCurrentBatchReachedPowderTime();
             }
 
-            return GrindDuration >= requiredSeconds;
+            return GrindDuration >= RequiredGrindingSeconds;
+        }
+
+        private bool IsEffectiveGrindingMotion(float mouseDelta)
+        {
+            return mouseDelta >= Mathf.Max(0.05f, minimumGrindingMouseDelta);
         }
 
         private bool TryGetMouseWorldPoint(out Vector3 worldPoint)

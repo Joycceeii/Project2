@@ -52,7 +52,13 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 3472144241530825209}
   dragLiftHeight: 0.55
-  mortarDropHeight: 0.35
+  mortarDropHeight: 0.2
+  groundVisualLift: 0.1
+  mortarGroundVisualLift: 0.04
+  homeGroundVisualLift: 0.24
+  groundVisualScale: 0.8
+  groundVisualFootprint: 0.7
+  groundVisualMaxHeight: 0.14
 --- !u!65 &1158541298453189606
 BoxCollider:
   m_ObjectHideFlags: 0

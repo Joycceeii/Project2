@@ -1,5 +1,7 @@
 LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
-L05,WhitePepper,L05_WhitePepper,Combination,WhitePepper,,,,,,,,,,,,"White pepper is sharp and spreads quickly."
-L05,DriedTangerinePeel,L05_DriedTangerinePeel,Combination,DriedTangerinePeel,,,,,,,,,,,,"Dried tangerine peel adds a bright citrus edge."
-L05,WhitePepper,L05_WhitePepper,GrindDuration,14-22,,,,,,,,,,,,"White pepper is sharp and spreads quickly."
-L05,DriedTangerinePeel,L05_DriedTangerinePeel,GrindDuration,14-22,,,,,,,,,,,,"Dried tangerine peel adds a bright citrus edge."
+L05,WhitePepper,L05_WhitePepper,Combination,WhitePepper,,,,,,,,,,,,"White pepper is sharp and can either join one spice or stay as the separate powder."
+L05,DriedTangerinePeel,L05_DriedTangerinePeel,Combination,DriedTangerinePeel,,,,,,,,,,,,"Dried tangerine peel adds a bright citrus edge and can work in either preparation role."
+L05,Ginger,L05_Ginger,Combination,Ginger,,,,,,,,,,,,"Ginger is fresh and sharp, so it can pair with one spice or stand alone before the final blend."
+L05,WhitePepper,L05_WhitePepper,GrindDuration,14-22,,,,,,,,,,,,"White pepper is sharp and can either join one spice or stay as the separate powder."
+L05,DriedTangerinePeel,L05_DriedTangerinePeel,GrindDuration,14-22,,,,,,,,,,,,"Dried tangerine peel adds a bright citrus edge and can work in either preparation role."
+L05,Ginger,L05_Ginger,GrindDuration,14-22,,,,,,,,,,,,"Ginger is fresh and sharp, so it can pair with one spice or stand alone before the final blend."

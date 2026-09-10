@@ -43,8 +43,6 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
   targetForceLevel: 1
   targetSpeedLevel: 1
-  minGrindDuration: 14
-  maxGrindDuration: 22
   passingScore: 100
   enabledMechanics:
     enableIngredientSelection: 0
@@ -53,7 +51,6 @@ MonoBehaviour:
     enableCombination: 0
     enableForce: 0
     enableSpeed: 0
-    enableGrindDuration: 1
   feedbackTexts:
     forceTooLight: Grinding force is too light.
     forceTooHeavy: Grinding force is too heavy.
@@ -61,9 +58,6 @@ MonoBehaviour:
     speedTooSlow: Grinding speed is too slow.
     speedTooFast: Grinding speed is too fast.
     speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
     selectionCorrect: Ingredient selection is correct.
     selectionWrong: Ingredient selection does not match the target.
     orderCorrect: Ingredient order is correct.
@@ -86,7 +80,6 @@ MonoBehaviour:
     combination: 15
     force: 10
     speed: 10
-    grindDuration: 10
   unlockCluesOnComplete:
   - clueId: L06_BlackSesame_Ratio
     title: Black Sesame - Ratio Clue
@@ -96,7 +89,7 @@ MonoBehaviour:
     relatedDimension: 2
   - clueId: L06_GlutinousRice_Ratio
     title: Glutinous Rice - Ratio Clue
-    content: Use the smallest amount of glutinous rice. It should only smooth the paste.
+    content: Use the Very Small amount of glutinous rice. It should only smooth the paste.
     relatedIngredients:
     - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
     relatedDimension: 2
@@ -105,11 +98,11 @@ MonoBehaviour:
   - ruleId: L06_Hint_BlackSesame_Ratio
     priority: 21
     mechanic: 2
-    hintText: Black sesame should use the larger of the two small amounts.
+    hintText: Black sesame should use the Small amount.
   - ruleId: L06_Hint_GlutinousRice_Ratio
     priority: 20
     mechanic: 2
-    hintText: Glutinous rice should use the smallest amount.
+    hintText: Glutinous rice should use the Very Small amount.
   ingredientProfiles:
   - profileTag: L06_BlackSesame
     ingredient: {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
@@ -120,14 +113,11 @@ MonoBehaviour:
       enableCombination: 0
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 2
     targetOrderIndex: -1
     targetCombinationKey: 
-    minGrindDuration: 14
-    maxGrindDuration: 22
     levelTraitDescription: Black sesame gives the paste its strong roasted taste.
     responseHintRules: []
   - profileTag: L06_GlutinousRice
@@ -139,16 +129,13 @@ MonoBehaviour:
       enableCombination: 0
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 1
     targetOrderIndex: -1
     targetCombinationKey: 
-    minGrindDuration: 14
-    maxGrindDuration: 22
     levelTraitDescription: Glutinous rice makes the paste smooth and soft.
     responseHintRules: []
   successFeedback: "Black sesame is slightly stronger, and glutinous rice keeps the paste smooth."
-  closeFeedback: Very close. Adjust the ratio or grinding time a little.
-  wrongFeedback: The sesame flavor is not clear enough. Check the ratio and grinding time.
+  closeFeedback: Very close. Adjust the ratio a little.
+  wrongFeedback: The sesame flavor is not clear enough. Check the ratio.

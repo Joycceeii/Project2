@@ -36,8 +36,6 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
   targetForceLevel: 1
   targetSpeedLevel: 0
-  minGrindDuration: 10
-  maxGrindDuration: 16
   passingScore: 100
   enabledMechanics:
     enableIngredientSelection: 0
@@ -46,7 +44,6 @@ MonoBehaviour:
     enableCombination: 0
     enableForce: 0
     enableSpeed: 1
-    enableGrindDuration: 1
   feedbackTexts:
     forceTooLight: Grinding force is too light.
     forceTooHeavy: Grinding force is too heavy.
@@ -54,9 +51,6 @@ MonoBehaviour:
     speedTooSlow: Grinding speed is too slow.
     speedTooFast: Grinding speed is too fast.
     speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
     selectionCorrect: Ingredient selection is correct.
     selectionWrong: Ingredient selection does not match the target.
     orderCorrect: Ingredient order is correct.
@@ -79,7 +73,6 @@ MonoBehaviour:
     combination: 15
     force: 10
     speed: 10
-    grindDuration: 10
   unlockCluesOnComplete:
   - clueId: L02_Tea_Speed
     title: Tea Leaf - Speed Clue
@@ -103,16 +96,13 @@ MonoBehaviour:
       enableCombination: 0
       enableForce: 0
       enableSpeed: 1
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 0
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: 
-    minGrindDuration: 10
-    maxGrindDuration: 16
     levelTraitDescription: Tea leaves release sweetness when ground slowly; fast grinding makes bitterness take over.
     responseHintRules: []
   successFeedback: "The tea tastes balanced: light bitterness first, then sweetness."
-  closeFeedback: Very close. Adjust the speed or grinding time a little.
-  wrongFeedback: The tea is too bitter. Check the speed and grinding time.
+  closeFeedback: Very close. Adjust the speed a little.
+  wrongFeedback: The tea is too bitter. Check the speed.

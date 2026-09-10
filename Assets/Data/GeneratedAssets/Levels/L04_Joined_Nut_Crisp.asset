@@ -27,24 +27,17 @@ MonoBehaviour:
   forbiddenIngredients: []
   unlockedDimensions: 03000000
   lockedDimensions: 04000000050000000200000001000000
-  correctIngredientOrder:
-  - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
-  - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
-  correctRatioPattern:
-  - ingredient: {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
-    ratioLevel: 5
-  - ingredient: {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
-    ratioLevel: 2
+  correctIngredientOrder: []
+  correctRatioPattern: []
   correctCombinationPattern:
     groups:
     - ingredients:
       - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
     - ingredients:
       - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
+  requireFinalCombinedBatch: 1
   targetForceLevel: 1
   targetSpeedLevel: 1
-  minGrindDuration: 15
-  maxGrindDuration: 24
   passingScore: 100
   enabledMechanics:
     enableIngredientSelection: 0
@@ -53,7 +46,6 @@ MonoBehaviour:
     enableCombination: 1
     enableForce: 0
     enableSpeed: 0
-    enableGrindDuration: 1
   feedbackTexts:
     forceTooLight: Grinding force is too light.
     forceTooHeavy: Grinding force is too heavy.
@@ -61,9 +53,6 @@ MonoBehaviour:
     speedTooSlow: Grinding speed is too slow.
     speedTooFast: Grinding speed is too fast.
     speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
     selectionCorrect: Ingredient selection is correct.
     selectionWrong: Ingredient selection does not match the target.
     orderCorrect: Ingredient order is correct.
@@ -71,8 +60,8 @@ MonoBehaviour:
     orderWrong: Ingredient order does not match the target.
     ratioCorrect: Ratio pattern is correct.
     ratioAmbiguous: Ratio pattern is still ambiguous.
-    combinationCorrect: Combination pattern is correct.
-    combinationWrong: Combination pattern does not match the target.
+    combinationCorrect: Each ingredient was prepared on its own, then both powders were combined in the final batch.
+    combinationWrong: Prepare each ingredient alone first, then add both powders to one final batch.
   hintSettings:
     hintPriority: 03000000
     maxOrderHints: 5
@@ -86,7 +75,6 @@ MonoBehaviour:
     combination: 15
     force: 10
     speed: 10
-    grindDuration: 10
   unlockCluesOnComplete:
   - clueId: L04_Peanut_Combination
     title: Peanut - Combination Clue
@@ -105,7 +93,7 @@ MonoBehaviour:
   - ruleId: L04_Hint_Combination
     priority: 20
     mechanic: 3
-    hintText: After grinding peanut by itself, press New Batch, add only black sesame, then grind again.
+    hintText: Grind each ingredient on its own first. After both powders return home, put both powders back into the mortar together.
   ingredientProfiles:
   - profileTag: L04_Peanut
     ingredient: {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
@@ -116,14 +104,11 @@ MonoBehaviour:
       enableCombination: 1
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: Peanut
-    minGrindDuration: 15
-    maxGrindDuration: 24
     levelTraitDescription: Peanut keeps a warm roasted edge when it is ground separately.
     responseHintRules: []
   - profileTag: L04_BlackSesame
@@ -135,16 +120,13 @@ MonoBehaviour:
       enableCombination: 1
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: BlackSesame
-    minGrindDuration: 15
-    maxGrindDuration: 24
     levelTraitDescription: Black sesame keeps its darker roasted taste when it has its own batch.
     responseHintRules: []
-  successFeedback: Peanut and black sesame stay clear because each one was handled in its own batch.
-  closeFeedback: Very close. Check whether each nutty ingredient has its own batch.
-  wrongFeedback: The nutty flavors are muddy together. Try using a separate batch.
+  successFeedback: Peanut and black sesame stay clear from separate preparation, then join cleanly in the final batch.
+  closeFeedback: Very close. Make sure each ingredient is ground alone first, then put both powders together at the end.
+  wrongFeedback: The nutty flavors need separate preparation followed by one final combined grind.

@@ -14,7 +14,9 @@ namespace TheTasteReviver
         private static readonly List<ExperimentRecord> sharedRecords = new List<ExperimentRecord>();
         private static readonly List<UnlockedClueRecord> unlockedClues = new List<UnlockedClueRecord>();
         private static readonly List<IngredientData> ingredientCatalog = new List<IngredientData>();
+        private static readonly HashSet<string> unlockedIngredientIDs = new HashSet<string>();
         private const string CluePrefsKey = "TheTasteReviver.UnlockedClues.v2";
+        private const string IngredientPrefsKey = "TheTasteReviver.UnlockedIngredients.v1";
         private const string OrderArrow = " \u2192 ";
 
         public IReadOnlyList<ExperimentRecord> Records => sharedRecords;
@@ -30,6 +32,44 @@ namespace TheTasteReviver
             }
 
             ingredientCatalog.AddRange(ingredients.Where(x => x != null && !string.IsNullOrWhiteSpace(x.ingredientID)));
+        }
+
+        public static void UnlockIngredientsFromLevels(IEnumerable<RecipeLevelData> levels)
+        {
+            if (levels == null)
+            {
+                return;
+            }
+
+            List<IngredientData> ingredients = levels
+                .Where(level => level != null && level.availableIngredients != null)
+                .SelectMany(level => level.availableIngredients)
+                .Where(ingredient => ingredient != null)
+                .ToList();
+            UnlockIngredients(ingredients);
+        }
+
+        public static void UnlockIngredients(IEnumerable<IngredientData> ingredients)
+        {
+            LoadUnlockedIngredients();
+            bool changed = false;
+            if (ingredients != null)
+            {
+                foreach (IngredientData ingredient in ingredients)
+                {
+                    if (ingredient == null || string.IsNullOrWhiteSpace(ingredient.ingredientID))
+                    {
+                        continue;
+                    }
+
+                    changed |= unlockedIngredientIDs.Add(ingredient.ingredientID);
+                }
+            }
+
+            if (changed)
+            {
+                SaveUnlockedIngredients();
+            }
         }
 
         private void Awake()
@@ -55,7 +95,7 @@ namespace TheTasteReviver
                 ratioPattern = string.Join(" / ", ratio.Select(x => x.Key.DisplayName + "=" + UIManager.GetRatioDisplayName(x.Value))),
                 combinationPattern = BuildCombinationPatternText(attempt.GrindingBatches),
                 forceLevel = attempt.forceController != null ? attempt.forceController.CurrentForceLevel : ForceLevel.Medium,
-                speedLevel = attempt.pestleController != null ? attempt.pestleController.CurrentSpeedLevel : SpeedLevel.Medium,
+                speedLevel = attempt.pestleController != null ? attempt.pestleController.EvaluatedSpeedLevel : SpeedLevel.Medium,
                 grindDuration = attempt.pestleController != null ? attempt.pestleController.GrindDuration : 0f,
                 mainFeedback = evaluation.mainFeedback,
                 hintGiven = hint != null ? hint.text : string.Empty,
@@ -73,12 +113,18 @@ namespace TheTasteReviver
 
         public List<UnlockedClueRecord> UnlockClues(RecipeLevelData level)
         {
-            if (level == null || level.unlockCluesOnComplete == null)
+            if (level == null)
             {
                 return new List<UnlockedClueRecord>();
             }
 
             LoadUnlockedClues();
+            UnlockIngredients(level.availableIngredients);
+            if (level.unlockCluesOnComplete == null)
+            {
+                return new List<UnlockedClueRecord>();
+            }
+
             List<UnlockedClueRecord> newlyUnlocked = new List<UnlockedClueRecord>();
             foreach (LevelClueData clue in level.unlockCluesOnComplete)
             {
@@ -104,9 +150,12 @@ namespace TheTasteReviver
                 };
                 unlockedClues.Add(unlocked);
                 newlyUnlocked.Add(unlocked);
+            }
+
+            if (newlyUnlocked.Count > 0)
+            {
                 SaveUnlockedClues();
                 RefreshUI();
-                break;
             }
 
             return newlyUnlocked;
@@ -198,6 +247,34 @@ namespace TheTasteReviver
                         : new List<string>()
                 });
             }
+        }
+
+        private static void LoadUnlockedIngredients()
+        {
+            if (unlockedIngredientIDs.Count > 0)
+            {
+                return;
+            }
+
+            string serialized = PlayerPrefs.GetString(IngredientPrefsKey, string.Empty);
+            if (string.IsNullOrWhiteSpace(serialized))
+            {
+                return;
+            }
+
+            foreach (string id in serialized.Split('\n'))
+            {
+                if (!string.IsNullOrWhiteSpace(id))
+                {
+                    unlockedIngredientIDs.Add(id.Trim());
+                }
+            }
+        }
+
+        private static void SaveUnlockedIngredients()
+        {
+            PlayerPrefs.SetString(IngredientPrefsKey, string.Join("\n", unlockedIngredientIDs.OrderBy(x => x)));
+            PlayerPrefs.Save();
         }
 
         private static void SaveUnlockedClues()
@@ -298,8 +375,8 @@ namespace TheTasteReviver
             {
                 GrindingBatch batch = batches.FirstOrDefault(x => x.ingredientsInBatch.Contains(ingredient));
                 RatioLevel ratioLevel = ratio != null && ratio.TryGetValue(ingredient, out RatioLevel value) ? value : RatioLevel.None;
-                ForceLevel forceLevel = attempt.forceController != null ? attempt.forceController.CurrentForceLevel : ForceLevel.Medium;
-                SpeedLevel speedLevel = attempt.pestleController != null ? attempt.pestleController.CurrentSpeedLevel : SpeedLevel.Medium;
+                ForceLevel forceLevel = batch != null ? batch.forceLevel : attempt.forceController != null ? attempt.forceController.CurrentForceLevel : ForceLevel.Medium;
+                SpeedLevel speedLevel = batch != null ? batch.speedLevel : attempt.pestleController != null ? attempt.pestleController.EvaluatedSpeedLevel : SpeedLevel.Medium;
                 float grindDuration = batch != null ? batch.grindDuration : attempt.pestleController != null ? attempt.pestleController.GrindDuration : 0f;
                 entries.Add(new ExperimentIngredientEntry
                 {
@@ -406,6 +483,11 @@ namespace TheTasteReviver
                 return "Not Checked";
             }
 
+            if (level != null && level.requireFinalCombinedBatch)
+            {
+                return BuildStatus(evaluation, MechanicType.Combination);
+            }
+
             string actualKey = batch != null ? RecipeLevelData.BuildCombinationKey(batch.ingredientsInBatch) : string.Empty;
             LevelIngredientProfile profile = FindProfile(level, ingredient, MechanicType.Combination);
             if (profile != null)
@@ -505,7 +587,13 @@ namespace TheTasteReviver
         public static List<IngredientLogEntry> BuildIngredientLogEntries()
         {
             LoadUnlockedClues();
+            LoadUnlockedIngredients();
             Dictionary<string, IngredientLogEntry> entries = new Dictionary<string, IngredientLogEntry>();
+
+            foreach (string ingredientID in unlockedIngredientIDs)
+            {
+                EnsureIngredientLogEntry(entries, ingredientID, null);
+            }
 
             foreach (ExperimentRecord record in sharedRecords)
             {
@@ -521,16 +609,7 @@ namespace TheTasteReviver
                         continue;
                     }
 
-                    if (!entries.TryGetValue(entry.ingredientID, out IngredientLogEntry logEntry))
-                    {
-                        logEntry = new IngredientLogEntry
-                        {
-                            ingredientID = entry.ingredientID,
-                            ingredientName = entry.ingredientName,
-                            traitDescription = entry.traitDescription
-                        };
-                        entries[entry.ingredientID] = logEntry;
-                    }
+                    IngredientLogEntry logEntry = EnsureIngredientLogEntry(entries, entry.ingredientID, entry);
 
                     logEntry.levelNotes.Add(entry);
                     if (string.IsNullOrWhiteSpace(logEntry.traitDescription) && !string.IsNullOrWhiteSpace(entry.traitDescription))
@@ -548,7 +627,7 @@ namespace TheTasteReviver
                 }
 
                 IEnumerable<IngredientLogEntry> relatedEntries = clue.relatedIngredientIDs != null && clue.relatedIngredientIDs.Count > 0
-                    ? entries.Values.Where(x => clue.relatedIngredientIDs.Contains(x.ingredientID))
+                    ? clue.relatedIngredientIDs.Select(id => EnsureIngredientLogEntry(entries, id, null)).Where(x => x != null)
                     : entries.Values.Where(x => !string.IsNullOrWhiteSpace(x.ingredientName) && clue.title.Contains(x.ingredientName));
                 foreach (IngredientLogEntry entry in relatedEntries)
                 {
@@ -557,6 +636,46 @@ namespace TheTasteReviver
             }
 
             return entries.Values.OrderBy(x => x.ingredientName).ToList();
+        }
+
+        private static IngredientLogEntry EnsureIngredientLogEntry(Dictionary<string, IngredientLogEntry> entries, string ingredientID, ExperimentIngredientEntry note)
+        {
+            if (entries == null || string.IsNullOrWhiteSpace(ingredientID))
+            {
+                return null;
+            }
+
+            if (entries.TryGetValue(ingredientID, out IngredientLogEntry existing))
+            {
+                if (note != null)
+                {
+                    if (string.IsNullOrWhiteSpace(existing.ingredientName) && !string.IsNullOrWhiteSpace(note.ingredientName))
+                    {
+                        existing.ingredientName = note.ingredientName;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(existing.traitDescription) && !string.IsNullOrWhiteSpace(note.traitDescription))
+                    {
+                        existing.traitDescription = note.traitDescription;
+                    }
+                }
+
+                return existing;
+            }
+
+            IngredientData ingredient = ingredientCatalog.FirstOrDefault(x => x != null && x.ingredientID == ingredientID);
+            IngredientLogEntry created = new IngredientLogEntry
+            {
+                ingredientID = ingredientID,
+                ingredientName = note != null && !string.IsNullOrWhiteSpace(note.ingredientName)
+                    ? note.ingredientName
+                    : ingredient != null ? ingredient.DisplayName : ingredientID,
+                traitDescription = note != null && !string.IsNullOrWhiteSpace(note.traitDescription)
+                    ? note.traitDescription
+                    : ingredient != null ? ingredient.initialDescription : string.Empty
+            };
+            entries[ingredientID] = created;
+            return created;
         }
     }
 

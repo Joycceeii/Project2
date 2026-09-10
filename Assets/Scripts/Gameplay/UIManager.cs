@@ -9,6 +9,25 @@ using UnityEngine.UI;
 
 namespace TheTasteReviver
 {
+    [Serializable]
+    public class HudPanelLayout
+    {
+        public Vector2 size;
+        public Vector2 position;
+        public int fontSize;
+
+        public HudPanelLayout()
+        {
+        }
+
+        public HudPanelLayout(float width, float height, float x, float y, int fontSize = 22)
+        {
+            size = new Vector2(width, height);
+            position = new Vector2(x, y);
+            this.fontSize = fontSize;
+        }
+    }
+
     public class UIManager : MonoBehaviour
     {
         public RecipeAttemptManager attemptManager;
@@ -18,6 +37,7 @@ namespace TheTasteReviver
         public LevelManager levelManager;
 
         public Text levelLabel;
+        public Text openingLevelTitleLabel;
         public Text currentOrderLabel;
         public Text currentRatioLabel;
         public Text currentSpeedLabel;
@@ -34,16 +54,50 @@ namespace TheTasteReviver
         public Button nextLevelButton;
         public string experimentLogSceneName = "ExperimentLog";
         public bool autoUpdateLevelLabel;
-        [Tooltip("Minimum grinding time before an attempt can be evaluated. Set 0 or below to use each level's table value.")]
-        public float evaluationGateSeconds = 4f;
+        [Tooltip("When enabled, grinding can submit an attempt automatically after the gate is reached. Leave off when the player should click Evaluate manually.")]
+        public bool enableAutoEvaluation = false;
         public string resetRequiredHint = "Press Reset Attempt before starting a new test.";
         public float resetPromptDelaySeconds = 3f;
 
+        [Header("Layout Control")]
+        [Tooltip("Off lets you move panels directly in the Scene view without NormalizeHudLayout overwriting their RectTransforms.")]
+        public bool driveHudLayoutFromInspector = false;
+
+        [Header("HUD Layout")]
+        public HudPanelLayout levelPanelLayout = new HudPanelLayout(430f, 82f, 288f, -42f, 23);
+        public HudPanelLayout currentOrderPanelLayout = new HudPanelLayout(430f, 118f, 56f, -166f, 23);
+        public HudPanelLayout currentRatioPanelLayout = new HudPanelLayout(430f, 138f, 56f, -296f, 23);
+        public HudPanelLayout currentSpeedPanelLayout = new HudPanelLayout(390f, 58f, 56f, -438f, 20);
+        public HudPanelLayout hintPanelLayout = new HudPanelLayout(430f, 258f, -56f, -132f, 20);
+        public HudPanelLayout experimentLogButtonLayout = new HudPanelLayout(210f, 54f, 56f, -42f);
+        public HudPanelLayout evaluateButtonLayout = new HudPanelLayout(200f, 56f, -56f, 174f);
+        public HudPanelLayout resetAttemptButtonLayout = new HudPanelLayout(200f, 56f, -56f, 112f);
+        public HudPanelLayout newBatchButtonLayout = new HudPanelLayout(200f, 56f, -56f, 50f);
+        public HudPanelLayout nextLevelButtonLayout = new HudPanelLayout(200f, 56f, 56f, 86f);
+        public HudPanelLayout ingredientTraitToggleButtonLayout = new HudPanelLayout(178f, 54f, -56f, -264f);
+        public HudPanelLayout forceSliderLayout = new HudPanelLayout(390f, 52f, 56f, 220f);
+        public HudPanelLayout forceLabelPanelLayout = new HudPanelLayout(390f, 52f, 56f, 282f, 15);
+        public HudPanelLayout ingredientTraitsPanelLayout = new HudPanelLayout(430f, 300f, -56f, -438f, 24);
+        public HudPanelLayout ratioSelectionPanelLayout = new HudPanelLayout(420f, 260f, 0f, 0f);
+
+        [Header("HUD Text Insets")]
+        public Vector2 forceLabelTextInsetMin = new Vector2(58f, 13f);
+        public Vector2 forceLabelTextInsetMax = new Vector2(-58f, -13f);
+        public bool showOpeningLevelTitle = true;
+        public float openingLevelTitleSeconds = 2.4f;
+
         private Action<RatioLevel> pendingRatioSelection;
         private Coroutine resetPromptCoroutine;
+        private Coroutine openingLevelTitleCoroutine;
         private float lastEvaluationTime = -999f;
         private GameObject ingredientTraitPanel;
         private GameObject ingredientTraitBackdrop;
+        private const string ChallengeStartTitleLine = "Tutorial complete. Challenge levels begin now.";
+        private const string TutorialCompleteTitle = "Tutorial Complete";
+        private const string ChallengeStartSubtitle = "Challenge levels begin now.";
+#if UNITY_EDITOR
+        private bool layoutUpdateQueued;
+#endif
         private static readonly HashSet<string> autoShownIngredientTraitLevels = new HashSet<string>();
 
         public bool IsRatioSelectionOpen => ratioSelectionPanel != null && ratioSelectionPanel.activeSelf;
@@ -54,8 +108,37 @@ namespace TheTasteReviver
             EnsureExperimentLogButton();
             EnsureActionButtons();
             EnsureIngredientTraitPanel();
+            EnsureOpeningLevelTitlePanel();
             NormalizeHudLayout();
+            PanelBackgroundStyle.ApplyToNamedPanels(transform);
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (layoutUpdateQueued)
+            {
+                return;
+            }
+
+            layoutUpdateQueued = true;
+            UnityEditor.EditorApplication.delayCall += () =>
+            {
+                layoutUpdateQueued = false;
+                if (this == null || !driveHudLayoutFromInspector)
+                {
+                    return;
+                }
+
+                NormalizeHudLayout();
+                if (!Application.isPlaying)
+                {
+                    UnityEditor.EditorUtility.SetDirty(this);
+                    UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(gameObject.scene);
+                }
+            };
+        }
+#endif
 
         public void EvaluateCurrentAttempt()
         {
@@ -81,7 +164,8 @@ namespace TheTasteReviver
                 return;
             }
 
-            if (!HasReachedEvaluationGate(attemptManager.currentLevel))
+            if (!HasReachedEvaluationGate(attemptManager.currentLevel)
+                && (isAutoEvaluation || !CanEvaluateManualSpeedAttemptBeforeGrindGate(attemptManager.currentLevel)))
             {
                 ShowHint(BuildEvaluationGateHint(attemptManager.currentLevel));
                 return;
@@ -148,8 +232,9 @@ namespace TheTasteReviver
 
             if (levelLabel != null)
             {
-                levelLabel.text = level == null ? "No Level" : level.levelID + " " + level.cityName + " - " + level.levelName + "\n" + level.levelIntro;
+                levelLabel.text = BuildCollapsedLevelTitle(level);
             }
+            ShowOpeningLevelTitle(level);
 
             RefreshAttemptPanels(attemptManager);
             ShowHint(BuildLevelStartHint(level));
@@ -222,7 +307,14 @@ namespace TheTasteReviver
 
             if (currentSpeedLabel != null && attempt.pestleController != null)
             {
-                currentSpeedLabel.text = "Current Grind Speed: " + attempt.pestleController.CurrentSpeedLevel;
+                if (attempt.pestleController.speedLabel == null)
+                {
+                    attempt.pestleController.speedLabel = currentSpeedLabel;
+                }
+
+                currentSpeedLabel.text = attempt.pestleController.HasSpeedReading
+                    ? "Current Grind Speed: " + attempt.pestleController.CurrentSpeedLevel
+                    : string.Empty;
             }
 
             if (IsAlive(newBatchButton))
@@ -296,6 +388,11 @@ namespace TheTasteReviver
                 return false;
             }
 
+            if ((mechanic == MechanicType.Force || mechanic == MechanicType.Speed) && targetIngredient == null)
+            {
+                return false;
+            }
+
             HintResult hint = hintManager.GetStepHint(level, attemptManager, mechanic, targetIngredient);
             if (hint == null || string.IsNullOrWhiteSpace(hint.text))
             {
@@ -308,7 +405,7 @@ namespace TheTasteReviver
 
         public void TryAutoEvaluateAfterGrinding()
         {
-            if (attemptManager == null || evaluator == null || IsRatioSelectionOpen)
+            if (!enableAutoEvaluation || attemptManager == null || evaluator == null || IsRatioSelectionOpen)
             {
                 return;
             }
@@ -339,25 +436,65 @@ namespace TheTasteReviver
                 return false;
             }
 
-            return attemptManager.pestleController.GrindDuration >= GetEvaluationGateSeconds(level);
+            bool reachedMinimumGrindTime = attemptManager.GetCurrentBatchGrindDuration() >= GetEvaluationGateSeconds(level);
+            if (!reachedMinimumGrindTime)
+            {
+                return false;
+            }
+
+            bool checksSpeed = level.enabledMechanics != null && level.enabledMechanics.IsEnabled(MechanicType.Speed);
+            return !checksSpeed || attemptManager.pestleController.HasEvaluatedSpeedLevel;
+        }
+
+        private bool CanEvaluateManualSpeedAttemptBeforeGrindGate(RecipeLevelData level)
+        {
+            if (level == null
+                || level.enabledMechanics == null
+                || !level.enabledMechanics.IsEnabled(MechanicType.Speed)
+                || attemptManager == null
+                || attemptManager.pestleController == null)
+            {
+                return false;
+            }
+
+            return attemptManager.pestleController.HasEvaluatedSpeedLevel;
         }
 
         private float GetEvaluationGateSeconds(RecipeLevelData level)
         {
-            if (evaluationGateSeconds > 0f)
+            if (attemptManager != null)
             {
-                return evaluationGateSeconds;
+                return attemptManager.RequiredBatchPowderSeconds;
             }
 
-            return level != null ? Mathf.Max(0f, level.minGrindDuration) : 0f;
+            return 0f;
         }
 
         private string BuildEvaluationGateHint(RecipeLevelData level)
         {
             float requiredSeconds = GetEvaluationGateSeconds(level);
-            float currentSeconds = attemptManager != null && attemptManager.pestleController != null
-                ? attemptManager.pestleController.GrindDuration
+            float currentSeconds = attemptManager != null
+                ? attemptManager.GetCurrentBatchGrindDuration()
                 : 0f;
+            if (currentSeconds < requiredSeconds)
+            {
+                return "Keep grinding before checking. Time: "
+                    + currentSeconds.ToString("0.0") + "s / " + requiredSeconds.ToString("0.0") + "s.";
+            }
+
+            if (level != null
+                && level.enabledMechanics != null
+                && level.enabledMechanics.IsEnabled(MechanicType.Speed)
+                && attemptManager != null
+                && attemptManager.pestleController != null
+                && !attemptManager.pestleController.HasEvaluatedSpeedLevel)
+            {
+                float heldSeconds = attemptManager.pestleController.CurrentSpeedHoldSeconds;
+                float requiredHoldSeconds = attemptManager.pestleController.RequiredSpeedHoldSeconds;
+                return "Hold one grinding speed steadily before checking. Speed held: "
+                    + heldSeconds.ToString("0.0") + "s / " + requiredHoldSeconds.ToString("0.0") + "s.";
+            }
+
             return "Keep grinding before checking. Time: " + currentSeconds.ToString("0.0") + "s / " + requiredSeconds.ToString("0.0") + "s.";
         }
 
@@ -560,7 +697,6 @@ namespace TheTasteReviver
                 case MechanicType.Combination: return "Combination";
                 case MechanicType.Force: return "Force";
                 case MechanicType.Speed: return "Speed";
-                case MechanicType.GrindDuration: return "Grinding Time";
                 default: return "Experiment";
             }
         }
@@ -569,6 +705,7 @@ namespace TheTasteReviver
         {
             if (ratioSelectionPanel != null)
             {
+                PanelBackgroundStyle.Apply(ratioSelectionPanel.GetComponent<Image>(), 0.94f);
                 ratioSelectionPanel.SetActive(false);
                 return;
             }
@@ -585,7 +722,7 @@ namespace TheTasteReviver
             panelRect.anchoredPosition = Vector2.zero;
 
             Image panelImage = ratioSelectionPanel.AddComponent<Image>();
-            panelImage.color = new Color(1f, 1f, 1f, 0.94f);
+            PanelBackgroundStyle.Apply(panelImage, 0.94f);
 
             ratioSelectionTitle = CreateRuntimeText(ratioSelectionPanel.transform, "Ratio Selection Title", new Vector2(320f, 44f), new Vector2(0f, 72f), TextAnchor.MiddleCenter, 22);
             ratioSelectionButtons = new Button[4];
@@ -662,24 +799,34 @@ namespace TheTasteReviver
 
         public void NormalizeHudLayout()
         {
-            ConfigureTextPanel(levelLabel, new Vector2(860f, 112f), new Vector2(-110f, -34f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), TextAnchor.UpperCenter, 31);
-            ConfigureTextPanel(currentOrderLabel, new Vector2(470f, 126f), new Vector2(36f, -138f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft, 26);
-            ConfigureTextPanel(currentRatioLabel, new Vector2(470f, 150f), new Vector2(36f, -278f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft, 26);
-            ConfigureTextPanel(currentSpeedLabel, new Vector2(470f, 66f), new Vector2(36f, -442f), new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.MiddleLeft, 26);
-            ConfigureTextPanel(hintLabel, new Vector2(470f, 230f), new Vector2(-36f, -34f), new Vector2(1f, 1f), new Vector2(1f, 1f), TextAnchor.UpperLeft, 24);
+            if (driveHudLayoutFromInspector)
+            {
+                ConfigureTextPanel(levelLabel, levelPanelLayout, new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.MiddleLeft);
+                ConfigureTextPanel(currentOrderLabel, currentOrderPanelLayout, new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft);
+                ConfigureTextPanel(currentRatioLabel, currentRatioPanelLayout, new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft);
+                ConfigureTextPanel(currentSpeedLabel, currentSpeedPanelLayout, new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.MiddleLeft);
+                ConfigureTextPanel(hintLabel, hintPanelLayout, new Vector2(1f, 1f), new Vector2(1f, 1f), TextAnchor.UpperLeft);
 
-            ConfigureButton(experimentLogButton, new Vector2(236f, 60f), new Vector2(36f, -34f), new Vector2(0f, 1f), new Vector2(0f, 1f));
-            ConfigureButton(evaluateButton, new Vector2(220f, 60f), new Vector2(-36f, 184f), new Vector2(1f, 0f), new Vector2(1f, 0f));
-            ConfigureButton(resetAttemptButton, new Vector2(220f, 60f), new Vector2(-36f, 118f), new Vector2(1f, 0f), new Vector2(1f, 0f));
-            ConfigureButton(newBatchButton, new Vector2(220f, 60f), new Vector2(-36f, 52f), new Vector2(1f, 0f), new Vector2(1f, 0f));
-            ConfigureButton(nextLevelButton, new Vector2(220f, 60f), new Vector2(36f, 96f), new Vector2(0f, 0f), new Vector2(0f, 0f));
-            ConfigureButton(ingredientTraitToggleButton, new Vector2(204f, 60f), new Vector2(-36f, -286f), new Vector2(1f, 1f), new Vector2(1f, 1f));
+                ConfigureButton(experimentLogButton, experimentLogButtonLayout, new Vector2(0f, 1f), new Vector2(0f, 1f));
+                ConfigureButton(evaluateButton, evaluateButtonLayout, new Vector2(1f, 0f), new Vector2(1f, 0f));
+                ConfigureButton(resetAttemptButton, resetAttemptButtonLayout, new Vector2(1f, 0f), new Vector2(1f, 0f));
+                ConfigureButton(newBatchButton, newBatchButtonLayout, new Vector2(1f, 0f), new Vector2(1f, 0f));
+                ConfigureButton(nextLevelButton, nextLevelButtonLayout, new Vector2(0f, 0f), new Vector2(0f, 0f));
+                ConfigureButton(ingredientTraitToggleButton, ingredientTraitToggleButtonLayout, new Vector2(1f, 1f), new Vector2(1f, 1f));
 
-            ConfigureNamedRect("Force Slider", new Vector2(430f, 52f), new Vector2(36f, 220f), new Vector2(0f, 0f), new Vector2(0f, 0f));
-            ConfigureNamedRect("Force Label Panel", new Vector2(430f, 52f), new Vector2(36f, 282f), new Vector2(0f, 0f), new Vector2(0f, 0f));
-            ConfigureNamedRect("Ingredient Traits Panel", new Vector2(470f, 360f), new Vector2(-36f, -306f), new Vector2(1f, 1f), new Vector2(1f, 1f));
-            ConfigureNamedRect("Ratio Selection Panel", new Vector2(420f, 260f), Vector2.zero, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
-            ConfigureTraitText();
+                ConfigureNamedRect("Force Slider", forceSliderLayout, new Vector2(0f, 0f), new Vector2(0f, 0f));
+                ConfigureNamedRect("Force Label Panel", forceLabelPanelLayout, new Vector2(0f, 0f), new Vector2(0f, 0f));
+                ConfigureNamedRect("Ingredient Traits Panel", ingredientTraitsPanelLayout, new Vector2(1f, 1f), new Vector2(1f, 1f));
+                ConfigureNamedRect("Ratio Selection Panel", ratioSelectionPanelLayout, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+                ConfigureForceLabelPanel(true);
+            }
+            else
+            {
+                StyleExistingHud();
+                ConfigureForceLabelPanel(false);
+            }
+
+            ConfigureTraitText(driveHudLayoutFromInspector);
 #if UNITY_EDITOR
             if (!Application.isPlaying)
             {
@@ -689,7 +836,7 @@ namespace TheTasteReviver
 #endif
         }
 
-        private void ConfigureTraitText()
+        private void ConfigureTraitText(bool updateRectTransform)
         {
             if (!IsAlive(ingredientTraitLabel))
             {
@@ -697,6 +844,8 @@ namespace TheTasteReviver
             }
 
             ingredientTraitLabel.fontSize = 24;
+            ingredientTraitLabel.font = GetRuntimeFont();
+            ingredientTraitLabel.fontStyle = FontStyle.Normal;
             ingredientTraitLabel.resizeTextForBestFit = true;
             ingredientTraitLabel.resizeTextMinSize = 17;
             ingredientTraitLabel.resizeTextMaxSize = 24;
@@ -704,16 +853,26 @@ namespace TheTasteReviver
             ingredientTraitLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
             ingredientTraitLabel.verticalOverflow = VerticalWrapMode.Truncate;
 
+            if (!updateRectTransform)
+            {
+                return;
+            }
+
             RectTransform rect = ingredientTraitLabel.GetComponent<RectTransform>();
             if (IsAlive(rect))
             {
                 rect.anchorMin = Vector2.zero;
                 rect.anchorMax = Vector2.one;
-                rect.offsetMin = new Vector2(16f, 14f);
-                rect.offsetMax = new Vector2(-16f, -14f);
+                rect.offsetMin = new Vector2(52f, 30f);
+                rect.offsetMax = new Vector2(-44f, -40f);
                 rect.localRotation = Quaternion.identity;
                 rect.localScale = Vector3.one;
             }
+        }
+
+        private static void ConfigureTextPanel(Text label, HudPanelLayout layout, Vector2 anchor, Vector2 pivot, TextAnchor alignment)
+        {
+            ConfigureTextPanel(label, GetLayoutSize(layout), GetLayoutPosition(layout), anchor, pivot, alignment, GetLayoutFontSize(layout, 22));
         }
 
         private static void ConfigureTextPanel(Text label, Vector2 size, Vector2 position, Vector2 anchor, Vector2 pivot, TextAnchor alignment, int fontSize)
@@ -727,15 +886,53 @@ namespace TheTasteReviver
             if (IsAlive(panel))
             {
                 ConfigureRect(panel as RectTransform, size, position, anchor, pivot);
+                PanelBackgroundStyle.Apply(panel.GetComponent<Image>());
             }
 
             label.alignment = alignment;
             label.fontSize = fontSize;
+            label.font = GetRuntimeFont();
+            label.fontStyle = alignment == TextAnchor.MiddleCenter ? FontStyle.Bold : FontStyle.Normal;
             label.resizeTextForBestFit = true;
             label.resizeTextMinSize = Mathf.Max(14, fontSize - 8);
             label.resizeTextMaxSize = fontSize;
             label.horizontalOverflow = HorizontalWrapMode.Wrap;
             label.verticalOverflow = VerticalWrapMode.Truncate;
+            ConfigureTextInset(label, alignment);
+        }
+
+        private static void ConfigureTextInset(Text label, TextAnchor alignment)
+        {
+            RectTransform rect = IsAlive(label) ? label.GetComponent<RectTransform>() : null;
+            if (!IsAlive(rect))
+            {
+                return;
+            }
+
+            bool leftAligned = alignment == TextAnchor.UpperLeft
+                || alignment == TextAnchor.MiddleLeft
+                || alignment == TextAnchor.LowerLeft;
+            bool upperAligned = alignment == TextAnchor.UpperLeft
+                || alignment == TextAnchor.UpperCenter
+                || alignment == TextAnchor.UpperRight;
+            float horizontalInset = leftAligned ? 52f : 60f;
+            float bottomInset = alignment == TextAnchor.MiddleLeft || alignment == TextAnchor.MiddleCenter ? 18f : 28f;
+            float topInset = upperAligned ? 42f : 24f;
+
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = Vector2.zero;
+            rect.offsetMin = new Vector2(horizontalInset, bottomInset);
+            rect.offsetMax = new Vector2(-horizontalInset, -topInset);
+            rect.sizeDelta = Vector2.zero;
+            rect.localRotation = Quaternion.identity;
+            rect.localScale = Vector3.one;
+        }
+
+        private static void ConfigureButton(Button button, HudPanelLayout layout, Vector2 anchor, Vector2 pivot)
+        {
+            ConfigureButton(button, GetLayoutSize(layout), GetLayoutPosition(layout), anchor, pivot);
         }
 
         private static void ConfigureButton(Button button, Vector2 size, Vector2 position, Vector2 anchor, Vector2 pivot)
@@ -750,11 +947,19 @@ namespace TheTasteReviver
             if (IsAlive(label))
             {
                 label.fontSize = label.text != null && label.text.Length > 12 ? 22 : 24;
+                label.font = GetRuntimeFont();
+                label.fontStyle = FontStyle.Bold;
                 label.resizeTextForBestFit = true;
                 label.resizeTextMinSize = 16;
                 label.resizeTextMaxSize = label.fontSize;
                 label.alignment = TextAnchor.MiddleCenter;
+                ConfigureTextInset(label, TextAnchor.MiddleCenter);
             }
+        }
+
+        private void ConfigureNamedRect(string objectName, HudPanelLayout layout, Vector2 anchor, Vector2 pivot)
+        {
+            ConfigureNamedRect(objectName, GetLayoutSize(layout), GetLayoutPosition(layout), anchor, pivot);
         }
 
         private void ConfigureNamedRect(string objectName, Vector2 size, Vector2 position, Vector2 anchor, Vector2 pivot)
@@ -763,7 +968,314 @@ namespace TheTasteReviver
             if (IsAlive(target))
             {
                 ConfigureRect(target as RectTransform, size, position, anchor, pivot);
+                PanelBackgroundStyle.Apply(target.GetComponent<Image>());
             }
+        }
+
+        private void StyleExistingHud()
+        {
+            ApplyPanelStyle(levelLabel);
+            ApplyPanelStyle(currentOrderLabel);
+            ApplyPanelStyle(currentRatioLabel);
+            ApplyPanelStyle(currentSpeedLabel);
+            ApplyPanelStyle(hintLabel);
+            ApplyButtonStyle(experimentLogButton);
+            ApplyButtonStyle(evaluateButton);
+            ApplyButtonStyle(resetAttemptButton);
+            ApplyButtonStyle(newBatchButton);
+            ApplyButtonStyle(nextLevelButton);
+            ApplyButtonStyle(ingredientTraitToggleButton);
+            ApplyNamedPanelStyle("Force Slider");
+            ApplyNamedPanelStyle("Force Label Panel");
+            ApplyNamedPanelStyle("Ingredient Traits Panel");
+            ApplyNamedPanelStyle("Ratio Selection Panel");
+        }
+
+        private void EnsureOpeningLevelTitlePanel()
+        {
+            if (IsAlive(openingLevelTitleLabel))
+            {
+                ConfigureOpeningLevelTitlePanel(openingLevelTitleLabel);
+                openingLevelTitleLabel.transform.parent.gameObject.SetActive(false);
+                return;
+            }
+
+            Transform existing = transform.Find("Opening Level Title Panel/Opening Level Title Text");
+            if (IsAlive(existing))
+            {
+                openingLevelTitleLabel = existing.GetComponent<Text>();
+                if (IsAlive(openingLevelTitleLabel))
+                {
+                    ConfigureOpeningLevelTitlePanel(openingLevelTitleLabel);
+                    openingLevelTitleLabel.transform.parent.gameObject.SetActive(false);
+                    return;
+                }
+            }
+
+            GameObject panel = new GameObject("Opening Level Title Panel");
+            panel.transform.SetParent(transform, false);
+            RectTransform panelRect = panel.AddComponent<RectTransform>();
+            panelRect.anchorMin = new Vector2(0.5f, 0.5f);
+            panelRect.anchorMax = new Vector2(0.5f, 0.5f);
+            panelRect.pivot = new Vector2(0.5f, 0.5f);
+            panelRect.sizeDelta = new Vector2(1040f, 230f);
+            panelRect.anchoredPosition = Vector2.zero;
+
+            Image panelImage = panel.AddComponent<Image>();
+            PanelBackgroundStyle.Apply(panelImage, 0.96f);
+
+            openingLevelTitleLabel = CreateRuntimeText(panel.transform, "Opening Level Title Text", Vector2.zero, Vector2.zero, TextAnchor.MiddleCenter, 34);
+            ConfigureOpeningLevelTitlePanel(openingLevelTitleLabel);
+            panel.SetActive(false);
+        }
+
+        private static void ConfigureOpeningLevelTitlePanel(Text titleLabel)
+        {
+            if (!IsAlive(titleLabel))
+            {
+                return;
+            }
+
+            RectTransform panelRect = titleLabel.transform.parent != null
+                ? titleLabel.transform.parent.GetComponent<RectTransform>()
+                : null;
+            if (IsAlive(panelRect))
+            {
+                panelRect.anchorMin = new Vector2(0.5f, 0.5f);
+                panelRect.anchorMax = new Vector2(0.5f, 0.5f);
+                panelRect.pivot = new Vector2(0.5f, 0.5f);
+                panelRect.sizeDelta = new Vector2(1120f, 300f);
+                panelRect.anchoredPosition = Vector2.zero;
+            }
+
+            Image panelImage = titleLabel.transform.parent != null
+                ? titleLabel.transform.parent.GetComponent<Image>()
+                : null;
+            if (IsAlive(panelImage))
+            {
+                PanelBackgroundStyle.Apply(panelImage, 0.96f);
+            }
+
+            RectTransform textRect = titleLabel.GetComponent<RectTransform>();
+            if (IsAlive(textRect))
+            {
+                textRect.anchorMin = Vector2.zero;
+                textRect.anchorMax = Vector2.one;
+                textRect.offsetMin = new Vector2(72f, 32f);
+                textRect.offsetMax = new Vector2(-72f, -32f);
+                textRect.sizeDelta = Vector2.zero;
+            }
+
+            titleLabel.font = GetRuntimeFont();
+            titleLabel.fontStyle = FontStyle.Bold;
+            titleLabel.resizeTextForBestFit = true;
+            titleLabel.resizeTextMinSize = 18;
+            titleLabel.resizeTextMaxSize = 34;
+            titleLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
+            titleLabel.verticalOverflow = VerticalWrapMode.Overflow;
+        }
+
+        private void ShowOpeningLevelTitle(RecipeLevelData level)
+        {
+            if (!Application.isPlaying || !showOpeningLevelTitle)
+            {
+                return;
+            }
+
+            EnsureOpeningLevelTitlePanel();
+            if (!IsAlive(openingLevelTitleLabel) || level == null)
+            {
+                return;
+            }
+
+            if (openingLevelTitleCoroutine != null)
+            {
+                StopCoroutine(openingLevelTitleCoroutine);
+            }
+
+            openingLevelTitleCoroutine = StartCoroutine(ShowOpeningLevelTitleRoutine(level));
+        }
+
+        private static string BuildCollapsedLevelTitle(RecipeLevelData level)
+        {
+            if (level == null)
+            {
+                return "No Level";
+            }
+
+            return TryGetLevelNumber(level, out int number) ? "Level " + number : level.levelID;
+        }
+
+        private static string BuildFullLevelTitle(RecipeLevelData level)
+        {
+            if (level == null)
+            {
+                return "No Level";
+            }
+
+            string header = level.levelID + " " + level.cityName + " - " + level.levelName;
+            string intro = CleanChallengeStartLine(level.levelIntro);
+
+            return string.IsNullOrWhiteSpace(intro) ? header : header + "\n" + intro;
+        }
+
+        private static string CleanChallengeStartLine(string intro)
+        {
+            if (string.IsNullOrWhiteSpace(intro))
+            {
+                return string.Empty;
+            }
+
+            return intro.Replace(ChallengeStartTitleLine, string.Empty).Trim();
+        }
+
+        private static bool TryGetLevelNumber(RecipeLevelData level, out int number)
+        {
+            number = 0;
+            if (level == null)
+            {
+                return false;
+            }
+
+            string digits = new string((level.levelID ?? string.Empty).Where(char.IsDigit).ToArray());
+            return int.TryParse(digits, out number);
+        }
+
+        private IEnumerator ShowOpeningLevelTitleRoutine(RecipeLevelData level)
+        {
+            GameObject panel = openingLevelTitleLabel != null && openingLevelTitleLabel.transform.parent != null
+                ? openingLevelTitleLabel.transform.parent.gameObject
+                : null;
+            if (!IsAlive(panel))
+            {
+                yield break;
+            }
+
+            panel.transform.SetAsLastSibling();
+            if (IsTutorialCompleteTitleLevel(level))
+            {
+                openingLevelTitleLabel.text = TutorialCompleteTitle + "\n" + ChallengeStartSubtitle;
+                openingLevelTitleLabel.resizeTextMaxSize = 42;
+                panel.SetActive(true);
+                yield return new WaitForSeconds(1.2f);
+                panel.SetActive(false);
+                yield return new WaitForSeconds(0.18f);
+                openingLevelTitleLabel.resizeTextMaxSize = 34;
+            }
+
+            openingLevelTitleLabel.text = BuildFullLevelTitle(level);
+            panel.SetActive(true);
+            yield return new WaitForSeconds(Mathf.Max(0.1f, openingLevelTitleSeconds));
+            panel.SetActive(false);
+            openingLevelTitleCoroutine = null;
+        }
+
+        private static bool IsTutorialCompleteTitleLevel(RecipeLevelData level)
+        {
+            return TryGetLevelNumber(level, out int number) && number == 7;
+        }
+
+        private void ApplyPanelStyle(Text label)
+        {
+            if (!IsAlive(label))
+            {
+                return;
+            }
+
+            if (IsAlive(label.transform.parent))
+            {
+                PanelBackgroundStyle.Apply(label.transform.parent.GetComponent<Image>());
+            }
+
+            label.font = GetRuntimeFont();
+            label.horizontalOverflow = HorizontalWrapMode.Wrap;
+            label.verticalOverflow = VerticalWrapMode.Truncate;
+        }
+
+        private void ApplyButtonStyle(Button button)
+        {
+            if (!IsAlive(button))
+            {
+                return;
+            }
+
+            PanelBackgroundStyle.Apply(button.GetComponent<Image>());
+            Text label = button.GetComponentInChildren<Text>(true);
+            if (IsAlive(label))
+            {
+                label.font = GetRuntimeFont();
+                label.fontStyle = FontStyle.Bold;
+                label.alignment = TextAnchor.MiddleCenter;
+            }
+        }
+
+        private void ApplyNamedPanelStyle(string objectName)
+        {
+            Transform target = transform.Find(objectName);
+            if (IsAlive(target))
+            {
+                PanelBackgroundStyle.Apply(target.GetComponent<Image>());
+            }
+        }
+
+        private void ConfigureForceLabelPanel(bool updateRectTransforms)
+        {
+            Transform panel = transform.Find("Force Label Panel");
+            if (!IsAlive(panel))
+            {
+                return;
+            }
+
+            PanelBackgroundStyle.Apply(panel.GetComponent<Image>(), 0.9f);
+            Text label = panel.GetComponentInChildren<Text>(true);
+            if (!IsAlive(label))
+            {
+                return;
+            }
+
+            label.font = GetRuntimeFont();
+            label.fontSize = GetLayoutFontSize(forceLabelPanelLayout, 15);
+            label.fontStyle = FontStyle.Normal;
+            label.resizeTextForBestFit = true;
+            label.resizeTextMinSize = 10;
+            label.resizeTextMaxSize = GetLayoutFontSize(forceLabelPanelLayout, 15);
+            label.alignment = TextAnchor.MiddleCenter;
+            label.horizontalOverflow = HorizontalWrapMode.Wrap;
+            label.verticalOverflow = VerticalWrapMode.Truncate;
+
+            if (!updateRectTransforms)
+            {
+                return;
+            }
+
+            RectTransform rect = label.GetComponent<RectTransform>();
+            if (IsAlive(rect))
+            {
+                rect.anchorMin = Vector2.zero;
+                rect.anchorMax = Vector2.one;
+                rect.pivot = new Vector2(0.5f, 0.5f);
+                rect.anchoredPosition = Vector2.zero;
+                rect.offsetMin = forceLabelTextInsetMin;
+                rect.offsetMax = forceLabelTextInsetMax;
+                rect.sizeDelta = Vector2.zero;
+                rect.localRotation = Quaternion.identity;
+                rect.localScale = Vector3.one;
+            }
+        }
+
+        private static Vector2 GetLayoutSize(HudPanelLayout layout)
+        {
+            return layout != null ? layout.size : Vector2.zero;
+        }
+
+        private static Vector2 GetLayoutPosition(HudPanelLayout layout)
+        {
+            return layout != null ? layout.position : Vector2.zero;
+        }
+
+        private static int GetLayoutFontSize(HudPanelLayout layout, int fallback)
+        {
+            return layout != null && layout.fontSize > 0 ? layout.fontSize : fallback;
         }
 
         private static void ConfigureRect(RectTransform rect, Vector2 size, Vector2 position, Vector2 anchor, Vector2 pivot)
@@ -853,7 +1365,6 @@ namespace TheTasteReviver
             Image image = button.GetComponent<Image>();
             if (IsAlive(image))
             {
-                image.color = Color.white;
                 button.targetGraphic = image;
             }
         }
@@ -865,6 +1376,7 @@ namespace TheTasteReviver
                 ingredientTraitPanel = ingredientTraitLabel.transform.parent != null
                     ? ingredientTraitLabel.transform.parent.gameObject
                     : ingredientTraitLabel.gameObject;
+                PanelBackgroundStyle.Apply(ingredientTraitPanel.GetComponent<Image>(), 0.82f);
                 EnsureIngredientTraitBackdrop();
                 EnsureIngredientTraitToggleButton();
                 return;
@@ -893,6 +1405,7 @@ namespace TheTasteReviver
                 ingredientTraitPanel = ingredientTraitLabel.transform.parent != null
                     ? ingredientTraitLabel.transform.parent.gameObject
                     : ingredientTraitLabel.gameObject;
+                PanelBackgroundStyle.Apply(ingredientTraitPanel.GetComponent<Image>(), 0.82f);
                 EnsureIngredientTraitBackdrop();
                 EnsureIngredientTraitToggleButton();
                 return;
@@ -908,7 +1421,7 @@ namespace TheTasteReviver
             panelRect.anchoredPosition = new Vector2(-24f, -252f);
 
             Image image = panel.AddComponent<Image>();
-            image.color = new Color(1f, 1f, 1f, 0.82f);
+            PanelBackgroundStyle.Apply(image, 0.82f);
 
             ingredientTraitLabel = CreateRuntimeText(panel.transform, "Ingredient Traits Text", Vector2.zero, Vector2.zero, TextAnchor.UpperLeft, 14);
             ingredientTraitLabel.fontSize = 14;
@@ -1301,6 +1814,11 @@ namespace TheTasteReviver
 
         private static string BuildCombinationTraitClue(RecipeLevelData level, LevelIngredientProfile profile)
         {
+            if (level != null && level.allowAnyPairPreparation)
+            {
+                return "It can prepare with any one spice, while the remaining spice is prepared separately.";
+            }
+
             List<IngredientData> group = FindCombinationGroup(level, profile.ingredient);
             if (group.Count <= 1)
             {
@@ -1438,19 +1956,7 @@ namespace TheTasteReviver
 
         private static Font GetRuntimeFont()
         {
-            try
-            {
-                Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-                if (font != null)
-                {
-                    return font;
-                }
-            }
-            catch (ArgumentException)
-            {
-            }
-
-            return Font.CreateDynamicFontFromOSFont(new[] { "Microsoft YaHei", "Arial", "Helvetica" }, 14);
+            return ThemeFontProvider.GetFont(14);
         }
 
         private static bool IsAlive(UnityEngine.Object obj)

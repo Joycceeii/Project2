@@ -138,7 +138,7 @@ namespace TheTasteReviver
             StretchToParent(backgroundRect);
             if (IsAlive(background))
             {
-                background.color = new Color(0.94f, 0.91f, 0.84f, 1f);
+                PanelBackgroundStyle.Apply(background);
                 background.transform.SetAsFirstSibling();
             }
 
@@ -185,7 +185,7 @@ namespace TheTasteReviver
                 return;
             }
 
-            scrollImage.color = new Color(1f, 0.98f, 0.92f, 1f);
+            PanelBackgroundStyle.Apply(scrollImage);
             RectTransform scrollRectTransform = EnsureComponent<RectTransform>(scrollImage.transform);
             if (!IsAlive(scrollRectTransform))
             {
@@ -414,7 +414,7 @@ namespace TheTasteReviver
             {
                 return null;
             }
-            image.color = new Color(0.98f, 0.95f, 0.88f, 1f);
+            PanelBackgroundStyle.Apply(image);
 
             Button button = EnsureComponent<Button>(transform);
             if (!IsAlive(button))
@@ -480,7 +480,7 @@ namespace TheTasteReviver
                 panelRect.sizeDelta = new Vector2(720f, 520f);
             }
 
-            panelImage.color = new Color(1f, 0.98f, 0.92f, 1f);
+            PanelBackgroundStyle.Apply(panelImage);
 
             detailText = EnsureText(panelImage.transform, "Ingredient Detail Text", TextAnchor.UpperLeft, 17, FontStyle.Normal);
             if (!IsAlive(detailText))
@@ -902,19 +902,7 @@ namespace TheTasteReviver
 
         private static Font GetRuntimeFont()
         {
-            try
-            {
-                Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-                if (font != null)
-                {
-                    return font;
-                }
-            }
-            catch (ArgumentException)
-            {
-            }
-
-            return Font.CreateDynamicFontFromOSFont(new[] { "Microsoft YaHei", "Arial", "Helvetica" }, 16);
+            return ThemeFontProvider.GetFont(16);
         }
 
         private static bool IsAlive(UnityEngine.Object obj)

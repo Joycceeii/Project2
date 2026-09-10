@@ -1,5 +1,13 @@
 LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
 L08,WhitePepper,L08_WhitePepper,Speed,Medium,,,,,,,,,,,,"White pepper is a clear sharp spice that spreads quickly."
+L08,Peanut,L08_Peanut,Speed,Slow,,,,,,,,,,,,"Peanut makes the soup taste warmer and rounder."
+L08,DriedTangerinePeel,L08_DriedTangerinePeel,Speed,Fast,,,,,,,,,,,,"Dried tangerine peel keeps the soup light and citrusy."
+L08,WhitePepper,L08_WhitePepper,Force,Light,,,,,,,,,,,,"White pepper is a clear sharp spice that spreads quickly."
+L08,Peanut,L08_Peanut,Force,Heavy,,,,,,,,,,,,"Peanut makes the soup taste warmer and rounder."
+L08,DriedTangerinePeel,L08_DriedTangerinePeel,Force,Medium,,,,,,,,,,,,"Dried tangerine peel keeps the soup light and citrusy."
+L08,WhitePepper,L08_WhitePepper,Combination,WhitePepper,,,,,,,,,,,,"White pepper is a clear sharp spice that spreads quickly."
+L08,Peanut,L08_Peanut,Combination,Peanut,,,,,,,,,,,,"Peanut makes the soup taste warmer and rounder."
+L08,DriedTangerinePeel,L08_DriedTangerinePeel,Combination,DriedTangerinePeel,,,,,,,,,,,,"Dried tangerine peel keeps the soup light and citrusy."
 L08,WhitePepper,L08_WhitePepper,GrindDuration,20-32,,,,,,,,,,,,"White pepper is a clear sharp spice that spreads quickly."
 L08,Peanut,L08_Peanut,GrindDuration,20-32,,,,,,,,,,,,"Peanut makes the soup taste warmer and rounder."
 L08,DriedTangerinePeel,L08_DriedTangerinePeel,GrindDuration,20-32,,,,,,,,,,,,"Dried tangerine peel keeps the soup light and citrusy."

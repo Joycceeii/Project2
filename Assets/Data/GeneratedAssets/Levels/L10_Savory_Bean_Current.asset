@@ -57,8 +57,6 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
   targetForceLevel: 1
   targetSpeedLevel: 1
-  minGrindDuration: 28
-  maxGrindDuration: 45
   passingScore: 90
   enabledMechanics:
     enableIngredientSelection: 0
@@ -67,7 +65,6 @@ MonoBehaviour:
     enableCombination: 0
     enableForce: 1
     enableSpeed: 1
-    enableGrindDuration: 1
   feedbackTexts:
     forceTooLight: Grinding force is too light.
     forceTooHeavy: Grinding force is too heavy.
@@ -75,9 +72,6 @@ MonoBehaviour:
     speedTooSlow: Grinding speed is too slow.
     speedTooFast: Grinding speed is too fast.
     speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
     selectionCorrect: Ingredient selection is correct.
     selectionWrong: Ingredient selection does not match the target.
     orderCorrect: Ingredient order is correct.
@@ -100,7 +94,6 @@ MonoBehaviour:
     combination: 15
     force: 10
     speed: 10
-    grindDuration: 10
   unlockCluesOnComplete:
   - clueId: L10_Douchi_Force
     title: Yangjiang Douchi - Force Clue
@@ -131,11 +124,11 @@ MonoBehaviour:
   - ruleId: L10_Hint_Douchi_Ratio
     priority: 22
     mechanic: 2
-    hintText: Yangjiang douchi should be the largest amount. It is the main savory flavor.
+    hintText: Yangjiang douchi should use the Large amount. It is the main savory flavor.
   - ruleId: L10_Hint_CoarseSalt_Ratio
     priority: 21
     mechanic: 2
-    hintText: Coarse salt should be the smallest amount. It should only support the recipe.
+    hintText: Coarse salt should use the Very Small amount. It should only support the recipe.
   - ruleId: L10_Hint_Douchi_Order
     priority: 22
     mechanic: 1
@@ -158,14 +151,11 @@ MonoBehaviour:
       enableCombination: 0
       enableForce: 1
       enableSpeed: 1
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 5
     targetOrderIndex: 0
     targetCombinationKey: 
-    minGrindDuration: 28
-    maxGrindDuration: 45
     levelTraitDescription: "Yangjiang douchi is fermented, savory, and strong."
     responseHintRules: []
   - profileTag: L10_Ginger
@@ -177,14 +167,11 @@ MonoBehaviour:
       enableCombination: 0
       enableForce: 0
       enableSpeed: 1
-      enableGrindDuration: 0
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 4
     targetOrderIndex: 1
     targetCombinationKey: 
-    minGrindDuration: 3
-    maxGrindDuration: 6
     levelTraitDescription: Ginger adds a fresh sharp taste.
     responseHintRules: []
   - profileTag: L10_DriedTangerinePeel
@@ -196,14 +183,11 @@ MonoBehaviour:
       enableCombination: 0
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 0
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 2
     targetOrderIndex: 2
     targetCombinationKey: 
-    minGrindDuration: 3
-    maxGrindDuration: 6
     levelTraitDescription: Dried tangerine peel adds a bright citrus taste.
     responseHintRules: []
   - profileTag: L10_CoarseSalt
@@ -215,14 +199,11 @@ MonoBehaviour:
       enableCombination: 0
       enableForce: 0
       enableSpeed: 0
-      enableGrindDuration: 0
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 1
     targetOrderIndex: 3
     targetCombinationKey: 
-    minGrindDuration: 3
-    maxGrindDuration: 6
     levelTraitDescription: Coarse salt is a low mineral anchor.
     responseHintRules: []
   successFeedback: "Douchi is the main savory flavor, with ginger, citrus, and light salt behind it."

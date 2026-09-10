@@ -18,7 +18,12 @@ namespace TheTasteReviver
         private const float IngredientPlateFootprint = 0.54f;
         private const float IngredientPlateMaxHeight = 0.3f;
         private const float MortarDropHeight = 0.2f;
+        private const float GroundVisualLift = 0.1f;
+        private const float MortarGroundVisualLift = 0.04f;
         private const float GroundVisualScale = 0.8f;
+        private const float GroundVisualFootprint = 0.7f;
+        private const float GroundVisualMaxHeight = 0.14f;
+        private const float HomeGroundVisualLift = 0.24f;
         private const string PortionClusterName = "Portion Cluster";
 
         public MortarArea mortarArea;
@@ -86,7 +91,8 @@ namespace TheTasteReviver
 
             EnsurePlateVisual(slot.transform);
             ConfigureMixedPowderVisuals(slot.transform, ingredients);
-            ConfigureMixedPowderLabel(slot.transform, batchID);
+            ConfigureMixedPowderLabel(slot.transform, "Mixed Powder " + batchID);
+            ConfigureMixedPowderDrag(slot.transform, ingredients);
             slot.SetActive(true);
         }
 
@@ -103,6 +109,60 @@ namespace TheTasteReviver
                 if (IsAlive(child))
                 {
                     child.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        public void ShowMixturePowderInIngredientSlot(IReadOnlyList<IngredientData> ingredients)
+        {
+            List<IngredientData> validIngredients = ingredients != null
+                ? ingredients.Where(ingredient => ingredient != null).Distinct().ToList()
+                : new List<IngredientData>();
+            if (validIngredients.Count <= 1)
+            {
+                return;
+            }
+
+            List<GameObject> slots = EnsureSlots();
+            GameObject targetSlot = slots.FirstOrDefault(slot => SlotContainsIngredient(slot, validIngredients));
+            if (!IsAlive(targetSlot))
+            {
+                return;
+            }
+
+            targetSlot.SetActive(true);
+            EnsurePlateVisual(targetSlot.transform);
+
+            Transform item = FindIngredientItem(targetSlot.transform);
+            if (IsAlive(item))
+            {
+                item.gameObject.SetActive(false);
+            }
+
+            ConfigureMixedPowderVisuals(targetSlot.transform, validIngredients);
+            ConfigureMixedPowderLabel(targetSlot.transform, "Mixture Powder");
+            ConfigureMixedPowderDrag(targetSlot.transform, validIngredients);
+        }
+
+        public void ClearPreparedPowderDisplays()
+        {
+            foreach (GameObject slot in EnsureSlots())
+            {
+                if (!IsAlive(slot))
+                {
+                    continue;
+                }
+
+                Transform visuals = slot.transform.Find(PowderVisualsName);
+                if (IsAlive(visuals))
+                {
+                    DestroyObject(visuals.gameObject);
+                }
+
+                Transform item = slot.transform.Find("Ingredient");
+                if (IsAlive(item))
+                {
+                    item.gameObject.SetActive(true);
                 }
             }
         }
@@ -206,6 +266,11 @@ namespace TheTasteReviver
             slot.transform.rotation = Quaternion.identity;
 
             EnsurePlateVisual(slot.transform);
+            Transform previousPowderVisuals = slot.transform.Find(PowderVisualsName);
+            if (IsAlive(previousPowderVisuals))
+            {
+                DestroyObject(previousPowderVisuals.gameObject);
+            }
 
             Transform item = EnsureIngredientItem(slot.transform, ingredient);
             if (!IsAlive(item))
@@ -214,6 +279,7 @@ namespace TheTasteReviver
             }
 
             item.gameObject.name = "Ingredient";
+            item.gameObject.SetActive(true);
             StripLodGroups(item.gameObject);
             ConfigurePortionCluster(item, ingredient);
             FitIngredientItemToPlate(item, ingredient.prefab != null);
@@ -230,11 +296,17 @@ namespace TheTasteReviver
             }
 
             drag.ingredientData = ingredient;
+            drag.representedIngredients.Clear();
             drag.mortarArea = mortarArea;
             drag.attemptManager = attemptManager;
             drag.sourcePrefab = ingredient.prefab;
             drag.mortarDropHeight = MortarDropHeight;
+            drag.groundVisualLift = GroundVisualLift;
+            drag.mortarGroundVisualLift = MortarGroundVisualLift;
             drag.groundVisualScale = GroundVisualScale;
+            drag.groundVisualFootprint = GroundVisualFootprint;
+            drag.groundVisualMaxHeight = GroundVisualMaxHeight;
+            drag.homeGroundVisualLift = HomeGroundVisualLift;
             drag.ResetHomePosition();
 
             ConfigureLabel(slot.transform, ingredient);
@@ -528,36 +600,40 @@ namespace TheTasteReviver
                 return;
             }
 
-            Transform lodRoot = FindChildRecursive(root, "lod");
-            if (!IsAlive(lodRoot))
+            List<Transform> lodRoots = new List<Transform>();
+            FindChildrenRecursive(root, "lod", lodRoots);
+            foreach (Transform lodRoot in lodRoots)
             {
-                return;
-            }
-
-            Transform keep = lodRoot.Find("model_LOD0");
-            List<GameObject> remove = new List<GameObject>();
-            foreach (Transform child in lodRoot)
-            {
-                if (!IsAlive(child) || !child.name.StartsWith("model_LOD"))
+                if (!IsAlive(lodRoot))
                 {
                     continue;
                 }
 
-                if (IsAlive(keep) && child == keep)
+                Transform keep = lodRoot.Find("model_LOD0");
+                List<GameObject> remove = new List<GameObject>();
+                foreach (Transform child in lodRoot)
                 {
-                    child.gameObject.SetActive(true);
-                    continue;
+                    if (!IsAlive(child) || !child.name.StartsWith("model_LOD"))
+                    {
+                        continue;
+                    }
+
+                    if (IsAlive(keep) && child == keep)
+                    {
+                        child.gameObject.SetActive(true);
+                        continue;
+                    }
+
+                    remove.Add(child.gameObject);
                 }
 
-                remove.Add(child.gameObject);
-            }
-
-            foreach (GameObject target in remove)
-            {
-                if (IsAlive(target))
+                foreach (GameObject target in remove)
                 {
-                    target.SetActive(false);
-                    DestroyObject(target);
+                    if (IsAlive(target))
+                    {
+                        target.SetActive(false);
+                        DestroyObject(target);
+                    }
                 }
             }
         }
@@ -591,6 +667,29 @@ namespace TheTasteReviver
             return null;
         }
 
+        private static void FindChildrenRecursive(Transform root, string childName, List<Transform> matches)
+        {
+            if (!IsAlive(root))
+            {
+                return;
+            }
+
+            foreach (Transform child in root)
+            {
+                if (!IsAlive(child))
+                {
+                    continue;
+                }
+
+                if (child.name == childName)
+                {
+                    matches.Add(child);
+                }
+
+                FindChildrenRecursive(child, childName, matches);
+            }
+        }
+
         private void ConfigureMixedPowderVisuals(Transform slot, IReadOnlyList<IngredientData> ingredients)
         {
             Transform visuals = slot.Find(PowderVisualsName);
@@ -622,35 +721,112 @@ namespace TheTasteReviver
                 IngredientData ingredient = validIngredients[i];
                 GameObject powder = Instantiate(ingredient.groundPrefab, visuals, false);
                 powder.name = ingredient.DisplayName + " Powder";
-                powder.transform.localPosition = GetPowderBlendOffset(i, validIngredients.Count);
+                powder.transform.localPosition = Vector3.zero;
                 powder.transform.localRotation = Quaternion.Euler(0f, i * 41f, 0f);
-                powder.transform.localScale = Vector3.one * 0.72f;
+                powder.transform.localScale = Vector3.one;
                 StripInteractionComponents(powder);
+                FitPowderVisualToSlot(powder.transform);
+                powder.transform.localPosition += GetPowderStackOffset(i, validIngredients.Count);
             }
         }
 
-        private static Vector3 GetPowderBlendOffset(int index, int count)
+        private static void FitPowderVisualToSlot(Transform powder)
+        {
+            if (!IsAlive(powder))
+            {
+                return;
+            }
+
+            Bounds bounds = CalculateLocalBounds(powder);
+            if (bounds.size.sqrMagnitude <= 0.0001f)
+            {
+                return;
+            }
+
+            float footprint = Mathf.Max(bounds.size.x, bounds.size.z);
+            float scale = Mathf.Min(
+                GroundVisualFootprint / Mathf.Max(footprint, 0.0001f),
+                GroundVisualMaxHeight / Mathf.Max(bounds.size.y, 0.0001f));
+            powder.localScale *= Mathf.Clamp(scale, 0.05f, 4f);
+            powder.localPosition += new Vector3(
+                -bounds.center.x * powder.localScale.x,
+                -bounds.min.y * powder.localScale.y,
+                -bounds.center.z * powder.localScale.z);
+        }
+
+        private static Vector3 GetPowderStackOffset(int index, int count)
         {
             if (count <= 1)
             {
                 return Vector3.zero;
             }
 
-            float angle = index * Mathf.PI * 2f / count;
-            float radius = 0.22f;
-            return new Vector3(Mathf.Cos(angle) * radius, 0.004f * index, Mathf.Sin(angle) * radius);
+            float layerLift = 0.004f * index;
+            float centerJitter = index % 2 == 0 ? 0f : 0.012f;
+            return new Vector3(centerJitter, layerLift, -centerJitter);
         }
 
-        private void ConfigureMixedPowderLabel(Transform slot, int batchID)
+        private void ConfigureMixedPowderDrag(Transform slot, IReadOnlyList<IngredientData> ingredients)
+        {
+            Transform visuals = slot.Find(PowderVisualsName);
+            if (!IsAlive(visuals))
+            {
+                return;
+            }
+
+            DraggableIngredient drag = visuals.GetComponent<DraggableIngredient>();
+            if (!IsAlive(drag))
+            {
+                drag = visuals.gameObject.AddComponent<DraggableIngredient>();
+            }
+
+            BoxCollider collider = visuals.GetComponent<BoxCollider>();
+            if (!IsAlive(collider))
+            {
+                collider = visuals.gameObject.AddComponent<BoxCollider>();
+            }
+
+            collider.center = Vector3.zero;
+            collider.size = new Vector3(1.2f, 0.35f, 1.2f);
+            collider.enabled = true;
+
+            drag.ingredientData = null;
+            drag.representedIngredients = ingredients != null
+                ? ingredients.Where(ingredient => ingredient != null).Distinct().ToList()
+                : new List<IngredientData>();
+            drag.mortarArea = mortarArea;
+            drag.attemptManager = attemptManager;
+            drag.mortarDropHeight = MortarDropHeight;
+            drag.groundVisualLift = GroundVisualLift;
+            drag.mortarGroundVisualLift = MortarGroundVisualLift;
+            drag.groundVisualScale = GroundVisualScale;
+            drag.groundVisualFootprint = GroundVisualFootprint;
+            drag.groundVisualMaxHeight = GroundVisualMaxHeight;
+            drag.homeGroundVisualLift = HomeGroundVisualLift;
+            drag.ResetHomePosition();
+        }
+
+        private void ConfigureMixedPowderLabel(Transform slot, string labelText)
         {
             TextMesh label = EnsureLabel(slot);
             label.gameObject.SetActive(true);
-            label.text = "Mixed Powder " + batchID;
+            label.text = labelText;
             label.color = Color.black;
             label.fontSize = Mathf.Max(8, labelFontSize);
             label.characterSize = GetLabelCharacterSize(label.text) * 0.9f;
             label.transform.localPosition = new Vector3(0f, Mathf.Max(0.006f, labelOffset.y), 0.32f);
             ConfigurePlateLabel(label.transform);
+        }
+
+        private static bool SlotContainsIngredient(GameObject slot, IReadOnlyList<IngredientData> ingredients)
+        {
+            if (!IsAlive(slot) || ingredients == null)
+            {
+                return false;
+            }
+
+            DraggableIngredient drag = slot.GetComponentInChildren<DraggableIngredient>(true);
+            return IsAlive(drag) && drag.ingredientData != null && ingredients.Contains(drag.ingredientData);
         }
 
         private Transform EnsurePlateVisual(Transform slot)

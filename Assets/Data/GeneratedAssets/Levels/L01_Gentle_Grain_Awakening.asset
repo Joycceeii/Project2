@@ -36,8 +36,6 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 9a1cd94e3dd91be4b88ca7f39f71ca64, type: 2}
   targetForceLevel: 1
   targetSpeedLevel: 1
-  minGrindDuration: 8
-  maxGrindDuration: 14
   passingScore: 100
   enabledMechanics:
     enableIngredientSelection: 0
@@ -46,7 +44,6 @@ MonoBehaviour:
     enableCombination: 0
     enableForce: 1
     enableSpeed: 0
-    enableGrindDuration: 1
   feedbackTexts:
     forceTooLight: Grinding force is too light.
     forceTooHeavy: Grinding force is too heavy.
@@ -54,9 +51,6 @@ MonoBehaviour:
     speedTooSlow: Grinding speed is too slow.
     speedTooFast: Grinding speed is too fast.
     speedCorrect: Grinding speed is correct.
-    durationTooShort: Grinding duration is too short.
-    durationCorrect: Grinding duration is correct.
-    durationTooLong: Grinding duration is too long.
     selectionCorrect: Ingredient selection is correct.
     selectionWrong: Ingredient selection does not match the target.
     orderCorrect: Ingredient order is correct.
@@ -79,7 +73,6 @@ MonoBehaviour:
     combination: 15
     force: 10
     speed: 10
-    grindDuration: 10
   unlockCluesOnComplete:
   - clueId: L01_Rice_Force
     title: Rice - Force Clue
@@ -103,16 +96,13 @@ MonoBehaviour:
       enableCombination: 0
       enableForce: 1
       enableSpeed: 0
-      enableGrindDuration: 1
     targetForceLevel: 1
     targetSpeedLevel: 1
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: 
-    minGrindDuration: 8
-    maxGrindDuration: 14
     levelTraitDescription: Rice stays mild when the force is near the middle; too much pressure can make it taste burnt.
     responseHintRules: []
   successFeedback: "The rice tastes soft and clean, with no burnt flavor."
-  closeFeedback: Very close. Adjust the force or grinding time a little.
-  wrongFeedback: The rice does not taste right. Check the force and grinding time.
+  closeFeedback: Very close. Adjust the force a little.
+  wrongFeedback: The rice does not taste right. Check the force.

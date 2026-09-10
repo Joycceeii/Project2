@@ -11,6 +11,9 @@ namespace TheTasteReviver
         public ForceSliderController forceController;
         public PestleController pestleController;
         public LevelIngredientDisplayManager ingredientDisplayManager;
+        [Header("Grinding Completion")]
+        [Tooltip("How many seconds of valid grinding this batch needs before ingredients become powder. Adjust this in the Inspector to tune the whole batch powder pace.")]
+        public float batchPowderSeconds = 1.5f;
 
         public List<IngredientInstance> ingredientAmounts = new List<IngredientInstance>();
         public List<IngredientData> ingredientOrder = new List<IngredientData>();
@@ -18,9 +21,11 @@ namespace TheTasteReviver
         public List<GrindingBatch> grindingBatches = new List<GrindingBatch>();
 
         private readonly Dictionary<IngredientData, int> batchByIngredient = new Dictionary<IngredientData, int>();
+        private readonly List<IngredientBatchEntry> ingredientBatchEntries = new List<IngredientBatchEntry>();
         private readonly Dictionary<int, float> finalizedBatchDurations = new Dictionary<int, float>();
         private readonly Dictionary<int, ForceLevel> finalizedBatchForces = new Dictionary<int, ForceLevel>();
         private readonly Dictionary<int, SpeedLevel> finalizedBatchSpeeds = new Dictionary<int, SpeedLevel>();
+        private readonly Dictionary<string, int> preparedBatchIDsByKey = new Dictionary<string, int>();
         private int currentBatchID = 1;
         private float currentBatchStartGrindDuration;
 
@@ -37,17 +42,102 @@ namespace TheTasteReviver
         public bool HasIngredientsInBowl => ingredientAmounts.Any(x => x != null && x.ingredient != null);
         public bool HasEvaluated { get; private set; }
         public bool HasAutoEvaluated { get; private set; }
+        public float RequiredBatchPowderSeconds => Mathf.Max(0.2f, batchPowderSeconds);
 
         public bool TryAddIngredient(IngredientData ingredient)
+        {
+            return TryAddIngredients(new[] { ingredient });
+        }
+
+        public bool TryAddIngredients(IReadOnlyList<IngredientData> ingredients)
+        {
+            List<IngredientData> validIngredients = ingredients != null
+                ? ingredients.Where(ingredient => ingredient != null).Distinct().ToList()
+                : new List<IngredientData>();
+            if (validIngredients.Count == 0)
+            {
+                return false;
+            }
+
+            if (validIngredients.Count == 1)
+            {
+                return TryAddSingleIngredient(validIngredients[0]);
+            }
+
+            if (uiManager != null && uiManager.IsRatioSelectionOpen)
+            {
+                uiManager.ShowHint("Choose this ingredient's amount first.");
+                return false;
+            }
+
+            int uniqueCount = ingredientBatchEntries
+                .Where(entry => entry != null && entry.batchID == currentBatchID && entry.ingredient != null)
+                .Select(entry => entry.ingredient)
+                .Distinct()
+                .Count();
+            int limit = currentLevel != null ? Mathf.Clamp(currentLevel.maxIngredientCount, 1, 4) : 4;
+            int newIngredientCount = validIngredients.Count(ingredient => !IsIngredientInBatch(ingredient, currentBatchID));
+            if (uniqueCount + newIngredientCount > limit)
+            {
+                uiManager?.ShowHint("This level allows up to four ingredients.");
+                return false;
+            }
+
+            foreach (IngredientData ingredient in validIngredients)
+            {
+                if (IsIngredientInBatch(ingredient, currentBatchID))
+                {
+                    uiManager?.ShowHint("This powder is already in the bowl.");
+                    return false;
+                }
+
+                bool wasUsedBefore = ingredientBatchEntries.Any(entry => entry != null && entry.ingredient == ingredient);
+                bool canReuseGroundIngredient = currentLevel != null
+                    && currentLevel.requireFinalCombinedBatch
+                    && wasUsedBefore;
+                if (wasUsedBefore && !canReuseGroundIngredient)
+                {
+                    uiManager?.ShowHint("This ingredient is already in the bowl.");
+                    return false;
+                }
+            }
+
+            RecordCurrentBatchAsPreparedIfReady();
+            foreach (IngredientData ingredient in validIngredients)
+            {
+                AddIngredientWithRatio(ingredient, RatioLevel.Medium, false);
+            }
+
+            RebuildCurrentBatch();
+            uiManager?.RefreshAttemptPanels(this);
+            uiManager?.ShowHint("Prepared powder added to the bowl.");
+            return true;
+        }
+
+        private bool TryAddSingleIngredient(IngredientData ingredient)
         {
             if (ingredient == null)
             {
                 return false;
             }
 
-            int uniqueCount = ingredientAmounts.Count(x => x.ingredient != null);
-            bool isNewIngredient = ingredientAmounts.All(x => x.ingredient != ingredient);
-            if (!isNewIngredient)
+            int uniqueCount = ingredientBatchEntries
+                .Where(entry => entry != null && entry.batchID == currentBatchID && entry.ingredient != null)
+                .Select(entry => entry.ingredient)
+                .Distinct()
+                .Count();
+            if (IsIngredientInBatch(ingredient, currentBatchID))
+            {
+                uiManager?.ShowHint("This ingredient is already in the bowl.");
+                return false;
+            }
+
+            bool wasUsedBefore = ingredientBatchEntries.Any(entry => entry != null && entry.ingredient == ingredient);
+            bool canReuseGroundIngredient = currentLevel != null
+                && currentLevel.requireFinalCombinedBatch
+                && wasUsedBefore
+                && !IsIngredientInBatch(ingredient, currentBatchID);
+            if (wasUsedBefore && !canReuseGroundIngredient)
             {
                 uiManager?.ShowHint("This ingredient is already in the bowl.");
                 return false;
@@ -65,6 +155,8 @@ namespace TheTasteReviver
                 uiManager.ShowHint("Choose this ingredient's amount first.");
                 return false;
             }
+
+            RecordCurrentBatchAsPreparedIfReady();
 
             if (!IsRatioSelectionRequired())
             {
@@ -103,17 +195,25 @@ namespace TheTasteReviver
             selectedRatioPattern.Clear();
             grindingBatches.Clear();
             batchByIngredient.Clear();
+            ingredientBatchEntries.Clear();
             finalizedBatchDurations.Clear();
             finalizedBatchForces.Clear();
             finalizedBatchSpeeds.Clear();
+            preparedBatchIDsByKey.Clear();
             currentBatchID = 1;
             HasEvaluated = false;
             HasAutoEvaluated = false;
             forceController?.ResetToDefault();
             pestleController?.ResetToDefault();
             currentBatchStartGrindDuration = pestleController != null ? pestleController.GrindDuration : 0f;
+            ingredientDisplayManager?.ClearPreparedPowderDisplays();
             ingredientDisplayManager?.ClearMixedPowderBatches();
             ReturnIngredientsHome();
+            if (clearMessages && currentLevel != null)
+            {
+                ingredientDisplayManager?.ShowLevelIngredients(currentLevel);
+            }
+
             RebuildCurrentBatch();
             uiManager?.RefreshAttemptPanels(this);
             if (clearMessages)
@@ -139,8 +239,104 @@ namespace TheTasteReviver
             HasEvaluated = true;
         }
 
-        public void ShowGroundVisualsForCurrentBatch()
+        public bool RemoveIngredientFromCurrentBatch(IngredientData ingredient)
         {
+            return RemoveIngredientsFromCurrentBatch(new[] { ingredient });
+        }
+
+        public bool RemoveIngredientsFromCurrentBatch(IReadOnlyList<IngredientData> ingredients)
+        {
+            List<IngredientData> validIngredients = ingredients != null
+                ? ingredients.Where(ingredient => ingredient != null).Distinct().ToList()
+                : new List<IngredientData>();
+            if (validIngredients.Count == 0)
+            {
+                return false;
+            }
+
+            bool removedAny = false;
+            foreach (IngredientData ingredient in validIngredients)
+            {
+                removedAny |= RemoveSingleIngredientFromCurrentBatch(ingredient, false);
+            }
+
+            if (!removedAny)
+            {
+                return false;
+            }
+
+            bool currentBatchIsEmpty = !ingredientBatchEntries.Any(entry => entry != null
+                && entry.batchID == currentBatchID
+                && entry.ingredient != null);
+            if (currentBatchIsEmpty)
+            {
+                currentBatchStartGrindDuration = pestleController != null ? pestleController.GrindDuration : 0f;
+                pestleController?.ResetSpeedAveraging();
+            }
+
+            RebuildCurrentBatch();
+            uiManager?.RefreshAttemptPanels(this);
+            return true;
+        }
+
+        private bool RemoveSingleIngredientFromCurrentBatch(IngredientData ingredient, bool refresh)
+        {
+            if (ingredient == null)
+            {
+                return false;
+            }
+
+            int removedEntries = ingredientBatchEntries.RemoveAll(entry => entry != null
+                && entry.ingredient == ingredient
+                && entry.batchID == currentBatchID);
+            if (removedEntries == 0)
+            {
+                return false;
+            }
+
+            RemoveLastMatching(ingredientAmounts, instance => instance != null && instance.ingredient == ingredient);
+            RemoveLastMatching(ingredientOrder, item => item == ingredient);
+            RemoveLastMatching(selectedRatioPattern, requirement => requirement != null && requirement.ingredient == ingredient);
+
+            IngredientBatchEntry previousEntry = ingredientBatchEntries
+                .Where(entry => entry != null && entry.ingredient == ingredient)
+                .OrderByDescending(entry => entry.batchID)
+                .FirstOrDefault();
+            if (previousEntry != null)
+            {
+                batchByIngredient[ingredient] = previousEntry.batchID;
+            }
+            else
+            {
+                batchByIngredient.Remove(ingredient);
+            }
+
+            if (refresh)
+            {
+                bool currentBatchIsEmpty = !ingredientBatchEntries.Any(entry => entry != null
+                    && entry.batchID == currentBatchID
+                    && entry.ingredient != null);
+                if (currentBatchIsEmpty)
+                {
+                    currentBatchStartGrindDuration = pestleController != null ? pestleController.GrindDuration : 0f;
+                    pestleController?.ResetSpeedAveraging();
+                }
+
+                RebuildCurrentBatch();
+                uiManager?.RefreshAttemptPanels(this);
+            }
+
+            return true;
+        }
+
+        public bool ShowGroundVisualsForCurrentBatch()
+        {
+            if (!HasCurrentBatchReachedPowderTime())
+            {
+                return false;
+            }
+
+            bool changedAnyIngredient = false;
             foreach (DraggableIngredient ingredient in FindObjectsByType<DraggableIngredient>(FindObjectsSortMode.None))
             {
                 if (ingredient == null || !ingredient.gameObject.activeInHierarchy || !ingredient.IsInMortar || ingredient.ingredientData == null)
@@ -148,21 +344,42 @@ namespace TheTasteReviver
                     continue;
                 }
 
-                if (batchByIngredient.TryGetValue(ingredient.ingredientData, out int batchID) && batchID != currentBatchID)
+                if (!IsIngredientInBatch(ingredient.ingredientData, currentBatchID))
                 {
                     continue;
                 }
 
+                bool wasGround = ingredient.HasBeenGround;
                 ingredient.ShowGroundState();
+                changedAnyIngredient |= !wasGround && ingredient.HasBeenGround;
             }
+
+            if (changedAnyIngredient)
+            {
+                uiManager?.ShowHint(BuildPowderReadyHint());
+            }
+
+            return changedAnyIngredient;
+        }
+
+        public bool HasCurrentBatchReachedPowderTime()
+        {
+            return GetCurrentBatchGrindDuration() >= GetMinimumBatchPowderSeconds();
         }
 
         private void ReturnIngredientsHome()
         {
-            foreach (DraggableIngredient ingredient in FindObjectsByType<DraggableIngredient>(FindObjectsSortMode.None))
+            foreach (DraggableIngredient ingredient in FindObjectsByType<DraggableIngredient>(FindObjectsInactive.Include, FindObjectsSortMode.None))
             {
-                if (ingredient != null && ingredient.gameObject.activeInHierarchy)
+                if (ingredient != null)
                 {
+                    if (ingredient.ingredientData == null)
+                    {
+                        ingredient.gameObject.SetActive(false);
+                        continue;
+                    }
+
+                    ingredient.gameObject.SetActive(true);
                     ingredient.ReturnHome();
                 }
             }
@@ -198,7 +415,7 @@ namespace TheTasteReviver
                 return;
             }
 
-            bool currentBatchHasIngredients = batchByIngredient.Values.Any(batchID => batchID == currentBatchID);
+            bool currentBatchHasIngredients = ingredientBatchEntries.Any(entry => entry != null && entry.batchID == currentBatchID && entry.ingredient != null);
             if (!currentBatchHasIngredients)
             {
                 uiManager?.ShowHint("The next batch is already empty.");
@@ -212,11 +429,33 @@ namespace TheTasteReviver
                 return;
             }
 
+            RecordCurrentBatchAsPreparedIfReady();
             finalizedBatchDurations[currentBatchID] = currentBatchDuration;
             finalizedBatchForces[currentBatchID] = GetCurrentForceLevel();
             finalizedBatchSpeeds[currentBatchID] = GetCurrentSpeedLevel();
-            ingredientDisplayManager?.ShowMixedPowderBatch(currentBatchID, GetCurrentBatchIngredients());
-            ReturnCurrentBatchIngredientsHome();
+            List<IngredientData> currentBatchIngredients = GetCurrentBatchIngredients();
+            bool isFinalCombinedBatch = currentLevel != null
+                && currentLevel.requireFinalCombinedBatch
+                && HasExactCurrentRequiredIngredients(currentBatchIngredients);
+            bool createsMixedPowder = currentLevel != null
+                && currentLevel.requireFinalCombinedBatch
+                && !isFinalCombinedBatch
+                && currentBatchIngredients.Count > 1;
+            if (isFinalCombinedBatch)
+            {
+                ingredientDisplayManager?.ClearPreparedPowderDisplays();
+                ingredientDisplayManager?.ClearMixedPowderBatches();
+            }
+            else if (createsMixedPowder)
+            {
+                ingredientDisplayManager?.ShowMixturePowderInIngredientSlot(currentBatchIngredients);
+            }
+            else if (currentLevel == null || !currentLevel.requireFinalCombinedBatch)
+            {
+                ingredientDisplayManager?.ShowMixedPowderBatch(currentBatchID, currentBatchIngredients);
+            }
+
+            ReturnCurrentBatchIngredientsHome(!createsMixedPowder);
             currentBatchID++;
             currentBatchStartGrindDuration = pestleController != null ? pestleController.GrindDuration : 0f;
             pestleController?.ResetSpeedAveraging();
@@ -224,7 +463,7 @@ namespace TheTasteReviver
             uiManager?.ShowHint("Next ingredients will start a separate batch.");
         }
 
-        private float GetCurrentBatchGrindDuration()
+        public float GetCurrentBatchGrindDuration()
         {
             float totalDuration = pestleController != null ? pestleController.GrindDuration : 0f;
             return Mathf.Max(0f, totalDuration - currentBatchStartGrindDuration);
@@ -232,12 +471,30 @@ namespace TheTasteReviver
 
         private float GetMinimumBatchPowderSeconds()
         {
-            if (pestleController == null)
+            return RequiredBatchPowderSeconds;
+        }
+
+        private string BuildPowderReadyHint()
+        {
+            int preparedCount = ingredientBatchEntries
+                .Where(entry => entry != null && entry.ingredient != null)
+                .Select(entry => entry.batchID)
+                .Distinct()
+                .Count();
+            int requiredCount = currentLevel != null && currentLevel.requiredIngredients != null
+                ? currentLevel.requiredIngredients.Where(ingredient => ingredient != null).Distinct().Count()
+                : 0;
+
+            if (currentLevel != null
+                && currentLevel.enabledMechanics != null
+                && currentLevel.enabledMechanics.enableCombination
+                && requiredCount > 0
+                && preparedCount < requiredCount)
             {
-                return 0.5f;
+                return "This batch is powder. Press New Batch, then add the next ingredient.";
             }
 
-            return Mathf.Max(0.5f, pestleController.groundVisualDelaySeconds);
+            return "This batch is powder. You can Evaluate when the recipe is ready.";
         }
 
         private List<IngredientData> GetCurrentBatchIngredients()
@@ -245,11 +502,16 @@ namespace TheTasteReviver
             return batchByIngredient
                 .Where(pair => pair.Value == currentBatchID && pair.Key != null)
                 .Select(pair => pair.Key)
+                .Concat(ingredientBatchEntries
+                    .Where(entry => entry != null && entry.batchID == currentBatchID && entry.ingredient != null)
+                    .Select(entry => entry.ingredient))
+                .Distinct()
                 .ToList();
         }
 
-        private void ReturnCurrentBatchIngredientsHome()
+        private void ReturnCurrentBatchIngredientsHome(bool keepGroundState)
         {
+            List<IngredientData> currentBatchIngredients = GetCurrentBatchIngredients();
             foreach (DraggableIngredient ingredient in FindObjectsByType<DraggableIngredient>(FindObjectsSortMode.None))
             {
                 if (ingredient == null || !ingredient.gameObject.activeInHierarchy || ingredient.ingredientData == null)
@@ -257,9 +519,16 @@ namespace TheTasteReviver
                     continue;
                 }
 
-                if (batchByIngredient.TryGetValue(ingredient.ingredientData, out int batchID) && batchID == currentBatchID)
+                if (currentBatchIngredients.Contains(ingredient.ingredientData))
                 {
-                    ingredient.ReturnHome(true);
+                    if (keepGroundState)
+                    {
+                        ingredient.ReturnHomeAsGround();
+                    }
+                    else
+                    {
+                        ingredient.HideAtHome();
+                    }
                 }
             }
         }
@@ -269,12 +538,12 @@ namespace TheTasteReviver
             grindingBatches.Clear();
 
             Dictionary<IngredientData, RatioLevel> pattern = CalculateRatioPattern(out _);
-            IEnumerable<IGrouping<int, IngredientInstance>> groups = ingredientAmounts
-                .Where(instance => instance != null && instance.ingredient != null)
-                .GroupBy(instance => batchByIngredient.TryGetValue(instance.ingredient, out int batchID) ? batchID : 1)
+            IEnumerable<IGrouping<int, IngredientData>> groups = ingredientBatchEntries
+                .Where(entry => entry != null && entry.ingredient != null)
+                .GroupBy(entry => entry.batchID, entry => entry.ingredient)
                 .OrderBy(group => group.Key);
 
-            foreach (IGrouping<int, IngredientInstance> group in groups)
+            foreach (IGrouping<int, IngredientData> group in groups)
             {
                 GrindingBatch batch = new GrindingBatch
                 {
@@ -284,7 +553,7 @@ namespace TheTasteReviver
                     grindDuration = GetBatchGrindDuration(group.Key)
                 };
 
-                HashSet<IngredientData> batchIngredients = new HashSet<IngredientData>(group.Select(instance => instance.ingredient));
+                HashSet<IngredientData> batchIngredients = new HashSet<IngredientData>(group);
                 batch.ingredientsInBatch.AddRange(batchIngredients);
                 batch.ingredientOrderInBatch.AddRange(ingredientOrder.Where(batchIngredients.Contains));
                 foreach (KeyValuePair<IngredientData, RatioLevel> pair in pattern.Where(pair => batchIngredients.Contains(pair.Key)))
@@ -294,6 +563,23 @@ namespace TheTasteReviver
 
                 grindingBatches.Add(batch);
             }
+        }
+
+        public bool TryGetPreparedAloneBatchID(IngredientData ingredient, out int batchID)
+        {
+            return TryGetPreparedBatchID(new[] { ingredient }, out batchID);
+        }
+
+        public bool TryGetPreparedBatchID(IEnumerable<IngredientData> ingredients, out int batchID)
+        {
+            string key = RecipeLevelData.BuildCombinationKey(ingredients);
+            if (!string.IsNullOrWhiteSpace(key) && preparedBatchIDsByKey.TryGetValue(key, out batchID))
+            {
+                return true;
+            }
+
+            batchID = 0;
+            return false;
         }
 
         private float GetBatchGrindDuration(int batchID)
@@ -338,18 +624,48 @@ namespace TheTasteReviver
 
         private void AddIngredientWithRatio(IngredientData ingredient, RatioLevel ratio)
         {
+            AddIngredientWithRatio(ingredient, ratio, true);
+        }
+
+        private void AddIngredientWithRatio(IngredientData ingredient, RatioLevel ratio, bool refresh)
+        {
+            bool wasCurrentBatchSingle = GetCurrentBatchIngredients().Count == 1;
             ingredientAmounts.Add(new IngredientInstance(ingredient, 1));
             ingredientOrder.Add(ingredient);
             selectedRatioPattern.Add(new RatioRequirement { ingredient = ingredient, ratioLevel = ratio });
             batchByIngredient[ingredient] = currentBatchID;
-            RebuildCurrentBatch();
-            uiManager?.RefreshAttemptPanels(this);
-            if (uiManager != null
-                && !uiManager.ShowStepFeedback(MechanicType.IngredientOrder, ingredient)
-                && !uiManager.ShowStepFeedback(MechanicType.Ratio, ingredient))
+            ingredientBatchEntries.Add(new IngredientBatchEntry { ingredient = ingredient, batchID = currentBatchID });
+            if (currentLevel != null && currentLevel.requireFinalCombinedBatch && wasCurrentBatchSingle && GetCurrentBatchIngredients().Count > 1)
             {
-                uiManager.ShowStepFeedback(MechanicType.Combination, ingredient);
+                currentBatchStartGrindDuration = pestleController != null ? pestleController.GrindDuration : 0f;
+                pestleController?.ResetSpeedAveraging();
             }
+
+            if (refresh)
+            {
+                RebuildCurrentBatch();
+                uiManager?.RefreshAttemptPanels(this);
+                if (uiManager != null
+                    && !uiManager.ShowStepFeedback(MechanicType.IngredientOrder, ingredient)
+                    && !uiManager.ShowStepFeedback(MechanicType.Ratio, ingredient)
+                    && !uiManager.ShowStepFeedback(MechanicType.Speed, ingredient)
+                    && !uiManager.ShowStepFeedback(MechanicType.Force, ingredient))
+                {
+                    uiManager.ShowStepFeedback(MechanicType.Combination, ingredient);
+                }
+            }
+        }
+
+        private bool HasExactCurrentRequiredIngredients(IReadOnlyList<IngredientData> currentBatchIngredients)
+        {
+            if (currentLevel == null || currentLevel.requiredIngredients == null || currentBatchIngredients == null)
+            {
+                return false;
+            }
+
+            HashSet<IngredientData> current = new HashSet<IngredientData>(currentBatchIngredients.Where(ingredient => ingredient != null));
+            HashSet<IngredientData> required = new HashSet<IngredientData>(currentLevel.requiredIngredients.Where(ingredient => ingredient != null));
+            return required.Count > 1 && current.SetEquals(required);
         }
 
         private List<RatioLevel> GetAvailableRatioChoices()
@@ -382,6 +698,54 @@ namespace TheTasteReviver
             HashSet<RatioLevel> used = new HashSet<RatioLevel>(selectedRatioPattern.Select(x => x.ratioLevel));
             choices.RemoveAll(used.Contains);
             return choices;
+        }
+
+        private bool IsIngredientInBatch(IngredientData ingredient, int batchID)
+        {
+            return ingredient != null && ingredientBatchEntries.Any(entry => entry != null && entry.ingredient == ingredient && entry.batchID == batchID);
+        }
+
+        private void RecordCurrentBatchAsPreparedIfReady()
+        {
+            if (currentLevel == null || !currentLevel.requireFinalCombinedBatch || !HasCurrentBatchReachedPowderTime())
+            {
+                return;
+            }
+
+            List<IngredientData> currentIngredients = GetCurrentBatchIngredients();
+            if (currentIngredients.Count == 0)
+            {
+                return;
+            }
+
+            string key = RecipeLevelData.BuildCombinationKey(currentIngredients);
+            if (!string.IsNullOrWhiteSpace(key) && !preparedBatchIDsByKey.ContainsKey(key))
+            {
+                preparedBatchIDsByKey[key] = currentBatchID;
+            }
+        }
+
+        private static void RemoveLastMatching<T>(List<T> list, System.Predicate<T> predicate)
+        {
+            if (list == null || predicate == null)
+            {
+                return;
+            }
+
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                if (predicate(list[i]))
+                {
+                    list.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+
+        private class IngredientBatchEntry
+        {
+            public IngredientData ingredient;
+            public int batchID;
         }
     }
 }

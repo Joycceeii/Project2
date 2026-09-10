@@ -115,12 +115,19 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   speedLabel: {fileID: 0}
   uiManager: {fileID: 0}
-  slowThreshold: 360
-  fastThreshold: 720
-  speedResponseTime: 0.25
+  applyPlayerFriendlySpeedCalibration: 1
+  slowThreshold: 470
+  fastThreshold: 1370
+  speedResponseTime: 0.22
+  speedHoldSeconds: 0.3
   speedDeadZone: 2.5
   speedHysteresis: 90
-  maxInstantSpeed: 1400
+  maxInstantSpeed: 2400
+  minimumGrindingMouseDelta: 1
+  groundVisualDelaySeconds: 1.5
+  expandClickHitbox: 1
+  clickHitboxPadding: {x: 0.45, y: 0.28, z: 0.45}
+  minimumClickHitboxSize: {x: 0.9, y: 0.45, z: 0.9}
 --- !u!136 &4610398688450319305
 CapsuleCollider:
   m_ObjectHideFlags: 0
