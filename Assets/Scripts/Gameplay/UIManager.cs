@@ -83,8 +83,8 @@ namespace TheTasteReviver
 
         [Header("Traits Overlay")]
         public HudPanelLayout ingredientTraitsExpandedPanelLayout = new HudPanelLayout(820f, 520f, 0f, -12f, 30);
-        public Vector2 ingredientTraitExpandedTextInsetMin = new Vector2(52f, 30f);
-        public Vector2 ingredientTraitExpandedTextInsetMax = new Vector2(-44f, -40f);
+        public Vector2 ingredientTraitExpandedTextInsetMin = new Vector2(70f, 46f);
+        public Vector2 ingredientTraitExpandedTextInsetMax = new Vector2(-64f, -56f);
         [Range(0f, 1f)]
         public float ingredientTraitBackdropAlpha = 0.34f;
 
@@ -102,6 +102,7 @@ namespace TheTasteReviver
         public Vector2 ingredientTooltipSize = new Vector2(380f, 170f);
         public Vector2 ingredientTooltipCursorOffset = new Vector2(24f, -22f);
         public int ingredientTooltipFontSize = 18;
+        public int ingredientTooltipNameFontSize = 24;
 
         private Action<RatioLevel> pendingRatioSelection;
         private Coroutine resetPromptCoroutine;
@@ -162,6 +163,7 @@ namespace TheTasteReviver
             }
 
             ingredientTooltipOwner = owner;
+            ingredientTooltipLabel.richText = true;
             ingredientTooltipLabel.text = BuildIngredientTooltipText(validIngredients);
             ingredientTooltipPanel.SetActive(true);
             ingredientTooltipPanel.transform.SetAsLastSibling();
@@ -236,6 +238,7 @@ namespace TheTasteReviver
             ingredientTooltipLabel.enableAutoSizing = true;
             ingredientTooltipLabel.fontSizeMin = 14f;
             ingredientTooltipLabel.fontSizeMax = ingredientTooltipFontSize;
+            ingredientTooltipLabel.richText = true;
             ingredientTooltipLabel.overflowMode = TextOverflowModes.Truncate;
             ingredientTooltipLabel.raycastTarget = false;
             ingredientTooltipPanel.SetActive(false);
@@ -264,15 +267,15 @@ namespace TheTasteReviver
             ingredientTooltipRect.anchoredPosition = position;
         }
 
-        private static string BuildIngredientTooltipText(IReadOnlyList<IngredientData> ingredients)
+        private string BuildIngredientTooltipText(IReadOnlyList<IngredientData> ingredients)
         {
             if (ingredients.Count > 1)
             {
-                return "Prepared mixture\n" + string.Join(" + ", ingredients.Select(ingredient => ingredient.DisplayName));
+                return "Prepared mixture\n" + string.Join(" + ", ingredients.Select(BuildIngredientTooltipName));
             }
 
             IngredientData ingredient = ingredients[0];
-            StringBuilder builder = new StringBuilder(ingredient.DisplayName);
+            StringBuilder builder = new StringBuilder(BuildIngredientTooltipName(ingredient));
 
             if (!string.IsNullOrWhiteSpace(ingredient.aromaType))
             {
@@ -285,6 +288,13 @@ namespace TheTasteReviver
             }
 
             return builder.ToString();
+        }
+
+        private string BuildIngredientTooltipName(IngredientData ingredient)
+        {
+            string displayName = ingredient != null ? ingredient.DisplayName : string.Empty;
+            int nameFontSize = Mathf.Max(ingredientTooltipFontSize, ingredientTooltipNameFontSize);
+            return "<size=" + nameFontSize + "><b>" + displayName + "</b></size>";
         }
 
 #if UNITY_EDITOR
@@ -1036,7 +1046,7 @@ namespace TheTasteReviver
         {
             if (driveHudLayoutFromInspector)
             {
-                ConfigureTextPanel(levelLabel, levelPanelLayout, new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.MiddleLeft);
+                ConfigureTextPanel(levelLabel, levelPanelLayout, new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.MiddleCenter);
                 ConfigureTextPanel(currentOrderLabel, currentOrderPanelLayout, new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft);
                 ConfigureTextPanel(currentRatioLabel, currentRatioPanelLayout, new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft);
                 ConfigureTextPanel(currentSpeedLabel, currentSpeedPanelLayout, new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.MiddleLeft);
@@ -1053,6 +1063,7 @@ namespace TheTasteReviver
                 ConfigureNamedRect("Force Label Panel", forceLabelPanelLayout, new Vector2(0f, 0f), new Vector2(0f, 0f));
                 ConfigureNamedRect("Ingredient Traits Panel", ingredientTraitsPanelLayout, new Vector2(1f, 1f), new Vector2(1f, 1f));
                 ConfigureNamedRect("Ratio Selection Panel", ratioSelectionPanelLayout, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+                ConfigureManagedHudTextFrames();
                 ConfigureForceLabelPanel(true);
             }
             else
@@ -1061,6 +1072,7 @@ namespace TheTasteReviver
                 ConfigureForceLabelPanel(false);
             }
 
+            ConfigureLevelLabelText();
             ConfigureHintText();
             ConfigureTraitText(driveHudLayoutFromInspector);
 #if UNITY_EDITOR
@@ -1200,6 +1212,15 @@ namespace TheTasteReviver
             rect.localScale = Vector3.one;
         }
 
+        private void ConfigureManagedHudTextFrames()
+        {
+            ConfigureHudTextInset(levelLabel, TextAnchor.MiddleCenter);
+            ConfigureHudTextInset(currentOrderLabel, TextAnchor.UpperLeft);
+            ConfigureHudTextInset(currentRatioLabel, TextAnchor.UpperLeft);
+            ConfigureHudTextInset(currentSpeedLabel, TextAnchor.MiddleLeft);
+            ConfigureHudTextInset(hintLabel, TextAnchor.UpperLeft);
+        }
+
         private void ConfigureHudTextInset(TMP_Text label, TextAnchor alignment)
         {
             RectTransform rect = IsAlive(label) ? label.GetComponent<RectTransform>() : null;
@@ -1307,35 +1328,17 @@ namespace TheTasteReviver
             ApplyNamedPanelStyle("Force Label Panel");
             ApplyNamedPanelStyle("Ingredient Traits Panel");
             ApplyNamedPanelStyle("Ratio Selection Panel");
-            ConfigureExistingHudTextFrames();
         }
 
-        private void ConfigureExistingHudTextFrames()
+        private void ConfigureLevelLabelText()
         {
-            ConfigureHudTextInset(levelLabel, TextAnchor.MiddleLeft);
-            ConfigureHudTextInset(currentOrderLabel, TextAnchor.UpperLeft);
-            ConfigureHudTextInset(currentRatioLabel, TextAnchor.UpperLeft);
-            ConfigureHudTextInset(currentSpeedLabel, TextAnchor.MiddleLeft);
-            ConfigureHudTextInset(hintLabel, TextAnchor.UpperLeft);
-
-            ConfigureExistingButtonText(experimentLogButton);
-            ConfigureExistingButtonText(evaluateButton);
-            ConfigureExistingButtonText(resetAttemptButton);
-            ConfigureExistingButtonText(newBatchButton);
-            ConfigureExistingButtonText(nextLevelButton);
-            ConfigureExistingButtonText(ingredientTraitToggleButton);
-        }
-
-        private void ConfigureExistingButtonText(Button button)
-        {
-            TMP_Text label = IsAlive(button) ? button.GetComponentInChildren<TMP_Text>(true) : null;
-            if (!IsAlive(label))
+            if (!IsAlive(levelLabel))
             {
                 return;
             }
 
-            label.alignment = TextAlignmentOptions.Center;
-            ConfigureButtonTextInset(label);
+            levelLabel.alignment = TextAlignmentOptions.Center;
+            levelLabel.fontStyle = FontStyles.Bold;
         }
 
         private void EnsureOpeningLevelTitlePanel()
@@ -1588,6 +1591,11 @@ namespace TheTasteReviver
             }
 
             PanelBackgroundStyle.Apply(panel.GetComponent<Image>(), 0.9f);
+            if (!updateRectTransforms)
+            {
+                return;
+            }
+
             TMP_Text label = panel.GetComponentInChildren<TMP_Text>(true);
             if (!IsAlive(label))
             {
@@ -1603,11 +1611,6 @@ namespace TheTasteReviver
             label.alignment = TextAlignmentOptions.Center;
             label.textWrappingMode = TextWrappingModes.Normal;
             label.overflowMode = TextOverflowModes.Truncate;
-
-            if (!updateRectTransforms)
-            {
-                return;
-            }
 
             RectTransform rect = label.GetComponent<RectTransform>();
             if (IsAlive(rect))

@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -617,6 +618,39 @@ namespace TheTasteReviver.EditorTools
             {
                 Object.DestroyImmediate(lodGroup);
             }
+
+            RemoveRedundantLodModels(root.transform);
+        }
+
+        private static void RemoveRedundantLodModels(Transform root)
+        {
+            IEnumerable<IGrouping<Transform, Transform>> siblingGroups = root
+                .GetComponentsInChildren<Transform>(true)
+                .Where(transform => transform != root && GetLodIndex(transform) >= 0)
+                .GroupBy(transform => transform.parent);
+
+            foreach (IGrouping<Transform, Transform> siblingGroup in siblingGroups)
+            {
+                Transform keep = siblingGroup.FirstOrDefault(transform => GetLodIndex(transform) == 0)
+                    ?? siblingGroup.OrderBy(GetLodIndex).First();
+                keep.gameObject.SetActive(true);
+
+                foreach (Transform candidate in siblingGroup.Where(transform => transform != keep).ToList())
+                {
+                    Object.DestroyImmediate(candidate.gameObject);
+                }
+            }
+        }
+
+        private static int GetLodIndex(Transform transform)
+        {
+            const string prefix = "model_LOD";
+            if (transform == null || !transform.name.StartsWith(prefix))
+            {
+                return -1;
+            }
+
+            return int.TryParse(transform.name.Substring(prefix.Length), out int index) ? index : -1;
         }
 
         private static void FitVisualToFootprint(Transform root, Transform visual, float targetDiameter)

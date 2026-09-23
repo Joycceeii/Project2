@@ -600,42 +600,35 @@ namespace TheTasteReviver
                 return;
             }
 
-            List<Transform> lodRoots = new List<Transform>();
-            FindChildrenRecursive(root, "lod", lodRoots);
-            foreach (Transform lodRoot in lodRoots)
+            IEnumerable<IGrouping<Transform, Transform>> siblingGroups = root
+                .GetComponentsInChildren<Transform>(true)
+                .Where(transform => transform != root && GetLodIndex(transform) >= 0)
+                .GroupBy(transform => transform.parent);
+            foreach (IGrouping<Transform, Transform> siblingGroup in siblingGroups)
             {
-                if (!IsAlive(lodRoot))
+                Transform keep = siblingGroup.FirstOrDefault(transform => GetLodIndex(transform) == 0)
+                    ?? siblingGroup.OrderBy(GetLodIndex).First();
+                keep.gameObject.SetActive(true);
+                foreach (Transform candidate in siblingGroup.Where(transform => transform != keep).ToList())
                 {
-                    continue;
-                }
-
-                Transform keep = lodRoot.Find("model_LOD0");
-                List<GameObject> remove = new List<GameObject>();
-                foreach (Transform child in lodRoot)
-                {
-                    if (!IsAlive(child) || !child.name.StartsWith("model_LOD"))
+                    if (IsAlive(candidate))
                     {
-                        continue;
-                    }
-
-                    if (IsAlive(keep) && child == keep)
-                    {
-                        child.gameObject.SetActive(true);
-                        continue;
-                    }
-
-                    remove.Add(child.gameObject);
-                }
-
-                foreach (GameObject target in remove)
-                {
-                    if (IsAlive(target))
-                    {
-                        target.SetActive(false);
-                        DestroyObject(target);
+                        candidate.gameObject.SetActive(false);
+                        DestroyObject(candidate.gameObject);
                     }
                 }
             }
+        }
+
+        private static int GetLodIndex(Transform transform)
+        {
+            const string prefix = "model_LOD";
+            if (!IsAlive(transform) || !transform.name.StartsWith(prefix))
+            {
+                return -1;
+            }
+
+            return int.TryParse(transform.name.Substring(prefix.Length), out int index) ? index : -1;
         }
 
         private static Transform FindChildRecursive(Transform root, string childName)

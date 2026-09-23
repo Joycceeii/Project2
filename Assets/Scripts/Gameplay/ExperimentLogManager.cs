@@ -24,6 +24,20 @@ namespace TheTasteReviver
         public static IReadOnlyList<ExperimentRecord> SharedRecords => sharedRecords;
         public static IReadOnlyList<UnlockedClueRecord> UnlockedClues => unlockedClues;
 
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetForNewGameSession()
+        {
+            sharedRecords.Clear();
+            unlockedClues.Clear();
+            ingredientCatalog.Clear();
+            levelCatalog.Clear();
+            unlockedIngredientIDs.Clear();
+
+            PlayerPrefs.DeleteKey(CluePrefsKey);
+            PlayerPrefs.DeleteKey(IngredientPrefsKey);
+            PlayerPrefs.Save();
+        }
+
         public static void SetIngredientCatalog(IEnumerable<IngredientData> ingredients)
         {
             ingredientCatalog.Clear();

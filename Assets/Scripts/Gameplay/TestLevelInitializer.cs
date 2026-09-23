@@ -749,6 +749,8 @@ public class TestLevelInitializer : MonoBehaviour
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.worldCamera = null;
             canvas.planeDistance = 100f;
+            canvas.additionalShaderChannels = AdditionalCanvasShaderChannels.TexCoord1;
+            canvas.vertexColorAlwaysGammaSpace = true;
 
             CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
             if (scaler != null)
