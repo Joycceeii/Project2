@@ -1,5 +1,7 @@
 LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
-L06,BlackSesame,L06_BlackSesame,Ratio,Less,,,,,,,,,,,,"Black sesame gives the paste its strong roasted taste."
-L06,GlutinousRice,L06_GlutinousRice,Ratio,VeryLess,,,,,,,,,,,,"Glutinous rice makes the paste smooth and soft."
-L06,BlackSesame,L06_BlackSesame,GrindDuration,14-22,,,,,,,,,,,,"Black sesame gives the paste its strong roasted taste."
-L06,GlutinousRice,L06_GlutinousRice,GrindDuration,14-22,,,,,,,,,,,,"Glutinous rice makes the paste smooth and soft."
+L06,BlackSesame,L06_BlackSesame,Ratio,SlightlyMore,,,,,,,,,,,,"Black sesame brings the main roasted flavor, but too much can make the paste bitter."
+L06,GlutinousRice,L06_GlutinousRice,Ratio,Less,,,,,,,,,,,,"Glutinous rice softens and thickens the paste, following the steady behavior of familiar grains."
+L06,BlackSesame,L06_BlackSesame,Force,Medium,,,,,,,,,,,,"Black sesame brings the main roasted flavor, but too much can make the paste bitter."
+L06,GlutinousRice,L06_GlutinousRice,Force,Medium,,,,,,,,,,,,"Glutinous rice softens and thickens the paste, following the steady behavior of familiar grains."
+L06,BlackSesame,L06_BlackSesame,GrindDuration,14-22,,,,,,,,,,,,"Black sesame brings the main roasted flavor, but too much can make the paste bitter."
+L06,GlutinousRice,L06_GlutinousRice,GrindDuration,14-22,,,,,,,,,,,,"Glutinous rice softens and thickens the paste, following the steady behavior of familiar grains."

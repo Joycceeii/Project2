@@ -31,7 +31,6 @@ namespace TheTasteReviver
             }
 
             CurrentLevelIndex = Mathf.Clamp(index, 0, levels.Count - 1);
-            ExperimentLogManager.UnlockIngredientsFromLevels(levels.Take(CurrentLevelIndex + 1));
             attemptManager?.SetLevel(CurrentLevel);
             ingredientDisplayManager?.ShowLevelIngredients(CurrentLevel);
             hintManager?.ResetHints();

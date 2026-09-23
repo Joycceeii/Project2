@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: Ginger-Scallion Finale
   cityName: Zhanjiang
   targetTasteName: Final Challenge
-  levelIntro: "Make a balanced ginger-scallion sauce. Ginger flavors should lead, with scallion and salt kept light."
+  levelIntro: "Make a balanced ginger-scallion sauce. Ginger should be the strongest flavor, while scallion stays fresh and salt stays light."
   maxIngredientCount: 4
   availableIngredients:
   - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
@@ -96,7 +96,7 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L11_Ginger_Combination
     title: Ginger Combination Clue
-    content: "Sand ginger and ginger can be ground together because they support the same main flavor."
+    content: "Sand ginger and ginger can be ground together because their spicy flavors develop in the same direction."
     relatedIngredients:
     - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
     - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
@@ -112,7 +112,7 @@ MonoBehaviour:
   - ruleId: L11_Hint_SandGinger_Ratio
     priority: 22
     mechanic: 2
-    hintText: Sand ginger should use the Large amount. It is the main ginger flavor.
+    hintText: Sand ginger should use the Large amount. It should be the strongest ginger flavor.
   - ruleId: L11_Hint_CoarseSalt_Ratio
     priority: 21
     mechanic: 2
@@ -120,7 +120,7 @@ MonoBehaviour:
   - ruleId: L11_Hint_Scallion_Ratio
     priority: 20
     mechanic: 2
-    hintText: "Use more scallion white than coarse salt, but less than ginger."
+    hintText: Scallion white should use the Small amount.
   - ruleId: L11_Hint_Ginger_Combination
     priority: 22
     mechanic: 3
@@ -136,7 +136,7 @@ MonoBehaviour:
   - ruleId: L11_Hint_CoarseSalt_Order
     priority: 22
     mechanic: 1
-    hintText: Start with coarse salt to set a light base.
+    hintText: Start with coarse salt. Its light seasoning needs to disperse before the ginger arrives.
   - ruleId: L11_Hint_Ginger_Order
     priority: 21
     mechanic: 1
@@ -160,7 +160,7 @@ MonoBehaviour:
     targetRatioLevel: 5
     targetOrderIndex: 1
     targetCombinationKey: Ginger+SandGinger
-    levelTraitDescription: Sand ginger gives the recipe a dry spicy base.
+    levelTraitDescription: "Sand ginger gives the sauce a deep, dry spice."
     responseHintRules: []
   - profileTag: L11_Ginger
     ingredient: {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
@@ -192,7 +192,7 @@ MonoBehaviour:
     targetRatioLevel: 1
     targetOrderIndex: 0
     targetCombinationKey: CoarseSalt
-    levelTraitDescription: Coarse salt is a quiet mineral base.
+    levelTraitDescription: Coarse salt adds light seasoning when used carefully.
     responseHintRules: []
   - profileTag: L11_ScallionWhite
     ingredient: {fileID: 11400000, guid: 90232a38a4c71eb4396c578d8b4122a9, type: 2}

@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: Sand Ginger Core
   cityName: Meizhou
   targetTasteName: Force And Ratio Challenge
-  levelIntro: "Sand ginger should be the main flavor. Dried tangerine peel and coarse salt should support it."
+  levelIntro: "Sand ginger should be the strongest flavor. Dried tangerine peel adds a citrus accent, while coarse salt brings the flavors forward."
   maxIngredientCount: 3
   availableIngredients:
   - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
@@ -96,7 +96,7 @@ MonoBehaviour:
     relatedDimension: 4
   - clueId: L07_CoarseSalt_Ratio
     title: Coarse Salt - Ratio Clue
-    content: Coarse salt should stay in the background. Do not make it the main flavor.
+    content: Coarse salt uses the Small amount so it brings out the sand ginger without covering it.
     relatedIngredients:
     - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
     relatedDimension: 2
@@ -109,11 +109,11 @@ MonoBehaviour:
   - ruleId: L07_Hint_CoarseSalt_Ratio
     priority: 21
     mechanic: 2
-    hintText: Coarse salt should use the Small amount. It should support the spice
+    hintText: Coarse salt should use the Small amount. It should bring out the spice without covering it.
   - ruleId: L07_Hint_Peel_Ratio
     priority: 20
     mechanic: 2
-    hintText: "Use more dried tangerine peel than coarse salt, but less than sand ginger."
+    hintText: Dried tangerine peel should use the Medium amount.
   ingredientProfiles:
   - profileTag: L07_SandGinger
     ingredient: {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
@@ -161,8 +161,8 @@ MonoBehaviour:
     targetRatioLevel: 2
     targetOrderIndex: -1
     targetCombinationKey: 
-    levelTraitDescription: "Coarse salt should support the recipe, not lead it."
+    levelTraitDescription: Coarse salt brings out the sand ginger when used lightly.
     responseHintRules: []
   successFeedback: "Sand ginger is clear, with a little citrus and salt behind it."
   closeFeedback: "Very close. Check the force or ratio."
-  wrongFeedback: "Salt or citrus is too strong, and sand ginger is not the main flavor."
+  wrongFeedback: "Salt or citrus is too strong, and sand ginger is no longer the strongest flavor."

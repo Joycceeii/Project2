@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ namespace TheTasteReviver
     public class ForceSliderController : MonoBehaviour
     {
         public Slider forceSlider;
-        public Text forceLabel;
+        public TMP_Text forceLabel;
         public UIManager uiManager;
         [Header("Slider Style")]
         [Tooltip("Off lets you adjust the slider fill, handle, and label RectTransforms directly in the Scene view.")]
@@ -71,7 +72,7 @@ namespace TheTasteReviver
             }
         }
 
-        public void Bind(Slider slider, Text label)
+        public void Bind(Slider slider, TMP_Text label)
         {
             forceSlider = slider;
             forceLabel = label;
@@ -235,15 +236,15 @@ namespace TheTasteReviver
             Vector2 panelPosition = managerLabelLayout != null ? managerLabelLayout.position : labelPanelPosition;
             int fontSize = managerLabelLayout != null && managerLabelLayout.fontSize > 0 ? managerLabelLayout.fontSize : labelFontSize;
 
-            forceLabel.font = ThemeFontProvider.GetFont(14);
+            forceLabel.font = ThemeFontProvider.GetTmpFont(14);
             forceLabel.fontSize = fontSize;
-            forceLabel.fontStyle = FontStyle.Normal;
-            forceLabel.resizeTextForBestFit = true;
-            forceLabel.resizeTextMinSize = 10;
-            forceLabel.resizeTextMaxSize = fontSize;
-            forceLabel.alignment = TextAnchor.MiddleCenter;
-            forceLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
-            forceLabel.verticalOverflow = VerticalWrapMode.Truncate;
+            forceLabel.fontStyle = FontStyles.Normal;
+            forceLabel.enableAutoSizing = true;
+            forceLabel.fontSizeMin = 10;
+            forceLabel.fontSizeMax = fontSize;
+            forceLabel.alignment = TextAlignmentOptions.Center;
+            forceLabel.textWrappingMode = TextWrappingModes.Normal;
+            forceLabel.overflowMode = TextOverflowModes.Truncate;
 
             RectTransform labelRect = forceLabel.GetComponent<RectTransform>();
             if (updateLabelRectTransforms && labelRect != null)

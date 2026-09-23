@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -37,6 +38,17 @@ public class TestLevelInitializer : MonoBehaviour
 
         private void OnEnable()
         {
+#if UNITY_EDITOR
+            if (UnityEditor.SessionState.GetBool("TheTasteReviver.TmpMigration", false))
+            {
+                return;
+            }
+
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+#endif
             RepairRuntimeReferences();
             TryBuildInEditMode();
         }
@@ -44,6 +56,11 @@ public class TestLevelInitializer : MonoBehaviour
 #if UNITY_EDITOR
         private void OnValidate()
         {
+            if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                return;
+            }
+
             QueueInspectorLayoutRefresh();
         }
 
@@ -63,8 +80,13 @@ public class TestLevelInitializer : MonoBehaviour
                     return;
                 }
 
+                if (UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+                {
+                    return;
+                }
+
                 ApplyInspectorLayout();
-                if (Application.isPlaying || !buildInEditMode)
+                if (!buildInEditMode || HasBuiltSceneObjects())
                 {
                     return;
                 }
@@ -121,6 +143,7 @@ public class TestLevelInitializer : MonoBehaviour
             CreateCanvas(out ui, out force, out log, pestle);
             EnsureAssignedData();
             ExperimentLogManager.SetIngredientCatalog(ingredients);
+            ExperimentLogManager.SetLevelCatalog(levels);
 
             attempt.uiManager = ui;
             attempt.forceController = force;
@@ -162,6 +185,7 @@ public class TestLevelInitializer : MonoBehaviour
 
             EnsureAssignedData();
             ExperimentLogManager.SetIngredientCatalog(ingredients);
+            ExperimentLogManager.SetLevelCatalog(levels);
 
             attempt.uiManager = ui;
             attempt.forceController = force;
@@ -208,6 +232,7 @@ public class TestLevelInitializer : MonoBehaviour
             ApplyInspectorLayout();
             EnsureAssignedData();
             ExperimentLogManager.SetIngredientCatalog(ingredients);
+            ExperimentLogManager.SetLevelCatalog(levels);
 
             if (force != null && force.forceSlider == null)
             {
@@ -697,7 +722,7 @@ public class TestLevelInitializer : MonoBehaviour
             log.logText = null;
 
             Slider slider = CreateSlider(canvas.transform, "Force Slider", new Vector2(300f, 36f), new Vector2(24f, 56f), bottomLeft, bottomLeft);
-            Text forceText = CreateText(canvas.transform, "Force Label", new Vector2(300f, 34f), new Vector2(24f, 20f), bottomLeft, bottomLeft);
+            TMP_Text forceText = CreateText(canvas.transform, "Force Label", new Vector2(300f, 34f), new Vector2(24f, 20f), bottomLeft, bottomLeft);
             force = slider.gameObject.AddComponent<ForceSliderController>();
             force.Bind(slider, forceText);
             force.uiManager = ui;
@@ -759,24 +784,24 @@ public class TestLevelInitializer : MonoBehaviour
             }
         }
 
-    private static Text CreateText(Transform parent, string name, Vector2 size, Vector2 position, TextAnchor anchor = TextAnchor.MiddleLeft)
+    private static TMP_Text CreateText(Transform parent, string name, Vector2 size, Vector2 position, TextAnchor anchor = TextAnchor.MiddleLeft)
     {
         GameObject panel = CreatePanel(parent, name + " Panel", size, position);
-        Text text = CreateTextChild(panel.transform, name, GetTextInsetMin(anchor), GetTextInsetMax(anchor), anchor);
+        TMP_Text text = CreateTextChild(panel.transform, name, GetTextInsetMin(anchor), GetTextInsetMax(anchor), anchor);
         text.fontSize = 20;
-        text.horizontalOverflow = HorizontalWrapMode.Wrap;
-        text.verticalOverflow = VerticalWrapMode.Overflow;
+        text.textWrappingMode = TextWrappingModes.Normal;
+        text.overflowMode = TextOverflowModes.Overflow;
         text.text = name;
         return text;
     }
 
-    private static Text CreateText(Transform parent, string name, Vector2 size, Vector2 position, Vector2 anchorPoint, Vector2 pivot, TextAnchor anchor = TextAnchor.MiddleLeft)
+    private static TMP_Text CreateText(Transform parent, string name, Vector2 size, Vector2 position, Vector2 anchorPoint, Vector2 pivot, TextAnchor anchor = TextAnchor.MiddleLeft)
     {
         GameObject panel = CreatePanel(parent, name + " Panel", size, position, anchorPoint, pivot);
-        Text text = CreateTextChild(panel.transform, name, GetTextInsetMin(anchor), GetTextInsetMax(anchor), anchor);
+        TMP_Text text = CreateTextChild(panel.transform, name, GetTextInsetMin(anchor), GetTextInsetMax(anchor), anchor);
         text.fontSize = 20;
-        text.horizontalOverflow = HorizontalWrapMode.Wrap;
-        text.verticalOverflow = VerticalWrapMode.Overflow;
+        text.textWrappingMode = TextWrappingModes.Normal;
+        text.overflowMode = TextOverflowModes.Overflow;
         text.text = name;
         return text;
     }
@@ -797,7 +822,7 @@ public class TestLevelInitializer : MonoBehaviour
         return new Vector2(-min.x, -topInset);
     }
 
-    private static Text CreateTextChild(Transform parent, string name, Vector2 offsetMin, Vector2 offsetMax, TextAnchor anchor)
+    private static TMP_Text CreateTextChild(Transform parent, string name, Vector2 offsetMin, Vector2 offsetMax, TextAnchor anchor)
     {
         GameObject textObject = new GameObject(name + " Text");
         textObject.transform.SetParent(parent, false);
@@ -807,10 +832,10 @@ public class TestLevelInitializer : MonoBehaviour
         rect.offsetMin = offsetMin;
         rect.offsetMax = offsetMax;
 
-        Text text = textObject.AddComponent<Text>();
-        text.font = GetDefaultUIFont();
+        TMP_Text text = textObject.AddComponent<TextMeshProUGUI>();
+        text.font = ThemeFontProvider.GetTmpFont(14);
         text.color = Color.black;
-        text.alignment = anchor;
+        text.alignment = TmpTextUtility.ToAlignment(anchor);
         return text;
     }
 
@@ -851,9 +876,9 @@ public class TestLevelInitializer : MonoBehaviour
         Button button = buttonObject.AddComponent<Button>();
         button.targetGraphic = buttonObject.GetComponent<Image>();
         button.onClick.AddListener(action);
-        Text text = CreateTextChild(buttonObject.transform, label, new Vector2(6f, 0f), new Vector2(-6f, 0f), TextAnchor.MiddleCenter);
+        TMP_Text text = CreateTextChild(buttonObject.transform, label, new Vector2(6f, 0f), new Vector2(-6f, 0f), TextAnchor.MiddleCenter);
         text.fontSize = 22;
-        text.fontStyle = FontStyle.Bold;
+        text.fontStyle = FontStyles.Bold;
         text.text = label;
         return button;
     }
@@ -864,9 +889,9 @@ public class TestLevelInitializer : MonoBehaviour
         Button button = buttonObject.AddComponent<Button>();
         button.targetGraphic = buttonObject.GetComponent<Image>();
         button.onClick.AddListener(action);
-        Text text = CreateTextChild(buttonObject.transform, label, new Vector2(6f, 0f), new Vector2(-6f, 0f), TextAnchor.MiddleCenter);
+        TMP_Text text = CreateTextChild(buttonObject.transform, label, new Vector2(6f, 0f), new Vector2(-6f, 0f), TextAnchor.MiddleCenter);
         text.fontSize = 22;
-        text.fontStyle = FontStyle.Bold;
+        text.fontStyle = FontStyles.Bold;
         text.text = label;
         return button;
     }

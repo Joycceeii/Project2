@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -36,16 +37,16 @@ namespace TheTasteReviver
         public ExperimentLogManager logManager;
         public LevelManager levelManager;
 
-        public Text levelLabel;
-        public Text openingLevelTitleLabel;
-        public Text currentOrderLabel;
-        public Text currentRatioLabel;
-        public Text currentSpeedLabel;
-        public Text hintLabel;
-        public Text ingredientTraitLabel;
+        public TMP_Text levelLabel;
+        public TMP_Text openingLevelTitleLabel;
+        public TMP_Text currentOrderLabel;
+        public TMP_Text currentRatioLabel;
+        public TMP_Text currentSpeedLabel;
+        public TMP_Text hintLabel;
+        public TMP_Text ingredientTraitLabel;
         public Button ingredientTraitToggleButton;
         public GameObject ratioSelectionPanel;
-        public Text ratioSelectionTitle;
+        public TMP_Text ratioSelectionTitle;
         public Button[] ratioSelectionButtons = new Button[4];
         public Button experimentLogButton;
         public Button evaluateButton;
@@ -82,8 +83,8 @@ namespace TheTasteReviver
 
         [Header("Traits Overlay")]
         public HudPanelLayout ingredientTraitsExpandedPanelLayout = new HudPanelLayout(820f, 520f, 0f, -12f, 30);
-        public Vector2 ingredientTraitExpandedTextInsetMin = new Vector2(150f, 104f);
-        public Vector2 ingredientTraitExpandedTextInsetMax = new Vector2(-150f, -126f);
+        public Vector2 ingredientTraitExpandedTextInsetMin = new Vector2(52f, 30f);
+        public Vector2 ingredientTraitExpandedTextInsetMax = new Vector2(-44f, -40f);
         [Range(0f, 1f)]
         public float ingredientTraitBackdropAlpha = 0.34f;
 
@@ -97,12 +98,23 @@ namespace TheTasteReviver
         public bool showOpeningLevelTitle = true;
         public float openingLevelTitleSeconds = 2.4f;
 
+        [Header("Ingredient Hover Tooltip")]
+        public Vector2 ingredientTooltipSize = new Vector2(380f, 170f);
+        public Vector2 ingredientTooltipCursorOffset = new Vector2(24f, -22f);
+        public int ingredientTooltipFontSize = 18;
+
         private Action<RatioLevel> pendingRatioSelection;
         private Coroutine resetPromptCoroutine;
         private Coroutine openingLevelTitleCoroutine;
         private float lastEvaluationTime = -999f;
         private GameObject ingredientTraitPanel;
         private GameObject ingredientTraitBackdrop;
+        private ScrollRect ingredientTraitScrollRect;
+        private RectTransform ingredientTraitViewport;
+        private GameObject ingredientTooltipPanel;
+        private RectTransform ingredientTooltipRect;
+        private TMP_Text ingredientTooltipLabel;
+        private UnityEngine.Object ingredientTooltipOwner;
         private const string ChallengeStartTitleLine = "Tutorial complete. Challenge levels begin now.";
         private const string TutorialCompleteTitle = "Tutorial Complete";
         private const string ChallengeStartSubtitle = "Challenge levels begin now.";
@@ -120,8 +132,159 @@ namespace TheTasteReviver
             EnsureActionButtons();
             EnsureIngredientTraitPanel();
             EnsureOpeningLevelTitlePanel();
+            EnsureIngredientTooltip();
             NormalizeHudLayout();
             PanelBackgroundStyle.ApplyToNamedPanels(transform);
+        }
+
+        private void LateUpdate()
+        {
+            if (IsAlive(ingredientTooltipPanel) && ingredientTooltipPanel.activeSelf)
+            {
+                PositionIngredientTooltip();
+            }
+        }
+
+        public void ShowIngredientTooltip(IReadOnlyList<IngredientData> ingredients, UnityEngine.Object owner)
+        {
+            List<IngredientData> validIngredients = ingredients != null
+                ? ingredients.Where(ingredient => ingredient != null).Distinct().ToList()
+                : new List<IngredientData>();
+            if (validIngredients.Count == 0)
+            {
+                return;
+            }
+
+            EnsureIngredientTooltip();
+            if (!IsAlive(ingredientTooltipPanel) || !IsAlive(ingredientTooltipLabel))
+            {
+                return;
+            }
+
+            ingredientTooltipOwner = owner;
+            ingredientTooltipLabel.text = BuildIngredientTooltipText(validIngredients);
+            ingredientTooltipPanel.SetActive(true);
+            ingredientTooltipPanel.transform.SetAsLastSibling();
+            Canvas.ForceUpdateCanvases();
+
+            float preferredHeight = ingredientTooltipLabel.GetPreferredValues(
+                ingredientTooltipLabel.text,
+                Mathf.Max(120f, ingredientTooltipSize.x - 112f),
+                0f).y;
+            ingredientTooltipRect.sizeDelta = new Vector2(
+                ingredientTooltipSize.x,
+                Mathf.Clamp(preferredHeight + 76f, ingredientTooltipSize.y, 260f));
+            PositionIngredientTooltip();
+        }
+
+        public void HideIngredientTooltip(UnityEngine.Object owner)
+        {
+            if (owner != null && ingredientTooltipOwner != null && owner != ingredientTooltipOwner)
+            {
+                return;
+            }
+
+            ingredientTooltipOwner = null;
+            if (IsAlive(ingredientTooltipPanel))
+            {
+                ingredientTooltipPanel.SetActive(false);
+            }
+        }
+
+        private void EnsureIngredientTooltip()
+        {
+            if (IsAlive(ingredientTooltipPanel) && IsAlive(ingredientTooltipLabel))
+            {
+                return;
+            }
+
+            Transform existing = transform.Find("Ingredient Hover Tooltip");
+            if (IsAlive(existing))
+            {
+                ingredientTooltipPanel = existing.gameObject;
+                ingredientTooltipRect = existing as RectTransform;
+                ingredientTooltipLabel = existing.GetComponentInChildren<TMP_Text>(true);
+                ingredientTooltipPanel.SetActive(false);
+                return;
+            }
+
+            ingredientTooltipPanel = new GameObject("Ingredient Hover Tooltip");
+            ingredientTooltipPanel.transform.SetParent(transform, false);
+            ingredientTooltipRect = ingredientTooltipPanel.AddComponent<RectTransform>();
+            ingredientTooltipRect.anchorMin = new Vector2(0.5f, 0.5f);
+            ingredientTooltipRect.anchorMax = new Vector2(0.5f, 0.5f);
+            ingredientTooltipRect.pivot = new Vector2(0f, 1f);
+            ingredientTooltipRect.sizeDelta = ingredientTooltipSize;
+
+            Image image = ingredientTooltipPanel.AddComponent<Image>();
+            PanelBackgroundStyle.Apply(image, 0.97f);
+            image.raycastTarget = false;
+
+            ingredientTooltipLabel = CreateRuntimeText(
+                ingredientTooltipPanel.transform,
+                "Ingredient Hover Tooltip Text",
+                Vector2.zero,
+                Vector2.zero,
+                TextAnchor.UpperLeft,
+                ingredientTooltipFontSize);
+            RectTransform labelRect = ingredientTooltipLabel.rectTransform;
+            labelRect.anchorMin = Vector2.zero;
+            labelRect.anchorMax = Vector2.one;
+            labelRect.offsetMin = new Vector2(56f, 34f);
+            labelRect.offsetMax = new Vector2(-56f, -40f);
+            ingredientTooltipLabel.fontStyle = FontStyles.Normal;
+            ingredientTooltipLabel.enableAutoSizing = true;
+            ingredientTooltipLabel.fontSizeMin = 14f;
+            ingredientTooltipLabel.fontSizeMax = ingredientTooltipFontSize;
+            ingredientTooltipLabel.overflowMode = TextOverflowModes.Truncate;
+            ingredientTooltipLabel.raycastTarget = false;
+            ingredientTooltipPanel.SetActive(false);
+        }
+
+        private void PositionIngredientTooltip()
+        {
+            Canvas canvas = GetComponent<Canvas>();
+            RectTransform canvasRect = transform as RectTransform;
+            if (!IsAlive(canvas) || !IsAlive(canvasRect) || !IsAlive(ingredientTooltipRect))
+            {
+                return;
+            }
+
+            Camera eventCamera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, Input.mousePosition, eventCamera, out Vector2 localPoint))
+            {
+                return;
+            }
+
+            Vector2 position = localPoint + ingredientTooltipCursorOffset;
+            Rect bounds = canvasRect.rect;
+            Vector2 size = ingredientTooltipRect.sizeDelta;
+            position.x = Mathf.Clamp(position.x, bounds.xMin, bounds.xMax - size.x);
+            position.y = Mathf.Clamp(position.y, bounds.yMin + size.y, bounds.yMax);
+            ingredientTooltipRect.anchoredPosition = position;
+        }
+
+        private static string BuildIngredientTooltipText(IReadOnlyList<IngredientData> ingredients)
+        {
+            if (ingredients.Count > 1)
+            {
+                return "Prepared mixture\n" + string.Join(" + ", ingredients.Select(ingredient => ingredient.DisplayName));
+            }
+
+            IngredientData ingredient = ingredients[0];
+            StringBuilder builder = new StringBuilder(ingredient.DisplayName);
+
+            if (!string.IsNullOrWhiteSpace(ingredient.aromaType))
+            {
+                builder.AppendLine().Append("Aroma: ").Append(ingredient.aromaType);
+            }
+
+            if (!string.IsNullOrWhiteSpace(ingredient.initialDescription))
+            {
+                builder.AppendLine().Append(ingredient.initialDescription);
+            }
+
+            return builder.ToString();
         }
 
 #if UNITY_EDITOR
@@ -245,7 +408,14 @@ namespace TheTasteReviver
             {
                 levelLabel.text = BuildCollapsedLevelTitle(level);
             }
-            ShowOpeningLevelTitle(level);
+            if (GameSceneReturnState.ConsumeSkipOpeningLevelTitle())
+            {
+                HideOpeningLevelTitle();
+            }
+            else
+            {
+                ShowOpeningLevelTitle(level);
+            }
 
             RefreshAttemptPanels(attemptManager);
             ShowHint(BuildLevelStartHint(level));
@@ -266,7 +436,7 @@ namespace TheTasteReviver
             SetNamedObjectVisible("Force Label Panel", showForceControls);
         }
 
-        private static void SetTextPanelVisible(Text label, bool visible)
+        private static void SetTextPanelVisible(TMP_Text label, bool visible)
         {
             if (!IsAlive(label))
             {
@@ -571,6 +741,7 @@ namespace TheTasteReviver
 
             string text = BuildIngredientTraitText(level);
             ingredientTraitLabel.text = text;
+            ResetIngredientTraitScroll();
             if (string.IsNullOrWhiteSpace(text))
             {
                 SetIngredientTraitsExpanded(false);
@@ -621,6 +792,7 @@ namespace TheTasteReviver
                 {
                     ConfigureExpandedIngredientTraitsPanel();
                     ingredientTraitPanel.transform.SetAsLastSibling();
+                    ResetIngredientTraitScroll();
                 }
             }
 
@@ -654,28 +826,27 @@ namespace TheTasteReviver
                 return;
             }
 
-            ingredientTraitLabel.font = GetRuntimeFont();
-            ingredientTraitLabel.fontStyle = FontStyle.Normal;
+            ingredientTraitLabel.font = ThemeFontProvider.GetTmpFont();
+            ingredientTraitLabel.fontStyle = FontStyles.Normal;
             ingredientTraitLabel.fontSize = GetLayoutFontSize(ingredientTraitsExpandedPanelLayout, 32);
-            ingredientTraitLabel.resizeTextForBestFit = true;
-            ingredientTraitLabel.resizeTextMinSize = 22;
-            ingredientTraitLabel.resizeTextMaxSize = ingredientTraitLabel.fontSize;
-            ingredientTraitLabel.alignment = TextAnchor.UpperLeft;
-            ingredientTraitLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
-            ingredientTraitLabel.verticalOverflow = VerticalWrapMode.Truncate;
+            ingredientTraitLabel.enableAutoSizing = true;
+            ingredientTraitLabel.fontSizeMin = 22;
+            ingredientTraitLabel.fontSizeMax = ingredientTraitLabel.fontSize;
+            ingredientTraitLabel.alignment = TextAlignmentOptions.TopLeft;
+            ingredientTraitLabel.textWrappingMode = TextWrappingModes.Normal;
+            ingredientTraitLabel.overflowMode = TextOverflowModes.Overflow;
 
-            RectTransform textRect = ingredientTraitLabel.GetComponent<RectTransform>();
-            if (IsAlive(textRect))
+            EnsureIngredientTraitScrollView();
+            if (IsAlive(ingredientTraitViewport))
             {
-                textRect.anchorMin = Vector2.zero;
-                textRect.anchorMax = Vector2.one;
-                textRect.pivot = new Vector2(0.5f, 0.5f);
-                textRect.anchoredPosition = Vector2.zero;
-                textRect.offsetMin = ingredientTraitExpandedTextInsetMin;
-                textRect.offsetMax = ingredientTraitExpandedTextInsetMax;
-                textRect.sizeDelta = Vector2.zero;
-                textRect.localRotation = Quaternion.identity;
-                textRect.localScale = Vector3.one;
+                ingredientTraitViewport.anchorMin = Vector2.zero;
+                ingredientTraitViewport.anchorMax = Vector2.one;
+                ingredientTraitViewport.pivot = new Vector2(0.5f, 0.5f);
+                ingredientTraitViewport.anchoredPosition = Vector2.zero;
+                ingredientTraitViewport.offsetMin = ingredientTraitExpandedTextInsetMin;
+                ingredientTraitViewport.offsetMax = ingredientTraitExpandedTextInsetMax;
+                ingredientTraitViewport.localRotation = Quaternion.identity;
+                ingredientTraitViewport.localScale = Vector3.one;
             }
         }
 
@@ -726,7 +897,7 @@ namespace TheTasteReviver
                 }
 
                 RatioLevel selected = options[i];
-                Text label = button.GetComponentInChildren<Text>();
+                TMP_Text label = button.GetComponentInChildren<TMP_Text>();
                 if (IsAlive(label))
                 {
                     label.text = GetRatioDisplayName(selected);
@@ -745,6 +916,7 @@ namespace TheTasteReviver
             {
                 case RatioLevel.VeryLess: return "Very Small";
                 case RatioLevel.Less: return "Small";
+                case RatioLevel.Medium: return "Medium";
                 case RatioLevel.SlightlyMore: return "Medium";
                 case RatioLevel.More: return "Large";
                 default: return "None";
@@ -889,6 +1061,7 @@ namespace TheTasteReviver
                 ConfigureForceLabelPanel(false);
             }
 
+            ConfigureHintText();
             ConfigureTraitText(driveHudLayoutFromInspector);
 #if UNITY_EDITOR
             if (!Application.isPlaying)
@@ -907,14 +1080,22 @@ namespace TheTasteReviver
             }
 
             ingredientTraitLabel.fontSize = 24;
-            ingredientTraitLabel.font = GetRuntimeFont();
-            ingredientTraitLabel.fontStyle = FontStyle.Normal;
-            ingredientTraitLabel.resizeTextForBestFit = true;
-            ingredientTraitLabel.resizeTextMinSize = 17;
-            ingredientTraitLabel.resizeTextMaxSize = 24;
-            ingredientTraitLabel.alignment = TextAnchor.UpperLeft;
-            ingredientTraitLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
-            ingredientTraitLabel.verticalOverflow = VerticalWrapMode.Truncate;
+            ingredientTraitLabel.font = ThemeFontProvider.GetTmpFont();
+            ingredientTraitLabel.fontStyle = FontStyles.Normal;
+            ingredientTraitLabel.enableAutoSizing = true;
+            ingredientTraitLabel.fontSizeMin = 17;
+            ingredientTraitLabel.fontSizeMax = 24;
+            ingredientTraitLabel.alignment = TextAlignmentOptions.TopLeft;
+            ingredientTraitLabel.textWrappingMode = TextWrappingModes.Normal;
+            ingredientTraitLabel.overflowMode = Application.isPlaying
+                ? TextOverflowModes.Overflow
+                : TextOverflowModes.Truncate;
+
+            if (Application.isPlaying)
+            {
+                EnsureIngredientTraitScrollView();
+                return;
+            }
 
             if (!updateRectTransform)
             {
@@ -933,12 +1114,38 @@ namespace TheTasteReviver
             }
         }
 
-        private static void ConfigureTextPanel(Text label, HudPanelLayout layout, Vector2 anchor, Vector2 pivot, TextAnchor alignment)
+        private void ConfigureHintText()
+        {
+            if (!IsAlive(hintLabel))
+            {
+                return;
+            }
+
+            hintLabel.alignment = TextAlignmentOptions.TopLeft;
+            hintLabel.fontStyle = FontStyles.Normal;
+            hintLabel.textWrappingMode = TextWrappingModes.Normal;
+            hintLabel.overflowMode = TextOverflowModes.Truncate;
+
+            RectTransform rect = hintLabel.GetComponent<RectTransform>();
+            if (IsAlive(rect))
+            {
+                rect.anchorMin = Vector2.zero;
+                rect.anchorMax = Vector2.one;
+                rect.pivot = new Vector2(0.5f, 0.5f);
+                rect.anchoredPosition = Vector2.zero;
+                rect.offsetMin = new Vector2(52f, 30f);
+                rect.offsetMax = new Vector2(-44f, -40f);
+                rect.localRotation = Quaternion.identity;
+                rect.localScale = Vector3.one;
+            }
+        }
+
+        private static void ConfigureTextPanel(TMP_Text label, HudPanelLayout layout, Vector2 anchor, Vector2 pivot, TextAnchor alignment)
         {
             ConfigureTextPanel(label, GetLayoutSize(layout), GetLayoutPosition(layout), anchor, pivot, alignment, GetLayoutFontSize(layout, 22));
         }
 
-        private static void ConfigureTextPanel(Text label, Vector2 size, Vector2 position, Vector2 anchor, Vector2 pivot, TextAnchor alignment, int fontSize)
+        private static void ConfigureTextPanel(TMP_Text label, Vector2 size, Vector2 position, Vector2 anchor, Vector2 pivot, TextAnchor alignment, int fontSize)
         {
             if (!IsAlive(label))
             {
@@ -952,19 +1159,19 @@ namespace TheTasteReviver
                 PanelBackgroundStyle.Apply(panel.GetComponent<Image>());
             }
 
-            label.alignment = alignment;
+            label.alignment = TmpTextUtility.ToAlignment(alignment);
             label.fontSize = fontSize;
-            label.font = GetRuntimeFont();
-            label.fontStyle = alignment == TextAnchor.MiddleCenter ? FontStyle.Bold : FontStyle.Normal;
-            label.resizeTextForBestFit = true;
-            label.resizeTextMinSize = Mathf.Max(14, fontSize - 8);
-            label.resizeTextMaxSize = fontSize;
-            label.horizontalOverflow = HorizontalWrapMode.Wrap;
-            label.verticalOverflow = VerticalWrapMode.Truncate;
+            label.font = ThemeFontProvider.GetTmpFont(fontSize);
+            label.fontStyle = alignment == TextAnchor.MiddleCenter ? FontStyles.Bold : FontStyles.Normal;
+            label.enableAutoSizing = true;
+            label.fontSizeMin = Mathf.Max(14, fontSize - 8);
+            label.fontSizeMax = fontSize;
+            label.textWrappingMode = TextWrappingModes.Normal;
+            label.overflowMode = TextOverflowModes.Truncate;
             ConfigureTextInset(label, alignment);
         }
 
-        private static void ConfigureTextInset(Text label, TextAnchor alignment)
+        private static void ConfigureTextInset(TMP_Text label, TextAnchor alignment)
         {
             RectTransform rect = IsAlive(label) ? label.GetComponent<RectTransform>() : null;
             if (!IsAlive(rect))
@@ -993,7 +1200,7 @@ namespace TheTasteReviver
             rect.localScale = Vector3.one;
         }
 
-        private void ConfigureHudTextInset(Text label, TextAnchor alignment)
+        private void ConfigureHudTextInset(TMP_Text label, TextAnchor alignment)
         {
             RectTransform rect = IsAlive(label) ? label.GetComponent<RectTransform>() : null;
             if (!IsAlive(rect))
@@ -1020,7 +1227,7 @@ namespace TheTasteReviver
             rect.localScale = Vector3.one;
         }
 
-        private void ConfigureButtonTextInset(Text label)
+        private void ConfigureButtonTextInset(TMP_Text label)
         {
             RectTransform rect = IsAlive(label) ? label.GetComponent<RectTransform>() : null;
             if (!IsAlive(rect))
@@ -1052,16 +1259,18 @@ namespace TheTasteReviver
             }
 
             ConfigureRect(button.transform as RectTransform, size, position, anchor, pivot);
-            Text label = button.GetComponentInChildren<Text>(true);
+            TMP_Text label = button.GetComponentInChildren<TMP_Text>(true);
             if (IsAlive(label))
             {
                 label.fontSize = label.text != null && label.text.Length > 12 ? 22 : 24;
-                label.font = GetRuntimeFont();
-                label.fontStyle = FontStyle.Bold;
-                label.resizeTextForBestFit = true;
-                label.resizeTextMinSize = 16;
-                label.resizeTextMaxSize = label.fontSize;
-                label.alignment = TextAnchor.MiddleCenter;
+                label.font = ThemeFontProvider.GetTmpFont();
+                label.fontStyle = FontStyles.Bold;
+                label.enableAutoSizing = true;
+                label.fontSizeMin = 16;
+                label.fontSizeMax = label.fontSize;
+                label.alignment = TextAlignmentOptions.Center;
+                label.textWrappingMode = TextWrappingModes.NoWrap;
+                label.overflowMode = TextOverflowModes.Truncate;
                 ConfigureButtonTextInset(label);
             }
         }
@@ -1119,13 +1328,13 @@ namespace TheTasteReviver
 
         private void ConfigureExistingButtonText(Button button)
         {
-            Text label = IsAlive(button) ? button.GetComponentInChildren<Text>(true) : null;
+            TMP_Text label = IsAlive(button) ? button.GetComponentInChildren<TMP_Text>(true) : null;
             if (!IsAlive(label))
             {
                 return;
             }
 
-            label.alignment = TextAnchor.MiddleCenter;
+            label.alignment = TextAlignmentOptions.Center;
             ConfigureButtonTextInset(label);
         }
 
@@ -1141,7 +1350,7 @@ namespace TheTasteReviver
             Transform existing = transform.Find("Opening Level Title Panel/Opening Level Title Text");
             if (IsAlive(existing))
             {
-                openingLevelTitleLabel = existing.GetComponent<Text>();
+                openingLevelTitleLabel = existing.GetComponent<TMP_Text>();
                 if (IsAlive(openingLevelTitleLabel))
                 {
                     ConfigureOpeningLevelTitlePanel(openingLevelTitleLabel);
@@ -1167,7 +1376,7 @@ namespace TheTasteReviver
             panel.SetActive(false);
         }
 
-        private static void ConfigureOpeningLevelTitlePanel(Text titleLabel)
+        private static void ConfigureOpeningLevelTitlePanel(TMP_Text titleLabel)
         {
             if (!IsAlive(titleLabel))
             {
@@ -1204,13 +1413,13 @@ namespace TheTasteReviver
                 textRect.sizeDelta = Vector2.zero;
             }
 
-            titleLabel.font = GetRuntimeFont();
-            titleLabel.fontStyle = FontStyle.Bold;
-            titleLabel.resizeTextForBestFit = true;
-            titleLabel.resizeTextMinSize = 18;
-            titleLabel.resizeTextMaxSize = 34;
-            titleLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
-            titleLabel.verticalOverflow = VerticalWrapMode.Overflow;
+            titleLabel.font = ThemeFontProvider.GetTmpFont(34);
+            titleLabel.fontStyle = FontStyles.Bold;
+            titleLabel.enableAutoSizing = true;
+            titleLabel.fontSizeMin = 18;
+            titleLabel.fontSizeMax = 34;
+            titleLabel.textWrappingMode = TextWrappingModes.Normal;
+            titleLabel.overflowMode = TextOverflowModes.Overflow;
         }
 
         private void ShowOpeningLevelTitle(RecipeLevelData level)
@@ -1232,6 +1441,20 @@ namespace TheTasteReviver
             }
 
             openingLevelTitleCoroutine = StartCoroutine(ShowOpeningLevelTitleRoutine(level));
+        }
+
+        private void HideOpeningLevelTitle()
+        {
+            if (openingLevelTitleCoroutine != null)
+            {
+                StopCoroutine(openingLevelTitleCoroutine);
+                openingLevelTitleCoroutine = null;
+            }
+
+            if (IsAlive(openingLevelTitleLabel) && openingLevelTitleLabel.transform.parent != null)
+            {
+                openingLevelTitleLabel.transform.parent.gameObject.SetActive(false);
+            }
         }
 
         private static string BuildCollapsedLevelTitle(RecipeLevelData level)
@@ -1293,12 +1516,12 @@ namespace TheTasteReviver
             if (IsTutorialCompleteTitleLevel(level))
             {
                 openingLevelTitleLabel.text = TutorialCompleteTitle + "\n" + ChallengeStartSubtitle;
-                openingLevelTitleLabel.resizeTextMaxSize = 42;
+                openingLevelTitleLabel.fontSizeMax = 42;
                 panel.SetActive(true);
                 yield return new WaitForSeconds(1.2f);
                 panel.SetActive(false);
                 yield return new WaitForSeconds(0.18f);
-                openingLevelTitleLabel.resizeTextMaxSize = 34;
+                openingLevelTitleLabel.fontSizeMax = 34;
             }
 
             openingLevelTitleLabel.text = BuildFullLevelTitle(level);
@@ -1313,7 +1536,7 @@ namespace TheTasteReviver
             return TryGetLevelNumber(level, out int number) && number == 7;
         }
 
-        private void ApplyPanelStyle(Text label)
+        private void ApplyPanelStyle(TMP_Text label)
         {
             if (!IsAlive(label))
             {
@@ -1325,9 +1548,9 @@ namespace TheTasteReviver
                 PanelBackgroundStyle.Apply(label.transform.parent.GetComponent<Image>());
             }
 
-            label.font = GetRuntimeFont();
-            label.horizontalOverflow = HorizontalWrapMode.Wrap;
-            label.verticalOverflow = VerticalWrapMode.Truncate;
+            label.font = ThemeFontProvider.GetTmpFont();
+            label.textWrappingMode = TextWrappingModes.Normal;
+            label.overflowMode = TextOverflowModes.Truncate;
         }
 
         private void ApplyButtonStyle(Button button)
@@ -1338,12 +1561,12 @@ namespace TheTasteReviver
             }
 
             PanelBackgroundStyle.Apply(button.GetComponent<Image>());
-            Text label = button.GetComponentInChildren<Text>(true);
+            TMP_Text label = button.GetComponentInChildren<TMP_Text>(true);
             if (IsAlive(label))
             {
-                label.font = GetRuntimeFont();
-                label.fontStyle = FontStyle.Bold;
-                label.alignment = TextAnchor.MiddleCenter;
+                label.font = ThemeFontProvider.GetTmpFont();
+                label.fontStyle = FontStyles.Bold;
+                label.alignment = TextAlignmentOptions.Center;
             }
         }
 
@@ -1365,21 +1588,21 @@ namespace TheTasteReviver
             }
 
             PanelBackgroundStyle.Apply(panel.GetComponent<Image>(), 0.9f);
-            Text label = panel.GetComponentInChildren<Text>(true);
+            TMP_Text label = panel.GetComponentInChildren<TMP_Text>(true);
             if (!IsAlive(label))
             {
                 return;
             }
 
-            label.font = GetRuntimeFont();
+            label.font = ThemeFontProvider.GetTmpFont();
             label.fontSize = GetLayoutFontSize(forceLabelPanelLayout, 15);
-            label.fontStyle = FontStyle.Normal;
-            label.resizeTextForBestFit = true;
-            label.resizeTextMinSize = 10;
-            label.resizeTextMaxSize = GetLayoutFontSize(forceLabelPanelLayout, 15);
-            label.alignment = TextAnchor.MiddleCenter;
-            label.horizontalOverflow = HorizontalWrapMode.Wrap;
-            label.verticalOverflow = VerticalWrapMode.Truncate;
+            label.fontStyle = FontStyles.Normal;
+            label.enableAutoSizing = true;
+            label.fontSizeMin = 10;
+            label.fontSizeMax = GetLayoutFontSize(forceLabelPanelLayout, 15);
+            label.alignment = TextAlignmentOptions.Center;
+            label.textWrappingMode = TextWrappingModes.Normal;
+            label.overflowMode = TextOverflowModes.Truncate;
 
             if (!updateRectTransforms)
             {
@@ -1460,7 +1683,7 @@ namespace TheTasteReviver
                 return;
             }
 
-            Text text = button.GetComponentInChildren<Text>(true);
+            TMP_Text text = button.GetComponentInChildren<TMP_Text>(true);
             if (!IsAlive(text))
             {
                 text = CreateRuntimeText(button.transform, label + " Text", Vector2.zero, Vector2.zero, TextAnchor.MiddleCenter, 14);
@@ -1470,14 +1693,14 @@ namespace TheTasteReviver
             text.enabled = true;
             text.text = label;
             text.color = Color.black;
-            text.alignment = TextAnchor.MiddleCenter;
-            text.font = GetRuntimeFont();
+            text.alignment = TextAlignmentOptions.Center;
+            text.font = ThemeFontProvider.GetTmpFont();
             text.fontSize = label.Length > 12 ? 22 : 24;
-            text.resizeTextForBestFit = true;
-            text.resizeTextMinSize = 16;
-            text.resizeTextMaxSize = text.fontSize;
-            text.horizontalOverflow = HorizontalWrapMode.Wrap;
-            text.verticalOverflow = VerticalWrapMode.Overflow;
+            text.enableAutoSizing = true;
+            text.fontSizeMin = 16;
+            text.fontSizeMax = text.fontSize;
+            text.textWrappingMode = TextWrappingModes.NoWrap;
+            text.overflowMode = TextOverflowModes.Truncate;
             text.raycastTarget = false;
             text.transform.SetAsLastSibling();
 
@@ -1511,10 +1734,19 @@ namespace TheTasteReviver
         {
             if (IsAlive(ingredientTraitLabel))
             {
-                ingredientTraitPanel = ingredientTraitLabel.transform.parent != null
-                    ? ingredientTraitLabel.transform.parent.gameObject
-                    : ingredientTraitLabel.gameObject;
+                if (!IsAlive(ingredientTraitPanel))
+                {
+                    Transform panelTransform = ingredientTraitLabel.transform;
+                    while (panelTransform.parent != null && panelTransform.name != "Ingredient Traits Panel")
+                    {
+                        panelTransform = panelTransform.parent;
+                    }
+
+                    ingredientTraitPanel = panelTransform.gameObject;
+                }
+
                 PanelBackgroundStyle.Apply(ingredientTraitPanel.GetComponent<Image>(), 0.82f);
+                EnsureIngredientTraitScrollView();
                 EnsureIngredientTraitBackdrop();
                 EnsureIngredientTraitToggleButton();
                 return;
@@ -1539,11 +1771,17 @@ namespace TheTasteReviver
 
             if (IsAlive(existing))
             {
-                ingredientTraitLabel = existing.GetComponent<Text>();
+                ingredientTraitLabel = existing.GetComponent<TMP_Text>();
+                if (!IsAlive(ingredientTraitLabel))
+                {
+                    return;
+                }
+
                 ingredientTraitPanel = ingredientTraitLabel.transform.parent != null
                     ? ingredientTraitLabel.transform.parent.gameObject
                     : ingredientTraitLabel.gameObject;
                 PanelBackgroundStyle.Apply(ingredientTraitPanel.GetComponent<Image>(), 0.82f);
+                EnsureIngredientTraitScrollView();
                 EnsureIngredientTraitBackdrop();
                 EnsureIngredientTraitToggleButton();
                 return;
@@ -1563,9 +1801,9 @@ namespace TheTasteReviver
 
             ingredientTraitLabel = CreateRuntimeText(panel.transform, "Ingredient Traits Text", Vector2.zero, Vector2.zero, TextAnchor.UpperLeft, 14);
             ingredientTraitLabel.fontSize = 14;
-            ingredientTraitLabel.alignment = TextAnchor.UpperLeft;
-            ingredientTraitLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
-            ingredientTraitLabel.verticalOverflow = VerticalWrapMode.Truncate;
+            ingredientTraitLabel.alignment = TextAlignmentOptions.TopLeft;
+            ingredientTraitLabel.textWrappingMode = TextWrappingModes.Normal;
+            ingredientTraitLabel.overflowMode = TextOverflowModes.Truncate;
 
             RectTransform textRect = ingredientTraitLabel.GetComponent<RectTransform>();
             textRect.anchorMin = Vector2.zero;
@@ -1575,9 +1813,110 @@ namespace TheTasteReviver
             textRect.sizeDelta = Vector2.zero;
             ingredientTraitLabel.text = "Ingredient Traits";
             ingredientTraitPanel = panel;
+            EnsureIngredientTraitScrollView();
             EnsureIngredientTraitBackdrop();
             EnsureIngredientTraitToggleButton();
             SetIngredientTraitsExpanded(false);
+        }
+
+        private void EnsureIngredientTraitScrollView()
+        {
+            if (!IsAlive(ingredientTraitPanel) || !IsAlive(ingredientTraitLabel))
+            {
+                return;
+            }
+
+            Transform viewportTransform = ingredientTraitPanel.transform.Find("Ingredient Traits Viewport");
+            if (!IsAlive(viewportTransform))
+            {
+                GameObject viewport = new GameObject("Ingredient Traits Viewport");
+                viewport.transform.SetParent(ingredientTraitPanel.transform, false);
+                ingredientTraitViewport = viewport.AddComponent<RectTransform>();
+
+                Image viewportImage = viewport.AddComponent<Image>();
+                viewportImage.color = Color.clear;
+                viewportImage.raycastTarget = true;
+                viewport.AddComponent<RectMask2D>();
+            }
+            else
+            {
+                ingredientTraitViewport = viewportTransform as RectTransform;
+                if (!IsAlive(viewportTransform.GetComponent<RectMask2D>()))
+                {
+                    viewportTransform.gameObject.AddComponent<RectMask2D>();
+                }
+
+                Image viewportImage = viewportTransform.GetComponent<Image>();
+                if (!IsAlive(viewportImage))
+                {
+                    viewportImage = viewportTransform.gameObject.AddComponent<Image>();
+                }
+
+                viewportImage.color = Color.clear;
+                viewportImage.raycastTarget = true;
+            }
+
+            if (!IsAlive(ingredientTraitViewport))
+            {
+                return;
+            }
+
+            ingredientTraitViewport.anchorMin = Vector2.zero;
+            ingredientTraitViewport.anchorMax = Vector2.one;
+            ingredientTraitViewport.offsetMin = new Vector2(12f, 12f);
+            ingredientTraitViewport.offsetMax = new Vector2(-12f, -12f);
+
+            if (ingredientTraitLabel.transform.parent != ingredientTraitViewport)
+            {
+                ingredientTraitLabel.transform.SetParent(ingredientTraitViewport, false);
+            }
+
+            RectTransform textRect = ingredientTraitLabel.GetComponent<RectTransform>();
+            textRect.anchorMin = new Vector2(0f, 1f);
+            textRect.anchorMax = new Vector2(1f, 1f);
+            textRect.pivot = new Vector2(0.5f, 1f);
+            textRect.anchoredPosition = Vector2.zero;
+            textRect.sizeDelta = Vector2.zero;
+            textRect.localRotation = Quaternion.identity;
+            textRect.localScale = Vector3.one;
+
+            ContentSizeFitter fitter = ingredientTraitLabel.GetComponent<ContentSizeFitter>();
+            if (!IsAlive(fitter))
+            {
+                fitter = ingredientTraitLabel.gameObject.AddComponent<ContentSizeFitter>();
+            }
+
+            fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            ingredientTraitLabel.raycastTarget = false;
+
+            ingredientTraitScrollRect = ingredientTraitPanel.GetComponent<ScrollRect>();
+            if (!IsAlive(ingredientTraitScrollRect))
+            {
+                ingredientTraitScrollRect = ingredientTraitPanel.AddComponent<ScrollRect>();
+            }
+
+            ingredientTraitScrollRect.viewport = ingredientTraitViewport;
+            ingredientTraitScrollRect.content = textRect;
+            ingredientTraitScrollRect.horizontal = false;
+            ingredientTraitScrollRect.vertical = true;
+            ingredientTraitScrollRect.movementType = ScrollRect.MovementType.Clamped;
+            ingredientTraitScrollRect.inertia = true;
+            ingredientTraitScrollRect.decelerationRate = 0.12f;
+            ingredientTraitScrollRect.scrollSensitivity = 36f;
+        }
+
+        private void ResetIngredientTraitScroll()
+        {
+            EnsureIngredientTraitScrollView();
+            if (!IsAlive(ingredientTraitScrollRect))
+            {
+                return;
+            }
+
+            Canvas.ForceUpdateCanvases();
+            ingredientTraitScrollRect.StopMovement();
+            ingredientTraitScrollRect.verticalNormalizedPosition = 1f;
         }
 
         private void EnsureIngredientTraitBackdrop()
@@ -1650,7 +1989,7 @@ namespace TheTasteReviver
                     new Vector2(1f, 1f));
             }
 
-            Text label = ingredientTraitToggleButton.GetComponentInChildren<Text>();
+            TMP_Text label = ingredientTraitToggleButton.GetComponentInChildren<TMP_Text>();
             if (IsAlive(label))
             {
                 label.text = "Traits";
@@ -1837,6 +2176,7 @@ namespace TheTasteReviver
 
             StringBuilder builder = new StringBuilder();
             builder.AppendLine("Ingredient Traits");
+            builder.AppendLine();
             IEnumerable<LevelIngredientProfile> profiles = level.ingredientProfiles != null && level.ingredientProfiles.Count > 0
                 ? level.ingredientProfiles.Where(x => x != null && x.ingredient != null)
                     .GroupBy(x => x.ingredient)
@@ -1850,9 +2190,7 @@ namespace TheTasteReviver
                     string trait = !string.IsNullOrWhiteSpace(profile.levelTraitDescription)
                         ? profile.levelTraitDescription
                         : GetIngredientTraitFallback(profile.ingredient);
-                    builder.Append("- ").Append(profile.ingredient.DisplayName).Append(": ");
-                    builder.Append(BuildIngredientTraitLine(level, profile, trait));
-                    builder.AppendLine();
+                    AppendIngredientTraitSection(builder, level, profile, trait);
                 }
 
                 return builder.ToString().Trim();
@@ -1860,23 +2198,40 @@ namespace TheTasteReviver
 
             foreach (IngredientData ingredient in level.availableIngredients.Where(x => x != null))
             {
-                builder.Append("- ").Append(ingredient.DisplayName).Append(": ");
-                builder.Append(BuildIngredientTraitLine(level, level.GetProfile(ingredient), GetIngredientTraitFallback(ingredient)));
-                builder.AppendLine();
+                AppendIngredientTraitSection(builder, level, level.GetProfile(ingredient), GetIngredientTraitFallback(ingredient), ingredient);
             }
 
             return builder.ToString().Trim();
         }
 
-        private static string BuildIngredientTraitLine(RecipeLevelData level, LevelIngredientProfile profile, string baseTrait)
+        private static void AppendIngredientTraitSection(
+            StringBuilder builder,
+            RecipeLevelData level,
+            LevelIngredientProfile profile,
+            string baseTrait,
+            IngredientData fallbackIngredient = null)
         {
-            List<string> clues = BuildLevelTraitClues(level, profile);
-            if (clues.Count == 0)
+            IngredientData ingredient = profile != null && profile.ingredient != null
+                ? profile.ingredient
+                : fallbackIngredient;
+            if (ingredient == null)
             {
-                return baseTrait;
+                return;
             }
 
-            return baseTrait.TrimEnd('.') + ". " + string.Join(" ", clues);
+            builder.AppendLine(ingredient.DisplayName);
+            if (!string.IsNullOrWhiteSpace(baseTrait))
+            {
+                builder.Append("- ").AppendLine(baseTrait.Trim());
+            }
+
+            List<string> clues = BuildLevelTraitClues(level, profile);
+            foreach (string clue in clues)
+            {
+                builder.Append("- ").AppendLine(clue.Trim());
+            }
+
+            builder.AppendLine();
         }
 
         private static List<string> BuildLevelTraitClues(RecipeLevelData level, LevelIngredientProfile profile)
@@ -1922,15 +2277,15 @@ namespace TheTasteReviver
                 : 0;
             if (profile.targetOrderIndex <= 0)
             {
-                return "It feels like a base note.";
+                return "Its flavor needs time to form before the other ingredients arrive.";
             }
 
             if (count > 0 && profile.targetOrderIndex >= count - 1)
             {
-                return "It reads best as a finishing note.";
+                return "Its character is best preserved when it arrives near the end.";
             }
 
-            return "It fits better after the base has formed.";
+            return "It works best after the first flavor has formed, but before the final ingredient arrives.";
         }
 
         private static string BuildRatioTraitClue(RatioLevel ratio)
@@ -1938,13 +2293,14 @@ namespace TheTasteReviver
             switch (ratio)
             {
                 case RatioLevel.VeryLess:
-                    return "Use it like a trace, not a main flavor.";
+                    return "Use the Very Small amount.";
                 case RatioLevel.Less:
-                    return "Let it stay light in the mix.";
+                    return "Use the Small amount.";
+                case RatioLevel.Medium:
                 case RatioLevel.SlightlyMore:
-                    return "Give it a clear supporting role.";
+                    return "Use the Medium amount.";
                 case RatioLevel.More:
-                    return "Let it lead the flavor.";
+                    return "Use the Large amount.";
                 default:
                     return string.Empty;
             }
@@ -2039,7 +2395,7 @@ namespace TheTasteReviver
                 : "Distinct flavor";
         }
 
-        private static Text CreateRuntimeText(Transform parent, string name, Vector2 size, Vector2 position, TextAnchor anchor, int fontSize)
+        private static TMP_Text CreateRuntimeText(Transform parent, string name, Vector2 size, Vector2 position, TextAnchor anchor, int fontSize)
         {
             GameObject textObject = new GameObject(name);
             textObject.transform.SetParent(parent, false);
@@ -2050,13 +2406,13 @@ namespace TheTasteReviver
             rect.sizeDelta = size;
             rect.anchoredPosition = position;
 
-            Text text = textObject.AddComponent<Text>();
-            text.font = GetRuntimeFont();
+            TMP_Text text = textObject.AddComponent<TextMeshProUGUI>();
+            text.font = ThemeFontProvider.GetTmpFont(fontSize);
             text.color = Color.black;
-            text.alignment = anchor;
+            text.alignment = TmpTextUtility.ToAlignment(anchor);
             text.fontSize = fontSize;
-            text.horizontalOverflow = HorizontalWrapMode.Wrap;
-            text.verticalOverflow = VerticalWrapMode.Overflow;
+            text.textWrappingMode = TextWrappingModes.Normal;
+            text.overflowMode = TextOverflowModes.Overflow;
             return text;
         }
 
@@ -2082,7 +2438,7 @@ namespace TheTasteReviver
             Button button = buttonObject.AddComponent<Button>();
             button.targetGraphic = image;
 
-            Text label = CreateRuntimeText(buttonObject.transform, name + " Text", Vector2.zero, Vector2.zero, TextAnchor.MiddleCenter, 14);
+            TMP_Text label = CreateRuntimeText(buttonObject.transform, name + " Text", Vector2.zero, Vector2.zero, TextAnchor.MiddleCenter, 14);
             RectTransform labelRect = label.GetComponent<RectTransform>();
             labelRect.anchorMin = Vector2.zero;
             labelRect.anchorMax = Vector2.one;

@@ -15,10 +15,10 @@ L01,PermanentClue,L01_Rice_Force,Unlocked after Correct,Force,0,,,Rice works bes
 L02,ProgressiveHint,L02_Hint_Speed,Evaluate hint,Speed,20,,,Tea needs slow grinding. Set the speed to Slow.,,TeaLeaf,No
 L02,PermanentClue,L02_Tea_Speed,Unlocked after Correct,Speed,0,,,Tea leaves work best with slow grinding. Fast grinding makes the tea too bitter.,Tea Leaf - Speed Clue,TeaLeaf,Yes
 L03,ProgressiveHint,L03_Hint_RedBean_Order,Evaluate hint,IngredientOrder,22,,,Red bean should go first. Place it before dried tangerine peel and rock sugar.,,RedBean,No
-L03,ProgressiveHint,L03_Hint_Peel_Order,Evaluate hint,IngredientOrder,21,,,Dried tangerine peel should come after red bean so it does not make the base bitter.,,DriedTangerinePeel,No
+L03,ProgressiveHint,L03_Hint_Peel_Order,Evaluate hint,IngredientOrder,21,,,Dried tangerine peel should come after red bean so the citrus bitterness does not arrive too early.,,DriedTangerinePeel,No
 L03,ProgressiveHint,L03_Hint_RockSugar_Order,Evaluate hint,IngredientOrder,20,,,Rock sugar should go last. Let it soften the dessert.,,RockSugar,No
-L03,PermanentClue,L03_RedBean_Order,Unlocked after Correct,IngredientOrder,0,,,Red bean works well early because it builds the base flavor.,Red Bean - Order Clue,RedBean,Yes
-L03,PermanentClue,L03_Peel_Order,Unlocked after Correct,IngredientOrder,0,,,Dried tangerine peel works better after the base is set. Too early can make the recipe bitter.,Dried Tangerine Peel - Order Clue,DriedTangerinePeel,Yes
+L03,PermanentClue,L03_RedBean_Order,Unlocked after Correct,IngredientOrder,0,,,Red bean works well early because its gentle sweetness needs time to form before the other ingredients arrive.,Red Bean - Order Clue,RedBean,Yes
+L03,PermanentClue,L03_Peel_Order,Unlocked after Correct,IngredientOrder,0,,,Dried tangerine peel works best after the red bean flavor has formed. Adding it too early can make the recipe bitter.,Dried Tangerine Peel - Order Clue,DriedTangerinePeel,Yes
 L03,PermanentClue,L03_RockSugar_Order,Unlocked after Correct,IngredientOrder,0,,,Rock sugar works best at the end because it softens the final taste.,Rock Sugar - Order Clue,RockSugar,Yes
 L04,ProgressiveHint,L04_Hint_Combination,Evaluate hint,Combination,20,,,"Grind each ingredient on its own first. After both powders return home, put both powders back into the mortar together.",,"Peanut,BlackSesame",No
 L04,PermanentClue,L04_Peanut_Combination,Unlocked after Correct,Combination,0,,,Peanut keeps its warm roasted taste when it is ground in its own batch.,Peanut - Combination Clue,Peanut,Yes
@@ -28,49 +28,51 @@ L05,ProgressiveHint,L05_Hint_Final_Blend,Evaluate hint,Combination,21,,,"After t
 L05,PermanentClue,L05_WhitePepper_Flexible,Unlocked after Correct,Combination,0,,,White pepper can either join one sharp spice or stay as the separate powder.,White Pepper - Batch Clue,WhitePepper,Yes
 L05,PermanentClue,L05_Peel_Flexible,Unlocked after Correct,Combination,0,,,Dried tangerine peel can either join one sharp spice or stay as the separate powder.,Dried Tangerine Peel - Batch Clue,DriedTangerinePeel,Yes
 L05,PermanentClue,L05_Ginger_Flexible,Unlocked after Correct,Combination,0,,,Ginger can be part of the paired powder or the spice that stays alone before the final blend.,Ginger - Batch Clue,Ginger,Yes
-L06,ProgressiveHint,L06_Hint_BlackSesame_Ratio,Evaluate hint,Ratio,21,,,Black sesame should use the Small amount.,,"BlackSesame,GlutinousRice",No
-L06,ProgressiveHint,L06_Hint_GlutinousRice_Ratio,Evaluate hint,Ratio,20,,,Glutinous rice should use the Very Small amount.,,GlutinousRice,No
-L06,PermanentClue,L06_BlackSesame_Ratio,Unlocked after Correct,Ratio,0,,,"Use a little black sesame. It should be stronger than glutinous rice, but not heavy.",Black Sesame - Ratio Clue,BlackSesame,Yes
-L06,PermanentClue,L06_GlutinousRice_Ratio,Unlocked after Correct,Ratio,0,,,"Use the Very Small amount of glutinous rice. It should only smooth the paste.",Glutinous Rice - Ratio Clue,GlutinousRice,Yes
+L06,ProgressiveHint,L06_Hint_BlackSesame_Ratio,Evaluate hint,Ratio,21,,,"Black sesame should use the Medium amount. It should remain the strongest flavor without making the paste bitter.",,"BlackSesame,GlutinousRice",No
+L06,ProgressiveHint,L06_Hint_GlutinousRice_Ratio,Evaluate hint,Ratio,20,,,"Glutinous rice should use the Small amount. It should soften the texture without replacing the roasted flavor.",,GlutinousRice,No
+L06,ProgressiveHint,L06_Hint_Force,Evaluate hint,Force,19,,,"Use Medium force. Apply the steady pressure learned from rice.",,GlutinousRice,No
+L06,PermanentClue,L06_BlackSesame_Ratio,Unlocked after Correct,Ratio,0,,,"Black sesame uses the Medium amount in this paste, keeping its roasted flavor clear without taking over.",Black Sesame - Ratio Clue,BlackSesame,Yes
+L06,PermanentClue,L06_GlutinousRice_Ratio,Unlocked after Correct,Ratio,0,,,"Glutinous rice uses the Small amount to soften and thicken this paste.",Glutinous Rice - Ratio Clue,GlutinousRice,Yes
+L06,PermanentClue,L06_GlutinousRice_Force,Unlocked after Correct,Force,0,,,"Glutinous rice responds best to Medium force, following the steady behavior learned from rice.",Glutinous Rice - Force Clue,GlutinousRice,Yes
 L07,ProgressiveHint,L07_Hint_SandGinger_Ratio,Evaluate hint,Ratio,22,,,Sand ginger should be the strongest flavor. Give it the Large amount.,,SandGinger,No
-L07,ProgressiveHint,L07_Hint_CoarseSalt_Ratio,Evaluate hint,Ratio,21,,,Coarse salt should use the Small amount. It should support the spice, not cover it.,,CoarseSalt,No
-L07,ProgressiveHint,L07_Hint_Peel_Ratio,Evaluate hint,Ratio,20,,,"Use more dried tangerine peel than coarse salt, but less than sand ginger.",,"DriedTangerinePeel,CoarseSalt",No
+L07,ProgressiveHint,L07_Hint_CoarseSalt_Ratio,Evaluate hint,Ratio,21,,,Coarse salt should use the Small amount. It should bring out the spice without covering it.,,CoarseSalt,No
+L07,ProgressiveHint,L07_Hint_Peel_Ratio,Evaluate hint,Ratio,20,,,"Dried tangerine peel should use the Medium amount.",,"DriedTangerinePeel,CoarseSalt",No
 L07,PermanentClue,L07_SandGinger_Force,Unlocked after Correct,Force,0,,,"Sand ginger needs heavy force, but too much grinding can still make it harsh.",Sand Ginger - Force Clue,SandGinger,Yes
-L07,PermanentClue,L07_CoarseSalt_Ratio,Unlocked after Correct,Ratio,0,,,"Coarse salt should stay in the background. Do not make it the main flavor.",Coarse Salt - Ratio Clue,CoarseSalt,Yes
+L07,PermanentClue,L07_CoarseSalt_Ratio,Unlocked after Correct,Ratio,0,,,"Coarse salt uses the Small amount so it brings out the sand ginger without covering it.",Coarse Salt - Ratio Clue,CoarseSalt,Yes
 L08,ProgressiveHint,L08_Hint_WhitePepper_Speed,Evaluate hint,Speed,20,,,White Pepper needs Medium speed and Light force. Too fast makes it harsh.,,WhitePepper,No
 L08,ProgressiveHint,L08_Hint_Peanut_Speed,Evaluate hint,Speed,19,,,Peanut needs Slow speed and Heavy force so it stays warm instead of heavy.,,Peanut,No
 L08,ProgressiveHint,L08_Hint_DriedTangerinePeel_Speed,Evaluate hint,Speed,18,,,Dried Tangerine Peel needs Fast speed and Medium force so the citrus releases clearly.,,DriedTangerinePeel,No
 L08,ProgressiveHint,L08_Hint_Combination,Evaluate hint,Combination,22,,,"Grind white pepper, peanut, and dried tangerine peel in separate batches. Press New Batch before changing ingredients.",,"WhitePepper,Peanut,DriedTangerinePeel",No
 L08,PermanentClue,L08_WhitePepper_Speed,Unlocked after Correct,Speed,0,,,White pepper works best at medium speed. Too fast makes it harsh; too slow makes it weak.,White Pepper - Speed Clue,WhitePepper,Yes
-L09,ProgressiveHint,L09_Hint_GlutinousRice_Ratio,Evaluate hint,Ratio,22,,,"Glutinous rice should use the Large amount. It is the base of this recipe.",,GlutinousRice,No
+L09,ProgressiveHint,L09_Hint_GlutinousRice_Ratio,Evaluate hint,Ratio,22,,,"Glutinous rice should use the Large amount. It should be the largest share of the filling.",,GlutinousRice,No
 L09,ProgressiveHint,L09_Hint_BlackSesame_Ratio,Evaluate hint,Ratio,21,,,Black sesame should use the Medium amount, just below glutinous rice.,,BlackSesame,No
 L09,ProgressiveHint,L09_Hint_RedBean_Ratio,Evaluate hint,Ratio,20,,,Red bean should use the Small amount.,,RedBean,No
 L09,ProgressiveHint,L09_Hint_LotusLeaf_Ratio,Evaluate hint,Ratio,19,,,Lotus leaf should use the Very Small amount. It is light and easy to cover.,,LotusLeaf,No
 L09,ProgressiveHint,L09_Hint_Main_Batch_Combination,Evaluate hint,Combination,20,,,"Red bean, glutinous rice, and black sesame should be ground together in the first batch.",,"RedBean,GlutinousRice,BlackSesame",No
 L09,ProgressiveHint,L09_Hint_Lotus_Separate_Combination,Evaluate hint,Combination,19,,,After the first three ingredients become filling, add lotus leaf last and move the pestle briefly to wrap them into zongzi.,,LotusLeaf,No
-L09,ProgressiveHint,L09_Hint_RedBean_Order,Evaluate hint,IngredientOrder,22,,,Red bean should go first. It builds the base.,,RedBean,No
+L09,ProgressiveHint,L09_Hint_RedBean_Order,Evaluate hint,IngredientOrder,22,,,Red bean should go first. Its gentle sweetness needs time to form before the other filling ingredients arrive.,,RedBean,No
 L09,ProgressiveHint,L09_Hint_LotusLeaf_Order,Evaluate hint,IngredientOrder,21,,,Lotus leaf should be last, after the first three ingredients have formed the main batch.,,LotusLeaf,No
 L09,ProgressiveHint,L09_Hint_Middle_Order,Evaluate hint,IngredientOrder,20,,,"Start with red bean, glutinous rice, and black sesame together. Add lotus leaf last to wrap the filling.",,"GlutinousRice,BlackSesame,LotusLeaf",No
-L09,PermanentClue,L09_LotusLeaf_Ratio,Unlocked after Correct,Ratio,0,,,Lotus leaf works best in a very small amount.,Lotus Leaf - Ratio Clue,LotusLeaf,Yes
+L09,PermanentClue,L09_LotusLeaf_Ratio,Unlocked after Correct,Ratio,0,,,Lotus leaf uses the Very Small amount.,Lotus Leaf - Ratio Clue,LotusLeaf,Yes
 L09,PermanentClue,L09_LotusLeaf_Combination,Unlocked after Correct,Combination,0,,,"Lotus leaf should stay separate from the filling batch, then wrap the prepared filling instead of becoming powder.",Lotus Leaf - Wrapping Clue,LotusLeaf,Yes
 L09,PermanentClue,L09_LotusLeaf_Order,Unlocked after Correct,IngredientOrder,0,,,"Add lotus leaf last so its fresh flavor is not covered by the main batch.",Lotus Leaf - Order Clue,LotusLeaf,Yes
-L10,ProgressiveHint,L10_Hint_Douchi_Ratio,Evaluate hint,Ratio,22,,,"Yangjiang douchi should use the Large amount. It is the main savory flavor.",,YangjiangDouchi,No
-L10,ProgressiveHint,L10_Hint_CoarseSalt_Ratio,Evaluate hint,Ratio,21,,,Coarse salt should use the Very Small amount. It should only support the recipe.,,CoarseSalt,No
-L10,ProgressiveHint,L10_Hint_Douchi_Order,Evaluate hint,IngredientOrder,22,,,Start with Yangjiang douchi to build the savory base.,,YangjiangDouchi,No
+L10,ProgressiveHint,L10_Hint_Douchi_Ratio,Evaluate hint,Ratio,22,,,"Yangjiang douchi should use the Large amount. It should remain the strongest savory flavor.",,YangjiangDouchi,No
+L10,ProgressiveHint,L10_Hint_CoarseSalt_Ratio,Evaluate hint,Ratio,21,,,Coarse salt should use the Very Small amount. It should bring out the other flavors without tasting salty.,,CoarseSalt,No
+L10,ProgressiveHint,L10_Hint_Douchi_Order,Evaluate hint,IngredientOrder,22,,,Start with Yangjiang douchi. Its deep savory flavor needs time to form before the other ingredients arrive.,,YangjiangDouchi,No
 L10,ProgressiveHint,L10_Hint_Ginger_Order,Evaluate hint,IngredientOrder,21,,,"Ginger should come after douchi and before dried tangerine peel.",,Ginger,No
-L10,ProgressiveHint,L10_Hint_Tail_Order,Evaluate hint,IngredientOrder,20,,,"Use dried tangerine peel near the end. Keep coarse salt very light.",,"DriedTangerinePeel,CoarseSalt",No
-L10,PermanentClue,L10_Douchi_Force,Unlocked after Correct,Force,0,,,Use heavy force for this whole recipe. The bean base needs clear pressure to wake up its savory depth.,Grinding Force - Process Clue,,Yes
-L10,PermanentClue,L10_Douchi_Ratio,Unlocked after Correct,Ratio,0,,,"Yangjiang douchi can be the main savory flavor, but too much makes the recipe heavy.",Yangjiang Douchi - Ratio Clue,YangjiangDouchi,Yes
-L10,PermanentClue,L10_Ginger_Speed,Unlocked after Correct,Speed,0,,,Use slow speed for this whole recipe. A slower grind keeps the savory base steady and prevents the support flavors from turning sharp.,Grinding Speed - Process Clue,,Yes
-L10,PermanentClue,L10_Ginger_Order,Unlocked after Correct,IngredientOrder,0,,,"Ginger works well in the middle, after the base flavor is set.",Ginger - Order Clue,Ginger,Yes
-L11,ProgressiveHint,L11_Hint_SandGinger_Ratio,Evaluate hint,Ratio,22,,,Sand ginger should use the Large amount. It is the main ginger flavor.,,SandGinger,No
+L10,ProgressiveHint,L10_Hint_Tail_Order,Evaluate hint,IngredientOrder,20,,,"Add dried tangerine peel near the end, then add coarse salt last.",,"DriedTangerinePeel,CoarseSalt",No
+L10,PermanentClue,L10_Douchi_Force,Unlocked after Correct,Force,0,,,Use heavy force for this whole recipe. The fermented beans need clear pressure to release their savory depth.,Grinding Force - Process Clue,,Yes
+L10,PermanentClue,L10_Douchi_Ratio,Unlocked after Correct,Ratio,0,,,"Yangjiang douchi uses the Large amount so its savory flavor remains the strongest.",Yangjiang Douchi - Ratio Clue,YangjiangDouchi,Yes
+L10,PermanentClue,L10_Ginger_Speed,Unlocked after Correct,Speed,0,,,Use slow speed for this whole recipe. A slower grind keeps the savory flavor steady and prevents ginger and citrus from turning sharp.,Grinding Speed - Process Clue,,Yes
+L10,PermanentClue,L10_Ginger_Order,Unlocked after Correct,IngredientOrder,0,,,"Ginger works well after the douchi flavor has formed, but before the dried tangerine peel arrives.",Ginger - Order Clue,Ginger,Yes
+L11,ProgressiveHint,L11_Hint_SandGinger_Ratio,Evaluate hint,Ratio,22,,,Sand ginger should use the Large amount. It should be the strongest ginger flavor.,,SandGinger,No
 L11,ProgressiveHint,L11_Hint_CoarseSalt_Ratio,Evaluate hint,Ratio,21,,,"Coarse salt should use the Very Small amount. It should not taste salty.",,CoarseSalt,No
-L11,ProgressiveHint,L11_Hint_Scallion_Ratio,Evaluate hint,Ratio,20,,,"Use more scallion white than coarse salt, but less than ginger.",,"ScallionWhite,CoarseSalt",No
+L11,ProgressiveHint,L11_Hint_Scallion_Ratio,Evaluate hint,Ratio,20,,,"Scallion white should use the Small amount.",,"ScallionWhite,CoarseSalt",No
 L11,ProgressiveHint,L11_Hint_Ginger_Combination,Evaluate hint,Combination,22,,,Sand ginger and ginger can be ground together.,,"SandGinger,Ginger",No
 L11,ProgressiveHint,L11_Hint_Scallion_Combination,Evaluate hint,Combination,21,,,Keep scallion white separate from the ginger group.,,ScallionWhite,No
 L11,ProgressiveHint,L11_Hint_CoarseSalt_Combination,Evaluate hint,Combination,20,,,Grind coarse salt separately. It does not need to join the ginger group.,,CoarseSalt,No
-L11,ProgressiveHint,L11_Hint_CoarseSalt_Order,Evaluate hint,IngredientOrder,22,,,Start with coarse salt to set a light base.,,CoarseSalt,No
+L11,ProgressiveHint,L11_Hint_CoarseSalt_Order,Evaluate hint,IngredientOrder,22,,,Start with coarse salt. Its light seasoning needs to disperse before the ginger arrives.,,CoarseSalt,No
 L11,ProgressiveHint,L11_Hint_Ginger_Order,Evaluate hint,IngredientOrder,21,,,"Add sand ginger before fresh ginger.",,"SandGinger,Ginger",No
 L11,ProgressiveHint,L11_Hint_Scallion_Order,Evaluate hint,IngredientOrder,20,,,Add scallion white last so it stays fresh.,,ScallionWhite,No
-L11,PermanentClue,L11_Ginger_Combination,Unlocked after Correct,Combination,0,,,Sand ginger and ginger can be ground together because they support the same main flavor.,Ginger Combination Clue,"SandGinger,Ginger",Yes
+L11,PermanentClue,L11_Ginger_Combination,Unlocked after Correct,Combination,0,,,Sand ginger and ginger can be ground together because their spicy flavors develop in the same direction.,Ginger Combination Clue,"SandGinger,Ginger",Yes
 L11,PermanentClue,L11_Scallion_Order,Unlocked after Correct,IngredientOrder,0,,,Scallion white works best at the end. Do not overgrind it with strong spices.,Scallion White - Order Clue,ScallionWhite,Yes

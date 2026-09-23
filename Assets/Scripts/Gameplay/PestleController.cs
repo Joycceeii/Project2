@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +8,7 @@ namespace TheTasteReviver
     {
         public MortarArea mortarArea;
         public Camera interactionCamera;
-        public Text speedLabel;
+        public TMP_Text speedLabel;
         public UIManager uiManager;
         [Header("Speed Calibration")]
         public bool applyPlayerFriendlySpeedCalibration = true;

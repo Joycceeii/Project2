@@ -1,22 +1,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace TheTasteReviver
 {
     public class ExperimentLogManager : MonoBehaviour
     {
-        public Text logText;
+        public TMP_Text logText;
         public int maxVisibleRecords = 5;
 
         private static readonly List<ExperimentRecord> sharedRecords = new List<ExperimentRecord>();
         private static readonly List<UnlockedClueRecord> unlockedClues = new List<UnlockedClueRecord>();
         private static readonly List<IngredientData> ingredientCatalog = new List<IngredientData>();
+        private static readonly List<RecipeLevelData> levelCatalog = new List<RecipeLevelData>();
         private static readonly HashSet<string> unlockedIngredientIDs = new HashSet<string>();
-        private const string CluePrefsKey = "TheTasteReviver.UnlockedClues.v2";
-        private const string IngredientPrefsKey = "TheTasteReviver.UnlockedIngredients.v1";
+        private const string CluePrefsKey = "TheTasteReviver.UnlockedClues.v5";
+        private const string IngredientPrefsKey = "TheTasteReviver.UnlockedIngredients.v5";
         private const string OrderArrow = " \u2192 ";
 
         public IReadOnlyList<ExperimentRecord> Records => sharedRecords;
@@ -34,19 +35,69 @@ namespace TheTasteReviver
             ingredientCatalog.AddRange(ingredients.Where(x => x != null && !string.IsNullOrWhiteSpace(x.ingredientID)));
         }
 
-        public static void UnlockIngredientsFromLevels(IEnumerable<RecipeLevelData> levels)
+        public static void SetLevelCatalog(IEnumerable<RecipeLevelData> levels)
         {
-            if (levels == null)
+            levelCatalog.Clear();
+            if (levels != null)
+            {
+                levelCatalog.AddRange(levels.Where(x => x != null));
+            }
+
+            RefreshUnlockedClueText();
+        }
+
+        private static void RefreshUnlockedClueText()
+        {
+            LoadUnlockedClues();
+            if (unlockedClues.Count == 0 || levelCatalog.Count == 0)
             {
                 return;
             }
 
-            List<IngredientData> ingredients = levels
-                .Where(level => level != null && level.availableIngredients != null)
-                .SelectMany(level => level.availableIngredients)
-                .Where(ingredient => ingredient != null)
-                .ToList();
-            UnlockIngredients(ingredients);
+            Dictionary<string, LevelClueData> currentClues = levelCatalog
+                .Where(level => level.unlockCluesOnComplete != null)
+                .SelectMany(level => level.unlockCluesOnComplete)
+                .Where(clue => clue != null && !string.IsNullOrWhiteSpace(clue.clueId))
+                .GroupBy(clue => clue.clueId)
+                .ToDictionary(group => group.Key, group => group.First());
+
+            bool changed = false;
+            foreach (UnlockedClueRecord unlocked in unlockedClues)
+            {
+                if (unlocked == null
+                    || string.IsNullOrWhiteSpace(unlocked.clueId)
+                    || !currentClues.TryGetValue(unlocked.clueId, out LevelClueData current))
+                {
+                    continue;
+                }
+
+                List<string> currentIngredientIDs = current.relatedIngredients != null
+                    ? current.relatedIngredients
+                        .Where(x => x != null && !string.IsNullOrWhiteSpace(x.ingredientID))
+                        .Select(x => x.ingredientID)
+                        .ToList()
+                    : new List<string>();
+                List<string> storedIngredientIDs = unlocked.relatedIngredientIDs ?? new List<string>();
+
+                if (unlocked.title == current.title
+                    && unlocked.content == current.content
+                    && unlocked.relatedDimension == current.relatedDimension
+                    && storedIngredientIDs.SequenceEqual(currentIngredientIDs))
+                {
+                    continue;
+                }
+
+                unlocked.title = current.title;
+                unlocked.content = current.content;
+                unlocked.relatedDimension = current.relatedDimension;
+                unlocked.relatedIngredientIDs = currentIngredientIDs;
+                changed = true;
+            }
+
+            if (changed)
+            {
+                SaveUnlockedClues();
+            }
         }
 
         public static void UnlockIngredients(IEnumerable<IngredientData> ingredients)
@@ -150,6 +201,7 @@ namespace TheTasteReviver
                 };
                 unlockedClues.Add(unlocked);
                 newlyUnlocked.Add(unlocked);
+                break;
             }
 
             if (newlyUnlocked.Count > 0)
@@ -336,7 +388,7 @@ namespace TheTasteReviver
                 return "Not Checked";
             }
 
-            return dimension.isCorrect ? "Correct" : "Needs Work";
+            return dimension.isCorrect ? "Correct" : "Incorrect";
         }
 
         private static string BuildCombinationPatternText(IReadOnlyList<GrindingBatch> batches)
@@ -527,7 +579,7 @@ namespace TheTasteReviver
 
         private static string StatusFromBool(bool correct)
         {
-            return correct ? "Correct" : "Needs Work";
+            return correct ? "Correct" : "Incorrect";
         }
 
         private static string FormatOrder(List<IngredientData> order, IngredientData ingredient)
@@ -592,9 +644,27 @@ namespace TheTasteReviver
 
             foreach (string ingredientID in unlockedIngredientIDs)
             {
-                EnsureIngredientLogEntry(entries, ingredientID, null);
+                EnsureIngredientLogEntry(entries, ingredientID);
             }
 
+            // Permanent clues are only awarded after a correct evaluation, so
+            // their related ingredients are also authoritative unlock evidence.
+            // This keeps the log working even if PlayerPrefs cannot be written.
+            foreach (UnlockedClueRecord clue in unlockedClues)
+            {
+                if (clue == null || clue.relatedIngredientIDs == null)
+                {
+                    continue;
+                }
+
+                foreach (string ingredientID in clue.relatedIngredientIDs)
+                {
+                    EnsureIngredientLogEntry(entries, ingredientID);
+                }
+            }
+
+            // Attempt notes may enrich an ingredient that has already been
+            // unlocked, but a failed attempt must never create a new entry.
             foreach (ExperimentRecord record in sharedRecords)
             {
                 if (record == null || record.ingredientEntries == null)
@@ -602,20 +672,16 @@ namespace TheTasteReviver
                     continue;
                 }
 
-                foreach (ExperimentIngredientEntry entry in record.ingredientEntries)
+                foreach (ExperimentIngredientEntry note in record.ingredientEntries)
                 {
-                    if (entry == null || string.IsNullOrWhiteSpace(entry.ingredientID))
+                    if (note == null
+                        || string.IsNullOrWhiteSpace(note.ingredientID)
+                        || !entries.TryGetValue(note.ingredientID, out IngredientLogEntry logEntry))
                     {
                         continue;
                     }
 
-                    IngredientLogEntry logEntry = EnsureIngredientLogEntry(entries, entry.ingredientID, entry);
-
-                    logEntry.levelNotes.Add(entry);
-                    if (string.IsNullOrWhiteSpace(logEntry.traitDescription) && !string.IsNullOrWhiteSpace(entry.traitDescription))
-                    {
-                        logEntry.traitDescription = entry.traitDescription;
-                    }
+                    logEntry.levelNotes.Add(note);
                 }
             }
 
@@ -627,7 +693,9 @@ namespace TheTasteReviver
                 }
 
                 IEnumerable<IngredientLogEntry> relatedEntries = clue.relatedIngredientIDs != null && clue.relatedIngredientIDs.Count > 0
-                    ? clue.relatedIngredientIDs.Select(id => EnsureIngredientLogEntry(entries, id, null)).Where(x => x != null)
+                    ? clue.relatedIngredientIDs
+                        .Select(id => entries.TryGetValue(id, out IngredientLogEntry entry) ? entry : null)
+                        .Where(entry => entry != null)
                     : entries.Values.Where(x => !string.IsNullOrWhiteSpace(x.ingredientName) && clue.title.Contains(x.ingredientName));
                 foreach (IngredientLogEntry entry in relatedEntries)
                 {
@@ -638,7 +706,7 @@ namespace TheTasteReviver
             return entries.Values.OrderBy(x => x.ingredientName).ToList();
         }
 
-        private static IngredientLogEntry EnsureIngredientLogEntry(Dictionary<string, IngredientLogEntry> entries, string ingredientID, ExperimentIngredientEntry note)
+        private static IngredientLogEntry EnsureIngredientLogEntry(Dictionary<string, IngredientLogEntry> entries, string ingredientID)
         {
             if (entries == null || string.IsNullOrWhiteSpace(ingredientID))
             {
@@ -647,19 +715,6 @@ namespace TheTasteReviver
 
             if (entries.TryGetValue(ingredientID, out IngredientLogEntry existing))
             {
-                if (note != null)
-                {
-                    if (string.IsNullOrWhiteSpace(existing.ingredientName) && !string.IsNullOrWhiteSpace(note.ingredientName))
-                    {
-                        existing.ingredientName = note.ingredientName;
-                    }
-
-                    if (string.IsNullOrWhiteSpace(existing.traitDescription) && !string.IsNullOrWhiteSpace(note.traitDescription))
-                    {
-                        existing.traitDescription = note.traitDescription;
-                    }
-                }
-
                 return existing;
             }
 
@@ -667,12 +722,9 @@ namespace TheTasteReviver
             IngredientLogEntry created = new IngredientLogEntry
             {
                 ingredientID = ingredientID,
-                ingredientName = note != null && !string.IsNullOrWhiteSpace(note.ingredientName)
-                    ? note.ingredientName
-                    : ingredient != null ? ingredient.DisplayName : ingredientID,
-                traitDescription = note != null && !string.IsNullOrWhiteSpace(note.traitDescription)
-                    ? note.traitDescription
-                    : ingredient != null ? ingredient.initialDescription : string.Empty
+                ingredientName = ingredient != null ? ingredient.DisplayName : ingredientID,
+                aromaType = ingredient != null ? ingredient.aromaType : string.Empty,
+                traitDescription = ingredient != null ? ingredient.initialDescription : string.Empty
             };
             entries[ingredientID] = created;
             return created;
@@ -730,6 +782,7 @@ namespace TheTasteReviver
     {
         public string ingredientID;
         public string ingredientName;
+        public string aromaType;
         public string traitDescription;
         public List<ExperimentIngredientEntry> levelNotes = new List<ExperimentIngredientEntry>();
         public List<UnlockedClueRecord> clues = new List<UnlockedClueRecord>();

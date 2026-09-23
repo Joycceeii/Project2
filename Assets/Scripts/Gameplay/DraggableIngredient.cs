@@ -13,6 +13,7 @@ namespace TheTasteReviver
         public Camera interactionCamera;
         public GameObject sourcePrefab;
         public float dragLiftHeight = 0.55f;
+        public float mortarDragClearance = 0.08f;
         public float mortarDropHeight = 0.2f;
         public float groundVisualLift = 0.1f;
         public float mortarGroundVisualLift = 0.04f;
@@ -28,6 +29,7 @@ namespace TheTasteReviver
         private GameObject groundVisualInstance;
         private bool groundVisualSizeNormalized;
         private bool hasBeenGround;
+        private UIManager hoverUIManager;
 
         public bool IsInMortar { get; private set; }
         public bool HasBeenGround => hasBeenGround;
@@ -233,6 +235,7 @@ namespace TheTasteReviver
 
         private void OnMouseDown()
         {
+            HideHoverTooltip();
             if (IsInMortar && attemptManager != null)
             {
                 attemptManager.RemoveIngredientsFromCurrentBatch(GetRepresentedIngredients());
@@ -240,7 +243,7 @@ namespace TheTasteReviver
             }
 
             dragging = true;
-            dragPlaneY = transform.position.y + Mathf.Max(0f, dragLiftHeight);
+            dragPlaneY = GetDragPlaneHeight(GetActiveMortarArea());
             transform.position = new Vector3(transform.position.x, dragPlaneY, transform.position.z);
         }
 
@@ -305,8 +308,42 @@ namespace TheTasteReviver
             return IsAlive(attemptMortarArea) ? attemptMortarArea : mortarArea;
         }
 
+        private float GetDragPlaneHeight(MortarArea activeMortarArea)
+        {
+            float targetY = transform.position.y + Mathf.Max(0f, dragLiftHeight);
+            if (!IsAlive(activeMortarArea))
+            {
+                return targetY;
+            }
+
+            Collider mortarCollider = activeMortarArea.GetComponent<Collider>();
+            if (!IsAlive(mortarCollider))
+            {
+                return targetY;
+            }
+
+            float minimumVisualY = mortarCollider.bounds.max.y + Mathf.Max(0f, mortarDragClearance);
+            if (TryCalculateWorldBounds(transform, out Bounds visualBounds) && visualBounds.size.sqrMagnitude > 0.0001f)
+            {
+                float liftNeeded = minimumVisualY - visualBounds.min.y;
+                targetY = Mathf.Max(targetY, transform.position.y + Mathf.Max(0f, liftNeeded));
+            }
+            else
+            {
+                targetY = Mathf.Max(targetY, minimumVisualY);
+            }
+
+            return targetY;
+        }
+
         private void NormalizeRuntimeVisualSettings()
         {
+            if (mortarDragClearance <= 0f)
+            {
+                mortarDragClearance = 0.08f;
+            }
+
+            mortarDragClearance = Mathf.Clamp(mortarDragClearance, 0.03f, 0.2f);
             mortarDropHeight = Mathf.Clamp(mortarDropHeight, 0.18f, 0.22f);
             groundVisualLift = Mathf.Clamp(groundVisualLift, 0.08f, 0.14f);
             mortarGroundVisualLift = Mathf.Clamp(mortarGroundVisualLift, 0.02f, 0.12f);
@@ -349,6 +386,38 @@ namespace TheTasteReviver
                     }
                 }
             }
+        }
+
+        private void OnMouseEnter()
+        {
+            if (dragging)
+            {
+                return;
+            }
+
+            hoverUIManager = attemptManager != null ? attemptManager.uiManager : null;
+            if (hoverUIManager == null)
+            {
+                hoverUIManager = FindFirstObjectByType<UIManager>();
+            }
+
+            hoverUIManager?.ShowIngredientTooltip(GetRepresentedIngredients(), this);
+        }
+
+        private void OnMouseExit()
+        {
+            HideHoverTooltip();
+        }
+
+        private void OnDisable()
+        {
+            HideHoverTooltip();
+        }
+
+        private void HideHoverTooltip()
+        {
+            hoverUIManager?.HideIngredientTooltip(this);
+            hoverUIManager = null;
         }
 
         private void ClearGroundState()

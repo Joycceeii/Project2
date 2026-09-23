@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 namespace TheTasteReviver
@@ -30,7 +31,7 @@ namespace TheTasteReviver
         public RecipeAttemptManager attemptManager;
         public GameObject platePrefab;
         public bool hideLegacyDisplaysOnFirstRefresh = true;
-        public bool showIngredientLabels = true;
+        public bool showIngredientLabels = false;
         public Vector3 labelOffset = new Vector3(0f, PlateLabelYOffset, -0.28f);
         public int labelFontSize = 60;
         public float labelCharacterSize = 0.035f;
@@ -808,12 +809,13 @@ namespace TheTasteReviver
 
         private void ConfigureMixedPowderLabel(Transform slot, string labelText)
         {
-            TextMesh label = EnsureLabel(slot);
+            TextMeshPro label = EnsureLabel(slot);
             label.gameObject.SetActive(true);
             label.text = labelText;
             label.color = Color.black;
             label.fontSize = Mathf.Max(8, labelFontSize);
-            label.characterSize = GetLabelCharacterSize(label.text) * 0.9f;
+            label.font = ThemeFontProvider.GetTmpFont(labelFontSize);
+            label.transform.localScale = Vector3.one * GetLabelCharacterSize(label.text) * 0.9f;
             label.transform.localPosition = new Vector3(0f, Mathf.Max(0.006f, labelOffset.y), 0.32f);
             ConfigurePlateLabel(label.transform);
         }
@@ -1000,31 +1002,31 @@ namespace TheTasteReviver
             }
         }
 
-        private TextMesh EnsureLabel(Transform slot)
+        private TextMeshPro EnsureLabel(Transform slot)
         {
             Transform existing = slot.Find(LabelName);
             if (IsAlive(existing))
             {
-                TextMesh existingText = existing.GetComponent<TextMesh>();
-                return IsAlive(existingText) ? existingText : existing.gameObject.AddComponent<TextMesh>();
+                TextMeshPro existingText = existing.GetComponent<TextMeshPro>();
+                return IsAlive(existingText) ? existingText : existing.gameObject.AddComponent<TextMeshPro>();
             }
 
             GameObject labelObject = new GameObject(LabelName);
             labelObject.transform.SetParent(slot, false);
-            TextMesh text = labelObject.AddComponent<TextMesh>();
-            text.anchor = TextAnchor.MiddleCenter;
-            text.alignment = TextAlignment.Center;
+            TextMeshPro text = labelObject.AddComponent<TextMeshPro>();
+            text.alignment = TextAlignmentOptions.Center;
             return text;
         }
 
         private void ConfigureLabel(Transform slot, IngredientData ingredient)
         {
-            TextMesh label = EnsureLabel(slot);
+            TextMeshPro label = EnsureLabel(slot);
             label.gameObject.SetActive(showIngredientLabels);
             label.text = ingredient != null ? ingredient.DisplayName : string.Empty;
             label.color = Color.black;
             label.fontSize = Mathf.Max(8, labelFontSize);
-            label.characterSize = GetLabelCharacterSize(label.text);
+            label.font = ThemeFontProvider.GetTmpFont(labelFontSize);
+            label.transform.localScale = Vector3.one * GetLabelCharacterSize(label.text);
             label.transform.localPosition = GetLabelPosition(label.text);
             ConfigurePlateLabel(label.transform);
         }
@@ -1037,7 +1039,6 @@ namespace TheTasteReviver
             }
 
             label.localRotation = Quaternion.Euler(90f, 0f, 0f);
-            label.localScale = Vector3.one;
         }
 
         private float GetLabelCharacterSize(string text)

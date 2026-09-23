@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: Pepper Held in Balance
   cityName: Shantou
   targetTasteName: Force Batch Challenge
-  levelIntro: "White pepper should stay clear without becoming harsh. Peanut and dried tangerine peel should support it. Grind each ingredient in its own batch and adjust the force for each one."
+  levelIntro: "White pepper should stay clear without becoming harsh. Peanut adds warmth, while dried tangerine peel adds a light citrus note. Grind each ingredient in its own batch and adjust the force for each one."
   maxIngredientCount: 3
   availableIngredients:
   - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
@@ -163,4 +163,4 @@ MonoBehaviour:
     responseHintRules: []
   successFeedback: "White pepper is clear, peanut adds warmth, and citrus keeps it light."
   closeFeedback: Very close. Check the separate batches, force, speed, or grinding time.
-  wrongFeedback: "White pepper is too harsh, or the support flavors are too weak."
+  wrongFeedback: "White pepper is too harsh, or the peanut and citrus flavors are too faint."

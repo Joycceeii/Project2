@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: Savory Bean Current
   cityName: Yangjiang
   targetTasteName: Force Speed Ratio And Order Challenge
-  levelIntro: "Yangjiang douchi should be the main savory flavor. Ginger, dried tangerine peel, and salt should support it."
+  levelIntro: "Yangjiang douchi should be the strongest savory flavor. Ginger adds warmth, dried tangerine peel adds brightness, and coarse salt brings the flavors forward."
   maxIngredientCount: 4
   availableIngredients:
   - {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
@@ -97,23 +97,23 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L10_Douchi_Force
     title: Grinding Force - Process Clue
-    content: "Use heavy force for this whole recipe. The bean base needs clear pressure to wake up its savory depth."
+    content: "Use heavy force for this whole recipe. The fermented beans need clear pressure to release their savory depth."
     relatedIngredients: []
     relatedDimension: 4
   - clueId: L10_Douchi_Ratio
     title: Yangjiang Douchi - Ratio Clue
-    content: "Yangjiang douchi can be the main savory flavor, but too much makes the recipe heavy."
+    content: Yangjiang douchi uses the Large amount so its savory flavor remains the strongest.
     relatedIngredients:
     - {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
     relatedDimension: 2
   - clueId: L10_Ginger_Speed
     title: Grinding Speed - Process Clue
-    content: Use slow speed for this whole recipe. A slower grind keeps the savory base steady and prevents the support flavors from turning sharp.
+    content: Use slow speed for this whole recipe. A slower grind keeps the savory flavor steady and prevents ginger and citrus from turning sharp.
     relatedIngredients: []
     relatedDimension: 5
   - clueId: L10_Ginger_Order
     title: Ginger - Order Clue
-    content: "Ginger works well in the middle, after the base flavor is set."
+    content: "Ginger works well after the douchi flavor has formed, but before the dried tangerine peel arrives."
     relatedIngredients:
     - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
     relatedDimension: 1
@@ -122,15 +122,15 @@ MonoBehaviour:
   - ruleId: L10_Hint_Douchi_Ratio
     priority: 22
     mechanic: 2
-    hintText: Yangjiang douchi should use the Large amount. It is the main savory flavor.
+    hintText: Yangjiang douchi should use the Large amount. It should remain the strongest savory flavor.
   - ruleId: L10_Hint_CoarseSalt_Ratio
     priority: 21
     mechanic: 2
-    hintText: Coarse salt should use the Very Small amount. It should only support the recipe.
+    hintText: Coarse salt should use the Very Small amount. It should bring out the other flavors without tasting salty.
   - ruleId: L10_Hint_Douchi_Order
     priority: 22
     mechanic: 1
-    hintText: Start with Yangjiang douchi to build the savory base.
+    hintText: Start with Yangjiang douchi. Its deep savory flavor needs time to form before the other ingredients arrive.
   - ruleId: L10_Hint_Ginger_Order
     priority: 21
     mechanic: 1
@@ -138,7 +138,7 @@ MonoBehaviour:
   - ruleId: L10_Hint_Tail_Order
     priority: 20
     mechanic: 1
-    hintText: Use dried tangerine peel near the end. Keep coarse salt very light.
+    hintText: Add dried tangerine peel near the end, then add coarse salt last.
   ingredientProfiles:
   - profileTag: L10_YangjiangDouchi
     ingredient: {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
@@ -204,6 +204,6 @@ MonoBehaviour:
     targetCombinationKey: 
     levelTraitDescription: Coarse salt is a low mineral anchor.
     responseHintRules: []
-  successFeedback: "Douchi is the main savory flavor, with ginger, citrus, and light salt behind it."
+  successFeedback: "Douchi is the strongest savory flavor, with ginger, citrus, and light salt behind it."
   closeFeedback: Very close. Check one process or structure setting.
   wrongFeedback: "Salt, ginger, or citrus is too strong, or the douchi flavor is unclear."

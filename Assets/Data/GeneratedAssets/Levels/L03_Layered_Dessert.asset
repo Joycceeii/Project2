@@ -90,13 +90,13 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L03_RedBean_Order
     title: Red Bean - Order Clue
-    content: Red bean works well early because it builds the base flavor.
+    content: Red bean works well early because its gentle sweetness needs time to form before the other ingredients arrive.
     relatedIngredients:
     - {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
     relatedDimension: 1
   - clueId: L03_Peel_Order
     title: Dried Tangerine Peel - Order Clue
-    content: "Dried tangerine peel works better after the base is set. Too early can make the recipe bitter."
+    content: "Dried tangerine peel works best after the red bean flavor has formed. Adding it too early can make the recipe bitter."
     relatedIngredients:
     - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
     relatedDimension: 1
@@ -115,7 +115,7 @@ MonoBehaviour:
   - ruleId: L03_Hint_Peel_Order
     priority: 21
     mechanic: 1
-    hintText: Dried tangerine peel should come after red bean so it does not make the base bitter.
+    hintText: Dried tangerine peel should come after red bean so the citrus bitterness does not arrive too early.
   - ruleId: L03_Hint_RockSugar_Order
     priority: 20
     mechanic: 1
@@ -135,7 +135,7 @@ MonoBehaviour:
     targetRatioLevel: 0
     targetOrderIndex: 0
     targetCombinationKey: 
-    levelTraitDescription: Red bean is a thick warm dessert base.
+    levelTraitDescription: "Red bean gives the dessert a thick, warm sweetness."
     responseHintRules: []
   - profileTag: L03_DriedTangerinePeel
     ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}

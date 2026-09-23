@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 namespace TheTasteReviver
@@ -6,6 +7,7 @@ namespace TheTasteReviver
     public static class ThemeFontProvider
     {
         private static Font cachedFont;
+        private static TMP_FontAsset cachedTmpFont;
 
         public static Font GetFont(int size = 16)
         {
@@ -26,6 +28,34 @@ namespace TheTasteReviver
             }
 
             return cachedFont;
+        }
+
+        public static TMP_FontAsset GetTmpFont(int size = 16)
+        {
+            if (cachedTmpFont != null)
+            {
+                return cachedTmpFont;
+            }
+
+            cachedTmpFont = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF");
+            if (cachedTmpFont != null)
+            {
+                return cachedTmpFont;
+            }
+
+            Font source = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            if (source != null)
+            {
+                cachedTmpFont = TMP_FontAsset.CreateFontAsset(source);
+                if (cachedTmpFont != null)
+                {
+                    cachedTmpFont.name = "Taste Reviver Runtime Font";
+                    cachedTmpFont.atlasPopulationMode = AtlasPopulationMode.Dynamic;
+                    return cachedTmpFont;
+                }
+            }
+
+            return cachedTmpFont;
         }
     }
 }

@@ -95,7 +95,7 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L09_LotusLeaf_Ratio
     title: Lotus Leaf - Ratio Clue
-    content: Lotus leaf works best in a very small amount.
+    content: Lotus leaf uses the Very Small amount.
     relatedIngredients:
     - {fileID: 11400000, guid: d9e3e41cc52bba94997680b94ac53836, type: 2}
     relatedDimension: 2
@@ -117,7 +117,7 @@ MonoBehaviour:
   - ruleId: L09_Hint_GlutinousRice_Ratio
     priority: 22
     mechanic: 2
-    hintText: Glutinous rice should use the Large amount. It is the base of this recipe.
+    hintText: Glutinous rice should use the Large amount. It should be the largest share of the filling.
   - ruleId: L09_Hint_BlackSesame_Ratio
     priority: 21
     mechanic: 2
@@ -141,7 +141,7 @@ MonoBehaviour:
   - ruleId: L09_Hint_RedBean_Order
     priority: 22
     mechanic: 1
-    hintText: Red bean should go first. It builds the base.
+    hintText: Red bean should go first. Its gentle sweetness needs time to form before the other filling ingredients arrive.
   - ruleId: L09_Hint_LotusLeaf_Order
     priority: 21
     mechanic: 1
@@ -165,7 +165,7 @@ MonoBehaviour:
     targetRatioLevel: 2
     targetOrderIndex: 0
     targetCombinationKey: BlackSesame+GlutinousRice+RedBean
-    levelTraitDescription: Red bean gives the dumpling a thick sweet base.
+    levelTraitDescription: "Red bean gives the filling a thick, gentle sweetness."
     responseHintRules: []
   - profileTag: L09_GlutinousRice
     ingredient: {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
@@ -215,6 +215,6 @@ MonoBehaviour:
     targetCombinationKey: LotusLeaf
     levelTraitDescription: Lotus leaf adds a light green taste.
     responseHintRules: []
-  successFeedback: "The filling is wrapped cleanly: sticky rice leads, sesame supports it, red bean sits lighter, and lotus leaf finishes the zongzi."
+  successFeedback: "The filling is wrapped cleanly: sticky rice is strongest, sesame adds a roasted note, red bean stays lighter, and lotus leaf finishes the zongzi."
   closeFeedback: "Very close. Check the ratio, first filling batch, or lotus leaf wrapping step."
   wrongFeedback: The zongzi layers are unclear. One flavor may be too strong or the lotus leaf may be used too early.

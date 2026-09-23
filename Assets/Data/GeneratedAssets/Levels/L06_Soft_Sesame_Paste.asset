@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: Soft Sesame Paste
   cityName: Shunde
   targetTasteName: Subtle Balance
-  levelIntro: A small change in amount can shift how the sesame paste feels.
+  levelIntro: Black sesame should be the strongest flavor without becoming bitter, while glutinous rice keeps the paste smooth. A familiar grain lesson may help.
   maxIngredientCount: 2
   availableIngredients:
   - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
@@ -25,16 +25,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
   - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
   forbiddenIngredients: []
-  unlockedDimensions: 02000000
-  lockedDimensions: 04000000050000000300000001000000
+  unlockedDimensions: 0400000002000000
+  lockedDimensions: 050000000300000001000000
   correctIngredientOrder:
   - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
   - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
   correctRatioPattern:
   - ingredient: {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
-    ratioLevel: 2
+    ratioLevel: 4
   - ingredient: {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
-    ratioLevel: 1
+    ratioLevel: 2
   correctCombinationPattern:
     groups:
     - ingredients:
@@ -49,7 +49,7 @@ MonoBehaviour:
     enableIngredientOrder: 0
     enableRatio: 1
     enableCombination: 0
-    enableForce: 0
+    enableForce: 1
     enableSpeed: 0
   feedbackTexts:
     forceTooLight: Grinding force is too light.
@@ -68,7 +68,7 @@ MonoBehaviour:
     combinationCorrect: Combination pattern is correct.
     combinationWrong: Combination pattern does not match the target.
   hintSettings:
-    hintPriority: 02000000
+    hintPriority: 0200000004000000
     maxOrderHints: 5
     maxRatioHints: 5
     maxCombinationHints: 3
@@ -83,26 +83,36 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L06_BlackSesame_Ratio
     title: Black Sesame - Ratio Clue
-    content: "Use a little black sesame. It should be stronger than glutinous rice, but not heavy."
+    content: Black sesame uses the Medium amount in this paste, keeping its roasted flavor clear without taking over.
     relatedIngredients:
     - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
     relatedDimension: 2
   - clueId: L06_GlutinousRice_Ratio
     title: Glutinous Rice - Ratio Clue
-    content: Use the Very Small amount of glutinous rice. It should only smooth the paste.
+    content: Glutinous rice uses the Small amount to soften and thicken this paste.
     relatedIngredients:
     - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
     relatedDimension: 2
+  - clueId: L06_GlutinousRice_Force
+    title: Glutinous Rice - Force Clue
+    content: Glutinous rice responds best to Medium force, following the steady behavior learned from rice.
+    relatedIngredients:
+    - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
+    relatedDimension: 4
   fallbackHintText: No new hint for now. Keep what worked
   progressiveHintRules:
   - ruleId: L06_Hint_BlackSesame_Ratio
     priority: 21
     mechanic: 2
-    hintText: Black sesame should use the Small amount.
+    hintText: Black sesame should use the Medium amount. It should remain the strongest flavor without making the paste bitter.
   - ruleId: L06_Hint_GlutinousRice_Ratio
     priority: 20
     mechanic: 2
-    hintText: Glutinous rice should use the Very Small amount.
+    hintText: Glutinous rice should use the Small amount. It should soften the texture without replacing the roasted flavor.
+  - ruleId: L06_Hint_Force
+    priority: 19
+    mechanic: 4
+    hintText: Use Medium force. Apply the steady pressure learned from rice.
   ingredientProfiles:
   - profileTag: L06_BlackSesame
     ingredient: {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
@@ -111,14 +121,14 @@ MonoBehaviour:
       enableIngredientOrder: 0
       enableRatio: 1
       enableCombination: 0
-      enableForce: 0
+      enableForce: 1
       enableSpeed: 0
     targetForceLevel: 1
     targetSpeedLevel: 1
-    targetRatioLevel: 2
+    targetRatioLevel: 4
     targetOrderIndex: -1
     targetCombinationKey: 
-    levelTraitDescription: Black sesame gives the paste its strong roasted taste.
+    levelTraitDescription: Black sesame brings the main roasted flavor, but too much can make the paste bitter.
     responseHintRules: []
   - profileTag: L06_GlutinousRice
     ingredient: {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
@@ -127,15 +137,15 @@ MonoBehaviour:
       enableIngredientOrder: 0
       enableRatio: 1
       enableCombination: 0
-      enableForce: 0
+      enableForce: 1
       enableSpeed: 0
     targetForceLevel: 1
     targetSpeedLevel: 1
-    targetRatioLevel: 1
+    targetRatioLevel: 2
     targetOrderIndex: -1
     targetCombinationKey: 
-    levelTraitDescription: Glutinous rice makes the paste smooth and soft.
+    levelTraitDescription: Glutinous rice softens and thickens the paste, following the steady behavior of familiar grains.
     responseHintRules: []
-  successFeedback: "Black sesame is slightly stronger, and glutinous rice keeps the paste smooth."
-  closeFeedback: Very close. Adjust the ratio a little.
-  wrongFeedback: The sesame flavor is not clear enough. Check the ratio.
+  successFeedback: "The Medium amount of black sesame stays clear, the Small amount of glutinous rice softens it, and Medium force keeps the paste balanced."
+  closeFeedback: Very close. Check the Medium and Small amounts or the Medium force.
+  wrongFeedback: The paste is unbalanced. Use Medium black sesame, Small glutinous rice, and Medium force.
