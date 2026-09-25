@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: Sand Ginger Core
   cityName: Meizhou
   targetTasteName: Force And Ratio Challenge
-  levelIntro: "Sand ginger should be the strongest flavor. Dried tangerine peel adds a citrus accent, while coarse salt brings the flavors forward."
+  levelIntro: "Sand ginger should form the bold base. Keep the familiar citrus accent restrained, and let coarse salt support rather than compete."
   maxIngredientCount: 3
   availableIngredients:
   - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
@@ -37,9 +37,9 @@ MonoBehaviour:
   - ingredient: {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
     ratioLevel: 5
   - ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
-    ratioLevel: 4
-  - ingredient: {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
     ratioLevel: 2
+  - ingredient: {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+    ratioLevel: 1
   correctCombinationPattern:
     groups:
     - ingredients:
@@ -96,11 +96,11 @@ MonoBehaviour:
     relatedDimension: 4
   - clueId: L07_CoarseSalt_Ratio
     title: Coarse Salt - Ratio Clue
-    content: Coarse salt uses the Small amount so it brings out the sand ginger without covering it.
+    content: Coarse salt uses the Very Small amount as a supporting flavor. This keeps it from covering the recipe's main aroma.
     relatedIngredients:
     - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
     relatedDimension: 2
-  fallbackHintText: No new hint for now. Keep what worked
+  fallbackHintText: No new hint for now. Keep what worked, and change only one thing on your next try.
   progressiveHintRules:
   - ruleId: L07_Hint_SandGinger_Ratio
     priority: 22
@@ -109,11 +109,15 @@ MonoBehaviour:
   - ruleId: L07_Hint_CoarseSalt_Ratio
     priority: 21
     mechanic: 2
-    hintText: Coarse salt should use the Small amount. It should bring out the spice without covering it.
+    hintText: Coarse salt should use the Very Small amount. It should lift the spice without competing with it.
   - ruleId: L07_Hint_Peel_Ratio
     priority: 20
     mechanic: 2
-    hintText: Dried tangerine peel should use the Medium amount.
+    hintText: "Recall the earlier citrus lesson: dried tangerine peel should use the Small amount."
+  - ruleId: L07_Hint_Force
+    priority: 19
+    mechanic: 4
+    hintText: Sand ginger is dry and sturdy. Use Heavy force to release its bold aroma.
   ingredientProfiles:
   - profileTag: L07_SandGinger
     ingredient: {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
@@ -129,7 +133,7 @@ MonoBehaviour:
     targetRatioLevel: 5
     targetOrderIndex: -1
     targetCombinationKey: 
-    levelTraitDescription: "Sand ginger is dry, spicy, and strong."
+    levelTraitDescription: Sand ginger is dry and sturdy, so it needs Heavy force to release its bold aroma.
     responseHintRules: []
   - profileTag: L07_DriedTangerinePeel
     ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
@@ -142,10 +146,10 @@ MonoBehaviour:
       enableSpeed: 0
     targetForceLevel: 1
     targetSpeedLevel: 1
-    targetRatioLevel: 4
+    targetRatioLevel: 2
     targetOrderIndex: -1
     targetCombinationKey: 
-    levelTraitDescription: Dried tangerine peel adds a clean citrus taste.
+    levelTraitDescription: Dried tangerine peel is a familiar citrus accent and should stay at the Small amount.
     responseHintRules: []
   - profileTag: L07_CoarseSalt
     ingredient: {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
@@ -158,11 +162,11 @@ MonoBehaviour:
       enableSpeed: 0
     targetForceLevel: 1
     targetSpeedLevel: 1
-    targetRatioLevel: 2
+    targetRatioLevel: 1
     targetOrderIndex: -1
     targetCombinationKey: 
-    levelTraitDescription: Coarse salt brings out the sand ginger when used lightly.
+    levelTraitDescription: Coarse salt is a strong supporting seasoning and needs only the Very Small amount.
     responseHintRules: []
-  successFeedback: "Sand ginger is clear, with a little citrus and salt behind it."
-  closeFeedback: "Very close. Check the force or ratio."
-  wrongFeedback: "Salt or citrus is too strong, and sand ginger is no longer the strongest flavor."
+  successFeedback: "The Large amount of sand ginger leads, Small dried tangerine peel adds a restrained citrus note, and Very Small coarse salt supports it under Heavy force."
+  closeFeedback: "Very close. Check the Large, Small, and Very Small amounts or the Heavy force."
+  wrongFeedback: "The balance is off. Use Large sand ginger, Small dried tangerine peel, Very Small coarse salt, and Heavy force."

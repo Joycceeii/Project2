@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: Pepper Held in Balance
   cityName: Shantou
   targetTasteName: Force Batch Challenge
-  levelIntro: "White pepper should stay clear without becoming harsh. Peanut adds warmth, while dried tangerine peel adds a light citrus note. Grind each ingredient in its own batch and adjust the force for each one."
+  levelIntro: "White pepper should stay clear without becoming harsh. Peanut and dried tangerine peel should feel familiar from earlier recipes. Prepare each ingredient in its own batch, then use your Experiment Log to choose the force and speed that fit each one."
   maxIngredientCount: 3
   availableIngredients:
   - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
@@ -90,28 +90,28 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L08_WhitePepper_Speed
     title: White Pepper - Speed Clue
-    content: "White pepper works best at Medium speed. Peanut needs Slow speed, while dried tangerine peel needs Fast speed."
+    content: "White pepper works best at Medium speed. Too fast makes it harsh; too slow leaves it weak."
     relatedIngredients:
     - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
     relatedDimension: 5
-  fallbackHintText: No new hint for now. Keep what worked
+  fallbackHintText: No new hint for now. Keep what worked, and change only one thing on your next try.
   progressiveHintRules:
   - ruleId: L08_Hint_WhitePepper_Speed
     priority: 20
     mechanic: 5
-    hintText: White Pepper needs Medium speed and Light force. Too fast makes it harsh.
+    hintText: "Recall the earlier spice lesson: White Pepper needs Medium speed and Light force. Too fast makes it harsh."
   - ruleId: L08_Hint_Peanut_Speed
     priority: 19
     mechanic: 5
-    hintText: Peanut needs Slow speed and Heavy force so it stays warm instead of heavy.
+    hintText: "Recall the earlier nut lesson: Peanut needs Slow speed and Heavy force so it stays warm instead of heavy."
   - ruleId: L08_Hint_DriedTangerinePeel_Speed
     priority: 18
     mechanic: 5
-    hintText: Dried Tangerine Peel needs Fast speed and Medium force so the citrus releases clearly.
+    hintText: "Recall the familiar citrus ingredient: Dried Tangerine Peel needs Fast speed and Medium force so its aroma stays clear."
   - ruleId: L08_Hint_Combination
     priority: 22
     mechanic: 3
-    hintText: Grind white pepper, peanut, and dried tangerine peel in separate batches. Press New Batch before changing ingredients.
+    hintText: These familiar ingredients react differently. Grind white pepper, peanut, and dried tangerine peel in separate batches. Press New Batch before changing ingredients.
   ingredientProfiles:
   - profileTag: L08_WhitePepper
     ingredient: {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
@@ -127,7 +127,7 @@ MonoBehaviour:
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: WhitePepper
-    levelTraitDescription: White pepper is a clear sharp spice that spreads quickly.
+    levelTraitDescription: White pepper is a sharp spice that releases quickly; Light force and Medium speed keep it clear.
     responseHintRules: []
   - profileTag: L08_Peanut
     ingredient: {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
@@ -143,7 +143,7 @@ MonoBehaviour:
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: Peanut
-    levelTraitDescription: Peanut makes the soup taste warmer and rounder.
+    levelTraitDescription: Peanut is dense and oily; Heavy force and Slow speed preserve its warm, rounded flavor.
     responseHintRules: []
   - profileTag: L08_DriedTangerinePeel
     ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
@@ -159,8 +159,8 @@ MonoBehaviour:
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: DriedTangerinePeel
-    levelTraitDescription: Dried tangerine peel keeps the soup light and citrusy.
+    levelTraitDescription: Dried tangerine peel is brittle and aromatic; Medium force and Fast speed release a clear citrus note.
     responseHintRules: []
-  successFeedback: "White pepper is clear, peanut adds warmth, and citrus keeps it light."
-  closeFeedback: Very close. Check the separate batches, force, speed, or grinding time.
-  wrongFeedback: "White pepper is too harsh, or the peanut and citrus flavors are too faint."
+  successFeedback: "Each separate batch preserves its role: white pepper stays clear, peanut adds warmth, and dried tangerine peel keeps the finish light."
+  closeFeedback: Very close. Recheck the separate batches and the force and speed used for each ingredient.
+  wrongFeedback: One or more ingredients were processed the wrong way. Use the Experiment Log to match each separate batch with its suitable force and speed.

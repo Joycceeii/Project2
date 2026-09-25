@@ -106,7 +106,7 @@ MonoBehaviour:
     relatedIngredients:
     - {fileID: 11400000, guid: f8de9a412976d494dbf0864972bd41a3, type: 2}
     relatedDimension: 1
-  fallbackHintText: No new hint for now. Keep what worked
+  fallbackHintText: No new hint for now. Keep what worked, and change only one thing on your next try.
   progressiveHintRules:
   - ruleId: L03_Hint_RedBean_Order
     priority: 22

@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: Wrapped Rice Layers
   cityName: Zhaoqing
   targetTasteName: Ratio Combination And Order Challenge
-  levelIntro: "Make a layered rice dumpling flavor with red bean, glutinous rice, black sesame, and lotus leaf. Grind the first three into filling, then use lotus leaf to wrap it into zongzi."
+  levelIntro: "Several familiar ingredients appear again in this zongzi recipe. Prepare red bean, glutinous rice, and black sesame as a single filling batch, adding them in the order suggested by your Experiment Log. Once the filling is ready, add the lotus leaf last and move the pestle briefly to complete the wrapping step."
   maxIngredientCount: 4
   availableIngredients:
   - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
@@ -95,61 +95,61 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L09_LotusLeaf_Ratio
     title: Lotus Leaf - Ratio Clue
-    content: Lotus leaf uses the Very Small amount.
+    content: The Very Small setting represents the lotus leaf wrapper used only in the final step.
     relatedIngredients:
     - {fileID: 11400000, guid: d9e3e41cc52bba94997680b94ac53836, type: 2}
     relatedDimension: 2
   - clueId: L09_LotusLeaf_Combination
     title: Lotus Leaf - Combination Clue
     title: Lotus Leaf - Wrapping Clue
-    content: "Lotus leaf should stay separate from the filling batch, then wrap the prepared filling instead of becoming powder."
+    content: "Keep the lotus leaf out of the filling batch. Use it to wrap the prepared filling instead of grinding it into powder."
     relatedIngredients:
     - {fileID: 11400000, guid: d9e3e41cc52bba94997680b94ac53836, type: 2}
     relatedDimension: 3
   - clueId: L09_LotusLeaf_Order
     title: Lotus Leaf - Order Clue
-    content: "Add lotus leaf last so its fresh flavor is not covered by the main batch."
+    content: "Add the lotus leaf only after the filling is complete; it is the wrapper and the final step."
     relatedIngredients:
     - {fileID: 11400000, guid: d9e3e41cc52bba94997680b94ac53836, type: 2}
     relatedDimension: 1
-  fallbackHintText: No new hint for now. Keep what worked
+  fallbackHintText: No new hint for now. Keep what worked, and change only one thing on your next try.
   progressiveHintRules:
   - ruleId: L09_Hint_GlutinousRice_Ratio
     priority: 22
     mechanic: 2
-    hintText: Glutinous rice should use the Large amount. It should be the largest share of the filling.
+    hintText: Use the Large amount for glutinous rice. It should make up the largest share of the filling.
   - ruleId: L09_Hint_BlackSesame_Ratio
     priority: 21
     mechanic: 2
-    hintText: Black sesame should use the Medium amount, just below glutinous rice.
+    hintText: Use the Medium amount for black sesame, one step below glutinous rice.
   - ruleId: L09_Hint_RedBean_Ratio
     priority: 20
     mechanic: 2
-    hintText: Red bean should use the Small amount.
+    hintText: Use the Small amount for red bean so its sweetness supports the filling rather than dominating it.
   - ruleId: L09_Hint_LotusLeaf_Ratio
     priority: 19
     mechanic: 2
-    hintText: Lotus leaf should use the Very Small amount. It is light and easy to cover.
+    hintText: Set the lotus leaf to Very Small. This represents the wrapper used only in the final step, not an ingredient mixed into the filling.
   - ruleId: L09_Hint_Main_Batch_Combination
     priority: 20
     mechanic: 3
-    hintText: Red bean, glutinous rice, and black sesame should be ground together in the first batch.
+    hintText: Red bean, glutinous rice, and black sesame belong to the same filling batch. Add them in the correct order without pressing New Batch between them.
   - ruleId: L09_Hint_Lotus_Separate_Combination
     priority: 19
     mechanic: 3
-    hintText: After the first three ingredients become filling, add lotus leaf last and move the pestle briefly to wrap them into zongzi.
+    hintText: When the filling is ready, add the lotus leaf as the final separate step, then move the pestle briefly to complete the wrapping.
   - ruleId: L09_Hint_RedBean_Order
     priority: 22
     mechanic: 1
-    hintText: Red bean should go first. Its gentle sweetness needs time to form before the other filling ingredients arrive.
+    hintText: Red bean goes first in the filling batch. Recall how it anchors the earlier dessert recipe.
   - ruleId: L09_Hint_LotusLeaf_Order
     priority: 21
     mechanic: 1
-    hintText: Lotus leaf should be last, after the first three ingredients have formed the main batch.
+    hintText: The lotus leaf goes last, only after the filling batch is complete.
   - ruleId: L09_Hint_Middle_Order
     priority: 20
     mechanic: 1
-    hintText: Start with red bean, glutinous rice, and black sesame together. Add lotus leaf last to wrap the filling.
+    hintText: After red bean, add glutinous rice and then black sesame to the same filling batch. Finish with the lotus leaf.
   ingredientProfiles:
   - profileTag: L09_RedBean
     ingredient: {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
@@ -165,7 +165,7 @@ MonoBehaviour:
     targetRatioLevel: 2
     targetOrderIndex: 0
     targetCombinationKey: BlackSesame+GlutinousRice+RedBean
-    levelTraitDescription: "Red bean gives the filling a thick, gentle sweetness."
+    levelTraitDescription: Red bean begins the filling batch and uses the Small amount to keep its sweetness gentle.
     responseHintRules: []
   - profileTag: L09_GlutinousRice
     ingredient: {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
@@ -181,7 +181,7 @@ MonoBehaviour:
     targetRatioLevel: 5
     targetOrderIndex: 1
     targetCombinationKey: BlackSesame+GlutinousRice+RedBean
-    levelTraitDescription: Glutinous rice makes the dumpling sticky and soft.
+    levelTraitDescription: Glutinous rice follows red bean and uses the Large amount to form the sticky body of the filling.
     responseHintRules: []
   - profileTag: L09_BlackSesame
     ingredient: {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
@@ -197,7 +197,7 @@ MonoBehaviour:
     targetRatioLevel: 4
     targetOrderIndex: 2
     targetCombinationKey: BlackSesame+GlutinousRice+RedBean
-    levelTraitDescription: Black sesame adds a light roasted taste.
+    levelTraitDescription: Black sesame follows glutinous rice and uses the Medium amount to add a roasted note.
     responseHintRules: []
   - profileTag: L09_LotusLeaf
     ingredient: {fileID: 11400000, guid: d9e3e41cc52bba94997680b94ac53836, type: 2}
@@ -213,8 +213,8 @@ MonoBehaviour:
     targetRatioLevel: 1
     targetOrderIndex: 3
     targetCombinationKey: LotusLeaf
-    levelTraitDescription: Lotus leaf adds a light green taste.
+    levelTraitDescription: The lotus leaf is a fragrant wrapper, not part of the ground filling. Add it only after the filling is ready.
     responseHintRules: []
-  successFeedback: "The filling is wrapped cleanly: sticky rice is strongest, sesame adds a roasted note, red bean stays lighter, and lotus leaf finishes the zongzi."
-  closeFeedback: "Very close. Check the ratio, first filling batch, or lotus leaf wrapping step."
-  wrongFeedback: The zongzi layers are unclear. One flavor may be too strong or the lotus leaf may be used too early.
+  successFeedback: "The zongzi is wrapped neatly: glutinous rice forms the main body, black sesame adds a roasted note, red bean brings gentle sweetness, and the lotus leaf gives it a fresh herbal aroma."
+  closeFeedback: "Very close. Recheck the filling ratios, the order of the three filling ingredients, or the final lotus leaf wrapping step."
+  wrongFeedback: The filling is unbalanced or the wrapping step happened too early. Review the ingredient ratios and order, then add the lotus leaf only after the filling is ready.

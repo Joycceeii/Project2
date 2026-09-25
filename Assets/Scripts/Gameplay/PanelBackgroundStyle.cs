@@ -4,26 +4,47 @@ using UnityEngine.UI;
 
 namespace TheTasteReviver
 {
+    public enum PanelBackgroundKind
+    {
+        Default,
+        CrayonOrange,
+        ColoredPencilRed,
+        Graphite,
+        DryBrushBrown,
+        MilitaryGreen,
+        OliveGreen,
+        SlateBlue,
+        OchreYellow,
+        PowderBlue,
+        PaleYellow,
+        PaleCream
+    }
+
     public static class PanelBackgroundStyle
     {
-        private const string ResourcePath = "UI/PanelBackground";
-        private static Sprite cachedSprite;
+        private const string DefaultResourcePath = "UI/PanelGraphite";
+        private static readonly Sprite[] cachedSprites = new Sprite[12];
 
         public static void Apply(Image image, float alpha = 1f)
+        {
+            Apply(image, PanelBackgroundKind.Default, alpha);
+        }
+
+        public static void Apply(Image image, PanelBackgroundKind kind, float alpha = 1f)
         {
             if (image == null)
             {
                 return;
             }
 
-            Sprite sprite = GetSprite();
+            Sprite sprite = GetSprite(kind);
             if (sprite == null)
             {
                 return;
             }
 
             image.sprite = sprite;
-            image.type = Image.Type.Sliced;
+            image.type = Image.Type.Simple;
             image.preserveAspect = false;
             image.color = new Color(1f, 1f, 1f, Mathf.Clamp01(alpha));
         }
@@ -57,14 +78,46 @@ namespace TheTasteReviver
                 || name.IndexOf("Background", StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
-        private static Sprite GetSprite()
+        private static Sprite GetSprite(PanelBackgroundKind kind)
         {
-            if (cachedSprite == null)
+            int index = (int)kind;
+            if (cachedSprites[index] == null)
             {
-                cachedSprite = Resources.Load<Sprite>(ResourcePath);
+                cachedSprites[index] = Resources.Load<Sprite>(GetResourcePath(kind));
             }
 
-            return cachedSprite;
+            return cachedSprites[index];
+        }
+
+        private static string GetResourcePath(PanelBackgroundKind kind)
+        {
+            switch (kind)
+            {
+                case PanelBackgroundKind.CrayonOrange:
+                    return "UI/PanelCrayonOrange";
+                case PanelBackgroundKind.ColoredPencilRed:
+                    return "UI/PanelColoredPencilRed";
+                case PanelBackgroundKind.Graphite:
+                    return "UI/PanelGraphite";
+                case PanelBackgroundKind.DryBrushBrown:
+                    return "UI/PanelDryBrushBrown";
+                case PanelBackgroundKind.MilitaryGreen:
+                    return "UI/PanelMilitaryGreen";
+                case PanelBackgroundKind.OliveGreen:
+                    return "UI/PanelOliveGreen";
+                case PanelBackgroundKind.SlateBlue:
+                    return "UI/PanelSlateBlue";
+                case PanelBackgroundKind.OchreYellow:
+                    return "UI/PanelOchreYellow";
+                case PanelBackgroundKind.PowderBlue:
+                    return "UI/PanelPowderBlue";
+                case PanelBackgroundKind.PaleYellow:
+                    return "UI/PanelPaleYellow";
+                case PanelBackgroundKind.PaleCream:
+                    return "UI/PanelPaleCream";
+                default:
+                    return DefaultResourcePath;
+            }
         }
     }
 }

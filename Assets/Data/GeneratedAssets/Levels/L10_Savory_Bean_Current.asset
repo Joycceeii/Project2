@@ -16,7 +16,7 @@ MonoBehaviour:
   levelName: Savory Bean Current
   cityName: Yangjiang
   targetTasteName: Force Speed Ratio And Order Challenge
-  levelIntro: "Yangjiang douchi should be the strongest savory flavor. Ginger adds warmth, dried tangerine peel adds brightness, and coarse salt brings the flavors forward."
+  levelIntro: "Yangjiang douchi forms the savory base. Ginger, dried tangerine peel, and coarse salt should feel familiar from earlier recipes. Use your Experiment Log to place and balance them, then choose a force and speed that preserve the douchi's depth."
   maxIngredientCount: 4
   availableIngredients:
   - {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
@@ -97,7 +97,7 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L10_Douchi_Force
     title: Grinding Force - Process Clue
-    content: "Use heavy force for this whole recipe. The fermented beans need clear pressure to release their savory depth."
+    content: Use Heavy force for the whole recipe. Firm pressure releases the fermented douchi's savory depth.
     relatedIngredients: []
     relatedDimension: 4
   - clueId: L10_Douchi_Ratio
@@ -108,37 +108,37 @@ MonoBehaviour:
     relatedDimension: 2
   - clueId: L10_Ginger_Speed
     title: Grinding Speed - Process Clue
-    content: Use slow speed for this whole recipe. A slower grind keeps the savory flavor steady and prevents ginger and citrus from turning sharp.
+    content: Use Slow speed for the whole recipe. A deliberate pace keeps the ginger and citrus from overpowering the douchi.
     relatedIngredients: []
     relatedDimension: 5
   - clueId: L10_Ginger_Order
     title: Ginger - Order Clue
-    content: "Ginger works well after the douchi flavor has formed, but before the dried tangerine peel arrives."
+    content: "Ginger follows the douchi but comes before the dried tangerine peel."
     relatedIngredients:
     - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
     relatedDimension: 1
-  fallbackHintText: No new hint for now. Keep what worked
+  fallbackHintText: No new hint for now. Keep what worked, and change only one thing on your next try.
   progressiveHintRules:
   - ruleId: L10_Hint_Douchi_Ratio
     priority: 22
     mechanic: 2
-    hintText: Yangjiang douchi should use the Large amount. It should remain the strongest savory flavor.
+    hintText: Use the Large amount for Yangjiang douchi so it remains the strongest savory flavor.
   - ruleId: L10_Hint_CoarseSalt_Ratio
     priority: 21
     mechanic: 2
-    hintText: Coarse salt should use the Very Small amount. It should bring out the other flavors without tasting salty.
+    hintText: "Recall the earlier salt lesson: use the Very Small amount for coarse salt so it supports the recipe without tasting salty."
   - ruleId: L10_Hint_Douchi_Order
     priority: 22
     mechanic: 1
-    hintText: Start with Yangjiang douchi. Its deep savory flavor needs time to form before the other ingredients arrive.
+    hintText: Start with Yangjiang douchi so its deep savory flavor forms the base of the recipe.
   - ruleId: L10_Hint_Ginger_Order
     priority: 21
     mechanic: 1
-    hintText: Ginger should come after douchi and before dried tangerine peel.
+    hintText: Ginger follows the douchi and comes before the dried tangerine peel.
   - ruleId: L10_Hint_Tail_Order
     priority: 20
     mechanic: 1
-    hintText: Add dried tangerine peel near the end, then add coarse salt last.
+    hintText: Add dried tangerine peel after the ginger, then finish with coarse salt.
   ingredientProfiles:
   - profileTag: L10_YangjiangDouchi
     ingredient: {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
@@ -154,7 +154,7 @@ MonoBehaviour:
     targetRatioLevel: 5
     targetOrderIndex: 0
     targetCombinationKey: 
-    levelTraitDescription: "Yangjiang douchi is fermented, savory, and strong."
+    levelTraitDescription: Yangjiang douchi begins the recipe and uses the Large amount to form its deep savory base.
     responseHintRules: []
   - profileTag: L10_Ginger
     ingredient: {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
@@ -170,7 +170,7 @@ MonoBehaviour:
     targetRatioLevel: 4
     targetOrderIndex: 1
     targetCombinationKey: 
-    levelTraitDescription: Ginger adds a fresh sharp taste.
+    levelTraitDescription: Ginger follows the douchi and uses the Medium amount to add warmth.
     responseHintRules: []
   - profileTag: L10_DriedTangerinePeel
     ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
@@ -186,7 +186,7 @@ MonoBehaviour:
     targetRatioLevel: 2
     targetOrderIndex: 2
     targetCombinationKey: 
-    levelTraitDescription: Dried tangerine peel adds a bright citrus taste.
+    levelTraitDescription: Dried tangerine peel follows the ginger and uses the Small amount to brighten the finish.
     responseHintRules: []
   - profileTag: L10_CoarseSalt
     ingredient: {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
@@ -202,8 +202,8 @@ MonoBehaviour:
     targetRatioLevel: 1
     targetOrderIndex: 3
     targetCombinationKey: 
-    levelTraitDescription: Coarse salt is a low mineral anchor.
+    levelTraitDescription: Coarse salt comes last and uses the Very Small amount to support the other flavors.
     responseHintRules: []
-  successFeedback: "Douchi is the strongest savory flavor, with ginger, citrus, and light salt behind it."
-  closeFeedback: Very close. Check one process or structure setting.
-  wrongFeedback: "Salt, ginger, or citrus is too strong, or the douchi flavor is unclear."
+  successFeedback: "The Large amount of Yangjiang douchi leads the recipe. Ginger adds warmth, dried tangerine peel brightens the finish, and the Very Small amount of coarse salt supports the blend. Heavy force and Slow speed preserve its savory depth."
+  closeFeedback: Very close. Recheck one ratio or order step, or the Heavy force and Slow speed used for the whole recipe.
+  wrongFeedback: The douchi has lost its lead. Review the four amounts and their order, then apply Heavy force at Slow speed to the whole recipe.

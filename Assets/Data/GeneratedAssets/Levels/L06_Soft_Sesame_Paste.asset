@@ -99,7 +99,7 @@ MonoBehaviour:
     relatedIngredients:
     - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}
     relatedDimension: 4
-  fallbackHintText: No new hint for now. Keep what worked
+  fallbackHintText: No new hint for now. Keep what worked, and change only one thing on your next try.
   progressiveHintRules:
   - ruleId: L06_Hint_BlackSesame_Ratio
     priority: 21

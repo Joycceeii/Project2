@@ -149,6 +149,10 @@ namespace TheTasteReviver
                 return;
             }
 
+            UnlockIngredients(attempt.IngredientAmounts
+                .Where(entry => entry != null && entry.ingredient != null)
+                .Select(entry => entry.ingredient));
+
             Dictionary<IngredientData, RatioLevel> ratio = attempt.CalculateRatioPattern(out _);
             attempt.GetCurrentBatch();
             ExperimentRecord record = new ExperimentRecord
@@ -184,7 +188,6 @@ namespace TheTasteReviver
             }
 
             LoadUnlockedClues();
-            UnlockIngredients(level.availableIngredients);
             if (level.unlockCluesOnComplete == null)
             {
                 return new List<UnlockedClueRecord>();
@@ -677,8 +680,9 @@ namespace TheTasteReviver
                 }
             }
 
-            // Attempt notes may enrich an ingredient that has already been
-            // unlocked, but a failed attempt must never create a new entry.
+            // Evaluating an ingredient unlocks its log entry immediately.
+            // The attempt note itself remains authoritative even if persistent
+            // ingredient unlock storage is unavailable.
             foreach (ExperimentRecord record in sharedRecords)
             {
                 if (record == null || record.ingredientEntries == null)
@@ -689,8 +693,13 @@ namespace TheTasteReviver
                 foreach (ExperimentIngredientEntry note in record.ingredientEntries)
                 {
                     if (note == null
-                        || string.IsNullOrWhiteSpace(note.ingredientID)
-                        || !entries.TryGetValue(note.ingredientID, out IngredientLogEntry logEntry))
+                        || string.IsNullOrWhiteSpace(note.ingredientID))
+                    {
+                        continue;
+                    }
+
+                    IngredientLogEntry logEntry = EnsureIngredientLogEntry(entries, note.ingredientID);
+                    if (logEntry == null)
                     {
                         continue;
                     }

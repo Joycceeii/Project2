@@ -674,7 +674,7 @@ namespace TheTasteReviver
         public GrindingBatch GetCurrentBatch()
         {
             RebuildCurrentBatch();
-            return grindingBatches.Count > 0 ? grindingBatches[0] : null;
+            return grindingBatches.Count > 0 ? grindingBatches[grindingBatches.Count - 1] : null;
         }
 
         public void StartNewBatch()
@@ -940,30 +940,13 @@ namespace TheTasteReviver
 
         private List<RatioLevel> GetAvailableRatioChoices()
         {
-            int limit = currentLevel != null ? Mathf.Clamp(currentLevel.maxIngredientCount, 1, 4) : 4;
-            List<RatioLevel> choices;
-            if (limit <= 1)
+            List<RatioLevel> choices = new List<RatioLevel>
             {
-                choices = new List<RatioLevel> { RatioLevel.More };
-            }
-            else if (limit == 2)
-            {
-                choices = new List<RatioLevel> { RatioLevel.VeryLess, RatioLevel.Less };
-            }
-            else if (limit == 3)
-            {
-                choices = new List<RatioLevel> { RatioLevel.Less, RatioLevel.SlightlyMore, RatioLevel.More };
-            }
-            else
-            {
-                choices = new List<RatioLevel>
-                {
-                    RatioLevel.VeryLess,
-                    RatioLevel.Less,
-                    RatioLevel.SlightlyMore,
-                    RatioLevel.More
-                };
-            }
+                RatioLevel.VeryLess,
+                RatioLevel.Less,
+                RatioLevel.SlightlyMore,
+                RatioLevel.More
+            };
 
             HashSet<RatioLevel> used = new HashSet<RatioLevel>(selectedRatioPattern.Select(x => x.ratioLevel));
             choices.RemoveAll(used.Contains);

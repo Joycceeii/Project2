@@ -88,7 +88,7 @@ MonoBehaviour:
     relatedIngredients:
     - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
     relatedDimension: 3
-  fallbackHintText: No new hint for now. Keep what worked
+  fallbackHintText: No new hint for now. Keep what worked, and change only one thing on your next try.
   progressiveHintRules:
   - ruleId: L04_Hint_Combination
     priority: 20

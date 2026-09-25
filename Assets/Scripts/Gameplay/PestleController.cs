@@ -182,6 +182,7 @@ namespace TheTasteReviver
                     GrindDuration += Time.deltaTime;
                     UpdateEvaluatedSpeedLevel(CurrentSpeedLevel, Time.deltaTime);
                     RefreshLabel();
+                    uiManager?.UpdateMortarReaction(CurrentSpeedLevel, CurrentSpeedHoldSeconds);
                     if (ShouldShowGroundVisualsForCurrentBatch())
                     {
                         uiManager?.attemptManager?.ShowGroundVisualsForCurrentBatch();

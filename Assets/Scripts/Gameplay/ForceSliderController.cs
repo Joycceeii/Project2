@@ -19,7 +19,8 @@ namespace TheTasteReviver
         public Vector2 handleSize = new Vector2(34f, 56f);
         public Vector2 handleAreaOffsetMin = new Vector2(38f, -2f);
         public Vector2 handleAreaOffsetMax = new Vector2(-38f, 2f);
-        public Color fillColor = new Color(0.72f, 0.52f, 0.32f, 0.82f);
+        public Color fillColor = Color.white;
+        public Color handleColor = Color.white;
         public Vector2 labelTextInsetMin = new Vector2(58f, 13f);
         public Vector2 labelTextInsetMax = new Vector2(-58f, -13f);
         public Vector2 labelPanelSize = new Vector2(390f, 52f);
@@ -62,6 +63,7 @@ namespace TheTasteReviver
 
                 forceSlider.minValue = 0f;
                 forceSlider.maxValue = 1f;
+                ApplySliderColors();
                 if (applyStyle && driveSliderStyleFromInspector)
                 {
                     StyleSlider();
@@ -141,19 +143,8 @@ namespace TheTasteReviver
                 return;
             }
 
-            Image background = forceSlider.GetComponent<Image>();
-            PanelBackgroundStyle.Apply(background, 0.9f);
-
             if (forceSlider.fillRect != null)
             {
-                Image fill = forceSlider.fillRect.GetComponent<Image>();
-                if (fill != null)
-                {
-                    fill.sprite = null;
-                    fill.type = Image.Type.Simple;
-                    fill.color = fillColor;
-                }
-
                 RectTransform fillArea = forceSlider.fillRect.parent as RectTransform;
                 if (fillArea != null)
                 {
@@ -170,7 +161,6 @@ namespace TheTasteReviver
                 Image handle = forceSlider.handleRect.GetComponent<Image>();
                 if (handle != null)
                 {
-                    PanelBackgroundStyle.Apply(handle);
                     forceSlider.targetGraphic = handle;
                 }
 
@@ -181,6 +171,42 @@ namespace TheTasteReviver
                     handleArea.anchorMax = Vector2.one;
                     handleArea.offsetMin = handleAreaOffsetMin;
                     handleArea.offsetMax = handleAreaOffsetMax;
+                }
+            }
+
+            ApplySliderColors();
+        }
+
+        private void ApplySliderColors()
+        {
+            if (forceSlider == null)
+            {
+                return;
+            }
+
+            PanelBackgroundStyle.Apply(
+                forceSlider.GetComponent<Image>(),
+                PanelBackgroundKind.PowderBlue,
+                0.9f);
+
+            if (forceSlider.fillRect != null)
+            {
+                Image fill = forceSlider.fillRect.GetComponent<Image>();
+                if (fill != null)
+                {
+                    PanelBackgroundStyle.Apply(fill, PanelBackgroundKind.PaleCream);
+                    fill.color = fillColor;
+                }
+            }
+
+            if (forceSlider.handleRect != null)
+            {
+                Image handle = forceSlider.handleRect.GetComponent<Image>();
+                if (handle != null)
+                {
+                    PanelBackgroundStyle.Apply(handle, PanelBackgroundKind.PaleCream);
+                    handle.color = handleColor;
+                    forceSlider.targetGraphic = handle;
                 }
             }
         }
@@ -274,7 +300,8 @@ namespace TheTasteReviver
             Image panelImage = forceLabel.transform.parent != null
                 ? forceLabel.transform.parent.GetComponent<Image>()
                 : null;
-            PanelBackgroundStyle.Apply(panelImage, 0.9f);
+            PanelBackgroundStyle.Apply(panelImage, PanelBackgroundKind.PowderBlue, 0.9f);
+            forceLabel.color = new Color(0.075f, 0.12f, 0.16f, 1f);
         }
 
         private static string FormatForceLabel(ForceLevel force)
