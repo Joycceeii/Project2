@@ -2564,7 +2564,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 17.25, y: 0, z: 15.936523, w: 0}
+  m_margin: {x: 38.274323, y: 10.726624, z: 24.088867, w: 16.304565}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -6114,8 +6114,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -7}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -23.304688}
+  m_SizeDelta: {x: 0, y: -32.6094}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1014750498
 MonoBehaviour:
@@ -6148,7 +6148,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4278787873
   m_fontColor: {r: 0.13, g: 0.12, b: 0.035, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -6161,7 +6161,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -6188,13 +6188,13 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
   m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
-  m_isOrthographic: 0
+  m_isOrthographic: 1
   m_isCullingEnabled: 0
   m_horizontalMapping: 0
   m_verticalMapping: 0
@@ -6204,7 +6204,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 54.07341, y: 0, z: 47.032776, w: 48.91394}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -7577,7 +7577,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1266002641
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7595,8 +7595,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 56, y: -166}
-  m_SizeDelta: {x: 430, y: 118}
+  m_AnchoredPosition: {x: 38.0484, y: -166}
+  m_SizeDelta: {x: 447.9516, y: 154.1688}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1266002642
 MonoBehaviour:
@@ -10537,7 +10537,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1827842157
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10555,8 +10555,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 56, y: -296}
-  m_SizeDelta: {x: 430, y: 138}
+  m_AnchoredPosition: {x: 38.048, y: -296}
+  m_SizeDelta: {x: 452.6742, y: 160.18}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1827842158
 MonoBehaviour:
@@ -11050,8 +11050,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -7}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -23.0159, y: 9.0414}
+  m_SizeDelta: {x: -46.0317, y: -32.0828}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1886728608
 MonoBehaviour:
@@ -11084,7 +11084,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4291619829
   m_fontColor: {r: 0.96, g: 0.92, b: 0.8, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -11097,7 +11097,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -11124,13 +11124,13 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
   m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
-  m_isOrthographic: 0
+  m_isOrthographic: 1
   m_isCullingEnabled: 0
   m_horizontalMapping: 0
   m_verticalMapping: 0
@@ -11140,7 +11140,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 52.21776, y: 29.34137, z: 5.861145, w: 15.192688}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -12362,8 +12362,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 56, y: -438}
-  m_SizeDelta: {x: 390, y: 58}
+  m_AnchoredPosition: {x: 47.418762, y: -466.3}
+  m_SizeDelta: {x: 431.6195, y: 94.0416}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2043170414
 MonoBehaviour:

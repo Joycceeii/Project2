@@ -537,6 +537,15 @@ namespace TheTasteReviver
 
             if (IsAlive(detailBackdrop))
             {
+                if (IsAlive(detailText))
+                {
+                    ContentSizeFitter existingFitter = detailText.GetComponent<ContentSizeFitter>();
+                    if (IsAlive(existingFitter))
+                    {
+                        existingFitter.enabled = false;
+                    }
+                }
+
                 Button existingBackdropButton = detailBackdrop.GetComponent<Button>();
                 if (IsAlive(existingBackdropButton))
                 {
@@ -624,11 +633,11 @@ namespace TheTasteReviver
             RectTransform textRect = EnsureRectTransform(detailText.transform);
             if (IsAlive(textRect))
             {
-                textRect.anchorMin = new Vector2(0f, 1f);
-                textRect.anchorMax = new Vector2(1f, 1f);
-                textRect.pivot = new Vector2(0.5f, 1f);
+                textRect.anchorMin = Vector2.zero;
+                textRect.anchorMax = Vector2.one;
+                textRect.pivot = new Vector2(0.5f, 0.5f);
                 textRect.anchoredPosition = Vector2.zero;
-                textRect.sizeDelta = new Vector2(-24f, 0f);
+                textRect.sizeDelta = new Vector2(-24f, -24f);
             }
 
             detailText.color = new Color(0.12f, 0.1f, 0.08f, 1f);
@@ -636,10 +645,6 @@ namespace TheTasteReviver
             detailText.overflowMode = TextOverflowModes.Overflow;
             detailText.margin = new Vector4(4f, 4f, 12f, 12f);
             detailText.raycastTarget = true;
-
-            ContentSizeFitter detailFitter = EnsureComponent<ContentSizeFitter>(detailText.transform);
-            detailFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
-            detailFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             detailScrollRect.viewport = viewportRect;
             detailScrollRect.content = textRect;

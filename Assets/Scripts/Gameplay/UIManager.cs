@@ -611,7 +611,9 @@ namespace TheTasteReviver
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if (layoutUpdateQueued)
+            if (Application.isPlaying
+                || UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode
+                || layoutUpdateQueued)
             {
                 return;
             }
@@ -633,12 +635,6 @@ namespace TheTasteReviver
                 {
                     PanelBackgroundStyle.ApplyToNamedPanels(transform);
                     ApplyDistinctBackgroundStyles();
-                }
-
-                if (!Application.isPlaying)
-                {
-                    UnityEditor.EditorUtility.SetDirty(this);
-                    UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(gameObject.scene);
                 }
             };
         }
@@ -1521,13 +1517,6 @@ namespace TheTasteReviver
             ConfigureHintText();
             ConfigureTraitText(driveHudLayoutFromInspector);
             ApplyDistinctBackgroundStyles();
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-            {
-                UnityEditor.EditorUtility.SetDirty(this);
-                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(gameObject.scene);
-            }
-#endif
         }
 
         private void ConfigureTraitText(bool updateRectTransform)
