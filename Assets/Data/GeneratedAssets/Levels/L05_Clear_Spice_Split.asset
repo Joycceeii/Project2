@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: L05_Clear_Spice_Split
   m_EditorClassIdentifier: 
   levelID: L05
-  levelName: Clear Spice Split
+  levelName: L05 Three-Spice Blend — Pepper, ginger, and citrus peel
   cityName: Shantou
-  targetTasteName: Flexible Batch Blend
+  targetTasteName: Pepper, ginger, and citrus peel
   levelIntro: "White pepper, dried tangerine peel, and ginger are all sharp. Prepare any two together, prepare the remaining spice alone, then combine the prepared powders."
   maxIngredientCount: 3
   availableIngredients:
@@ -81,19 +81,19 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L05_WhitePepper_Flexible
     title: White Pepper - Batch Clue
-    content: White pepper can either join one sharp spice or stay as the separate powder.
+    content: White pepper can share one preparation with a single spice; the remaining spice should stay separate first.
     relatedIngredients:
     - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
     relatedDimension: 3
   - clueId: L05_Peel_Flexible
     title: Dried Tangerine Peel - Batch Clue
-    content: Dried tangerine peel can either join one sharp spice or stay as the separate powder.
+    content: Dried tangerine peel can share one preparation with a single spice; the remaining spice should stay separate first.
     relatedIngredients:
     - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
     relatedDimension: 3
   - clueId: L05_Ginger_Flexible
     title: Ginger - Batch Clue
-    content: Ginger can be part of the paired powder or the spice that stays alone before the final blend.
+    content: Ginger can share one preparation with a single spice; the remaining spice should stay separate first.
     relatedIngredients:
     - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
     relatedDimension: 3
@@ -122,7 +122,7 @@ MonoBehaviour:
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: WhitePepper
-    levelTraitDescription: White pepper is sharp and can either join one spice or stay as the separate powder.
+    levelTraitDescription: White pepper is sharp and quick to spread.
     responseHintRules: []
   - profileTag: L05_DriedTangerinePeel
     ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
@@ -138,7 +138,7 @@ MonoBehaviour:
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: DriedTangerinePeel
-    levelTraitDescription: Dried tangerine peel adds a bright citrus edge and can work in either preparation role.
+    levelTraitDescription: Dried tangerine peel adds a bright citrus edge.
     responseHintRules: []
   - profileTag: L05_Ginger
     ingredient: {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
@@ -154,7 +154,7 @@ MonoBehaviour:
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: Ginger
-    levelTraitDescription: Ginger is fresh and sharp, so it can pair with one spice or stand alone before the final blend.
+    levelTraitDescription: Ginger brings a fresh sharp warmth.
     responseHintRules: []
   successFeedback: The spices stay clear: one paired powder, one single powder, then one final blend.
   closeFeedback: Very close. Make sure any two spices become one powder, the remaining spice becomes another powder, then the prepared powders meet at the end.

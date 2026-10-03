@@ -16,7 +16,7 @@ MonoBehaviour:
   ingredientNameCN:
   ingredientNameEN: Dried Tangerine Peel
   aromaType: Citrus peel
-  initialDescription: Dried tangerine peel is bright and slightly bitter. It works best as a small accent.
+  initialDescription: Bright and slightly bitter. It can pair with one flavor before the final blend.
   ingredientColor: {r: 0.95, g: 0.45, b: 0.12, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 1052279163172246164, guid: 1f0af176f0f1494a88e182973f9435ae, type: 3}

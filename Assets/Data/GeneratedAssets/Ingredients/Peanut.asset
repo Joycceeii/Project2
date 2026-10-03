@@ -16,7 +16,7 @@ MonoBehaviour:
   ingredientNameCN:
   ingredientNameEN: Peanut
   aromaType: Roasted nut
-  initialDescription: Peanut gives a warm roasted flavor. It works well with other nutty ingredients.
+  initialDescription: Warm and rounded. It keeps its roasted flavor clearer when prepared on its own.
   ingredientColor: {r: 0.72, g: 0.48, b: 0.27, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 3011262018843442921, guid: 9d0de144f4cf4fa09dc3834208d8ad99, type: 3}

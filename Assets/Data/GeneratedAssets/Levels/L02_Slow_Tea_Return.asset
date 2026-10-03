@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: L02_Slow_Tea_Return
   m_EditorClassIdentifier: 
   levelID: L02
-  levelName: Slow Tea Return
+  levelName: L02 Tea Powder — Slow-ground tea with a gentle finish
   cityName: Chaozhou
-  targetTasteName: Speed Tutorial
+  targetTasteName: Slow-ground tea with a gentle finish
   levelIntro: "Use tea leaves to learn grinding speed. The goal is gentle tea bitterness followed by sweetness."
   maxIngredientCount: 1
   availableIngredients:

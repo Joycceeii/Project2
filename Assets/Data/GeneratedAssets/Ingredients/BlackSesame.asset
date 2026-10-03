@@ -16,7 +16,7 @@ MonoBehaviour:
   ingredientNameCN:
   ingredientNameEN: Black Sesame
   aromaType: Roasted nut
-  initialDescription: Black sesame has a strong roasted flavor. It can lead a recipe, but too much makes it bitter.
+  initialDescription: Dark and strong. It can turn muddy when mixed too early with another roasted flavor.
   ingredientColor: {r: 0.08, g: 0.07, b: 0.06, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 1052279163172246164, guid: 6d11e50235c74455a84bbb9eed7ad3dd, type: 3}

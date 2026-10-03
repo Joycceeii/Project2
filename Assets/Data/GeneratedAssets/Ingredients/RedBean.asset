@@ -16,8 +16,7 @@ MonoBehaviour:
   ingredientNameCN:
   ingredientNameEN: Red Bean
   aromaType: Sweet bean
-  initialDescription: Thick and warm. It is good at building a base before lighter
-    notes appear.
+  initialDescription: Thick and warm. It gives the dessert its base.
   ingredientColor: {r: 0.55, g: 0.12, b: 0.11, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 1052279163172246164, guid: ae485dcb5f6f4be1b3be46a204a86706, type: 3}

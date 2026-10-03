@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: L06_Soft_Sesame_Paste
   m_EditorClassIdentifier: 
   levelID: L06
-  levelName: Soft Sesame Paste
+  levelName: L06 Black Sesame Paste — Smooth sesame softened with glutinous rice
   cityName: Shunde
-  targetTasteName: Subtle Balance
+  targetTasteName: Smooth sesame softened with glutinous rice
   levelIntro: Black sesame should be the strongest flavor without becoming bitter, while glutinous rice keeps the paste smooth. A familiar grain lesson may help.
   maxIngredientCount: 2
   availableIngredients:

@@ -27,6 +27,12 @@ namespace TheTasteReviver
         [SerializeField] private GameObject detailBackdrop;
         [SerializeField] private TMP_Text detailText;
         [SerializeField] private ScrollRect detailScrollRect;
+        [SerializeField] private Image gameplayScreenCover;
+        private readonly List<Camera> suspendedGameplayCameras = new List<Camera>();
+        private readonly List<AudioListener> suspendedGameplayAudioListeners = new List<AudioListener>();
+        private readonly List<GraphicRaycaster> suspendedGameplayRaycasters = new List<GraphicRaycaster>();
+        private bool gameplaySceneSuspended;
+        private bool gameplaySceneRestored;
         private const string ReturnToGameButtonName = "Return To Game";
 
         private void Awake()
@@ -36,6 +42,7 @@ namespace TheTasteReviver
                 return;
             }
 
+            SuspendGameplayScene();
             EnsureSceneObjects();
         }
 
@@ -98,8 +105,137 @@ namespace TheTasteReviver
                 return;
             }
 
+            if (gameplaySceneSuspended)
+            {
+                DisableLogPresentation();
+                RestoreGameplayScene();
+                SceneManager.UnloadSceneAsync(gameObject.scene);
+                return;
+            }
+
             GameSceneReturnState.MarkReturningFromExperimentLog();
             SceneManager.LoadScene(testLevelSceneName);
+        }
+
+        private void OnDestroy()
+        {
+            RestoreGameplayScene();
+        }
+
+        private void SuspendGameplayScene()
+        {
+            if (gameplaySceneSuspended)
+            {
+                return;
+            }
+
+            Scene gameplayScene = SceneManager.GetSceneByName(testLevelSceneName);
+            if (!gameplayScene.IsValid() || !gameplayScene.isLoaded || gameplayScene == gameObject.scene)
+            {
+                return;
+            }
+
+            suspendedGameplayCameras.Clear();
+            suspendedGameplayAudioListeners.Clear();
+            suspendedGameplayRaycasters.Clear();
+            foreach (GameObject root in gameplayScene.GetRootGameObjects())
+            {
+                if (!IsAlive(root))
+                {
+                    continue;
+                }
+
+                foreach (Camera gameplayCamera in root.GetComponentsInChildren<Camera>(true))
+                {
+                    if (IsAlive(gameplayCamera) && gameplayCamera.enabled)
+                    {
+                        suspendedGameplayCameras.Add(gameplayCamera);
+                        gameplayCamera.enabled = false;
+                    }
+                }
+
+                foreach (AudioListener listener in root.GetComponentsInChildren<AudioListener>(true))
+                {
+                    if (IsAlive(listener) && listener.enabled)
+                    {
+                        suspendedGameplayAudioListeners.Add(listener);
+                        listener.enabled = false;
+                    }
+                }
+
+                foreach (GraphicRaycaster raycaster in root.GetComponentsInChildren<GraphicRaycaster>(true))
+                {
+                    if (IsAlive(raycaster) && raycaster.enabled)
+                    {
+                        suspendedGameplayRaycasters.Add(raycaster);
+                        raycaster.enabled = false;
+                    }
+                }
+            }
+
+            gameplaySceneSuspended = true;
+            gameplaySceneRestored = false;
+        }
+
+        private void RestoreGameplayScene()
+        {
+            if (!gameplaySceneSuspended || gameplaySceneRestored)
+            {
+                return;
+            }
+
+            gameplaySceneRestored = true;
+            foreach (Camera gameplayCamera in suspendedGameplayCameras)
+            {
+                if (IsAlive(gameplayCamera))
+                {
+                    gameplayCamera.enabled = true;
+                }
+            }
+
+            foreach (AudioListener listener in suspendedGameplayAudioListeners)
+            {
+                if (IsAlive(listener))
+                {
+                    listener.enabled = true;
+                }
+            }
+
+            foreach (GraphicRaycaster raycaster in suspendedGameplayRaycasters)
+            {
+                if (IsAlive(raycaster))
+                {
+                    raycaster.enabled = true;
+                }
+            }
+
+            suspendedGameplayCameras.Clear();
+            suspendedGameplayAudioListeners.Clear();
+            suspendedGameplayRaycasters.Clear();
+            gameplaySceneSuspended = false;
+
+            UIManager gameplayUI = UnityEngine.Object.FindFirstObjectByType<UIManager>();
+            gameplayUI?.ResumeFromExperimentLog();
+        }
+
+        private void DisableLogPresentation()
+        {
+            if (IsAlive(canvas))
+            {
+                canvas.enabled = false;
+            }
+
+            if (!IsAlive(sceneCamera))
+            {
+                return;
+            }
+
+            sceneCamera.enabled = false;
+            AudioListener listener = sceneCamera.GetComponent<AudioListener>();
+            if (IsAlive(listener))
+            {
+                listener.enabled = false;
+            }
         }
 
         private void EnsureCanvas()
@@ -129,6 +265,8 @@ namespace TheTasteReviver
             canvas.gameObject.SetActive(true);
             canvas.enabled = true;
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            canvas.overrideSorting = true;
+            canvas.sortingOrder = 1000;
 
             GraphicRaycaster raycaster = canvas.GetComponent<GraphicRaycaster>();
             if (raycaster == null)
@@ -140,14 +278,33 @@ namespace TheTasteReviver
             RectTransform canvasRect = EnsureComponent<RectTransform>(canvas.transform);
             Transform root = canvas.transform;
 
+            if (!IsAlive(gameplayScreenCover))
+            {
+                gameplayScreenCover = EnsureImage(root, "Gameplay Screen Cover");
+            }
+
+            if (IsAlive(gameplayScreenCover))
+            {
+                RectTransform coverRect = EnsureComponent<RectTransform>(gameplayScreenCover.transform);
+                StretchToParent(coverRect);
+                gameplayScreenCover.sprite = null;
+                gameplayScreenCover.type = Image.Type.Simple;
+                gameplayScreenCover.color = new Color(0.94f, 0.91f, 0.84f, 1f);
+                gameplayScreenCover.raycastTarget = true;
+                gameplayScreenCover.transform.SetAsFirstSibling();
+            }
+
             if (!IsAlive(background))
             {
                 background = EnsureImage(root, "Background");
-                RectTransform backgroundRect = IsAlive(background) ? EnsureComponent<RectTransform>(background.transform) : null;
-                StretchToParent(backgroundRect);
                 PanelBackgroundStyle.Apply(background);
             }
-            if (IsAlive(background)) background.transform.SetAsFirstSibling();
+            if (IsAlive(background))
+            {
+                RectTransform backgroundRect = EnsureComponent<RectTransform>(background.transform);
+                StretchToParent(backgroundRect);
+                background.transform.SetSiblingIndex(IsAlive(gameplayScreenCover) ? 1 : 0);
+            }
 
             if (!IsAlive(titleText))
             {
@@ -689,6 +846,22 @@ namespace TheTasteReviver
             StringBuilder builder = new StringBuilder();
             builder.AppendLine(entry.ingredientName);
             builder.AppendLine();
+
+            builder.AppendLine("Unlocked Clues");
+            if (entry.clues.Count == 0)
+            {
+                builder.AppendLine("No permanent clues unlocked yet.");
+            }
+            else
+            {
+                for (int i = 0; i < entry.clues.Count; i++)
+                {
+                    UnlockedClueRecord clue = entry.clues[i];
+                    builder.AppendLine("Clue " + (i + 1) + ": " + clue.content);
+                }
+            }
+
+            builder.AppendLine();
             builder.AppendLine("Ingredient Traits");
             if (!string.IsNullOrWhiteSpace(entry.aromaType))
             {
@@ -724,17 +897,6 @@ namespace TheTasteReviver
                     }
 
                     builder.AppendLine();
-                }
-            }
-
-            if (entry.clues.Count > 0)
-            {
-                builder.AppendLine();
-                builder.AppendLine("Unlocked Clues");
-                for (int i = 0; i < entry.clues.Count; i++)
-                {
-                    UnlockedClueRecord clue = entry.clues[i];
-                    builder.AppendLine("Clue " + (i + 1) + ": " + clue.content);
                 }
             }
 
@@ -807,14 +969,27 @@ namespace TheTasteReviver
                 return;
             }
 
-            if (UnityEngine.Object.FindFirstObjectByType<EventSystem>() != null)
+            EventSystem[] activeEventSystems = UnityEngine.Object.FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
+            if (activeEventSystems.Length > 0)
             {
-                EventSystem existing = FindInControllerScene<EventSystem>();
-                if (existing != null)
+                EventSystem activeEventSystem = activeEventSystems.FirstOrDefault(system =>
+                        IsAlive(system)
+                        && system.gameObject.scene.IsValid()
+                        && string.Equals(system.gameObject.scene.name, testLevelSceneName, StringComparison.Ordinal))
+                    ?? activeEventSystems.FirstOrDefault(IsAlive);
+
+                foreach (EventSystem existingSystem in activeEventSystems)
                 {
-                    existing.gameObject.SetActive(true);
-                    return;
+                    if (!IsAlive(existingSystem) || existingSystem == activeEventSystem)
+                    {
+                        continue;
+                    }
+
+                    existingSystem.enabled = false;
+                    Destroy(existingSystem.gameObject);
                 }
+
+                return;
             }
 
             GameObject eventSystem = new GameObject("EventSystem");

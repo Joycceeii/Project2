@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: L12_Douchi-Scallion_Mastery
   m_EditorClassIdentifier: 
   levelID: L12
-  levelName: Douchi-Scallion Mastery
+  levelName: L12 Douchi-Scallion Sauce — Savory black bean finished with ginger and scallion
   cityName: Yangjiang
-  targetTasteName: Memory Mastery
+  targetTasteName: Savory black bean finished with ginger and scallion
   levelIntro: "This mastery recipe uses only familiar ingredients. Build a douchi-and-ginger base, keep scallion white fresh in its own batch, and let coarse salt finish the sauce. Your Experiment Log contains every rule you need."
   maxIngredientCount: 4
   availableIngredients:

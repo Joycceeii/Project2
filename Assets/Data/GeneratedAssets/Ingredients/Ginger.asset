@@ -16,7 +16,7 @@ MonoBehaviour:
   ingredientNameCN:
   ingredientNameEN: Ginger
   aromaType: Fresh spice
-  initialDescription: Ginger is fresh and sharp. It can brighten a recipe, but it can also become too strong.
+  initialDescription: Fresh and sharp. It can stand alone or pair with one spice before joining the blend.
   ingredientColor: {r: 0.9, g: 0.75, b: 0.38, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 4011262018843443021, guid: 75a236359e054fd2969a1259c057cbc6, type: 3}

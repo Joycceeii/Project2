@@ -1,16 +1,16 @@
 IngredientID,EnglishName,AromaType,InitialDescription,DefaultRatio
 Rice,Rice,Soft grain,"Rice is mild and clean. It needs steady grinding, but too much force can make it taste burnt.",Normal
 TeaLeaf,Tea Leaves,Tea,"Tea leaves taste bitter at first and sweet later. Slow grinding helps the sweetness come out.",Normal
-BlackSesame,Black Sesame,Roasted nut,"Black sesame has a strong roasted flavor. It can be the strongest flavor in a recipe, but too much makes it bitter.",High
+BlackSesame,Black Sesame,Roasted nut,"Dark and strong. It can turn muddy when mixed too early with another roasted flavor.",High
 GlutinousRice,Glutinous Rice,Sticky grain,"Glutinous rice makes the mixture smooth and thick without covering stronger flavors.",Normal
-Peanut,Peanut,Roasted nut,"Peanut gives a warm roasted flavor. It works well with other nutty ingredients.",Normal
-RedBean,Red Bean,Sweet bean,"Red bean is thick and gently sweet. Its flavor benefits from being formed early.",High
-DriedTangerinePeel,Dried Tangerine Peel,Citrus peel,"Dried tangerine peel is bright and slightly bitter. It works best as a small accent.",Low
-RockSugar,Rock Sugar,Clean sweetness,"Rock sugar adds clean sweetness. It should round out the recipe instead of taking over.",Normal
+Peanut,Peanut,Roasted nut,"Warm and rounded. It keeps its roasted flavor clearer when prepared on its own.",Normal
+RedBean,Red Bean,Sweet bean,"Thick and warm. It gives the dessert its base.",High
+DriedTangerinePeel,Dried Tangerine Peel,Citrus peel,"Bright and slightly bitter. It can pair with one flavor before the final blend.",Low
+RockSugar,Rock Sugar,Clean sweetness,"Clear and gentle. It rounds out the dessert.",Normal
 SandGinger,Sand Ginger,Root spice,"Sand ginger is deep and spicy. It needs enough force to bring out its flavor.",High
 CoarseSalt,Coarse Salt,Salt,"Coarse salt brings out nearby flavors. Use it lightly so it does not become the strongest taste.",Low
-WhitePepper,White Pepper,Sharp spice,"White pepper is sharp and quick to spread. Too much grinding can make it harsh.",High
+WhitePepper,White Pepper,Sharp spice,"Sharp and quick. It can share a first batch with one spice, then join the full blend.",High
 LotusLeaf,Lotus Leaf,Green leaf,"Lotus leaf is light and fresh. It can be covered easily by stronger ingredients.",Low
 YangjiangDouchi,Yangjiang Douchi,Fermented bean,"Yangjiang douchi is savory and fermented. Its deep flavor benefits from being formed early.",High
-Ginger,Ginger,Fresh spice,"Ginger is fresh and sharp. It can brighten a recipe, but it can also become too strong.",Normal
+Ginger,Ginger,Fresh spice,"Fresh and sharp. It can stand alone or pair with one spice before joining the blend.",Normal
 ScallionWhite,Scallion White,Fresh green,"Scallion white is fresh and light. It works best near the end of a recipe.",Low

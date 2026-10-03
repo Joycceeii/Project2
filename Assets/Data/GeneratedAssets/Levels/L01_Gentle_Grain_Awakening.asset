@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: L01_Gentle_Grain_Awakening
   m_EditorClassIdentifier: 
   levelID: L01
-  levelName: Gentle Grain Awakening
+  levelName: L01 Rice Flour — Soft, finely ground rice
   cityName: Guangzhou
-  targetTasteName: Force Tutorial
+  targetTasteName: Soft, finely ground rice
   levelIntro: "Use rice to learn grinding force. The goal is a soft rice flavor without a burnt taste."
   maxIngredientCount: 1
   availableIngredients:

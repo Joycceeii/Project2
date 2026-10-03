@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: L08_Pepper_Held_in_Balance
   m_EditorClassIdentifier: 
   levelID: L08
-  levelName: Pepper Held in Balance
+  levelName: L08 Pepper-Peanut Seasoning — Pepper and peanut with a citrus finish
   cityName: Shantou
-  targetTasteName: Force Batch Challenge
+  targetTasteName: Pepper and peanut with a citrus finish
   levelIntro: "White pepper should stay clear without becoming harsh. Peanut and dried tangerine peel should feel familiar from earlier recipes. Prepare each ingredient in its own batch, then use your Experiment Log to choose the force and speed that fit each one."
   maxIngredientCount: 3
   availableIngredients:

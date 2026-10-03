@@ -1,7 +1,7 @@
 LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
 L03,RedBean,L03_RedBean,IngredientOrder,0,,,,,,,,,,,,"Red bean gives the dessert a thick, warm sweetness."
-L03,DriedTangerinePeel,L03_DriedTangerinePeel,IngredientOrder,1,,,,,,,,,,,,"Dried tangerine peel gives a bright citrus lift."
-L03,RockSugar,L03_RockSugar,IngredientOrder,2,,,,,,,,,,,,"Rock sugar adds a clean sweetness at the end."
-L03,RedBean,L03_RedBean,GrindDuration,18-28,,,,,,,,,,,,"Red bean gives the dessert a thick, warm sweetness."
-L03,DriedTangerinePeel,L03_DriedTangerinePeel,GrindDuration,18-28,,,,,,,,,,,,"Dried tangerine peel gives a bright citrus lift."
-L03,RockSugar,L03_RockSugar,GrindDuration,18-28,,,,,,,,,,,,"Rock sugar adds a clean sweetness at the end."
+L03,DriedTangerinePeel,L03_DriedTangerinePeel,IngredientOrder,1,,,,,,,,,,,,"Dried tangerine peel brightens the red bean flavor."
+L03,RockSugar,L03_RockSugar,IngredientOrder,2,,,,,,,,,,,,"Rock sugar adds clean sweetness."
+L03,RedBean,L03_RedBean,GrindDuration,18-28,,,,,,,,,,,,"It feels like the base of the dessert."
+L03,DriedTangerinePeel,L03_DriedTangerinePeel,GrindDuration,18-28,,,,,,,,,,,,"It works best when there is already a base to lift."
+L03,RockSugar,L03_RockSugar,GrindDuration,18-28,,,,,,,,,,,,"It feels like the finishing touch that rounds out the dessert."

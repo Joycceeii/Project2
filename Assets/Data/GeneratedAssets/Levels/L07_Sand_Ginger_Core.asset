@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: L07_Sand_Ginger_Core
   m_EditorClassIdentifier: 
   levelID: L07
-  levelName: Sand Ginger Core
+  levelName: L07 Sand Ginger Seasoning — Sand ginger with citrus peel and coarse salt
   cityName: Meizhou
-  targetTasteName: Force And Ratio Challenge
+  targetTasteName: Sand ginger with citrus peel and coarse salt
   levelIntro: "Sand ginger should form the bold base. Keep the familiar citrus accent restrained, and let coarse salt support rather than compete."
   maxIngredientCount: 3
   availableIngredients:

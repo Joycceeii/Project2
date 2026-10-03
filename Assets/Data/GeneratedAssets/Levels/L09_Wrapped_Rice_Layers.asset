@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: L09_Wrapped_Rice_Layers
   m_EditorClassIdentifier: 
   levelID: L09
-  levelName: Wrapped Rice Layers
+  levelName: L09 Zongzi — Sweet glutinous rice wrapped in a lotus leaf
   cityName: Zhaoqing
-  targetTasteName: Ratio Combination And Order Challenge
+  targetTasteName: Sweet glutinous rice wrapped in a lotus leaf
   levelIntro: "Several familiar ingredients appear again in this zongzi recipe. Prepare red bean, glutinous rice, and black sesame as a single filling batch, adding them in the order suggested by your Experiment Log. Once the filling is ready, add the lotus leaf last and move the pestle briefly to complete the wrapping step."
   maxIngredientCount: 4
   availableIngredients:

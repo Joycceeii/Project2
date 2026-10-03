@@ -451,6 +451,11 @@ namespace TheTasteReviver
                 int actualIndex = actual.IndexOf(expected);
                 if (actualIndex < 0)
                 {
+                    if (i < actual.Count && actual[i] != null)
+                    {
+                        return "Add " + expected.DisplayName + " before " + actual[i].DisplayName + ".";
+                    }
+
                     return i == 0
                         ? expected.DisplayName + " should be the starting ingredient."
                         : "Add " + expected.DisplayName + " after " + target[i - 1].DisplayName + ".";
@@ -460,7 +465,7 @@ namespace TheTasteReviver
                 {
                     return i == 0
                         ? expected.DisplayName + " should be the starting ingredient."
-                        : "Move " + expected.DisplayName + " after " + target[i - 1].DisplayName + ".";
+                        : "Add " + expected.DisplayName + " before " + actual[i].DisplayName + ".";
                 }
             }
 

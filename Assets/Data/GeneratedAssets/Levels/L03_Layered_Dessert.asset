@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: L03_Layered_Dessert
   m_EditorClassIdentifier: 
   levelID: L03
-  levelName: Layered Dessert
+  levelName: L03 Red Bean Dessert — Red bean, citrus peel, and rock sugar
   cityName: Jiangmen
-  targetTasteName: Layer Timing
+  targetTasteName: Red bean, citrus peel, and rock sugar
   levelIntro: "Tutorial complete. Challenge levels begin now. Red bean, dried tangerine peel, and rock sugar each change the dessert at a different moment."
   maxIngredientCount: 3
   availableIngredients:
@@ -90,19 +90,19 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L03_RedBean_Order
     title: Red Bean - Order Clue
-    content: Red bean works well early because its gentle sweetness needs time to form before the other ingredients arrive.
+    content: Red bean makes the warm dessert base, so it should be added before the brighter and sweeter finishing flavors.
     relatedIngredients:
     - {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
     relatedDimension: 1
   - clueId: L03_Peel_Order
     title: Dried Tangerine Peel - Order Clue
-    content: "Dried tangerine peel works best after the red bean flavor has formed. Adding it too early can make the recipe bitter."
+    content: Dried tangerine peel lifts the red bean base, so it belongs between the base and the final sweetness.
     relatedIngredients:
     - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
     relatedDimension: 1
   - clueId: L03_RockSugar_Order
     title: Rock Sugar - Order Clue
-    content: Rock sugar works best at the end because it softens the final taste.
+    content: Rock sugar rounds out the dessert as the final sweet finish.
     relatedIngredients:
     - {fileID: 11400000, guid: f8de9a412976d494dbf0864972bd41a3, type: 2}
     relatedDimension: 1
@@ -115,7 +115,7 @@ MonoBehaviour:
   - ruleId: L03_Hint_Peel_Order
     priority: 21
     mechanic: 1
-    hintText: Dried tangerine peel should come after red bean so the citrus bitterness does not arrive too early.
+    hintText: Dried tangerine peel belongs between the red bean base and the final rock sugar sweetness.
   - ruleId: L03_Hint_RockSugar_Order
     priority: 20
     mechanic: 1
@@ -151,7 +151,7 @@ MonoBehaviour:
     targetRatioLevel: 0
     targetOrderIndex: 1
     targetCombinationKey: 
-    levelTraitDescription: Dried tangerine peel gives a bright citrus lift.
+    levelTraitDescription: Dried tangerine peel brightens the red bean flavor.
     responseHintRules: []
   - profileTag: L03_RockSugar
     ingredient: {fileID: 11400000, guid: f8de9a412976d494dbf0864972bd41a3, type: 2}
@@ -167,7 +167,7 @@ MonoBehaviour:
     targetRatioLevel: 0
     targetOrderIndex: 2
     targetCombinationKey: 
-    levelTraitDescription: Rock sugar adds a clean sweetness at the end.
+    levelTraitDescription: Rock sugar adds clean sweetness.
     responseHintRules: []
   successFeedback: "The dessert has a clear order: red bean first, citrus next, sweetness last."
   closeFeedback: Very close. Check the order.

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: L10_Savory_Bean_Current
   m_EditorClassIdentifier: 
   levelID: L10
-  levelName: Savory Bean Current
+  levelName: L10 Yangjiang Douchi Blend — Savory black bean with ginger and citrus peel
   cityName: Yangjiang
-  targetTasteName: Force Speed Ratio And Order Challenge
+  targetTasteName: Savory black bean with ginger and citrus peel
   levelIntro: "Yangjiang douchi forms the savory base. Ginger, dried tangerine peel, and coarse salt should feel familiar from earlier recipes. Use your Experiment Log to place and balance them, then choose a force and speed that preserve the douchi's depth."
   maxIngredientCount: 4
   availableIngredients:
@@ -154,7 +154,7 @@ MonoBehaviour:
     targetRatioLevel: 5
     targetOrderIndex: 0
     targetCombinationKey: 
-    levelTraitDescription: Yangjiang douchi begins the recipe and uses the Large amount to form its deep savory base.
+    levelTraitDescription: Yangjiang douchi begins the recipe and uses the Large amount to form its deep savory base. Heavy force and Slow speed preserve that depth.
     responseHintRules: []
   - profileTag: L10_Ginger
     ingredient: {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}

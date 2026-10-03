@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: L04_Joined_Nut_Crisp
   m_EditorClassIdentifier: 
   levelID: L04
-  levelName: Joined Nut Crisp
+  levelName: L04 Peanut-Sesame Crisp — A roasted peanut and sesame blend
   cityName: Foshan
-  targetTasteName: Separate Nut Grind
+  targetTasteName: A roasted peanut and sesame blend
   levelIntro: Peanut and black sesame are both nutty, but each one should keep its own roasted edge. Use New Batch to grind them separately.
   maxIngredientCount: 2
   availableIngredients:
@@ -78,13 +78,13 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L04_Peanut_Combination
     title: Peanut - Combination Clue
-    content: Peanut keeps its warm roasted taste when it is ground in its own batch.
+    content: Peanut keeps its warm roasted taste clearer when it is prepared in its own batch before combining.
     relatedIngredients:
     - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
     relatedDimension: 3
   - clueId: L04_BlackSesame_Combination
     title: Black Sesame - Combination Clue
-    content: "Black sesame turns bitter when it gets muddied with peanut, so keep it in a separate batch."
+    content: Black sesame keeps its darker roasted identity when it is prepared separately before joining peanut.
     relatedIngredients:
     - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
     relatedDimension: 3
@@ -109,7 +109,7 @@ MonoBehaviour:
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: Peanut
-    levelTraitDescription: Peanut keeps a warm roasted edge when it is ground separately.
+    levelTraitDescription: Peanut brings a warm roasted flavor.
     responseHintRules: []
   - profileTag: L04_BlackSesame
     ingredient: {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
@@ -125,7 +125,7 @@ MonoBehaviour:
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: BlackSesame
-    levelTraitDescription: Black sesame keeps its darker roasted taste when it has its own batch.
+    levelTraitDescription: Black sesame brings a darker roasted flavor.
     responseHintRules: []
   successFeedback: Peanut and black sesame stay clear from separate preparation, then join cleanly in the final batch.
   closeFeedback: Very close. Make sure each ingredient is ground alone first, then put both powders together at the end.

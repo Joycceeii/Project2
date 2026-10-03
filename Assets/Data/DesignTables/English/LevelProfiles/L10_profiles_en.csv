@@ -1,10 +1,10 @@
 LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
-L10,YangjiangDouchi,L10_YangjiangDouchi,IngredientOrder,0,,,,,,,,,,,,"Yangjiang douchi begins the recipe and uses the Large amount to form its deep savory base."
+L10,YangjiangDouchi,L10_YangjiangDouchi,IngredientOrder,0,,,,,,,,,,,,"Yangjiang douchi begins the recipe and uses the Large amount to form its deep savory base. Heavy force and Slow speed preserve that depth."
 L10,Ginger,L10_Ginger,IngredientOrder,1,,,,,,,,,,,,"Ginger follows the douchi and uses the Medium amount to add warmth."
 L10,DriedTangerinePeel,L10_DriedTangerinePeel,IngredientOrder,2,,,,,,,,,,,,"Dried tangerine peel follows the ginger and uses the Small amount to brighten the finish."
 L10,CoarseSalt,L10_CoarseSalt,IngredientOrder,3,,,,,,,,,,,,"Coarse salt comes last and uses the Very Small amount to support the other flavors."
-L10,YangjiangDouchi,L10_YangjiangDouchi,Ratio,More,,,,,,,,,,,,"Yangjiang douchi begins the recipe and uses the Large amount to form its deep savory base."
+L10,YangjiangDouchi,L10_YangjiangDouchi,Ratio,More,,,,,,,,,,,,"Yangjiang douchi begins the recipe and uses the Large amount to form its deep savory base. Heavy force and Slow speed preserve that depth."
 L10,Ginger,L10_Ginger,Ratio,SlightlyMore,,,,,,,,,,,,"Ginger follows the douchi and uses the Medium amount to add warmth."
 L10,DriedTangerinePeel,L10_DriedTangerinePeel,Ratio,Less,,,,,,,,,,,,"Dried tangerine peel follows the ginger and uses the Small amount to brighten the finish."
 L10,CoarseSalt,L10_CoarseSalt,Ratio,VeryLess,,,,,,,,,,,,"Coarse salt comes last and uses the Very Small amount to support the other flavors."
-L10,YangjiangDouchi,L10_YangjiangDouchi,GrindDuration,28-45,,,,,,,,,,,,"Yangjiang douchi begins the recipe and uses the Large amount to form its deep savory base."
+L10,YangjiangDouchi,L10_YangjiangDouchi,GrindDuration,28-45,,,,,,,,,,,,"Yangjiang douchi begins the recipe and uses the Large amount to form its deep savory base. Heavy force and Slow speed preserve that depth."

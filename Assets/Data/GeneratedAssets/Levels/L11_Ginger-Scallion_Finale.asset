@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: L11_Ginger-Scallion_Finale
   m_EditorClassIdentifier: 
   levelID: L11
-  levelName: Ginger-Scallion Finale
+  levelName: L11 Ginger-Scallion Sauce — Two gingers layered with fresh scallion
   cityName: Zhanjiang
-  targetTasteName: Final Challenge
+  targetTasteName: Two gingers layered with fresh scallion
   levelIntro: "This ginger-scallion sauce brings together lessons from earlier recipes. Sand ginger, ginger, and coarse salt should feel familiar, while scallion white adds a fresh new layer. Use your Experiment Log to decide the amounts, batch structure, order, force, and speed."
   maxIngredientCount: 4
   availableIngredients:

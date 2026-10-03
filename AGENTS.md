@@ -1,5 +1,17 @@
 # Project Continuity and Agent Change Log
 
+## 2026-10-03 - Experiment Log Mid-Recipe State Preservation
+
+- Changed the Experiment Log to open additively over the gameplay scene instead of replacing and later reloading it.
+- The Experiment Log leaves gameplay roots active and temporarily disables only gameplay cameras, audio listeners, and UI raycasters. This avoids `OnEnable` rebuilding ingredient displays while preserving the current batch, ingredient positions and ground visuals, ratios, force/speed state, and grinding progress.
+- Reordered Experiment Log content so permanent `Unlocked Clues` appear first and success/failure `Experiment Notes` appear later in the ingredient detail view and full-log text.
+- Permanent clues remain progression-gated per clue ID: completing the current level correctly unlocks all of that level's not-yet-earned clues, while later clues for a repeated ingredient stay hidden until their own level is completed.
+- The ingredient hover tooltip is suppressed for the entire time the expanded Traits overlay is open, so it cannot render through or above the enlarged Traits panel.
+- The additive Experiment Log reuses the gameplay EventSystem and its canvas renders at an explicit higher sorting order, preventing duplicate EventSystem warnings and input leaking to the gameplay UI.
+- The Experiment Log creates an opaque full-screen cover below its own content, hiding all gameplay HUD buttons while keeping the live gameplay objects untouched behind it.
+- Kept the existing standalone Experiment Log fallback so opening that scene directly can still return to the test level.
+- Verified the Unity C# solution builds successfully with zero warnings and zero errors using a separate output directory because Unity had locked the default build assembly.
+
 ## Active Collaboration State (2026-09-24)
 
 - Reply to the user in Chinese unless they request another language.

@@ -218,7 +218,6 @@ namespace TheTasteReviver
                 };
                 unlockedClues.Add(unlocked);
                 newlyUnlocked.Add(unlocked);
-                break;
             }
 
             if (newlyUnlocked.Count > 0)
@@ -251,23 +250,8 @@ namespace TheTasteReviver
             LoadUnlockedClues();
             StringBuilder builder = new StringBuilder();
 
-            if (sharedRecords.Count > 0)
-            {
-                builder.AppendLine("Attempt History");
-                builder.AppendLine();
-                foreach (ExperimentRecord record in sharedRecords)
-                {
-                    AppendRecordSummary(builder, record);
-                }
-            }
-
             if (unlockedClues.Count > 0)
             {
-                if (builder.Length > 0)
-                {
-                    builder.AppendLine();
-                }
-
                 builder.AppendLine("Unlocked Clues");
                 builder.AppendLine();
                 foreach (UnlockedClueRecord clue in unlockedClues)
@@ -275,6 +259,21 @@ namespace TheTasteReviver
                     builder.AppendLine("[" + clue.title + "]");
                     builder.AppendLine(clue.content);
                     builder.AppendLine();
+                }
+            }
+
+            if (sharedRecords.Count > 0)
+            {
+                if (builder.Length > 0)
+                {
+                    builder.AppendLine();
+                }
+
+                builder.AppendLine("Experiment Notes");
+                builder.AppendLine();
+                foreach (ExperimentRecord record in sharedRecords)
+                {
+                    AppendRecordSummary(builder, record);
                 }
             }
 
