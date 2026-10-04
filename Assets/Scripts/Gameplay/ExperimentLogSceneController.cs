@@ -556,7 +556,16 @@ namespace TheTasteReviver
                 ? ingredientButtonTemplate.GetComponent<RectTransform>().rect.height
                 : 44f;
             float rowStep = buttonHeight + 10f;
-            float contentHeight = Mathf.Max(720f, entries.Count * rowStep + 48f);
+            float contentWidth = ingredientListContent.rect.width > 1f ? ingredientListContent.rect.width : 920f;
+            const int columnCount = 2;
+            const float horizontalInset = 24f;
+            const float columnGap = 24f;
+            float buttonWidth = Mathf.Clamp(
+                (contentWidth - horizontalInset * 2f - columnGap * (columnCount - 1)) / columnCount,
+                240f,
+                360f);
+            int rowCount = Mathf.CeilToInt(entries.Count / (float)columnCount);
+            float contentHeight = Mathf.Max(720f, rowCount * rowStep + 48f);
             ingredientListContent.sizeDelta = new Vector2(0f, contentHeight);
 
             if (IsAlive(logText))
@@ -571,7 +580,12 @@ namespace TheTasteReviver
             for (int i = 0; i < entries.Count; i++)
             {
                 IngredientLogEntry entry = entries[i];
-                Button button = CreateIngredientButton(ingredientListContent, entry.ingredientName, i * rowStep, buttonHeight);
+                int row = i / columnCount;
+                int column = i % columnCount;
+                Vector2 buttonPosition = new Vector2(
+                    horizontalInset + column * (buttonWidth + columnGap),
+                    -16f - row * rowStep);
+                Button button = CreateIngredientButton(ingredientListContent, entry.ingredientName, buttonPosition, buttonHeight, buttonWidth);
                 if (button == null)
                 {
                     continue;
@@ -604,7 +618,7 @@ namespace TheTasteReviver
             }
         }
 
-        private Button CreateIngredientButton(Transform parent, string labelText, float verticalOffset, float height)
+        private Button CreateIngredientButton(Transform parent, string labelText, Vector2 anchoredPosition, float height, float width)
         {
             if (IsAlive(ingredientButtonTemplate))
             {
@@ -615,9 +629,11 @@ namespace TheTasteReviver
                 RectTransform instanceRect = templateInstance.GetComponent<RectTransform>();
                 if (IsAlive(instanceRect))
                 {
-                    instanceRect.anchoredPosition = new Vector2(
-                        ingredientButtonTemplate.GetComponent<RectTransform>().anchoredPosition.x,
-                        ingredientButtonTemplate.GetComponent<RectTransform>().anchoredPosition.y - verticalOffset);
+                    instanceRect.anchorMin = new Vector2(0f, 1f);
+                    instanceRect.anchorMax = new Vector2(0f, 1f);
+                    instanceRect.pivot = new Vector2(0f, 1f);
+                    instanceRect.anchoredPosition = anchoredPosition;
+                    instanceRect.sizeDelta = new Vector2(width, height);
                 }
 
                 TMP_Text instanceLabel = templateInstance.GetComponentInChildren<TMP_Text>(true);
@@ -639,8 +655,8 @@ namespace TheTasteReviver
             rect.anchorMin = new Vector2(0f, 1f);
             rect.anchorMax = new Vector2(0f, 1f);
             rect.pivot = new Vector2(0f, 1f);
-            rect.anchoredPosition = new Vector2(24f, -16f - verticalOffset);
-            rect.sizeDelta = new Vector2(360f, height);
+            rect.anchoredPosition = anchoredPosition;
+            rect.sizeDelta = new Vector2(width, height);
 
             Image image = EnsureComponent<Image>(transform);
             if (!IsAlive(image))

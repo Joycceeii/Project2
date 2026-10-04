@@ -1,6 +1,6 @@
 IngredientID,EnglishName,AromaType,InitialDescription,DefaultRatio
 Rice,Rice,Soft grain,"Rice is mild and clean. It needs steady grinding, but too much force can make it taste burnt.",Normal
-TeaLeaf,Tea Leaves,Tea,"Tea leaves taste bitter at first and sweet later. Slow grinding helps the sweetness come out.",Normal
+TeaLeaf,Tea Leaves,Tea,"Tea leaves taste bitter at first and sweet later. Their best handling is recorded in the Experiment Log.",Normal
 BlackSesame,Black Sesame,Roasted nut,"Dark and strong. It can turn muddy when mixed too early with another roasted flavor.",High
 GlutinousRice,Glutinous Rice,Sticky grain,"Glutinous rice makes the mixture smooth and thick without covering stronger flavors.",Normal
 Peanut,Peanut,Roasted nut,"Warm and rounded. It keeps its roasted flavor clearer when prepared on its own.",Normal

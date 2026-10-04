@@ -159,7 +159,7 @@ namespace TheTasteReviver.EditorTools
                 created.Add(asset);
             }
 
-            return created.OrderBy(x => x.levelID).ToList();
+            return created;
         }
 
         private static void ApplyHints(RecipeLevelData level, List<Dictionary<string, string>> hints, Dictionary<string, IngredientData> ingredients)

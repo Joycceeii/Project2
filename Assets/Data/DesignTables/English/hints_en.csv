@@ -6,6 +6,7 @@ L04,Fallback,L04_Fallback,No new hint,General,999,,,"No new hint for now. Keep w
 L05,Fallback,L05_Fallback,No new hint,General,999,,,"No new hint for now. Keep what worked, and change only one thing on your next try.",,"WhitePepper,DriedTangerinePeel",No
 L06,Fallback,L06_Fallback,No new hint,General,999,,,"No new hint for now. Keep what worked, and change only one thing on your next try.",,"BlackSesame,GlutinousRice",No
 L07,Fallback,L07_Fallback,No new hint,General,999,,,"No new hint for now. Keep what worked, and change only one thing on your next try.",,"SandGinger,CoarseSalt,DriedTangerinePeel",No
+L07_Log_Practice,Fallback,L07_Log_Practice_Fallback,No new hint,General,999,,,"This level is a log-reading check. Open the Experiment Log and compare earlier saved clues before changing another control.",,TeaLeaf,No
 L08,Fallback,L08_Fallback,No new hint,General,999,,,"No new hint for now. Keep what worked, and change only one thing on your next try.",,"WhitePepper,Peanut,DriedTangerinePeel",No
 L09,Fallback,L09_Fallback,No new hint,General,999,,,"No new hint for now. Keep what worked, and change only one thing on your next try.",,"GlutinousRice,RedBean,LotusLeaf,BlackSesame",No
 L10,Fallback,L10_Fallback,No new hint,General,999,,,"No new hint for now. Keep what worked, and change only one thing on your next try.",,"YangjiangDouchi,Ginger,DriedTangerinePeel,CoarseSalt",No
@@ -41,6 +42,10 @@ L07,ProgressiveHint,L07_Hint_Peel_Ratio,Evaluate hint,Ratio,20,,,"Recall the ear
 L07,ProgressiveHint,L07_Hint_Force,Evaluate hint,Force,19,,,"Sand ginger is dry and sturdy. Use Heavy force to release its bold aroma.",,SandGinger,No
 L07,PermanentClue,L07_SandGinger_Force,Unlocked after Correct,Force,0,,,"Sand ginger needs heavy force, but too much grinding can still make it harsh.",Sand Ginger - Force Clue,SandGinger,Yes
 L07,PermanentClue,L07_CoarseSalt_Ratio,Unlocked after Correct,Ratio,0,,,"Coarse salt uses the Very Small amount as a supporting flavor. This keeps it from covering the recipe's main aroma.",Coarse Salt - Ratio Clue,CoarseSalt,Yes
+L07_Log_Practice,ProgressiveHint,L07_Log_Practice_Hint_OpenLog,Evaluate hint,Speed,22,,,Open the Experiment Log and choose Tea Leaves. Do not rely on the Traits panel for the speed answer.,,TeaLeaf,No
+L07_Log_Practice,ProgressiveHint,L07_Log_Practice_Hint_Speed,Evaluate hint,Speed,21,,,The needed speed is in a saved Tea Leaf clue. Reopen the Experiment Log and copy that old lesson.,,TeaLeaf,No
+L07_Log_Practice,ProgressiveHint,L07_Log_Practice_Hint_Force,Evaluate hint,Force,20,,,The force setting comes from an earlier basic grinding clue. Compare your saved notes instead of guessing here.,,TeaLeaf,No
+L07_Log_Practice,PermanentClue,L07_Log_Practice_Tea_Force,Unlocked after Correct,Force,0,,,"Tea leaves keep their balance with Medium force when the speed is Slow.",Tea Leaf - Force Clue,TeaLeaf,Yes
 L08,ProgressiveHint,L08_Hint_WhitePepper_Speed,Evaluate hint,Speed,20,,,Recall the earlier spice lesson: White Pepper needs Medium speed and Light force. Too fast makes it harsh.,,WhitePepper,No
 L08,ProgressiveHint,L08_Hint_Peanut_Speed,Evaluate hint,Speed,19,,,Recall the earlier nut lesson: Peanut needs Slow speed and Heavy force so it stays warm instead of heavy.,,Peanut,No
 L08,ProgressiveHint,L08_Hint_DriedTangerinePeel_Speed,Evaluate hint,Speed,18,,,Recall the familiar citrus ingredient: Dried Tangerine Peel needs Fast speed and Medium force so its aroma stays clear.,,DriedTangerinePeel,No

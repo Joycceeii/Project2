@@ -75,7 +75,8 @@ namespace TheTasteReviver
             }
 
             if (string.Equals(name, "Ingredient Traits Expanded Panel", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(name, "Ingredient Traits Panel", StringComparison.OrdinalIgnoreCase))
+                || string.Equals(name, "Ingredient Traits Panel", StringComparison.OrdinalIgnoreCase)
+                || string.Equals(name, "Ratio Selection Panel", StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }

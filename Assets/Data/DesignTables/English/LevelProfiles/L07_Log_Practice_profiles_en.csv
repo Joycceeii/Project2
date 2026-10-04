@@ -1,0 +1,4 @@
+LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
+L07_Log_Practice,TeaLeaf,L07_Log_Practice_TeaLeaf,Speed,Slow,,,,,,,,,,,,"Tea leaves already have a saved speed clue in the Experiment Log."
+L07_Log_Practice,TeaLeaf,L07_Log_Practice_TeaLeaf,Force,Medium,,,,,,,,,,,,"This panel will not reveal the force setting; compare earlier saved grinding clues."
+L07_Log_Practice,TeaLeaf,L07_Log_Practice_TeaLeaf,GrindDuration,10-16,,,,,,,,,,,,"This level is a short review: one ingredient, two controls, and the answer hidden in saved notes."

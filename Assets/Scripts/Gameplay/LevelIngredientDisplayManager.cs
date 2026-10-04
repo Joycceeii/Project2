@@ -696,7 +696,7 @@ namespace TheTasteReviver
             visuals.SetParent(slot, false);
             visuals.localPosition = new Vector3(0f, PlateIngredientSurfaceY + 0.01f, 0.02f);
             visuals.localRotation = Quaternion.identity;
-            visuals.localScale = Vector3.one * 0.38f;
+            visuals.localScale = Vector3.one;
 
             List<IngredientData> validIngredients = ingredients.Where(x => x != null && x.groundPrefab != null).ToList();
             if (validIngredients.Count == 0)

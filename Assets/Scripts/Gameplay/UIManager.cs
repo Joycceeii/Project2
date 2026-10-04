@@ -94,7 +94,7 @@ namespace TheTasteReviver
 
         [Header("Opening Level Title")]
         public bool showOpeningLevelTitle = true;
-        public float openingLevelTitleSeconds = 5f;
+        public float openingLevelTitleSeconds = 2.5f;
 
         [Header("Ingredient Hover Tooltip")]
         public GameObject ingredientTooltipPanel;
@@ -117,6 +117,8 @@ namespace TheTasteReviver
         private GameObject ingredientTraitPanel;
         private GameObject ingredientTraitBackdrop;
         private bool ingredientTraitsExpanded;
+        private ScrollRect ingredientTraitScrollRect;
+        private RectTransform ingredientTraitViewportRect;
         private RectTransform ingredientTooltipRect;
         private UnityEngine.Object ingredientTooltipOwner;
         private GameObject mortarReactionPanel;
@@ -1227,17 +1229,13 @@ namespace TheTasteReviver
                 {
                     ingredientTraitPanel.transform.SetAsLastSibling();
 
-                    ScrollRect scrollRect = ingredientTraitPanel.GetComponent<ScrollRect>();
-                    if (IsAlive(scrollRect))
+                    EnsureIngredientTraitScrollArea();
+                    if (IsAlive(ingredientTraitScrollRect))
                     {
                         Canvas.ForceUpdateCanvases();
-                        if (IsAlive(ingredientTraitLabel))
-                        {
-                            LayoutRebuilder.ForceRebuildLayoutImmediate(ingredientTraitLabel.rectTransform);
-                        }
-
-                        scrollRect.StopMovement();
-                        scrollRect.verticalNormalizedPosition = 1f;
+                        RefreshIngredientTraitScrollContent();
+                        ingredientTraitScrollRect.StopMovement();
+                        ingredientTraitScrollRect.verticalNormalizedPosition = 1f;
                     }
                 }
             }
@@ -1342,10 +1340,6 @@ namespace TheTasteReviver
         {
             if (ratioSelectionPanel != null)
             {
-                PanelBackgroundStyle.Apply(
-                    ratioSelectionPanel.GetComponent<Image>(),
-                    PanelBackgroundKind.SlateBlue,
-                    0.94f);
                 StyleRatioSelectionContents();
                 ratioSelectionPanel.SetActive(false);
                 return;
@@ -1719,7 +1713,10 @@ namespace TheTasteReviver
             if (IsAlive(target))
             {
                 ConfigureRect(target as RectTransform, size, position, anchor, pivot);
-                PanelBackgroundStyle.Apply(target.GetComponent<Image>());
+                if (!string.Equals(objectName, "Ratio Selection Panel", StringComparison.OrdinalIgnoreCase))
+                {
+                    PanelBackgroundStyle.Apply(target.GetComponent<Image>());
+                }
             }
         }
 
@@ -1738,7 +1735,6 @@ namespace TheTasteReviver
             ApplyButtonStyle(ingredientTraitToggleButton);
             ApplyNamedPanelStyle("Force Slider");
             ApplyNamedPanelStyle("Force Label Panel");
-            ApplyNamedPanelStyle("Ratio Selection Panel");
         }
 
         private void ConfigureLevelLabelText()
@@ -1881,6 +1877,11 @@ namespace TheTasteReviver
                 return "No Level";
             }
 
+            if (IsExperimentLogPracticeLevel(level))
+            {
+                return "Log Practice";
+            }
+
             return TryGetLevelNumber(level, out int number) ? "Level " + number : level.levelID;
         }
 
@@ -1933,7 +1934,7 @@ namespace TheTasteReviver
             {
                 openingLevelTitleLabel.text = TutorialCompleteTitle + "\n" + ChallengeStartSubtitle;
                 panel.SetActive(true);
-                yield return new WaitForSecondsRealtime(Mathf.Max(2.5f, openingLevelTitleSeconds * 0.5f));
+                yield return new WaitForSecondsRealtime(Mathf.Max(1.5f, openingLevelTitleSeconds * 0.5f));
                 panel.SetActive(false);
                 yield return new WaitForSecondsRealtime(0.18f);
             }
@@ -1947,7 +1948,14 @@ namespace TheTasteReviver
 
         private static bool IsTutorialCompleteTitleLevel(RecipeLevelData level)
         {
-            return TryGetLevelNumber(level, out int number) && number == 7;
+            return level != null && string.Equals(level.levelID, "L07", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private static bool IsExperimentLogPracticeLevel(RecipeLevelData level)
+        {
+            return level != null
+                && !string.IsNullOrWhiteSpace(level.levelID)
+                && level.levelID.IndexOf("Log_Practice", StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         private void ApplyPanelStyle(TMP_Text label)
@@ -2035,7 +2043,6 @@ namespace TheTasteReviver
                 openingLevelTitleLabel.color = PaleYellowTextColor;
             }
             SetTextColor(currentOrderLabel, MilitaryGreenTextColor);
-            SetTextColor(currentRatioLabel, OliveGreenTextColor);
             SetTextColor(currentSpeedLabel, SlateBlueTextColor);
             SetTextColor(hintLabel, SlateBlueTextColor);
 
@@ -2053,7 +2060,7 @@ namespace TheTasteReviver
 
         private void StyleRatioSelectionContents()
         {
-            SetTextColor(ratioSelectionTitle, SlateBlueTextColor);
+            SetTextColor(ratioSelectionTitle, Color.black);
             if (ratioSelectionButtons == null)
             {
                 return;
@@ -2062,6 +2069,7 @@ namespace TheTasteReviver
             foreach (Button button in ratioSelectionButtons)
             {
                 ApplyButtonStyle(button);
+                SetTextColor(button != null ? button.GetComponentInChildren<TMP_Text>(true) : null, Color.white);
             }
         }
 
@@ -2296,6 +2304,7 @@ namespace TheTasteReviver
 
                 EnsureIngredientTraitBackdrop();
                 EnsureIngredientTraitToggleButton();
+                EnsureIngredientTraitScrollArea();
                 return;
             }
 
@@ -2320,6 +2329,117 @@ namespace TheTasteReviver
                 : ingredientTraitLabel.gameObject;
             EnsureIngredientTraitBackdrop();
             EnsureIngredientTraitToggleButton();
+            EnsureIngredientTraitScrollArea();
+        }
+
+        private void EnsureIngredientTraitScrollArea()
+        {
+            if (!IsAlive(ingredientTraitPanel) || !IsAlive(ingredientTraitLabel))
+            {
+                return;
+            }
+
+            RectTransform panelRect = ingredientTraitPanel.GetComponent<RectTransform>();
+            if (!IsAlive(panelRect))
+            {
+                return;
+            }
+
+            ingredientTraitScrollRect = ingredientTraitPanel.GetComponent<ScrollRect>();
+            if (!IsAlive(ingredientTraitScrollRect))
+            {
+                ingredientTraitScrollRect = ingredientTraitPanel.AddComponent<ScrollRect>();
+            }
+
+            Transform viewport = ingredientTraitPanel.transform.Find("Ingredient Traits Viewport");
+            if (!IsAlive(viewport))
+            {
+                GameObject viewportObject = new GameObject("Ingredient Traits Viewport");
+                viewportObject.transform.SetParent(ingredientTraitPanel.transform, false);
+                viewport = viewportObject.transform;
+            }
+
+            ingredientTraitViewportRect = viewport.GetComponent<RectTransform>();
+            if (!IsAlive(ingredientTraitViewportRect))
+            {
+                ingredientTraitViewportRect = viewport.gameObject.AddComponent<RectTransform>();
+            }
+
+            ingredientTraitViewportRect.anchorMin = Vector2.zero;
+            ingredientTraitViewportRect.anchorMax = Vector2.one;
+            ingredientTraitViewportRect.pivot = new Vector2(0.5f, 0.5f);
+            ingredientTraitViewportRect.offsetMin = new Vector2(72f, 52f);
+            ingredientTraitViewportRect.offsetMax = new Vector2(-72f, -52f);
+            ingredientTraitViewportRect.localRotation = Quaternion.identity;
+            ingredientTraitViewportRect.localScale = Vector3.one;
+
+            Image viewportImage = viewport.GetComponent<Image>();
+            if (!IsAlive(viewportImage))
+            {
+                viewportImage = viewport.gameObject.AddComponent<Image>();
+            }
+            viewportImage.sprite = null;
+            viewportImage.type = Image.Type.Simple;
+            viewportImage.color = new Color(1f, 1f, 1f, 0.001f);
+            viewportImage.raycastTarget = true;
+
+            RectMask2D mask = viewport.GetComponent<RectMask2D>();
+            if (!IsAlive(mask))
+            {
+                viewport.gameObject.AddComponent<RectMask2D>();
+            }
+
+            RectTransform labelRect = ingredientTraitLabel.GetComponent<RectTransform>();
+            if (IsAlive(labelRect) && ingredientTraitLabel.transform.parent != viewport)
+            {
+                ingredientTraitLabel.transform.SetParent(viewport, false);
+            }
+
+            if (IsAlive(labelRect))
+            {
+                labelRect.anchorMin = new Vector2(0f, 1f);
+                labelRect.anchorMax = new Vector2(1f, 1f);
+                labelRect.pivot = new Vector2(0.5f, 1f);
+                labelRect.anchoredPosition = Vector2.zero;
+                labelRect.offsetMin = new Vector2(0f, labelRect.offsetMin.y);
+                labelRect.offsetMax = new Vector2(0f, labelRect.offsetMax.y);
+                labelRect.localRotation = Quaternion.identity;
+                labelRect.localScale = Vector3.one;
+            }
+
+            ingredientTraitLabel.alignment = TextAlignmentOptions.TopLeft;
+            ingredientTraitLabel.textWrappingMode = TextWrappingModes.Normal;
+            ingredientTraitLabel.overflowMode = TextOverflowModes.Overflow;
+
+            ingredientTraitScrollRect.viewport = ingredientTraitViewportRect;
+            ingredientTraitScrollRect.content = labelRect;
+            ingredientTraitScrollRect.horizontal = false;
+            ingredientTraitScrollRect.vertical = true;
+            ingredientTraitScrollRect.movementType = ScrollRect.MovementType.Clamped;
+            ingredientTraitScrollRect.inertia = true;
+            ingredientTraitScrollRect.decelerationRate = 0.12f;
+            ingredientTraitScrollRect.scrollSensitivity = 42f;
+        }
+
+        private void RefreshIngredientTraitScrollContent()
+        {
+            if (!IsAlive(ingredientTraitLabel) || !IsAlive(ingredientTraitViewportRect))
+            {
+                return;
+            }
+
+            RectTransform labelRect = ingredientTraitLabel.GetComponent<RectTransform>();
+            if (!IsAlive(labelRect))
+            {
+                return;
+            }
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(labelRect);
+            float viewportHeight = Mathf.Max(1f, ingredientTraitViewportRect.rect.height);
+            float preferredHeight = Mathf.Max(viewportHeight, ingredientTraitLabel.preferredHeight + 12f);
+            labelRect.sizeDelta = new Vector2(0f, preferredHeight);
+            labelRect.anchoredPosition = Vector2.zero;
+            LayoutRebuilder.ForceRebuildLayoutImmediate(labelRect);
         }
 
         private void EnsureIngredientTraitBackdrop()
@@ -2662,12 +2782,16 @@ namespace TheTasteReviver
 
             if (level.enabledMechanics.enableForce)
             {
-                clues.Add(BuildForceTraitClue(profile.targetForceLevel));
+                clues.Add(IsExperimentLogPracticeLevel(level)
+                    ? "The force answer must be recovered from an earlier Experiment Log clue."
+                    : BuildForceTraitClue(profile.targetForceLevel));
             }
 
             if (level.enabledMechanics.enableSpeed)
             {
-                clues.Add(BuildSpeedTraitClue(profile.targetSpeedLevel));
+                clues.Add(IsExperimentLogPracticeLevel(level)
+                    ? "The speed answer must be recovered from the saved Tea Leaf clue."
+                    : BuildSpeedTraitClue(profile.targetSpeedLevel));
             }
 
             return clues.Where(clue => !string.IsNullOrWhiteSpace(clue)).ToList();
