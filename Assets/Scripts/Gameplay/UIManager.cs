@@ -96,6 +96,18 @@ namespace TheTasteReviver
         public bool showOpeningLevelTitle = true;
         public float openingLevelTitleSeconds = 2.5f;
 
+        [Header("Story Intro")]
+        public bool showStoryIntroPanels = true;
+        public Color storyIntroBackdropColor = new Color(0.93f, 0.88f, 0.78f, 1f);
+        public Vector2 storyIntroFrameSize = new Vector2(920f, 620f);
+        public Vector2 storyIntroFramePosition = new Vector2(0f, 82f);
+        public Vector2 storyIntroImageSize = new Vector2(1040f, 650f);
+        public Vector2 storyIntroImagePosition = new Vector2(0f, 42f);
+        public Vector2 storyIntroTextSize = new Vector2(820f, 122f);
+        public Vector2 storyIntroTextPosition = new Vector2(0f, -248f);
+        public Vector2 storyIntroButtonSize = new Vector2(220f, 58f);
+        public Vector2 storyIntroButtonPosition = new Vector2(0f, -328f);
+
         [Header("Ingredient Hover Tooltip")]
         public GameObject ingredientTooltipPanel;
         public TMP_Text ingredientTooltipLabel;
@@ -124,6 +136,13 @@ namespace TheTasteReviver
         private GameObject mortarReactionPanel;
         private TMP_Text mortarReactionLabel;
         private CanvasGroup mortarReactionCanvasGroup;
+        private GameObject storyIntroPanel;
+        private Image storyIntroBackdropImage;
+        private Image storyIntroImage;
+        private TMP_Text storyIntroText;
+        private TMP_Text storyIntroButtonText;
+        private readonly List<StoryIntroPage> pendingStoryIntroPages = new List<StoryIntroPage>();
+        private int currentStoryIntroIndex;
         private string lastMortarReactionKey = string.Empty;
         private float lastMortarReactionTime = -999f;
         private const string ChallengeStartTitleLine = "Tutorial complete. Challenge levels begin now.";
@@ -146,6 +165,21 @@ namespace TheTasteReviver
         private bool layoutUpdateQueued;
 #endif
         private static readonly HashSet<string> autoShownIngredientTraitLevels = new HashSet<string>();
+        private static readonly HashSet<string> shownStoryIntroPageKeys = new HashSet<string>();
+
+        private class StoryIntroPage
+        {
+            public string key;
+            public string resourcePath;
+            public string storyText;
+
+            public StoryIntroPage(string key, string resourcePath, string storyText)
+            {
+                this.key = key;
+                this.resourcePath = resourcePath;
+                this.storyText = storyText;
+            }
+        }
 
         public bool IsRatioSelectionOpen => ratioSelectionPanel != null && ratioSelectionPanel.activeSelf;
 
@@ -158,6 +192,7 @@ namespace TheTasteReviver
             EnsureOpeningLevelTitlePanel();
             EnsureIngredientTooltip();
             EnsureMortarReactionPanel();
+            EnsureStoryIntroPanel();
             NormalizeHudLayout();
             PanelBackgroundStyle.ApplyToNamedPanels(transform);
             ApplyDistinctBackgroundStyles();
@@ -777,6 +812,10 @@ namespace TheTasteReviver
             ShowHint(BuildLevelStartGuidance(level, returnedFromExperimentLog));
 
             ShowIngredientTraits(level);
+            if (!returnedFromExperimentLog)
+            {
+                TryShowStoryIntro(level);
+            }
         }
 
         private void ApplyLevelPanelVisibility(RecipeLevelData level)
@@ -2920,6 +2959,230 @@ namespace TheTasteReviver
             return !string.IsNullOrWhiteSpace(ingredient.aromaType)
                 ? ingredient.aromaType
                 : "Distinct flavor";
+        }
+
+        private void EnsureStoryIntroPanel()
+        {
+            if (IsAlive(storyIntroPanel))
+            {
+                storyIntroPanel.transform.SetParent(GetStoryIntroParent(), false);
+                storyIntroPanel.transform.SetAsLastSibling();
+                storyIntroPanel.SetActive(false);
+                return;
+            }
+
+            storyIntroPanel = new GameObject("Story Intro Panel");
+            storyIntroPanel.transform.SetParent(GetStoryIntroParent(), false);
+            storyIntroPanel.transform.SetAsLastSibling();
+
+            RectTransform rootRect = storyIntroPanel.AddComponent<RectTransform>();
+            rootRect.anchorMin = Vector2.zero;
+            rootRect.anchorMax = Vector2.one;
+            rootRect.offsetMin = Vector2.zero;
+            rootRect.offsetMax = Vector2.zero;
+
+            storyIntroBackdropImage = storyIntroPanel.AddComponent<Image>();
+            storyIntroBackdropImage.color = storyIntroBackdropColor;
+
+            CanvasGroup canvasGroup = storyIntroPanel.AddComponent<CanvasGroup>();
+            canvasGroup.blocksRaycasts = true;
+            canvasGroup.interactable = true;
+
+            GameObject imageFrame = new GameObject("Story Image Frame");
+            imageFrame.transform.SetParent(storyIntroPanel.transform, false);
+            RectTransform imageFrameRect = imageFrame.AddComponent<RectTransform>();
+            imageFrameRect.anchorMin = new Vector2(0.5f, 0.5f);
+            imageFrameRect.anchorMax = new Vector2(0.5f, 0.5f);
+            imageFrameRect.pivot = new Vector2(0.5f, 0.5f);
+            imageFrameRect.sizeDelta = storyIntroFrameSize;
+            imageFrameRect.anchoredPosition = storyIntroFramePosition;
+            Image imageFrameBackground = imageFrame.AddComponent<Image>();
+            PanelBackgroundStyle.Apply(imageFrameBackground, PanelBackgroundKind.PaleCream, 0.98f);
+
+            GameObject imageObject = new GameObject("Story Image");
+            imageObject.transform.SetParent(imageFrame.transform, false);
+            RectTransform imageRect = imageObject.AddComponent<RectTransform>();
+            imageRect.anchorMin = new Vector2(0.5f, 0.5f);
+            imageRect.anchorMax = new Vector2(0.5f, 0.5f);
+            imageRect.pivot = new Vector2(0.5f, 0.5f);
+            imageRect.sizeDelta = storyIntroImageSize;
+            imageRect.anchoredPosition = storyIntroImagePosition;
+            storyIntroImage = imageObject.AddComponent<Image>();
+            storyIntroImage.color = Color.white;
+            storyIntroImage.preserveAspect = true;
+            storyIntroImage.raycastTarget = false;
+
+            storyIntroText = CreateRuntimeText(
+                imageFrame.transform,
+                "Story Intro Text",
+                storyIntroTextSize,
+                storyIntroTextPosition,
+                TextAnchor.UpperCenter,
+                22);
+            storyIntroText.color = GraphiteTextColor;
+            storyIntroText.lineSpacing = 7f;
+            storyIntroText.overflowMode = TextOverflowModes.Ellipsis;
+
+            Button continueButton = CreateRuntimeButton(storyIntroPanel.transform, "Story Continue Button", storyIntroButtonSize, storyIntroButtonPosition);
+            PanelBackgroundStyle.Apply(continueButton.GetComponent<Image>(), PanelBackgroundKind.OchreYellow, 0.98f);
+            storyIntroButtonText = continueButton.GetComponentInChildren<TMP_Text>();
+            if (IsAlive(storyIntroButtonText))
+            {
+                storyIntroButtonText.text = "Continue";
+                storyIntroButtonText.color = OchreYellowTextColor;
+                storyIntroButtonText.fontSize = 20f;
+                storyIntroButtonText.fontStyle = FontStyles.Bold;
+            }
+            continueButton.onClick.AddListener(AdvanceStoryIntro);
+
+            storyIntroPanel.SetActive(false);
+        }
+
+        private void TryShowStoryIntro(RecipeLevelData level)
+        {
+            if (!showStoryIntroPanels || level == null)
+            {
+                return;
+            }
+
+            pendingStoryIntroPages.Clear();
+            currentStoryIntroIndex = 0;
+
+            foreach (StoryIntroPage page in BuildStoryIntroPagesForLevel(level))
+            {
+                if (page == null || string.IsNullOrWhiteSpace(page.key) || shownStoryIntroPageKeys.Contains(page.key))
+                {
+                    continue;
+                }
+
+                Texture2D texture = Resources.Load<Texture2D>(page.resourcePath);
+                if (texture == null)
+                {
+                    continue;
+                }
+
+                pendingStoryIntroPages.Add(page);
+            }
+
+            if (pendingStoryIntroPages.Count == 0)
+            {
+                return;
+            }
+
+            ShowStoryIntroPage(0);
+        }
+
+        private Transform GetStoryIntroParent()
+        {
+            Canvas parentCanvas = GetComponentInParent<Canvas>();
+            return parentCanvas != null ? parentCanvas.transform : transform;
+        }
+
+        private IEnumerable<StoryIntroPage> BuildStoryIntroPagesForLevel(RecipeLevelData level)
+        {
+            string levelID = level.levelID ?? string.Empty;
+            switch (levelID)
+            {
+                case "L01":
+                    yield return new StoryIntroPage(
+                        "Opening_Guangdong_Map",
+                        "Story/Opening_Guangdong_Map",
+                        "Grandma once remembered recipes by scent, not by scale or clock.\nBut the old recipe book has blurred with time.\nShe places her first marker on the Guangdong map and begins to restore the tastes hidden inside her memories.");
+                    yield return new StoryIntroPage(
+                        "Level01_Rice_Start",
+                        "Story/Level01_Rice_Start",
+                        "The first stop begins on an old arcade street.\nIn her hand is a small bag of rice, and in the recipe book only one warning remains: rice can turn burnt under the wrong pressure.\nShe starts with the simplest flavor: a clean grain memory.");
+                    break;
+                case "L02":
+                    yield return new StoryIntroPage(
+                        "Level02_Tea_Start",
+                        "Story/Level02_Tea_Start",
+                        "After the rice returns as soft powder, a brittle tea leaf slips from the next page.\nTea is different. Its bitterness arrives first, and sweetness follows only with patience.\nGrandma sits by the window and listens for the rhythm of the leaves.");
+                    break;
+            }
+
+            // Add future transition images here, for example:
+            // if (levelID == "L03") yield return new StoryIntroPage("Level03_Start", "Story/Level03_Start", "...");
+        }
+
+        private void ShowStoryIntroPage(int index)
+        {
+            if (!IsAlive(storyIntroPanel) || index < 0 || index >= pendingStoryIntroPages.Count)
+            {
+                CloseStoryIntro();
+                return;
+            }
+
+            currentStoryIntroIndex = index;
+            StoryIntroPage page = pendingStoryIntroPages[index];
+            Texture2D texture = Resources.Load<Texture2D>(page.resourcePath);
+            if (texture == null)
+            {
+                AdvanceStoryIntro();
+                return;
+            }
+
+            storyIntroPanel.transform.SetParent(GetStoryIntroParent(), false);
+            storyIntroPanel.transform.SetAsLastSibling();
+            storyIntroPanel.SetActive(true);
+
+            if (IsAlive(storyIntroBackdropImage))
+            {
+                storyIntroBackdropImage.color = storyIntroBackdropColor;
+            }
+
+            if (IsAlive(storyIntroImage))
+            {
+                storyIntroImage.sprite = Sprite.Create(
+                    texture,
+                    new Rect(0f, 0f, texture.width, texture.height),
+                    new Vector2(0.5f, 0.5f),
+                    100f);
+            }
+
+            if (IsAlive(storyIntroText))
+            {
+                storyIntroText.text = page.storyText;
+            }
+
+            if (IsAlive(storyIntroButtonText))
+            {
+                storyIntroButtonText.text = index >= pendingStoryIntroPages.Count - 1 ? "Begin" : "Continue";
+            }
+        }
+
+        private void AdvanceStoryIntro()
+        {
+            if (pendingStoryIntroPages.Count == 0)
+            {
+                CloseStoryIntro();
+                return;
+            }
+
+            StoryIntroPage page = pendingStoryIntroPages[currentStoryIntroIndex];
+            if (page != null && !string.IsNullOrWhiteSpace(page.key))
+            {
+                shownStoryIntroPageKeys.Add(page.key);
+            }
+
+            int nextIndex = currentStoryIntroIndex + 1;
+            if (nextIndex >= pendingStoryIntroPages.Count)
+            {
+                CloseStoryIntro();
+                return;
+            }
+
+            ShowStoryIntroPage(nextIndex);
+        }
+
+        private void CloseStoryIntro()
+        {
+            pendingStoryIntroPages.Clear();
+            currentStoryIntroIndex = 0;
+            if (IsAlive(storyIntroPanel))
+            {
+                storyIntroPanel.SetActive(false);
+            }
         }
 
         private static TMP_Text CreateRuntimeText(Transform parent, string name, Vector2 size, Vector2 position, TextAnchor anchor, int fontSize)
