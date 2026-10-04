@@ -2470,7 +2470,7 @@ namespace TheTasteReviver
             string message = "Result: Correct\nRecipe complete.";
             return string.IsNullOrWhiteSpace(permanentHint)
                 ? message
-                : message + "\nNew clue saved. Open the Experiment Log before continuing.";
+                : message + "\nNew clue saved.";
         }
 
         private static string BuildEvaluationHint(EvaluationResult result, HintResult hint, string permanentHint)
