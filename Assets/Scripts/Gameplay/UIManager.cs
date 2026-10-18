@@ -166,7 +166,7 @@ namespace TheTasteReviver
         private Image storyIntroImage;
         private TMP_Text storyIntroText;
         private TMP_Text storyIntroButtonText;
-        private readonly List<StoryIntroPage> pendingStoryIntroPages = new List<StoryIntroPage>();
+        private readonly List<StoryIntroPageData> pendingStoryIntroPages = new List<StoryIntroPageData>();
         private int currentStoryIntroIndex;
         private string lastMortarReactionKey = string.Empty;
         private float lastMortarReactionTime = -999f;
@@ -192,23 +192,11 @@ namespace TheTasteReviver
         private static readonly HashSet<string> autoShownIngredientTraitLevels = new HashSet<string>();
         private static readonly HashSet<string> shownStoryIntroPageKeys = new HashSet<string>();
 
-        private class StoryIntroPage
-        {
-            public string key;
-            public string resourcePath;
-            public string storyText;
-
-            public StoryIntroPage(string key, string resourcePath, string storyText)
-            {
-                this.key = key;
-                this.resourcePath = resourcePath;
-                this.storyText = storyText;
-            }
-        }
-
         public bool IsRatioSelectionOpen => ratioSelectionView != null
             ? ratioSelectionView.IsOpen
             : ratioSelectionPanel != null && ratioSelectionPanel.activeSelf;
+
+        public bool UsesPrefabViews => GetComponentInChildren<GameplayHudView>(true) != null;
 
         private void Awake()
         {
@@ -238,13 +226,13 @@ namespace TheTasteReviver
 
         private void ResolvePrefabViews()
         {
-            gameplayHud ??= GetComponentInChildren<GameplayHudView>(true);
-            ratioSelectionView ??= GetComponentInChildren<RatioSelectionPanelView>(true);
-            ingredientTraitsView ??= GetComponentInChildren<IngredientTraitsPanelView>(true);
-            ingredientTooltipView ??= GetComponentInChildren<IngredientTooltipView>(true);
-            openingLevelTitleView ??= GetComponentInChildren<OpeningLevelTitlePanelView>(true);
-            mortarReactionView ??= GetComponentInChildren<MortarReactionPanelView>(true);
-            storyIntroView ??= GetComponentInChildren<StoryIntroPanelView>(true);
+            gameplayHud = ResolveSceneView(gameplayHud);
+            ratioSelectionView = ResolveSceneView(ratioSelectionView);
+            ingredientTraitsView = ResolveSceneView(ingredientTraitsView);
+            ingredientTooltipView = ResolveSceneView(ingredientTooltipView);
+            openingLevelTitleView = ResolveSceneView(openingLevelTitleView);
+            mortarReactionView = ResolveSceneView(mortarReactionView);
+            storyIntroView = ResolveSceneView(storyIntroView);
 
             if (gameplayHud != null)
             {
@@ -265,6 +253,18 @@ namespace TheTasteReviver
                 ingredientTraitLabel = ingredientTraitsView.TraitLabel;
                 ingredientTraitToggleButton = ingredientTraitsView.ToggleButton;
             }
+        }
+
+        private T ResolveSceneView<T>(T current) where T : Component
+        {
+            if (current != null
+                && current.gameObject.scene.IsValid()
+                && current.transform.IsChildOf(transform))
+            {
+                return current;
+            }
+
+            return GetComponentInChildren<T>(true);
         }
 
 #if UNITY_EDITOR
@@ -796,7 +796,8 @@ namespace TheTasteReviver
         {
             if (Application.isPlaying
                 || UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode
-                || layoutUpdateQueued)
+                || layoutUpdateQueued
+                || UsesPrefabViews)
             {
                 return;
             }
@@ -1698,6 +1699,11 @@ namespace TheTasteReviver
 
         public void NormalizeHudLayout()
         {
+            if (UsesPrefabViews)
+            {
+                return;
+            }
+
             if (driveHudLayoutFromInspector)
             {
                 ConfigureTextPanel(levelLabel, levelPanelLayout, new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.MiddleCenter);
@@ -3231,14 +3237,15 @@ namespace TheTasteReviver
             pendingStoryIntroPages.Clear();
             currentStoryIntroIndex = 0;
 
-            foreach (StoryIntroPage page in BuildStoryIntroPagesForLevel(level))
+            IEnumerable<StoryIntroPageData> pages = level.storyIntroPages ?? Enumerable.Empty<StoryIntroPageData>();
+            foreach (StoryIntroPageData page in pages)
             {
-                if (page == null || string.IsNullOrWhiteSpace(page.key) || shownStoryIntroPageKeys.Contains(page.key))
+                if (page == null || string.IsNullOrWhiteSpace(page.pageKey) || shownStoryIntroPageKeys.Contains(page.pageKey))
                 {
                     continue;
                 }
 
-                Texture2D texture = Resources.Load<Texture2D>(page.resourcePath);
+                Texture2D texture = Resources.Load<Texture2D>(page.imageResourcePath);
                 if (texture == null)
                 {
                     continue;
@@ -3261,33 +3268,6 @@ namespace TheTasteReviver
             return parentCanvas != null ? parentCanvas.transform : transform;
         }
 
-        private IEnumerable<StoryIntroPage> BuildStoryIntroPagesForLevel(RecipeLevelData level)
-        {
-            string levelID = level.levelID ?? string.Empty;
-            switch (levelID)
-            {
-                case "L01":
-                    yield return new StoryIntroPage(
-                        "Opening_Guangdong_Map",
-                        "Story/Opening_Guangdong_Map",
-                        "Grandma once remembered recipes by scent, not by scale or clock.\nBut the old recipe book has blurred with time.\nShe places her first marker on the Guangdong map and begins to restore the tastes hidden inside her memories.");
-                    yield return new StoryIntroPage(
-                        "Level01_Rice_Start",
-                        "Story/Level01_Rice_Start",
-                        "The first stop begins on an old arcade street.\nIn her hand is a small bag of rice, and in the recipe book only one warning remains: rice can turn burnt under the wrong pressure.\nShe starts with the simplest flavor: a clean grain memory.");
-                    break;
-                case "L02":
-                    yield return new StoryIntroPage(
-                        "Level02_Tea_Start",
-                        "Story/Level02_Tea_Start",
-                        "After the rice returns as soft powder, a brittle tea leaf slips from the next page.\nTea is different. Its bitterness arrives first, and sweetness follows only with patience.\nGrandma sits by the window and listens for the rhythm of the leaves.");
-                    break;
-            }
-
-            // Add future transition images here, for example:
-            // if (levelID == "L03") yield return new StoryIntroPage("Level03_Start", "Story/Level03_Start", "...");
-        }
-
         private void ShowStoryIntroPage(int index)
         {
             if ((storyIntroView == null && !IsAlive(storyIntroPanel)) || index < 0 || index >= pendingStoryIntroPages.Count)
@@ -3297,8 +3277,8 @@ namespace TheTasteReviver
             }
 
             currentStoryIntroIndex = index;
-            StoryIntroPage page = pendingStoryIntroPages[index];
-            Texture2D texture = Resources.Load<Texture2D>(page.resourcePath);
+            StoryIntroPageData page = pendingStoryIntroPages[index];
+            Texture2D texture = Resources.Load<Texture2D>(page.imageResourcePath);
             if (texture == null)
             {
                 AdvanceStoryIntro();
@@ -3311,7 +3291,6 @@ namespace TheTasteReviver
                     texture,
                     page.storyText,
                     index >= pendingStoryIntroPages.Count - 1 ? "Begin" : "Continue",
-                    storyIntroBackdropColor,
                     AdvanceStoryIntro);
                 return;
             }
@@ -3353,10 +3332,10 @@ namespace TheTasteReviver
                 return;
             }
 
-            StoryIntroPage page = pendingStoryIntroPages[currentStoryIntroIndex];
-            if (page != null && !string.IsNullOrWhiteSpace(page.key))
+            StoryIntroPageData page = pendingStoryIntroPages[currentStoryIntroIndex];
+            if (page != null && !string.IsNullOrWhiteSpace(page.pageKey))
             {
-                shownStoryIntroPageKeys.Add(page.key);
+                shownStoryIntroPageKeys.Add(page.pageKey);
             }
 
             int nextIndex = currentStoryIntroIndex + 1;

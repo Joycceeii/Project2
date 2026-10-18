@@ -133,10 +133,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ingredientData: {fileID: 0}
+  representedIngredients: []
   attemptManager: {fileID: 0}
   mortarArea: {fileID: 0}
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 9095778456970719305}
+  dragLiftHeight: 0.55
+  mortarDragClearance: 0.08
+  mortarDropHeight: 0.2
+  groundVisualLift: 0.1
+  mortarGroundVisualLift: 0.04
+  homeGroundVisualLift: 0.22
+  groundVisualScale: 0.8
+  groundVisualFootprint: 0.7
+  groundVisualMaxHeight: 0.14
 --- !u!65 &2309898433230916524
 BoxCollider:
   m_ObjectHideFlags: 0

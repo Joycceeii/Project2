@@ -185,6 +185,14 @@ namespace TheTasteReviver
         }
     }
 
+    [Serializable]
+    public class StoryIntroPageData
+    {
+        public string pageKey;
+        public string imageResourcePath;
+        [TextArea] public string storyText;
+    }
+
     [CreateAssetMenu(menuName = "The Taste Reviver/Recipe Level Data", fileName = "RecipeLevelData")]
     public class RecipeLevelData : ScriptableObject
     {
@@ -193,6 +201,7 @@ namespace TheTasteReviver
         public string cityName;
         public string targetTasteName;
         [TextArea] public string levelIntro;
+        public List<StoryIntroPageData> storyIntroPages = new List<StoryIntroPageData>();
         [Range(1, 4)] public int maxIngredientCount = 4;
         public List<IngredientData> availableIngredients = new List<IngredientData>();
         public List<IngredientData> requiredIngredients = new List<IngredientData>();

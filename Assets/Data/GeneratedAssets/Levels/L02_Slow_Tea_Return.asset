@@ -13,10 +13,22 @@ MonoBehaviour:
   m_Name: L02_Slow_Tea_Return
   m_EditorClassIdentifier: 
   levelID: L02
-  levelName: L02 Tea Powder — Slow-ground tea with a gentle finish
+  levelName: "L02 Tea Powder \u2014 Slow-ground tea with a gentle finish"
   cityName: Chaozhou
   targetTasteName: Slow-ground tea with a gentle finish
-  levelIntro: "Use tea leaves to learn grinding speed. The goal is gentle tea bitterness followed by sweetness."
+  levelIntro: Use tea leaves to learn grinding speed. The goal is gentle tea bitterness
+    followed by sweetness.
+  storyIntroPages:
+  - pageKey: Level02_Tea_Start
+    imageResourcePath: Story/Level02_Tea_Start
+    storyText: 'After the rice returns as soft powder, a brittle tea leaf slips from
+      the next page.
+
+      Tea is different. Its bitterness arrives first, and sweetness
+      follows only with patience.
+
+      Grandma sits by the window and listens for
+      the rhythm of the leaves.'
   maxIngredientCount: 1
   availableIngredients:
   - {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
@@ -34,6 +46,8 @@ MonoBehaviour:
     groups:
     - ingredients:
       - {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
+  requireFinalCombinedBatch: 0
+  allowAnyPairPreparation: 0
   targetForceLevel: 1
   targetSpeedLevel: 0
   passingScore: 100
@@ -76,11 +90,13 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L02_Tea_Speed
     title: Tea Leaf - Speed Clue
-    content: Tea leaves work best with slow grinding. Fast grinding makes the tea too bitter.
+    content: Tea leaves work best with slow grinding. Fast grinding makes the tea
+      too bitter.
     relatedIngredients:
     - {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
     relatedDimension: 5
-  fallbackHintText: No new hint for now. Keep what worked, and change only one thing on your next try.
+  fallbackHintText: No new hint for now. Keep what worked, and change only one thing
+    on your next try.
   progressiveHintRules:
   - ruleId: L02_Hint_Speed
     priority: 20
@@ -90,7 +106,7 @@ MonoBehaviour:
   - profileTag: L02_TeaLeaf
     ingredient: {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 0
       enableRatio: 0
       enableCombination: 0
@@ -101,8 +117,9 @@ MonoBehaviour:
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: 
-    levelTraitDescription: Tea leaves release sweetness when ground slowly; fast grinding makes bitterness take over.
+    levelTraitDescription: Tea leaves release sweetness when ground slowly; fast
+      grinding makes bitterness take over.
     responseHintRules: []
-  successFeedback: "The tea tastes balanced: light bitterness first, then sweetness."
-  closeFeedback: Very close. Adjust the speed a little.
-  wrongFeedback: The tea is too bitter. Check the speed.
+  successFeedback: 'The tea tastes balanced: light bitterness first, then sweetness.'
+  closeFeedback: Very close. Adjust the speed or grinding time a little.
+  wrongFeedback: The tea is too bitter. Check the speed and grinding time.

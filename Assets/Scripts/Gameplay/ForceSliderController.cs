@@ -63,7 +63,6 @@ namespace TheTasteReviver
 
                 forceSlider.minValue = 0f;
                 forceSlider.maxValue = 1f;
-                ApplySliderColors();
                 if (applyStyle && driveSliderStyleFromInspector)
                 {
                     StyleSlider();

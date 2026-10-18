@@ -16,8 +16,8 @@ MonoBehaviour:
   ingredientNameCN: 
   ingredientNameEN: Yangjiang Douchi
   aromaType: Fermented bean
-  initialDescription: Savory and fermented. It carries body, but rough handling can
-    make it dull, bitter, or muddy.
+  initialDescription: Yangjiang douchi is savory and fermented. Its deep flavor benefits
+    from being formed early.
   ingredientColor: {r: 0.18, g: 0.14, b: 0.1, a: 1}
   icon: {fileID: 0}
   prefab: {fileID: 7654612238255230900, guid: 8f650f1183ad74a4684d5a39c0efef52, type: 3}

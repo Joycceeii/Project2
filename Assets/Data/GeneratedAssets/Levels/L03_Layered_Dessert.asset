@@ -13,10 +13,22 @@ MonoBehaviour:
   m_Name: L03_Layered_Dessert
   m_EditorClassIdentifier: 
   levelID: L03
-  levelName: L03 Red Bean Dessert — Red bean, citrus peel, and rock sugar
+  levelName: "L03 Red Bean Dessert \u2014 Red bean, citrus peel, and rock sugar"
   cityName: Jiangmen
   targetTasteName: Red bean, citrus peel, and rock sugar
-  levelIntro: "Tutorial complete. Challenge levels begin now. Red bean, dried tangerine peel, and rock sugar each change the dessert at a different moment."
+  levelIntro: Tutorial complete. Challenge levels begin now. Red bean, dried tangerine
+    peel, and rock sugar each change the dessert at a different moment.
+  storyIntroPages:
+  - pageKey: Level03_Red_Bean_Start
+    imageResourcePath: Story/Level03_Red_Bean_Start
+    storyText: 'At the next market stop, Grandma weighs beans against sweetness while
+      an old citrus scent lingers nearby.
+
+      The faded recipe no longer says
+      how each flavor should enter.
+
+      She must recover the dessert by remembering
+      what comes first, what follows, and what waits until the end.'
   maxIngredientCount: 3
   availableIngredients:
   - {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
@@ -48,6 +60,8 @@ MonoBehaviour:
       - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
     - ingredients:
       - {fileID: 11400000, guid: f8de9a412976d494dbf0864972bd41a3, type: 2}
+  requireFinalCombinedBatch: 0
+  allowAnyPairPreparation: 0
   targetForceLevel: 1
   targetSpeedLevel: 1
   passingScore: 100
@@ -90,13 +104,15 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L03_RedBean_Order
     title: Red Bean - Order Clue
-    content: Red bean makes the warm dessert base, so it should be added before the brighter and sweeter finishing flavors.
+    content: Red bean makes the warm dessert base, so it should be added before the
+      brighter and sweeter finishing flavors.
     relatedIngredients:
     - {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
     relatedDimension: 1
   - clueId: L03_Peel_Order
     title: Dried Tangerine Peel - Order Clue
-    content: Dried tangerine peel lifts the red bean base, so it belongs between the base and the final sweetness.
+    content: Dried tangerine peel lifts the red bean base, so it belongs between
+      the base and the final sweetness.
     relatedIngredients:
     - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
     relatedDimension: 1
@@ -106,16 +122,19 @@ MonoBehaviour:
     relatedIngredients:
     - {fileID: 11400000, guid: f8de9a412976d494dbf0864972bd41a3, type: 2}
     relatedDimension: 1
-  fallbackHintText: No new hint for now. Keep what worked, and change only one thing on your next try.
+  fallbackHintText: No new hint for now. Keep what worked, and change only one thing
+    on your next try.
   progressiveHintRules:
   - ruleId: L03_Hint_RedBean_Order
     priority: 22
     mechanic: 1
-    hintText: Red bean should go first. Place it before dried tangerine peel and rock sugar.
+    hintText: Red bean should go first. Place it before dried tangerine peel and
+      rock sugar.
   - ruleId: L03_Hint_Peel_Order
     priority: 21
     mechanic: 1
-    hintText: Dried tangerine peel belongs between the red bean base and the final rock sugar sweetness.
+    hintText: Dried tangerine peel belongs between the red bean base and the final
+      rock sugar sweetness.
   - ruleId: L03_Hint_RockSugar_Order
     priority: 20
     mechanic: 1
@@ -124,7 +143,7 @@ MonoBehaviour:
   - profileTag: L03_RedBean
     ingredient: {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 1
       enableRatio: 0
       enableCombination: 0
@@ -135,12 +154,12 @@ MonoBehaviour:
     targetRatioLevel: 0
     targetOrderIndex: 0
     targetCombinationKey: 
-    levelTraitDescription: "Red bean gives the dessert a thick, warm sweetness."
+    levelTraitDescription: Red bean gives the dessert a thick, warm sweetness.
     responseHintRules: []
   - profileTag: L03_DriedTangerinePeel
     ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 1
       enableRatio: 0
       enableCombination: 0
@@ -156,7 +175,7 @@ MonoBehaviour:
   - profileTag: L03_RockSugar
     ingredient: {fileID: 11400000, guid: f8de9a412976d494dbf0864972bd41a3, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 1
       enableRatio: 0
       enableCombination: 0
@@ -169,6 +188,7 @@ MonoBehaviour:
     targetCombinationKey: 
     levelTraitDescription: Rock sugar adds clean sweetness.
     responseHintRules: []
-  successFeedback: "The dessert has a clear order: red bean first, citrus next, sweetness last."
-  closeFeedback: Very close. Check the order.
+  successFeedback: 'The dessert has a clear order: red bean first, citrus next, sweetness
+    last.'
+  closeFeedback: Very close. Check the order or grinding time.
   wrongFeedback: The dessert tastes out of order. Check when each ingredient is added.

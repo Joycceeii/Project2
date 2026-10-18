@@ -13,10 +13,25 @@ MonoBehaviour:
   m_Name: L01_Gentle_Grain_Awakening
   m_EditorClassIdentifier: 
   levelID: L01
-  levelName: L01 Rice Flour — Soft, finely ground rice
+  levelName: "L01 Rice Flour \u2014 Soft, finely ground rice"
   cityName: Guangzhou
   targetTasteName: Soft, finely ground rice
-  levelIntro: "Use rice to learn grinding force. The goal is a soft rice flavor without a burnt taste."
+  levelIntro: Use rice to learn grinding force. The goal is a soft rice flavor without
+    a burnt taste.
+  storyIntroPages:
+  - pageKey: Opening_Guangdong_Map
+    imageResourcePath: Story/Opening_Guangdong_Map
+    storyText: "Grandma is getting old. She always craves that taste from her childhood. She took out an old, yellowed cookbook from the bottom of her suitcase, intending to recreate that childhood taste according to the steps in the cookbook. However, due to the passage of time, the words on the cookbook were no longer legible."
+  - pageKey: Level01_Rice_Start
+    imageResourcePath: Story/Level01_Rice_Start
+    storyText: 'The first stop begins on an old arcade street.
+
+      In her hand
+      is a small bag of rice, and in the recipe book only one warning remains: rice
+      can turn burnt under the wrong pressure.
+
+      She starts with the simplest
+      flavor: a clean grain memory.'
   maxIngredientCount: 1
   availableIngredients:
   - {fileID: 11400000, guid: 9a1cd94e3dd91be4b88ca7f39f71ca64, type: 2}
@@ -34,6 +49,8 @@ MonoBehaviour:
     groups:
     - ingredients:
       - {fileID: 11400000, guid: 9a1cd94e3dd91be4b88ca7f39f71ca64, type: 2}
+  requireFinalCombinedBatch: 0
+  allowAnyPairPreparation: 0
   targetForceLevel: 1
   targetSpeedLevel: 1
   passingScore: 100
@@ -76,21 +93,24 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L01_Rice_Force
     title: Rice - Force Clue
-    content: "Rice works best with medium force. Too little force keeps it weak; too much can make it taste burnt."
+    content: Rice works best with medium force. Too little force keeps it weak; too
+      much can make it taste burnt.
     relatedIngredients:
     - {fileID: 11400000, guid: 9a1cd94e3dd91be4b88ca7f39f71ca64, type: 2}
     relatedDimension: 4
-  fallbackHintText: No new hint for now. Keep what worked, and change only one thing on your next try.
+  fallbackHintText: No new hint for now. Keep what worked, and change only one thing
+    on your next try.
   progressiveHintRules:
   - ruleId: L01_Hint_Force
     priority: 20
     mechanic: 4
-    hintText: Rice does not need full force. Try setting the force near the middle of the slider.
+    hintText: Rice does not need full force. Try setting the force near the middle
+      of the slider.
   ingredientProfiles:
   - profileTag: L01_Rice
     ingredient: {fileID: 11400000, guid: 9a1cd94e3dd91be4b88ca7f39f71ca64, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 0
       enableRatio: 0
       enableCombination: 0
@@ -101,8 +121,9 @@ MonoBehaviour:
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: 
-    levelTraitDescription: Rice stays mild when the force is near the middle; too much pressure can make it taste burnt.
+    levelTraitDescription: Rice stays mild when the force is near the middle; too
+      much pressure can make it taste burnt.
     responseHintRules: []
-  successFeedback: "The rice tastes soft and clean, with no burnt flavor."
-  closeFeedback: Very close. Adjust the force a little.
-  wrongFeedback: The rice does not taste right. Check the force.
+  successFeedback: The rice tastes soft and clean, with no burnt flavor.
+  closeFeedback: Very close. Adjust the force or grinding time a little.
+  wrongFeedback: The rice does not taste right. Check the force and grinding time.

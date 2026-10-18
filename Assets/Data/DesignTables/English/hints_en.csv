@@ -74,24 +74,24 @@ L10,PermanentClue,L10_Ginger_Speed,Unlocked after Correct,Speed,0,,,Use Slow spe
 L10,PermanentClue,L10_Ginger_Order,Unlocked after Correct,IngredientOrder,0,,,"Ginger follows the douchi but comes before the dried tangerine peel.",Ginger - Order Clue,Ginger,Yes
 L11,ProgressiveHint,L11_Hint_SandGinger_Ratio,Evaluate hint,Ratio,22,,,Use the Large amount for sand ginger so it remains the strongest ginger flavor.,,SandGinger,No
 L11,ProgressiveHint,L11_Hint_CoarseSalt_Ratio,Evaluate hint,Ratio,21,,,"Recall the earlier salt lesson: use the Very Small amount for coarse salt.",,CoarseSalt,No
-L11,ProgressiveHint,L11_Hint_Scallion_Ratio,Evaluate hint,Ratio,20,,,Use the Small amount for scallion white so it stays fresh without overtaking the ginger.,,"ScallionWhite,CoarseSalt",No
+L11,ProgressiveHint,L11_Hint_Scallion_Ratio,Evaluate hint,Ratio,20,,,Use the Small amount for scallion stem so it stays fresh without overtaking the ginger.,,"ScallionWhite,CoarseSalt",No
 L11,ProgressiveHint,L11_Hint_Ginger_Combination,Evaluate hint,Combination,22,,,"Sand ginger and ginger belong in the same first batch; do not press New Batch between them.",,"SandGinger,Ginger",No
-L11,ProgressiveHint,L11_Hint_Scallion_Combination,Evaluate hint,Combination,21,,,Keep scallion white in its own batch so its fresh aroma is not buried by the ginger.,,ScallionWhite,No
+L11,ProgressiveHint,L11_Hint_Scallion_Combination,Evaluate hint,Combination,21,,,Keep scallion stem in its own batch so its fresh aroma is not buried by the ginger.,,ScallionWhite,No
 L11,ProgressiveHint,L11_Hint_CoarseSalt_Combination,Evaluate hint,Combination,20,,,Keep coarse salt in a separate final batch rather than adding it to the ginger group.,,CoarseSalt,No
 L11,ProgressiveHint,L11_Hint_CoarseSalt_Order,Evaluate hint,IngredientOrder,22,,,Finish with coarse salt. Its Very Small amount should support the completed sauce.,,CoarseSalt,No
 L11,ProgressiveHint,L11_Hint_Ginger_Order,Evaluate hint,IngredientOrder,21,,,"Begin with sand ginger, then add ginger to the same first batch.",,"SandGinger,Ginger",No
-L11,ProgressiveHint,L11_Hint_Scallion_Order,Evaluate hint,IngredientOrder,20,,,"After the ginger batch, add scallion white in its own batch. Coarse salt comes last.",,ScallionWhite,No
+L11,ProgressiveHint,L11_Hint_Scallion_Order,Evaluate hint,IngredientOrder,20,,,"After the ginger batch, add scallion stem in its own batch. Coarse salt comes last.",,ScallionWhite,No
 L11,PermanentClue,L11_Ginger_Combination,Unlocked after Correct,Combination,0,,,Sand ginger and ginger can share one batch because their spicy aromas develop together.,Ginger Combination Clue,"SandGinger,Ginger",Yes
-L11,PermanentClue,L11_Scallion_Order,Unlocked after Correct,IngredientOrder,0,,,"Scallion white follows the completed ginger batch in its own batch, before the final coarse salt.",Scallion White - Order Clue,ScallionWhite,Yes
+L11,PermanentClue,L11_Scallion_Order,Unlocked after Correct,IngredientOrder,0,,,"Scallion stem follows the completed ginger batch in its own batch, before the final coarse salt.",Scallion Stem - Order Clue,ScallionWhite,Yes
 L12,ProgressiveHint,L12_Hint_Douchi_Ratio,Evaluate hint,Ratio,24,,,Recall the douchi recipe and use the Large amount for Yangjiang douchi.,,YangjiangDouchi,No
 L12,ProgressiveHint,L12_Hint_Ginger_Ratio,Evaluate hint,Ratio,23,,,Use the Medium amount for ginger so it supports the douchi without replacing it.,,Ginger,No
-L12,ProgressiveHint,L12_Hint_Scallion_Ratio,Evaluate hint,Ratio,22,,,Use the Small amount for scallion white so its freshness stays controlled.,,ScallionWhite,No
+L12,ProgressiveHint,L12_Hint_Scallion_Ratio,Evaluate hint,Ratio,22,,,Use the Small amount for scallion stem so its freshness stays controlled.,,ScallionWhite,No
 L12,ProgressiveHint,L12_Hint_Salt_Ratio,Evaluate hint,Ratio,21,,,Use the Very Small amount for coarse salt. This is the same supporting role learned earlier.,,CoarseSalt,No
 L12,ProgressiveHint,L12_Hint_Base_Combination,Evaluate hint,Combination,24,,,"Yangjiang douchi and ginger belong in the same first batch; do not press New Batch between them.",,"YangjiangDouchi,Ginger",No
-L12,ProgressiveHint,L12_Hint_Scallion_Combination,Evaluate hint,Combination,23,,,Keep scallion white in its own batch so the savory base does not bury its fresh aroma.,,ScallionWhite,No
+L12,ProgressiveHint,L12_Hint_Scallion_Combination,Evaluate hint,Combination,23,,,Keep scallion stem in its own batch so the savory base does not bury its fresh aroma.,,ScallionWhite,No
 L12,ProgressiveHint,L12_Hint_Salt_Combination,Evaluate hint,Combination,22,,,Keep coarse salt in a separate final batch.,,CoarseSalt,No
 L12,ProgressiveHint,L12_Hint_Start_Order,Evaluate hint,IngredientOrder,24,,,Begin with Yangjiang douchi and then add ginger to the same first batch.,,"YangjiangDouchi,Ginger",No
-L12,ProgressiveHint,L12_Hint_Scallion_Order,Evaluate hint,IngredientOrder,23,,,"After the savory base is complete, add scallion white in its own batch.",,ScallionWhite,No
+L12,ProgressiveHint,L12_Hint_Scallion_Order,Evaluate hint,IngredientOrder,23,,,"After the savory base is complete, add scallion stem in its own batch.",,ScallionWhite,No
 L12,ProgressiveHint,L12_Hint_Salt_Order,Evaluate hint,IngredientOrder,22,,,"Finish with coarse salt, following the same final seasoning rule used before.",,CoarseSalt,No
 L12,ProgressiveHint,L12_Hint_Force,Evaluate hint,Force,19,,,Use Heavy force for the douchi-and-ginger batch to release the fermented bean's savory depth.,,"YangjiangDouchi,Ginger",No
 L12,ProgressiveHint,L12_Hint_Speed,Evaluate hint,Speed,20,,,Use Slow speed for the douchi-and-ginger batch so the savory base stays steady.,,"YangjiangDouchi,Ginger",No

@@ -21,14 +21,9 @@ namespace TheTasteReviver
             BindButton();
         }
 
-        public void Show(Texture2D texture, string text, string buttonText, Color backdropColor, Action onContinue)
+        public void Show(Texture2D texture, string text, string buttonText, Action onContinue)
         {
             continueAction = onContinue;
-            if (backdrop != null)
-            {
-                backdrop.color = backdropColor;
-            }
-
             if (storyText != null)
             {
                 storyText.text = text ?? string.Empty;

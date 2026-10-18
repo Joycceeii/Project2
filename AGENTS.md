@@ -1,11 +1,32 @@
 # Project Continuity and Agent Change Log
 
+## 2026-10-18 - Prefab-Authored UI Visuals
+
+- Prefab instances are now the source of truth for gameplay UI layout and appearance. Runtime code may update content, visibility, interaction state, sibling order, and genuinely dynamic geometry, but must not restyle authored prefab visuals.
+- `UIManager` skips legacy panel creation, normalization, and named-panel styling whenever prefab views are present; `TestLevelInitializer` follows the same boundary.
+- Story Intro runtime presentation no longer overwrites the prefab Backdrop color.
+- Re-running the gameplay UI migration only applies default layout and appearance to newly created objects or newly added visual components, preserving existing Story Intro and Mortar Reaction prefab edits.
+- Force slider colors are only driven from code when `driveSliderStyleFromInspector` is enabled.
+
+## 2026-10-18 - Scallion Stem Terminology
+
+- Standardized the player-facing scallion ingredient as `Scallion Stem` across English source tables, generated assets, hints, Traits, feedback, and project documentation.
+- Kept the internal ingredient ID `ScallionWhite` and existing asset/model names unchanged so serialized level references remain stable.
+
+## 2026-10-18 - Gameplay UI Prefabs Generated
+
+- Ran `Tools > The Taste Reviver > Migrate Gameplay UI To Prefabs` in the unlocked Unity Editor.
+- Generated and saved seven independent panel prefabs under `Assets/Prefabs/UI`: Gameplay HUD, ratio selection, ingredient traits, ingredient tooltip, opening title, mortar reaction, and story intro.
+- Reconnected and saved `TasteRestorerTestLevel.unity` so its seven UI roots are prefab instances; the Hint Panel is owned by `GameplayHud.prefab`.
+- Corrected the migration tool so `UIManager` stores scene-instance component references rather than persistent prefab-asset references, and added runtime recovery from stale asset references.
+- Re-ran the migration and verified Play Mode with an empty Console; the prefab Transform mutation error no longer occurs. The runtime and Editor C# projects build with zero warnings and zero errors.
+
 ## 2026-10-17 - Gameplay UI Prefab Architecture
 
 - Began replacing the monolithic gameplay `UIManager` with prefab-owned view components. `UIManager` now exposes only seven high-level view references plus gameplay coordination dependencies in its normal Inspector surface.
 - Added dedicated components for the gameplay HUD, ratio selection, ingredient traits, ingredient tooltip, opening title, mortar reaction, and story intro. Each component owns its child references and local presentation behavior.
 - Added `Tools > The Taste Reviver > Migrate Gameplay UI To Prefabs`, which groups the existing scene UI without changing its authored layout, creates independent prefabs under `Assets/Prefabs/UI`, reconnects the gameplay scene, and keeps a legacy fallback for programmatically generated test canvases.
-- The runtime and Editor C# projects compile with zero warnings and zero errors. The prefab migration still needs to be run from an unlocked Unity Editor session; headless execution in the sandbox was blocked by Unity Licensing/Package entitlement IPC before the migration method could run.
+- The runtime and Editor C# projects compile with zero warnings and zero errors. The prefab migration was subsequently completed in an unlocked Unity Editor session on 2026-10-18.
 
 ## 2026-10-03 - Experiment Log Mid-Recipe State Preservation
 
@@ -83,18 +104,18 @@
 
 ### L11 - Ginger-Scallion Finale (Completed Order Retune and Text Pass)
 
-- Final order is Sand Ginger → Ginger → Scallion White → Coarse Salt.
-- Sand Ginger and Ginger share the first batch; Scallion White and Coarse Salt each use separate batches.
-- Ratios remain Sand Ginger=`Large`, Ginger=`Medium`, Scallion White=`Small`, Coarse Salt=`Very Small`.
+- Final order is Sand Ginger → Ginger → Scallion Stem → Coarse Salt.
+- Sand Ginger and Ginger share the first batch; Scallion Stem and Coarse Salt each use separate batches.
+- Ratios remain Sand Ginger=`Large`, Ginger=`Medium`, Scallion Stem=`Small`, Coarse Salt=`Very Small`.
 - The ginger batch retains Heavy Force and Medium Speed. Combination, ratio, score, and duration settings remain otherwise unchanged.
-- Rewrote intro, feedback, hints, Traits, and permanent clues so L11 functions as a synthesis of earlier Sand Ginger, Ginger, and Coarse Salt knowledge while introducing Scallion White as the fresh separate layer.
+- Rewrote intro, feedback, hints, Traits, and permanent clues so L11 functions as a synthesis of earlier Sand Ginger, Ginger, and Coarse Salt knowledge while introducing Scallion Stem as the fresh separate layer.
 
 ### L12 - Douchi-Scallion Mastery (Added)
 
-- Ingredients: Yangjiang Douchi, Ginger, Scallion White, and Coarse Salt; all reuse existing ingredient assets.
-- Final order is Yangjiang Douchi → Ginger → Scallion White → Coarse Salt.
-- Yangjiang Douchi and Ginger share the first batch; Scallion White and Coarse Salt each use separate batches.
-- Ratios are Yangjiang Douchi=`Large`, Ginger=`Medium`, Scallion White=`Small`, and Coarse Salt=`Very Small`.
+- Ingredients: Yangjiang Douchi, Ginger, Scallion Stem, and Coarse Salt; all reuse existing ingredient assets.
+- Final order is Yangjiang Douchi → Ginger → Scallion Stem → Coarse Salt.
+- Yangjiang Douchi and Ginger share the first batch; Scallion Stem and Coarse Salt each use separate batches.
+- Ratios are Yangjiang Douchi=`Large`, Ginger=`Medium`, Scallion Stem=`Small`, and Coarse Salt=`Very Small`.
 - The douchi-and-ginger batch uses Heavy Force and Slow Speed. Passing score is 90 and the accepted duration is 32-50 seconds.
 - L12 adds no new mechanic, model, or permanent Experiment Log clue; it is a memory-mastery test built from rules already taught in L07, L10, and L11.
 
@@ -116,9 +137,9 @@
 - Corrected the malformed L07 fallback CSV row so its comma no longer shifts text into the wrong column.
 - Synchronized `levels_en.csv`, `hints_en.csv`, `L07_profiles_en.csv`, and `L07_Sand_Ginger_Core.asset`.
 - Completed native-English text passes for L08, L09, and L10 without changing their correct conditions or adding mechanics.
-- Retuned L11 order from Coarse Salt first to Sand Ginger → Ginger → Scallion White → Coarse Salt so the final level respects the earlier rule that Very Small Coarse Salt finishes the recipe.
+- Retuned L11 order from Coarse Salt first to Sand Ginger → Ginger → Scallion Stem → Coarse Salt so the final level respects the earlier rule that Very Small Coarse Salt finishes the recipe.
 - Updated L11 order-dependent profiles, hints, Traits, feedback, source tables, and generated asset while preserving its existing ratios, batch groups, Force/Speed targets, score, and duration.
-- Added L12 Douchi-Scallion Mastery using only Yangjiang Douchi, Ginger, Scallion White, and Coarse Salt, with synchronized source tables, hints, profiles, generated asset, and scene level lists.
+- Added L12 Douchi-Scallion Mastery using only Yangjiang Douchi, Ginger, Scallion Stem, and Coarse Salt, with synchronized source tables, hints, profiles, generated asset, and scene level lists.
 - Quoted the comma-containing L01-L06 fallback hint fields and synchronized their generated level assets so every English design-table CSV row remains column-safe on reimport; wording and gameplay conditions were unchanged.
 
 ## 2026-09-24 - Experiment Log Guidance

@@ -266,13 +266,16 @@ public class TestLevelInitializer : MonoBehaviour
                     ConfigureGameplayCanvas(canvas);
                 }
 
-                ui.EnsureRatioSelectionPanel();
-                ui.EnsureExperimentLogButton();
-                ui.EnsureActionButtons();
-                ui.EnsureIngredientTraitPanel();
-                if (ui.driveHudLayoutFromInspector)
+                if (!ui.UsesPrefabViews)
                 {
-                    ui.NormalizeHudLayout();
+                    ui.EnsureRatioSelectionPanel();
+                    ui.EnsureExperimentLogButton();
+                    ui.EnsureActionButtons();
+                    ui.EnsureIngredientTraitPanel();
+                    if (ui.driveHudLayoutFromInspector)
+                    {
+                        ui.NormalizeHudLayout();
+                    }
                 }
                 ui.attemptManager = attempt;
                 ui.evaluator = evaluator;

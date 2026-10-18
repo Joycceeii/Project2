@@ -14,7 +14,7 @@
 | L08 | Pepper Held in Balance | 平衡白胡椒 | 比例：`White Pepper` 最大，`Peanut` 次之，`Dried Tangerine Peel` 最少。Speed 设 `Medium`，研磨 `20-32s`。 |
 | L09 | Wrapped Rice Layers | 裹粽米香层次 | 顺序：`Red Bean -> Glutinous Rice -> Lotus Leaf -> Black Sesame`。比例：Red Bean 最大，Glutinous Rice 次之，Black Sesame 少，Lotus Leaf 最少。Batch：`Glutinous Rice + Lotus Leaf` 一起；`Red Bean` 单独；`Black Sesame` 单独。操作：红豆单独 batch；点 `New Batch` 后加糯米，再马上加荷叶到同一个 batch；再点 `New Batch` 加黑芝麻。研磨 `25-40s`。 |
 | L10 | Savory Bean Current | 咸香豆豉底味 | 顺序：`Yangjiang Douchi -> Ginger -> Dried Tangerine Peel -> Coarse Salt`。比例：Douchi 最大，Ginger 次之，Peel 少，Salt 最少。Force `Medium`，Speed `Medium`，研磨 `28-45s`。 |
-| L11 | Ginger-Scallion Finale | 姜葱终章 | 顺序：`Coarse Salt -> Sand Ginger -> Ginger -> Scallion White`。比例：Sand Ginger 最大，Ginger 次之，Scallion White 少，Coarse Salt 最少。Batch：`Sand Ginger + Ginger` 一起；`Scallion White` 单独；`Coarse Salt` 单独。Force `Heavy`，Speed `Medium`，研磨 `30-50s`。 |
+| L11 | Ginger-Scallion Finale | 姜葱终章 | 顺序：`Coarse Salt -> Sand Ginger -> Ginger -> Scallion Stem`。比例：Sand Ginger 最大，Ginger 次之，Scallion Stem 少，Coarse Salt 最少。Batch：`Sand Ginger + Ginger` 一起；`Scallion Stem` 单独；`Coarse Salt` 单独。Force `Heavy`，Speed `Medium`，研磨 `30-50s`。 |
 
 ## Ingredients / 食材
 
@@ -34,4 +34,4 @@
 | Lotus Leaf | 荷叶 |
 | Yangjiang Douchi | 阳江豆豉 |
 | Ginger | 姜 |
-| Scallion White | 葱白 |
+| Scallion Stem | 葱茎 |

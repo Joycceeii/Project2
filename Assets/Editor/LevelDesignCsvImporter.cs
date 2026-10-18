@@ -20,6 +20,7 @@ namespace TheTasteReviver.EditorTools
         private const string IngredientCsvPath = DesignDataPath + "/ingredients_en.csv";
         private const string LevelCsvPath = DesignDataPath + "/levels_en.csv";
         private const string HintCsvPath = DesignDataPath + "/hints_en.csv";
+        private const string StoryIntroCsvPath = DesignDataPath + "/story_intros_en.csv";
         private const string LevelProfileFolderPath = DesignDataPath + "/LevelProfiles";
 
         [MenuItem("The Taste Reviver/Import English CSV Design Data")]
@@ -33,10 +34,11 @@ namespace TheTasteReviver.EditorTools
             List<Dictionary<string, string>> ingredientRows = ReadCsvAsset(IngredientCsvPath);
             List<Dictionary<string, string>> levelRows = ReadCsvAsset(LevelCsvPath);
             List<Dictionary<string, string>> hintRows = ReadCsvAsset(HintCsvPath);
+            List<Dictionary<string, string>> storyIntroRows = ReadCsvAsset(StoryIntroCsvPath);
 
             Dictionary<string, IngredientData> ingredients = ImportIngredients(ingredientRows);
             TryGenerateIngredientPrefabs();
-            List<RecipeLevelData> levels = ImportLevels(levelRows, hintRows, ingredients);
+            List<RecipeLevelData> levels = ImportLevels(levelRows, hintRows, storyIntroRows, ingredients);
             AssignOpenSceneReferences(ingredients.Values.ToList(), levels);
 
             AssetDatabase.SaveAssets();
@@ -84,12 +86,20 @@ namespace TheTasteReviver.EditorTools
             return created;
         }
 
-        private static List<RecipeLevelData> ImportLevels(List<Dictionary<string, string>> rows, List<Dictionary<string, string>> hintRows, Dictionary<string, IngredientData> ingredients)
+        private static List<RecipeLevelData> ImportLevels(
+            List<Dictionary<string, string>> rows,
+            List<Dictionary<string, string>> hintRows,
+            List<Dictionary<string, string>> storyIntroRows,
+            Dictionary<string, IngredientData> ingredients)
         {
             Dictionary<string, List<Dictionary<string, string>>> hintsByLevel = hintRows
                 .Where(row => !string.IsNullOrWhiteSpace(Get(row, "LevelID")))
                 .GroupBy(row => Get(row, "LevelID"))
                 .ToDictionary(group => group.Key, group => group.ToList());
+            Dictionary<string, List<Dictionary<string, string>>> storyIntrosByLevel = storyIntroRows
+                .Where(row => !string.IsNullOrWhiteSpace(Get(row, "LevelID")))
+                .GroupBy(row => Get(row, "LevelID"))
+                .ToDictionary(group => group.Key, group => group.OrderBy(row => ParseInt(Get(row, "PageOrder"), 0)).ToList());
 
             List<RecipeLevelData> created = new List<RecipeLevelData>();
             foreach (Dictionary<string, string> row in rows)
@@ -102,19 +112,25 @@ namespace TheTasteReviver.EditorTools
 
                 string levelName = Get(row, "LevelName");
                 string path = LevelsPath + "/" + Sanitize(id + "_" + levelName) + ".asset";
-                RecipeLevelData asset = AssetDatabase.LoadAssetAtPath<RecipeLevelData>(path);
+                RecipeLevelData asset = FindExistingLevelAsset(id);
                 if (asset == null)
                 {
                     asset = ScriptableObject.CreateInstance<RecipeLevelData>();
                     AssetDatabase.CreateAsset(asset, path);
                 }
 
-                asset.name = Path.GetFileNameWithoutExtension(path);
+                asset.name = Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(asset));
                 asset.levelID = id;
                 asset.cityName = Get(row, "City");
                 asset.levelName = levelName;
                 asset.targetTasteName = Get(row, "TargetTasteName");
                 asset.levelIntro = Get(row, "LevelIntro");
+                asset.storyIntroPages ??= new List<StoryIntroPageData>();
+                asset.storyIntroPages.Clear();
+                if (storyIntrosByLevel.TryGetValue(id, out List<Dictionary<string, string>> levelStoryIntros))
+                {
+                    ApplyStoryIntros(asset, levelStoryIntros);
+                }
                 asset.availableIngredients = ResolveIngredients(Get(row, "AvailableIngredients"), ingredients);
                 asset.requiredIngredients = ResolveIngredients(Get(row, "RequiredIngredients"), ingredients);
                 asset.forbiddenIngredients.Clear();
@@ -160,6 +176,44 @@ namespace TheTasteReviver.EditorTools
             }
 
             return created;
+        }
+
+        private static RecipeLevelData FindExistingLevelAsset(string levelID)
+        {
+            foreach (string guid in AssetDatabase.FindAssets("t:RecipeLevelData", new[] { LevelsPath }))
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                RecipeLevelData candidate = AssetDatabase.LoadAssetAtPath<RecipeLevelData>(path);
+                if (candidate != null && candidate.levelID == levelID)
+                {
+                    return candidate;
+                }
+            }
+
+            return null;
+        }
+
+        private static void ApplyStoryIntros(RecipeLevelData level, List<Dictionary<string, string>> rows)
+        {
+            foreach (Dictionary<string, string> row in rows)
+            {
+                string pageKey = Get(row, "PageKey");
+                string imageResourcePath = Get(row, "ImageResourcePath");
+                string storyText = Get(row, "StoryText").Replace("\\n", "\n");
+                if (string.IsNullOrWhiteSpace(pageKey)
+                    || string.IsNullOrWhiteSpace(imageResourcePath)
+                    || string.IsNullOrWhiteSpace(storyText))
+                {
+                    continue;
+                }
+
+                level.storyIntroPages.Add(new StoryIntroPageData
+                {
+                    pageKey = pageKey,
+                    imageResourcePath = imageResourcePath,
+                    storyText = storyText
+                });
+            }
         }
 
         private static void ApplyHints(RecipeLevelData level, List<Dictionary<string, string>> hints, Dictionary<string, IngredientData> ingredients)

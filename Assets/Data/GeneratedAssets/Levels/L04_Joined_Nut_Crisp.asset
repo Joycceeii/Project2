@@ -13,10 +13,22 @@ MonoBehaviour:
   m_Name: L04_Joined_Nut_Crisp
   m_EditorClassIdentifier: 
   levelID: L04
-  levelName: L04 Peanut-Sesame Crisp — A roasted peanut and sesame blend
+  levelName: "L04 Peanut-Sesame Crisp \u2014 A roasted peanut and sesame blend"
   cityName: Foshan
   targetTasteName: A roasted peanut and sesame blend
-  levelIntro: Peanut and black sesame are both nutty, but each one should keep its own roasted edge. Use New Batch to grind them separately.
+  levelIntro: Peanut and black sesame are both nutty, but each one should keep its
+    own roasted edge. Use New Batch to grind them separately.
+  storyIntroPages:
+  - pageKey: Level04_Peanut_Sesame_Start
+    imageResourcePath: Story/Level04_Peanut_Sesame_Start
+    storyText: 'Inside a wooden spice cabinet, Grandma finds peanut and black sesame
+      stored in separate compartments.
+
+      Their roasted aromas belong together,
+      but each needs room to keep its own character.
+
+      She opens the recipe
+      book and prepares to restore the crisp one batch at a time.'
   maxIngredientCount: 2
   availableIngredients:
   - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
@@ -36,6 +48,7 @@ MonoBehaviour:
     - ingredients:
       - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
   requireFinalCombinedBatch: 1
+  allowAnyPairPreparation: 0
   targetForceLevel: 1
   targetSpeedLevel: 1
   passingScore: 100
@@ -60,8 +73,10 @@ MonoBehaviour:
     orderWrong: Ingredient order does not match the target.
     ratioCorrect: Ratio pattern is correct.
     ratioAmbiguous: Ratio pattern is still ambiguous.
-    combinationCorrect: Each ingredient was prepared on its own, then both powders were combined in the final batch.
-    combinationWrong: Prepare each ingredient alone first, then add both powders to one final batch.
+    combinationCorrect: Each ingredient was prepared on its own, then both powders
+      were combined in the final batch.
+    combinationWrong: Prepare each ingredient alone first, then add both powders
+      to one final batch.
   hintSettings:
     hintPriority: 03000000
     maxOrderHints: 5
@@ -78,27 +93,31 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L04_Peanut_Combination
     title: Peanut - Combination Clue
-    content: Peanut keeps its warm roasted taste clearer when it is prepared in its own batch before combining.
+    content: Peanut keeps its warm roasted taste clearer when it is prepared in its
+      own batch before combining.
     relatedIngredients:
     - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
     relatedDimension: 3
   - clueId: L04_BlackSesame_Combination
     title: Black Sesame - Combination Clue
-    content: Black sesame keeps its darker roasted identity when it is prepared separately before joining peanut.
+    content: Black sesame keeps its darker roasted identity when it is prepared separately
+      before joining peanut.
     relatedIngredients:
     - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
     relatedDimension: 3
-  fallbackHintText: No new hint for now. Keep what worked, and change only one thing on your next try.
+  fallbackHintText: No new hint for now. Keep what worked, and change only one thing
+    on your next try.
   progressiveHintRules:
   - ruleId: L04_Hint_Combination
     priority: 20
     mechanic: 3
-    hintText: Grind each ingredient on its own first. After both powders return home, put both powders back into the mortar together.
+    hintText: Grind each ingredient on its own first. After both powders return home,
+      put both powders back into the mortar together.
   ingredientProfiles:
   - profileTag: L04_Peanut
     ingredient: {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 0
       enableRatio: 0
       enableCombination: 1
@@ -114,7 +133,7 @@ MonoBehaviour:
   - profileTag: L04_BlackSesame
     ingredient: {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 0
       enableRatio: 0
       enableCombination: 1
@@ -127,6 +146,9 @@ MonoBehaviour:
     targetCombinationKey: BlackSesame
     levelTraitDescription: Black sesame brings a darker roasted flavor.
     responseHintRules: []
-  successFeedback: Peanut and black sesame stay clear from separate preparation, then join cleanly in the final batch.
-  closeFeedback: Very close. Make sure each ingredient is ground alone first, then put both powders together at the end.
-  wrongFeedback: The nutty flavors need separate preparation followed by one final combined grind.
+  successFeedback: Peanut and black sesame stay clear from separate preparation,
+    then join cleanly in the final batch.
+  closeFeedback: Very close. Make sure each ingredient is ground alone first, then
+    put both powders together at the end.
+  wrongFeedback: The nutty flavors need separate preparation followed by one final
+    combined grind.

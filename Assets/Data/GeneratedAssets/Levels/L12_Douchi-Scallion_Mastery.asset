@@ -13,10 +13,14 @@ MonoBehaviour:
   m_Name: L12_Douchi-Scallion_Mastery
   m_EditorClassIdentifier: 
   levelID: L12
-  levelName: L12 Douchi-Scallion Sauce — Savory black bean finished with ginger and scallion
+  levelName: "L12 Douchi-Scallion Sauce \u2014 Savory black bean finished with ginger
+    and scallion stem"
   cityName: Yangjiang
-  targetTasteName: Savory black bean finished with ginger and scallion
-  levelIntro: "This mastery recipe uses only familiar ingredients. Build a douchi-and-ginger base, keep scallion white fresh in its own batch, and let coarse salt finish the sauce. Your Experiment Log contains every rule you need."
+  targetTasteName: Savory black bean finished with ginger and scallion stem
+  levelIntro: This mastery recipe uses only familiar ingredients. Build a douchi-and-ginger
+    base, keep scallion stem fresh in its own batch, and let coarse salt finish the
+    sauce. Your Experiment Log contains every rule you need.
+  storyIntroPages: []
   maxIngredientCount: 4
   availableIngredients:
   - {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
@@ -54,6 +58,8 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 90232a38a4c71eb4396c578d8b4122a9, type: 2}
     - ingredients:
       - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+  requireFinalCombinedBatch: 0
+  allowAnyPairPreparation: 0
   targetForceLevel: 2
   targetSpeedLevel: 0
   passingScore: 90
@@ -94,7 +100,8 @@ MonoBehaviour:
     force: 10
     speed: 10
   unlockCluesOnComplete: []
-  fallbackHintText: No new hint for now. Every answer has appeared in an earlier recipe.
+  fallbackHintText: No new hint for now. Every answer has appeared in an earlier
+    recipe.
   progressiveHintRules:
   - ruleId: L12_Hint_Douchi_Ratio
     priority: 24
@@ -103,23 +110,27 @@ MonoBehaviour:
   - ruleId: L12_Hint_Ginger_Ratio
     priority: 23
     mechanic: 2
-    hintText: Use the Medium amount for ginger so it supports the douchi without replacing it.
+    hintText: Use the Medium amount for ginger so it supports the douchi without
+      replacing it.
   - ruleId: L12_Hint_Scallion_Ratio
     priority: 22
     mechanic: 2
-    hintText: Use the Small amount for scallion white so its freshness stays controlled.
+    hintText: Use the Small amount for scallion stem so its freshness stays controlled.
   - ruleId: L12_Hint_Salt_Ratio
     priority: 21
     mechanic: 2
-    hintText: Use the Very Small amount for coarse salt. This is the same supporting role learned earlier.
+    hintText: Use the Very Small amount for coarse salt. This is the same supporting
+      role learned earlier.
   - ruleId: L12_Hint_Base_Combination
     priority: 24
     mechanic: 3
-    hintText: "Yangjiang douchi and ginger belong in the same first batch; do not press New Batch between them."
+    hintText: Yangjiang douchi and ginger belong in the same first batch; do not
+      press New Batch between them.
   - ruleId: L12_Hint_Scallion_Combination
     priority: 23
     mechanic: 3
-    hintText: Keep scallion white in its own batch so the savory base does not bury its fresh aroma.
+    hintText: Keep scallion stem in its own batch so the savory base does not bury
+      its fresh aroma.
   - ruleId: L12_Hint_Salt_Combination
     priority: 22
     mechanic: 3
@@ -131,24 +142,27 @@ MonoBehaviour:
   - ruleId: L12_Hint_Scallion_Order
     priority: 23
     mechanic: 1
-    hintText: "After the savory base is complete, add scallion white in its own batch."
+    hintText: After the savory base is complete, add scallion stem in its own batch.
   - ruleId: L12_Hint_Salt_Order
     priority: 22
     mechanic: 1
-    hintText: "Finish with coarse salt, following the same final seasoning rule used before."
+    hintText: Finish with coarse salt, following the same final seasoning rule used
+      before.
   - ruleId: L12_Hint_Force
     priority: 19
     mechanic: 4
-    hintText: Use Heavy force for the douchi-and-ginger batch to release the fermented bean's savory depth.
+    hintText: Use Heavy force for the douchi-and-ginger batch to release the fermented
+      bean's savory depth.
   - ruleId: L12_Hint_Speed
     priority: 20
     mechanic: 5
-    hintText: Use Slow speed for the douchi-and-ginger batch so the savory base stays steady.
+    hintText: Use Slow speed for the douchi-and-ginger batch so the savory base stays
+      steady.
   ingredientProfiles:
   - profileTag: L12_YangjiangDouchi
     ingredient: {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 1
       enableRatio: 1
       enableCombination: 1
@@ -159,12 +173,13 @@ MonoBehaviour:
     targetRatioLevel: 5
     targetOrderIndex: 0
     targetCombinationKey: Ginger+YangjiangDouchi
-    levelTraitDescription: Yangjiang douchi begins the first batch, uses the Large amount, and needs Heavy force with Slow speed.
+    levelTraitDescription: Yangjiang douchi begins the first batch, uses the Large
+      amount, and needs Heavy force with Slow speed.
     responseHintRules: []
   - profileTag: L12_Ginger
     ingredient: {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 1
       enableRatio: 1
       enableCombination: 1
@@ -175,12 +190,13 @@ MonoBehaviour:
     targetRatioLevel: 4
     targetOrderIndex: 1
     targetCombinationKey: Ginger+YangjiangDouchi
-    levelTraitDescription: Ginger joins the douchi in the first batch, uses the Medium amount, and follows the same Heavy force and Slow speed.
+    levelTraitDescription: Ginger joins the douchi in the first batch, uses the Medium
+      amount, and follows the same Heavy force and Slow speed.
     responseHintRules: []
   - profileTag: L12_ScallionWhite
     ingredient: {fileID: 11400000, guid: 90232a38a4c71eb4396c578d8b4122a9, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 1
       enableRatio: 1
       enableCombination: 1
@@ -191,12 +207,13 @@ MonoBehaviour:
     targetRatioLevel: 2
     targetOrderIndex: 2
     targetCombinationKey: ScallionWhite
-    levelTraitDescription: Scallion white uses the Small amount in its own batch after the savory base.
+    levelTraitDescription: Scallion stem uses the Small amount in its own batch after
+      the savory base.
     responseHintRules: []
   - profileTag: L12_CoarseSalt
     ingredient: {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 1
       enableRatio: 1
       enableCombination: 1
@@ -207,8 +224,14 @@ MonoBehaviour:
     targetRatioLevel: 1
     targetOrderIndex: 3
     targetCombinationKey: CoarseSalt
-    levelTraitDescription: Coarse salt uses the Very Small amount in a separate final batch.
+    levelTraitDescription: Coarse salt uses the Very Small amount in a separate final
+      batch.
     responseHintRules: []
-  successFeedback: "Every earlier lesson comes together: douchi leads the first batch, ginger adds warmth, scallion white stays fresh, and the Very Small amount of coarse salt finishes the sauce. Heavy force and Slow speed preserve the savory base."
-  closeFeedback: "Very close. Recheck one remembered amount, batch, order step, or the Heavy force and Slow speed used for the first batch."
-  wrongFeedback: "One familiar rule is out of place. Review the Experiment Log, rebuild the douchi-and-ginger base, keep scallion white separate, and finish with coarse salt."
+  successFeedback: 'Every earlier lesson comes together: douchi leads the first batch,
+    ginger adds warmth, scallion stem stays fresh, and the Very Small amount of coarse
+    salt finishes the sauce. Heavy force and Slow speed preserve the savory base.'
+  closeFeedback: Very close. Recheck one remembered amount, batch, order step, or
+    the Heavy force and Slow speed used for the first batch.
+  wrongFeedback: One familiar rule is out of place. Review the Experiment Log, rebuild
+    the douchi-and-ginger base, keep scallion stem separate, and finish with coarse
+    salt.

@@ -13,10 +13,23 @@ MonoBehaviour:
   m_Name: L05_Clear_Spice_Split
   m_EditorClassIdentifier: 
   levelID: L05
-  levelName: L05 Three-Spice Blend — Pepper, ginger, and citrus peel
+  levelName: "L05 Three-Spice Blend \u2014 Pepper, ginger, and citrus peel"
   cityName: Shantou
   targetTasteName: Pepper, ginger, and citrus peel
-  levelIntro: "White pepper, dried tangerine peel, and ginger are all sharp. Prepare any two together, prepare the remaining spice alone, then combine the prepared powders."
+  levelIntro: White pepper, dried tangerine peel, and ginger are all sharp. Prepare
+    any two together, prepare the remaining spice alone, then combine the prepared
+    powders.
+  storyIntroPages:
+  - pageKey: Level05_Three_Spice_Start
+    imageResourcePath: Story/Level05_Three_Spice_Start
+    storyText: 'Three sharp aromas wait behind a blue curtain: white pepper, ginger,
+      and dried tangerine peel.
+
+      The old notes suggest that two once worked
+      side by side while the third kept its distance.
+
+      Grandma studies the
+      little bags and searches for the blend hidden between them.'
   maxIngredientCount: 3
   availableIngredients:
   - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
@@ -63,8 +76,10 @@ MonoBehaviour:
     orderWrong: Ingredient order does not match the target.
     ratioCorrect: Ratio pattern is correct.
     ratioAmbiguous: Ratio pattern is still ambiguous.
-    combinationCorrect: Any two spices were prepared together, the remaining spice was prepared alone, and the prepared powders joined in the final batch.
-    combinationWrong: Prepare any two spices together, prepare the remaining spice alone, then put the prepared powders into one final batch.
+    combinationCorrect: Any two spices were prepared together, the remaining spice
+      was prepared alone, and the prepared powders joined in the final batch.
+    combinationWrong: Prepare any two spices together, prepare the remaining spice
+      alone, then put the prepared powders into one final batch.
   hintSettings:
     hintPriority: 03000000
     maxOrderHints: 5
@@ -81,37 +96,43 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L05_WhitePepper_Flexible
     title: White Pepper - Batch Clue
-    content: White pepper can share one preparation with a single spice; the remaining spice should stay separate first.
+    content: White pepper can share one preparation with a single spice; the remaining
+      spice should stay separate first.
     relatedIngredients:
     - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
     relatedDimension: 3
   - clueId: L05_Peel_Flexible
     title: Dried Tangerine Peel - Batch Clue
-    content: Dried tangerine peel can share one preparation with a single spice; the remaining spice should stay separate first.
+    content: Dried tangerine peel can share one preparation with a single spice;
+      the remaining spice should stay separate first.
     relatedIngredients:
     - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
     relatedDimension: 3
   - clueId: L05_Ginger_Flexible
     title: Ginger - Batch Clue
-    content: Ginger can share one preparation with a single spice; the remaining spice should stay separate first.
+    content: Ginger can share one preparation with a single spice; the remaining
+      spice should stay separate first.
     relatedIngredients:
     - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
     relatedDimension: 3
-  fallbackHintText: No new hint for now. Keep what worked, and change only one thing on your next try.
+  fallbackHintText: No new hint for now. Keep what worked, and change only one thing
+    on your next try.
   progressiveHintRules:
   - ruleId: L05_Hint_NewBatch
     priority: 22
     mechanic: 3
-    hintText: Grind any two spices together first, press New Batch, then grind the remaining spice on its own.
+    hintText: Grind any two spices together first, press New Batch, then grind the
+      remaining spice on its own.
   - ruleId: L05_Hint_Final_Blend
     priority: 21
     mechanic: 3
-    hintText: After the paired powder and single powder are prepared, put all prepared powders back into the mortar together.
+    hintText: After the paired powder and single powder are prepared, put all prepared
+      powders back into the mortar together.
   ingredientProfiles:
   - profileTag: L05_WhitePepper
     ingredient: {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 0
       enableRatio: 0
       enableCombination: 1
@@ -127,7 +148,7 @@ MonoBehaviour:
   - profileTag: L05_DriedTangerinePeel
     ingredient: {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 0
       enableRatio: 0
       enableCombination: 1
@@ -143,7 +164,7 @@ MonoBehaviour:
   - profileTag: L05_Ginger
     ingredient: {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 0
       enableRatio: 0
       enableCombination: 1
@@ -156,6 +177,9 @@ MonoBehaviour:
     targetCombinationKey: Ginger
     levelTraitDescription: Ginger brings a fresh sharp warmth.
     responseHintRules: []
-  successFeedback: The spices stay clear: one paired powder, one single powder, then one final blend.
-  closeFeedback: Very close. Make sure any two spices become one powder, the remaining spice becomes another powder, then the prepared powders meet at the end.
-  wrongFeedback: The spice batches need a clearer structure: two together, one alone, then both powders together.
+  successFeedback: 'The spices stay clear: one paired powder, one single powder,
+    then one final blend.'
+  closeFeedback: Very close. Make sure any two spices become one powder, the remaining
+    spice becomes another powder, then the prepared powders meet at the end.
+  wrongFeedback: 'The spice batches need a clearer structure: two together, one alone,
+    then the prepared powders together.'

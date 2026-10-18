@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: L11_Ginger-Scallion_Finale
   m_EditorClassIdentifier: 
   levelID: L11
-  levelName: L11 Ginger-Scallion Sauce — Two gingers layered with fresh scallion
+  levelName: "L11 Ginger-Scallion Sauce \u2014 Two gingers layered with fresh scallion
+    stem"
   cityName: Zhanjiang
-  targetTasteName: Two gingers layered with fresh scallion
-  levelIntro: "This ginger-scallion sauce brings together lessons from earlier recipes. Sand ginger, ginger, and coarse salt should feel familiar, while scallion white adds a fresh new layer. Use your Experiment Log to decide the amounts, batch structure, order, force, and speed."
+  targetTasteName: Two gingers layered with fresh scallion stem
+  levelIntro: This ginger-scallion sauce brings together lessons from earlier recipes.
+    Sand ginger, ginger, and coarse salt should feel familiar, while scallion stem
+    adds a fresh new layer. Use your Experiment Log to decide the amounts, batch
+    structure, order, force, and speed.
+  storyIntroPages: []
   maxIngredientCount: 4
   availableIngredients:
   - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
@@ -54,6 +59,8 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 90232a38a4c71eb4396c578d8b4122a9, type: 2}
     - ingredients:
       - {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
+  requireFinalCombinedBatch: 0
+  allowAnyPairPreparation: 0
   targetForceLevel: 2
   targetSpeedLevel: 1
   passingScore: 90
@@ -96,47 +103,57 @@ MonoBehaviour:
   unlockCluesOnComplete:
   - clueId: L11_Ginger_Combination
     title: Ginger Combination Clue
-    content: Sand ginger and ginger can share one batch because their spicy aromas develop together.
+    content: Sand ginger and ginger can share one batch because their spicy aromas
+      develop together.
     relatedIngredients:
     - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
     - {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
     relatedDimension: 3
   - clueId: L11_Scallion_Order
-    title: Scallion White - Order Clue
-    content: "Scallion white follows the completed ginger batch in its own batch, before the final coarse salt."
+    title: Scallion Stem - Order Clue
+    content: Scallion stem follows the completed ginger batch in its own batch, before
+      the final coarse salt.
     relatedIngredients:
     - {fileID: 11400000, guid: 90232a38a4c71eb4396c578d8b4122a9, type: 2}
     relatedDimension: 1
-  fallbackHintText: No new hint for now. Keep what worked, and change only one thing on your next try.
+  fallbackHintText: No new hint for now. Keep what worked, and change only one thing
+    on your next try.
   progressiveHintRules:
   - ruleId: L11_Hint_SandGinger_Ratio
     priority: 22
     mechanic: 2
-    hintText: Use the Large amount for sand ginger so it remains the strongest ginger flavor.
+    hintText: Use the Large amount for sand ginger so it remains the strongest ginger
+      flavor.
   - ruleId: L11_Hint_CoarseSalt_Ratio
     priority: 21
     mechanic: 2
-    hintText: "Recall the earlier salt lesson: use the Very Small amount for coarse salt."
+    hintText: 'Recall the earlier salt lesson: use the Very Small amount for coarse
+      salt.'
   - ruleId: L11_Hint_Scallion_Ratio
     priority: 20
     mechanic: 2
-    hintText: Use the Small amount for scallion white so it stays fresh without overtaking the ginger.
+    hintText: Use the Small amount for scallion stem so it stays fresh without overtaking
+      the ginger.
   - ruleId: L11_Hint_Ginger_Combination
     priority: 22
     mechanic: 3
-    hintText: "Sand ginger and ginger belong in the same first batch; do not press New Batch between them."
+    hintText: Sand ginger and ginger belong in the same first batch; do not press
+      New Batch between them.
   - ruleId: L11_Hint_Scallion_Combination
     priority: 21
     mechanic: 3
-    hintText: Keep scallion white in its own batch so its fresh aroma is not buried by the ginger.
+    hintText: Keep scallion stem in its own batch so its fresh aroma is not buried
+      by the ginger.
   - ruleId: L11_Hint_CoarseSalt_Combination
     priority: 20
     mechanic: 3
-    hintText: Keep coarse salt in a separate final batch rather than adding it to the ginger group.
+    hintText: Keep coarse salt in a separate final batch rather than adding it to
+      the ginger group.
   - ruleId: L11_Hint_CoarseSalt_Order
     priority: 22
     mechanic: 1
-    hintText: Finish with coarse salt. Its Very Small amount should support the completed sauce.
+    hintText: Finish with coarse salt. Its Very Small amount should support the completed
+      sauce.
   - ruleId: L11_Hint_Ginger_Order
     priority: 21
     mechanic: 1
@@ -144,12 +161,13 @@ MonoBehaviour:
   - ruleId: L11_Hint_Scallion_Order
     priority: 20
     mechanic: 1
-    hintText: After the ginger batch, add scallion white in its own batch. Coarse salt comes last.
+    hintText: After the ginger batch, add scallion stem in its own batch. Coarse
+      salt comes last.
   ingredientProfiles:
   - profileTag: L11_SandGinger
     ingredient: {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 1
       enableRatio: 1
       enableCombination: 1
@@ -160,12 +178,13 @@ MonoBehaviour:
     targetRatioLevel: 5
     targetOrderIndex: 0
     targetCombinationKey: Ginger+SandGinger
-    levelTraitDescription: Sand ginger begins the recipe, uses the Large amount, and shares the first batch with ginger under Heavy force.
+    levelTraitDescription: Sand ginger begins the recipe, uses the Large amount,
+      and shares the first batch with ginger under Heavy force.
     responseHintRules: []
   - profileTag: L11_Ginger
     ingredient: {fileID: 11400000, guid: 8bbe0982030adbe43bad85013e3c9400, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 1
       enableRatio: 1
       enableCombination: 1
@@ -176,12 +195,13 @@ MonoBehaviour:
     targetRatioLevel: 4
     targetOrderIndex: 1
     targetCombinationKey: Ginger+SandGinger
-    levelTraitDescription: Ginger joins sand ginger in the first batch, uses the Medium amount, and needs Medium speed.
+    levelTraitDescription: Ginger joins sand ginger in the first batch, uses the
+      Medium amount, and needs Medium speed.
     responseHintRules: []
   - profileTag: L11_CoarseSalt
     ingredient: {fileID: 11400000, guid: 6da95fec9bca88f46877042c3df87ba0, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 1
       enableRatio: 1
       enableCombination: 1
@@ -192,12 +212,13 @@ MonoBehaviour:
     targetRatioLevel: 1
     targetOrderIndex: 3
     targetCombinationKey: CoarseSalt
-    levelTraitDescription: Coarse salt uses the Very Small amount in a separate final batch.
+    levelTraitDescription: Coarse salt uses the Very Small amount in a separate final
+      batch.
     responseHintRules: []
   - profileTag: L11_ScallionWhite
     ingredient: {fileID: 11400000, guid: 90232a38a4c71eb4396c578d8b4122a9, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 1
       enableRatio: 1
       enableCombination: 1
@@ -208,8 +229,14 @@ MonoBehaviour:
     targetRatioLevel: 2
     targetOrderIndex: 2
     targetCombinationKey: ScallionWhite
-    levelTraitDescription: Scallion white uses the Small amount in its own batch after the ginger so its fresh aroma remains clear.
+    levelTraitDescription: Scallion stem uses the Small amount in its own batch after
+      the ginger so its fresh aroma remains clear.
     responseHintRules: []
-  successFeedback: "The sauce comes together cleanly: the ginger pair forms a bold base, scallion white stays fresh in its own batch, and the Very Small amount of coarse salt finishes the balance. Heavy force and Medium speed bring the ginger batch together."
-  closeFeedback: "Very close. Recheck one ratio, batch, or order step, or the Heavy force and Medium speed used for the ginger batch."
-  wrongFeedback: "One earlier lesson is out of place. Review the ginger batch, keep scallion white separate, and finish with the Very Small amount of coarse salt."
+  successFeedback: 'The sauce comes together cleanly: the ginger pair forms a bold
+    base, scallion stem stays fresh in its own batch, and the Very Small amount of
+    coarse salt finishes the balance. Heavy force and Medium speed bring the ginger
+    batch together.'
+  closeFeedback: Very close. Recheck one ratio, batch, or order step, or the Heavy
+    force and Medium speed used for the ginger batch.
+  wrongFeedback: One earlier lesson is out of place. Review the ginger batch, keep
+    scallion stem separate, and finish with the Very Small amount of coarse salt.

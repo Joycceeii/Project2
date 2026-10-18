@@ -13,10 +13,14 @@ MonoBehaviour:
   m_Name: L07_Log_Practice_Revisited_tea_grinding
   m_EditorClassIdentifier: 
   levelID: L07_Log_Practice
-  levelName: Experiment Log Practice — Revisited tea grinding
+  levelName: "Experiment Log Practice \u2014 Revisited tea grinding"
   cityName: Chaozhou
   targetTasteName: Revisited tea grinding
-  levelIntro: "This short practice level is here to teach the Experiment Log. The tea leaves have been studied before, but this panel will not repeat the settings. Open the log first, compare earlier notes, then choose the force and speed from memory."
+  levelIntro: This short practice level is here to teach the Experiment Log. The
+    tea leaves have been studied before, but this panel will not repeat the settings.
+    Open the log first, compare earlier notes, then choose the force and speed from
+    memory.
+  storyIntroPages: []
   maxIngredientCount: 1
   availableIngredients:
   - {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
@@ -34,6 +38,8 @@ MonoBehaviour:
     groups:
     - ingredients:
       - {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
+  requireFinalCombinedBatch: 0
+  allowAnyPairPreparation: 0
   targetForceLevel: 1
   targetSpeedLevel: 0
   passingScore: 100
@@ -61,7 +67,7 @@ MonoBehaviour:
     combinationCorrect: Combination pattern is correct.
     combinationWrong: Combination pattern does not match the target.
   hintSettings:
-    hintPriority: 0400000005000000
+    hintPriority: 0500000004000000
     maxOrderHints: 5
     maxRatioHints: 5
     maxCombinationHints: 3
@@ -80,25 +86,29 @@ MonoBehaviour:
     relatedIngredients:
     - {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
     relatedDimension: 4
-  fallbackHintText: This level is a log-reading check. Open the Experiment Log and compare earlier saved clues before changing another control.
+  fallbackHintText: This level is a log-reading check. Open the Experiment Log and
+    compare earlier saved clues before changing another control.
   progressiveHintRules:
   - ruleId: L07_Log_Practice_Hint_OpenLog
     priority: 22
     mechanic: 5
-    hintText: Open the Experiment Log and choose Tea Leaves. Do not rely on the Traits panel for the speed answer.
+    hintText: Open the Experiment Log and choose Tea Leaves. Do not rely on the Traits
+      panel for the speed answer.
   - ruleId: L07_Log_Practice_Hint_Speed
     priority: 21
     mechanic: 5
-    hintText: The needed speed is in a saved Tea Leaf clue. Reopen the Experiment Log and copy that old lesson.
+    hintText: The needed speed is in a saved Tea Leaf clue. Reopen the Experiment
+      Log and copy that old lesson.
   - ruleId: L07_Log_Practice_Hint_Force
     priority: 20
     mechanic: 4
-    hintText: The force setting comes from an earlier basic grinding clue. Compare your saved notes instead of guessing here.
+    hintText: The force setting comes from an earlier basic grinding clue. Compare
+      your saved notes instead of guessing here.
   ingredientProfiles:
   - profileTag: L07_Log_Practice_TeaLeaf
     ingredient: {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}
     checkedMechanics:
-      enableIngredientSelection: 1
+      enableIngredientSelection: 0
       enableIngredientOrder: 0
       enableRatio: 0
       enableCombination: 0
@@ -109,8 +119,12 @@ MonoBehaviour:
     targetRatioLevel: 0
     targetOrderIndex: -1
     targetCombinationKey: 
-    levelTraitDescription: Tea leaves already have saved clues in the Experiment Log.
+    levelTraitDescription: This panel will not reveal the force setting; compare
+      earlier saved grinding clues.
     responseHintRules: []
-  successFeedback: "The tea returns cleanly: Slow speed protects its sweetness, and Medium force keeps the grind steady."
-  closeFeedback: Very close. Do not guess from this panel; reopen the Experiment Log and compare the earlier Tea Leaf and force clues.
-  wrongFeedback: The answer is already saved in the Experiment Log. Review the earlier clues, then set both force and speed from those notes.
+  successFeedback: 'The tea returns cleanly: Slow speed protects its sweetness, and
+    Medium force keeps the grind steady.'
+  closeFeedback: Very close. Do not guess from this panel; reopen the Experiment
+    Log and compare the earlier Tea Leaf and force clues.
+  wrongFeedback: The answer is already saved in the Experiment Log. Review the earlier
+    clues, then set both force and speed from those notes.

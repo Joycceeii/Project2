@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: RedBean
   m_EditorClassIdentifier: 
   ingredientID: RedBean
-  ingredientNameCN:
+  ingredientNameCN: 
   ingredientNameEN: Red Bean
   aromaType: Sweet bean
   initialDescription: Thick and warm. It gives the dessert its base.
   ingredientColor: {r: 0.55, g: 0.12, b: 0.11, a: 1}
   icon: {fileID: 0}
-  prefab: {fileID: 1052279163172246164, guid: ae485dcb5f6f4be1b3be46a204a86706, type: 3}
+  prefab: {fileID: 4563944257802639620, guid: efa8a3678d5624348bd785c1f12bed80, type: 3}
   groundPrefab: {fileID: 1052279163172246164, guid: ff091043393c47fb963817d1c970e550, type: 3}
   defaultRatioValue: 2

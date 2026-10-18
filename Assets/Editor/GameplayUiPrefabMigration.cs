@@ -159,86 +159,160 @@ namespace TheTasteReviver.Editor
 
         private static MortarReactionPanelView BuildMortarReaction(Transform canvas, UIManager manager)
         {
-            GameObject root = Find(canvas, "Mortar Reaction") ?? CreateRectObject(canvas, "Mortar Reaction");
+            GameObject root = Find(canvas, "Mortar Reaction");
+            bool createdRoot = root == null;
+            root ??= CreateRectObject(canvas, "Mortar Reaction");
             RectTransform rect = root.GetComponent<RectTransform>();
-            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0.5f, 0.5f);
-            rect.sizeDelta = manager.mortarReactionSize;
-            rect.anchoredPosition = manager.mortarReactionPosition;
-
-            Image background = GetOrAdd<Image>(root);
-            Texture2D texture = Resources.Load<Texture2D>("UI/MortarReactionBackground");
-            if (texture != null)
+            if (createdRoot)
             {
-                background.sprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100f);
-                background.type = Image.Type.Sliced;
+                rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0.5f, 0.5f);
+                rect.sizeDelta = manager.mortarReactionSize;
+                rect.anchoredPosition = manager.mortarReactionPosition;
+            }
+
+            Image background = root.GetComponent<Image>();
+            bool createdBackground = background == null;
+            background ??= root.AddComponent<Image>();
+            if (createdRoot || createdBackground)
+            {
+                Texture2D texture = Resources.Load<Texture2D>("UI/MortarReactionBackground");
+                if (texture != null)
+                {
+                    background.sprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100f);
+                    background.type = Image.Type.Sliced;
+                }
             }
             background.raycastTarget = false;
 
             CanvasGroup group = GetOrAdd<CanvasGroup>(root);
             group.blocksRaycasts = false;
             group.interactable = false;
-            TMP_Text label = root.GetComponentInChildren<TMP_Text>(true) ?? CreateText(root.transform, "Mortar Reaction Text", 23);
-            Stretch(label.rectTransform, new Vector2(94f, 60f), new Vector2(-94f, -60f));
-            label.alignment = TextAlignmentOptions.Center;
-            label.enableAutoSizing = true;
-            label.fontSizeMin = 16f;
-            label.fontSizeMax = 23f;
-            label.richText = true;
+            TMP_Text label = root.GetComponentInChildren<TMP_Text>(true);
+            bool createdLabel = label == null;
+            label ??= CreateText(root.transform, "Mortar Reaction Text", 23);
+            if (createdLabel)
+            {
+                Stretch(label.rectTransform, new Vector2(94f, 60f), new Vector2(-94f, -60f));
+                label.alignment = TextAlignmentOptions.Center;
+                label.enableAutoSizing = true;
+                label.fontSizeMin = 16f;
+                label.fontSizeMax = 23f;
+                label.richText = true;
+            }
             label.raycastTarget = false;
 
             MortarReactionPanelView view = GetOrAdd<MortarReactionPanelView>(root);
             view.Configure(label, group, manager.mortarReactionHoldSeconds);
-            root.SetActive(false);
+            if (createdRoot)
+            {
+                root.SetActive(false);
+            }
             return SaveAndConnect(root, "MortarReactionPanel.prefab").GetComponent<MortarReactionPanelView>();
         }
 
         private static StoryIntroPanelView BuildStoryIntro(Transform canvas, UIManager manager)
         {
-            GameObject root = Find(canvas, "Story Intro Panel") ?? CreateStretchRoot(canvas, "Story Intro Panel");
-            Image backdrop = GetOrAdd<Image>(root);
-            backdrop.color = manager.storyIntroBackdropColor;
+            GameObject root = Find(canvas, "Story Intro Panel");
+            bool createdRoot = root == null;
+            root ??= CreateStretchRoot(canvas, "Story Intro Panel");
+            Image backdrop = root.GetComponent<Image>();
+            bool createdBackdrop = backdrop == null;
+            backdrop ??= root.AddComponent<Image>();
+            if (createdRoot || createdBackdrop)
+            {
+                backdrop.color = manager.storyIntroBackdropColor;
+            }
             CanvasGroup group = GetOrAdd<CanvasGroup>(root);
             group.blocksRaycasts = true;
             group.interactable = true;
 
-            GameObject frame = Find(root.transform, "Story Image Frame") ?? CreateRectObject(root.transform, "Story Image Frame");
-            SetCentered(frame.GetComponent<RectTransform>(), manager.storyIntroFrameSize, manager.storyIntroFramePosition);
-            PanelBackgroundStyle.Apply(GetOrAdd<Image>(frame), PanelBackgroundKind.PaleCream, 0.98f);
+            GameObject frame = Find(root.transform, "Story Image Frame");
+            bool createdFrame = frame == null;
+            frame ??= CreateRectObject(root.transform, "Story Image Frame");
+            if (createdFrame)
+            {
+                SetCentered(frame.GetComponent<RectTransform>(), manager.storyIntroFrameSize, manager.storyIntroFramePosition);
+            }
+            Image frameImage = frame.GetComponent<Image>();
+            bool createdFrameImage = frameImage == null;
+            frameImage ??= frame.AddComponent<Image>();
+            if (createdFrame || createdFrameImage)
+            {
+                PanelBackgroundStyle.Apply(frameImage, PanelBackgroundKind.PaleCream, 0.98f);
+            }
 
-            GameObject imageObject = Find(frame.transform, "Story Image") ?? CreateRectObject(frame.transform, "Story Image");
-            SetCentered(imageObject.GetComponent<RectTransform>(), manager.storyIntroImageSize, manager.storyIntroImagePosition);
-            Image image = GetOrAdd<Image>(imageObject);
-            image.preserveAspect = true;
+            GameObject imageObject = Find(frame.transform, "Story Image");
+            bool createdImageObject = imageObject == null;
+            imageObject ??= CreateRectObject(frame.transform, "Story Image");
+            if (createdImageObject)
+            {
+                SetCentered(imageObject.GetComponent<RectTransform>(), manager.storyIntroImageSize, manager.storyIntroImagePosition);
+            }
+            Image image = imageObject.GetComponent<Image>();
+            bool createdImage = image == null;
+            image ??= imageObject.AddComponent<Image>();
+            if (createdImageObject || createdImage)
+            {
+                image.preserveAspect = true;
+            }
             image.raycastTarget = false;
 
-            TMP_Text body = FindText(frame.transform, "Story Intro Text") ?? CreateText(frame.transform, "Story Intro Text", 22);
-            SetCentered(body.rectTransform, manager.storyIntroTextSize, manager.storyIntroTextPosition);
-            body.alignment = TextAlignmentOptions.Top;
-            body.lineSpacing = 7f;
-            body.overflowMode = TextOverflowModes.Ellipsis;
+            TMP_Text body = FindText(frame.transform, "Story Intro Text");
+            bool createdBody = body == null;
+            body ??= CreateText(frame.transform, "Story Intro Text", 22);
+            if (createdBody)
+            {
+                SetCentered(body.rectTransform, manager.storyIntroTextSize, manager.storyIntroTextPosition);
+                body.alignment = TextAlignmentOptions.Top;
+                body.lineSpacing = 7f;
+                body.overflowMode = TextOverflowModes.Ellipsis;
+            }
 
-            GameObject buttonObject = Find(root.transform, "Story Continue Button") ?? CreateRectObject(root.transform, "Story Continue Button");
-            SetCentered(buttonObject.GetComponent<RectTransform>(), manager.storyIntroButtonSize, manager.storyIntroButtonPosition);
-            Image buttonImage = GetOrAdd<Image>(buttonObject);
-            PanelBackgroundStyle.Apply(buttonImage, PanelBackgroundKind.OchreYellow, 0.98f);
+            GameObject buttonObject = Find(root.transform, "Story Continue Button");
+            bool createdButtonObject = buttonObject == null;
+            buttonObject ??= CreateRectObject(root.transform, "Story Continue Button");
+            if (createdButtonObject)
+            {
+                SetCentered(buttonObject.GetComponent<RectTransform>(), manager.storyIntroButtonSize, manager.storyIntroButtonPosition);
+            }
+            Image buttonImage = buttonObject.GetComponent<Image>();
+            bool createdButtonImage = buttonImage == null;
+            buttonImage ??= buttonObject.AddComponent<Image>();
+            if (createdButtonObject || createdButtonImage)
+            {
+                PanelBackgroundStyle.Apply(buttonImage, PanelBackgroundKind.OchreYellow, 0.98f);
+            }
             Button button = GetOrAdd<Button>(buttonObject);
             button.targetGraphic = buttonImage;
-            TMP_Text buttonLabel = buttonObject.GetComponentInChildren<TMP_Text>(true) ?? CreateText(buttonObject.transform, "Story Continue Button Text", 20);
-            Stretch(buttonLabel.rectTransform, new Vector2(34f, 10f), new Vector2(-34f, -12f));
-            buttonLabel.alignment = TextAlignmentOptions.Center;
-            buttonLabel.fontStyle = FontStyles.Bold;
-            buttonLabel.text = "Continue";
+            TMP_Text buttonLabel = buttonObject.GetComponentInChildren<TMP_Text>(true);
+            bool createdButtonLabel = buttonLabel == null;
+            buttonLabel ??= CreateText(buttonObject.transform, "Story Continue Button Text", 20);
+            if (createdButtonLabel)
+            {
+                Stretch(buttonLabel.rectTransform, new Vector2(34f, 10f), new Vector2(-34f, -12f));
+                buttonLabel.alignment = TextAlignmentOptions.Center;
+                buttonLabel.fontStyle = FontStyles.Bold;
+                buttonLabel.text = "Continue";
+            }
 
             StoryIntroPanelView view = GetOrAdd<StoryIntroPanelView>(root);
             view.Configure(backdrop, image, body, button, buttonLabel);
-            root.SetActive(false);
+            if (createdRoot)
+            {
+                root.SetActive(false);
+            }
             return SaveAndConnect(root, "StoryIntroPanel.prefab").GetComponent<StoryIntroPanelView>();
         }
 
         private static GameObject SaveAndConnect(GameObject root, string fileName)
         {
             string path = PrefabFolder + "/" + fileName;
-            return PrefabUtility.SaveAsPrefabAssetAndConnect(root, path, InteractionMode.AutomatedAction);
+            PrefabUtility.SaveAsPrefabAssetAndConnect(root, path, InteractionMode.AutomatedAction);
+
+            // SaveAsPrefabAssetAndConnect returns the persistent prefab asset root.
+            // UIManager must reference the connected scene instance instead; otherwise
+            // runtime presentation code attempts to modify asset Transforms directly.
+            return root;
         }
 
         private static GameObject CreateStretchRoot(Transform parent, string name)

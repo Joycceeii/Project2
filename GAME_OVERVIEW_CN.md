@@ -225,7 +225,7 @@
 | 9 | L08 胡椒花生调味 | 汕头 | 为不同食材分别使用不同加工参数 | 分批、力度、速度、时间 |
 | 10 | L09 粽子 | 肇庆 | 综合比例、顺序、同批馅料与最后包裹 | 比例、批次、顺序、时间 |
 | 11 | L10 阳江豆豉调味 | 阳江 | 建立豆豉主味，并复用姜、陈皮、盐规则 | 比例、顺序、力度、速度、时间 |
-| 12 | L11 姜葱酱 | 湛江 | 综合双姜、葱白与最后盐层 | 比例、批次、顺序、力度、速度、时间 |
+| 12 | L11 姜葱酱 | 湛江 | 综合双姜、葱茎与最后盐层 | 比例、批次、顺序、力度、速度、时间 |
 | 13 | L12 豆豉姜葱酱 | 阳江 | 不引入新食材或机制的最终记忆考验 | 全部核心维度、时间 |
 
 ## 十一、各关卡详细说明与当前正确规则
@@ -343,26 +343,26 @@
 - **时间**：28—45 秒。
 - **知识产出**：豆豉应当先建立咸香底味；姜提供温暖，陈皮提亮，粗盐最后支持；重力度和慢速度保护豆豉的深度。
 
-### L11 — Ginger-Scallion Sauce / 双姜葱白酱
+### L11 — Ginger-Scallion Sauce / 双姜葱茎酱
 
 - **城市**：湛江
-- **食材**：Sand Ginger、Ginger、Scallion White、Coarse Salt
-- **目标**：综合沙姜与粗盐旧知识，并引入葱白作为需要保持清新的新层次。
-- **正确顺序**：Sand Ginger → Ginger → Scallion White → Coarse Salt。
-- **正确比例**：Sand Ginger = Large；Ginger = Medium；Scallion White = Small；Coarse Salt = Very Small。
-- **正确批次**：沙姜与姜同属第一批；葱白单独一批；粗盐单独作为最后一批。
+- **食材**：Sand Ginger、Ginger、Scallion Stem、Coarse Salt
+- **目标**：综合沙姜与粗盐旧知识，并引入葱茎作为需要保持清新的新层次。
+- **正确顺序**：Sand Ginger → Ginger → Scallion Stem → Coarse Salt。
+- **正确比例**：Sand Ginger = Large；Ginger = Medium；Scallion Stem = Small；Coarse Salt = Very Small。
+- **正确批次**：沙姜与姜同属第一批；葱茎单独一批；粗盐单独作为最后一批。
 - **正确处理**：姜批次 Heavy Force + Medium Speed。
 - **时间**：30—50 秒。
-- **知识产出**：双姜可以共同发展辛香；葱白需要独立保持清新；粗盐延续“极少量且最后加入”的规则。
+- **知识产出**：双姜可以共同发展辛香；葱茎需要独立保持清新；粗盐延续“极少量且最后加入”的规则。
 
 ### L12 — Douchi-Scallion Sauce / 豆豉姜葱记忆考验
 
 - **城市**：阳江
-- **食材**：Yangjiang Douchi、Ginger、Scallion White、Coarse Salt
+- **食材**：Yangjiang Douchi、Ginger、Scallion Stem、Coarse Salt
 - **定位**：最终记忆掌握关，不加入新食材、新模型或新操作。
-- **正确顺序**：Yangjiang Douchi → Ginger → Scallion White → Coarse Salt。
-- **正确比例**：Yangjiang Douchi = Large；Ginger = Medium；Scallion White = Small；Coarse Salt = Very Small。
-- **正确批次**：豆豉与姜同属第一批；葱白单独一批；粗盐单独作为最后一批。
+- **正确顺序**：Yangjiang Douchi → Ginger → Scallion Stem → Coarse Salt。
+- **正确比例**：Yangjiang Douchi = Large；Ginger = Medium；Scallion Stem = Small；Coarse Salt = Very Small。
+- **正确批次**：豆豉与姜同属第一批；葱茎单独一批；粗盐单独作为最后一批。
 - **正确处理**：豆豉姜第一批 Heavy Force + Slow Speed。
 - **时间**：32—50 秒。
 - **设计意义**：答案全部来自 L07、L10 与 L11 已经建立的规律，要求玩家主动检索和组合实验日志中的旧知识。
@@ -385,7 +385,7 @@
 | Lotus Leaf | 荷叶 | 清新轻盈，是最后的包裹材料，不属于研磨馅料。 |
 | Yangjiang Douchi | 阳江豆豉 | 发酵咸香主味，应较早建立，并以重力度、慢速度保护深度。 |
 | Ginger | 姜 | 新鲜辛暖，可单独处理，也能与一种香料组成基础批次。 |
-| Scallion White | 葱白 | 清新轻盈，适合在靠后位置单独形成一层。 |
+| Scallion Stem | 葱茎 | 清新轻盈，适合在靠后位置单独形成一层。 |
 
 ## 十三、知识链与难度成长
 
@@ -406,7 +406,7 @@ L06 黑芝麻与糯米 ───────────────> L09       
 L07 沙姜、陈皮、粗盐 ─> L10 / L11 / L12       │
 L08 分食材加工参数 ──────────────> 后期综合判断 │
 L10 豆豉底味 ───────────────────> L12          │
-L11 葱白与双姜结构 ──────────────> L12 <────────┘
+L11 葱茎与双姜结构 ──────────────> L12 <────────┘
 ```
 
 前半段每关主要引入一个新维度，后半段不再不断添加新按钮，而是要求玩家把已经学会的规则组合起来。L12 因此是“记忆掌握”而不是“新机制展示”。
