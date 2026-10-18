@@ -1,5 +1,32 @@
 # Project Continuity and Agent Change Log
 
+## 2026-10-18 - Imported Ingredient Material Overrides Saved
+
+- Reapplied each imported Before Grinding model's authored ingredient material to every child Renderer and saved all 12 migrated ingredient prefabs.
+- Kept the five ingredients without imported Before Grinding FBX visuals on their existing authored fallback visuals.
+- Removed the one-shot `IngredientVisualPrefabMigration` editor utility after the prefab assets were saved; the remaining editor tools are unchanged.
+
+## 2026-10-18 - Sequential Multi-Dimension Hint Flow
+
+- Hint priority now locks onto the first unresolved enabled dimension instead of falling through to later dimensions when that dimension's progressive hints are exhausted.
+- Players must resolve the current dimension through evaluation before hints advance to the next dimension; missing-ingredient guidance and the existing combination-before-process safeguard remain unchanged.
+- Added clear hold messages for order, ratio, batch structure, speed, and force so the next action remains understandable without revealing every later answer at once.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-18 - Ingredient Traits Cross-Level Alignment
+
+- Audited Ingredient Traits against the L01-L12 level mechanics, target values, combination groups, order, and progressive hints.
+- Fixed Traits so ingredient-specific Force/Speed targets are shown only on the profiles that actually evaluate those dimensions; whole-level Force/Speed targets remain visible when no ingredient-specific target exists.
+- This removes misleading default Medium clues from unrelated ingredients in L07, L11, and L12 while preserving the correct Heavy/Slow whole-level guidance in L10.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-18 - Imported Before-Grinding Ingredient Models
+
+- Replaced primitive `Before Grinding` visuals with matching raw `lod_basic_pbr.fbx` model instances for 12 ingredients, while preserving the authored Rice visual.
+- Kept the four ingredients without matching FBX assets (Chili, Coarse Salt, Lotus Leaf, and Scallion Stem) on their existing placeholder visuals.
+- Moved the old primitive visuals under inactive `Legacy Primitive Visual` children for safe rollback; imported models are normalized to the previous visual footprint.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
 ## 2026-10-18 - Safe Mixed-Powder Visual Fallback
 
 - Fixed the L09 Wrapped Rice Layers crash that occurred when all ingredients, including Lotus Leaf, were incorrectly ground together and evaluated.

@@ -2568,18 +2568,26 @@ namespace TheTasteReviver
                 clues.Add(BuildCombinationTraitClue(level, profile));
             }
 
-            if (level.enabledMechanics.enableForce)
+            bool hasIngredientForceTargets = level.GetProfilesForMechanic(MechanicType.Force).Count > 0;
+            if (level.enabledMechanics.enableForce
+                && (!hasIngredientForceTargets || profile.IsEnabled(MechanicType.Force)))
             {
                 clues.Add(IsExperimentLogPracticeLevel(level)
                     ? "The force answer must be recovered from an earlier Experiment Log clue."
-                    : BuildForceTraitClue(profile.targetForceLevel));
+                    : BuildForceTraitClue(hasIngredientForceTargets
+                        ? profile.targetForceLevel
+                        : level.targetForceLevel));
             }
 
-            if (level.enabledMechanics.enableSpeed)
+            bool hasIngredientSpeedTargets = level.GetProfilesForMechanic(MechanicType.Speed).Count > 0;
+            if (level.enabledMechanics.enableSpeed
+                && (!hasIngredientSpeedTargets || profile.IsEnabled(MechanicType.Speed)))
             {
                 clues.Add(IsExperimentLogPracticeLevel(level)
                     ? "The speed answer must be recovered from the saved Tea Leaf clue."
-                    : BuildSpeedTraitClue(profile.targetSpeedLevel));
+                    : BuildSpeedTraitClue(hasIngredientSpeedTargets
+                        ? profile.targetSpeedLevel
+                        : level.targetSpeedLevel));
             }
 
             return clues.Where(clue => !string.IsNullOrWhiteSpace(clue)).ToList();

@@ -51,20 +51,22 @@ namespace TheTasteReviver
                     continue;
                 }
 
-                if (!CanGiveMore(level, mechanic))
+                if (CanGiveMore(level, mechanic))
                 {
-                    continue;
+                    string hint = BuildHint(level, attempt, mechanic, givenHints);
+                    if (!string.IsNullOrWhiteSpace(hint) && !givenHints.Contains(hint))
+                    {
+                        Increment(mechanic);
+                        givenHints.Add(hint);
+                        return new HintResult(mechanic, hint, hintCounts[mechanic], givenHints);
+                    }
                 }
 
-                string hint = BuildHint(level, attempt, mechanic, givenHints);
-                if (string.IsNullOrWhiteSpace(hint) || givenHints.Contains(hint))
-                {
-                    continue;
-                }
-
-                Increment(mechanic);
-                givenHints.Add(hint);
-                return new HintResult(mechanic, hint, hintCounts[mechanic], givenHints);
+                // Keep the player on the first unresolved dimension even when its
+                // progressive hint list has been exhausted. Later dimensions become
+                // available only after this one evaluates correctly.
+                string holdHint = BuildDimensionHoldHint(mechanic);
+                return new HintResult(mechanic, holdHint, hintCounts.TryGetValue(mechanic, out int count) ? count : 0, givenHints);
             }
 
             DimensionEvaluation missedDimension = evaluation.dimensions.FirstOrDefault(dimension => dimension != null && !dimension.isCorrect && IsEnabled(level, dimension.mechanic));
@@ -86,6 +88,25 @@ namespace TheTasteReviver
             }
 
             return new HintResult(MechanicType.IngredientSelection, fallback, givenHints.Count, givenHints);
+        }
+
+        private static string BuildDimensionHoldHint(MechanicType mechanic)
+        {
+            switch (mechanic)
+            {
+                case MechanicType.IngredientOrder:
+                    return "Ingredient order still needs attention. Fix the order before moving to the next dimension.";
+                case MechanicType.Ratio:
+                    return "Ingredient amounts still need attention. Fix the ratios before moving to the next dimension.";
+                case MechanicType.Combination:
+                    return "Batch structure still needs attention. Fix the batch structure before moving to the next dimension.";
+                case MechanicType.Speed:
+                    return "Grinding speed still needs attention. Fix the speed before moving to the next dimension.";
+                case MechanicType.Force:
+                    return "Grinding force still needs attention. Fix the force before moving to the next dimension.";
+                default:
+                    return "This recipe dimension still needs attention before moving to the next one.";
+            }
         }
 
         public void ResetHints()
