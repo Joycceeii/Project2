@@ -1,5 +1,12 @@
 # Project Continuity and Agent Change Log
 
+## 2026-10-17 - Gameplay UI Prefab Architecture
+
+- Began replacing the monolithic gameplay `UIManager` with prefab-owned view components. `UIManager` now exposes only seven high-level view references plus gameplay coordination dependencies in its normal Inspector surface.
+- Added dedicated components for the gameplay HUD, ratio selection, ingredient traits, ingredient tooltip, opening title, mortar reaction, and story intro. Each component owns its child references and local presentation behavior.
+- Added `Tools > The Taste Reviver > Migrate Gameplay UI To Prefabs`, which groups the existing scene UI without changing its authored layout, creates independent prefabs under `Assets/Prefabs/UI`, reconnects the gameplay scene, and keeps a legacy fallback for programmatically generated test canvases.
+- The runtime and Editor C# projects compile with zero warnings and zero errors. The prefab migration still needs to be run from an unlocked Unity Editor session; headless execution in the sandbox was blocked by Unity Licensing/Package entitlement IPC before the migration method could run.
+
 ## 2026-10-03 - Experiment Log Mid-Recipe State Preservation
 
 - Changed the Experiment Log to open additively over the gameplay scene instead of replacing and later reloading it.

@@ -31,27 +31,52 @@ namespace TheTasteReviver
 
     public class UIManager : MonoBehaviour
     {
+        [Header("Prefab Views")]
+        [SerializeField] private GameplayHudView gameplayHud;
+        [SerializeField] private RatioSelectionPanelView ratioSelectionView;
+        [SerializeField] private IngredientTraitsPanelView ingredientTraitsView;
+        [SerializeField] private IngredientTooltipView ingredientTooltipView;
+        [SerializeField] private OpeningLevelTitlePanelView openingLevelTitleView;
+        [SerializeField] private MortarReactionPanelView mortarReactionView;
+        [SerializeField] private StoryIntroPanelView storyIntroView;
+
+        [Header("Gameplay Coordination")]
         public RecipeAttemptManager attemptManager;
         public RecipeEvaluator evaluator;
         public HintManager hintManager;
         public ExperimentLogManager logManager;
         public LevelManager levelManager;
 
-        public TMP_Text levelLabel;
+        [HideInInspector] public TMP_Text levelLabel;
+        [HideInInspector]
         public TMP_Text openingLevelTitleLabel;
+        [HideInInspector]
         public TMP_Text currentOrderLabel;
+        [HideInInspector]
         public TMP_Text currentRatioLabel;
+        [HideInInspector]
         public TMP_Text currentSpeedLabel;
+        [HideInInspector]
         public TMP_Text hintLabel;
+        [HideInInspector]
         public TMP_Text ingredientTraitLabel;
+        [HideInInspector]
         public Button ingredientTraitToggleButton;
+        [HideInInspector]
         public GameObject ratioSelectionPanel;
+        [HideInInspector]
         public TMP_Text ratioSelectionTitle;
+        [HideInInspector]
         public Button[] ratioSelectionButtons = new Button[4];
+        [HideInInspector]
         public Button experimentLogButton;
+        [HideInInspector]
         public Button evaluateButton;
+        [HideInInspector]
         public Button resetAttemptButton;
+        [HideInInspector]
         public Button newBatchButton;
+        [HideInInspector]
         public Button nextLevelButton;
         public string experimentLogSceneName = "ExperimentLog";
         public bool autoUpdateLevelLabel;
@@ -60,63 +85,63 @@ namespace TheTasteReviver
         public string resetRequiredHint = "Press Reset Attempt before starting a new test.";
         public float resetPromptDelaySeconds = 3f;
 
-        [Header("Layout Control")]
+        [HideInInspector, Header("Legacy Layout Migration")]
         [Tooltip("Off lets you move panels directly in the Scene view without NormalizeHudLayout overwriting their RectTransforms.")]
         public bool driveHudLayoutFromInspector = false;
 
-        [Header("HUD Layout")]
+        [HideInInspector, Header("HUD Layout")]
         public HudPanelLayout levelPanelLayout = new HudPanelLayout(430f, 82f, 288f, -42f, 23);
-        public HudPanelLayout currentOrderPanelLayout = new HudPanelLayout(430f, 118f, 56f, -166f, 23);
-        public HudPanelLayout currentRatioPanelLayout = new HudPanelLayout(430f, 138f, 56f, -296f, 23);
-        public HudPanelLayout currentSpeedPanelLayout = new HudPanelLayout(390f, 58f, 56f, -438f, 20);
-        public HudPanelLayout hintPanelLayout = new HudPanelLayout(430f, 258f, -56f, -132f, 20);
-        public HudPanelLayout experimentLogButtonLayout = new HudPanelLayout(210f, 54f, 56f, -42f);
-        public HudPanelLayout evaluateButtonLayout = new HudPanelLayout(200f, 56f, -56f, 174f);
-        public HudPanelLayout resetAttemptButtonLayout = new HudPanelLayout(200f, 56f, -56f, 112f);
-        public HudPanelLayout newBatchButtonLayout = new HudPanelLayout(200f, 56f, -56f, 50f);
-        public HudPanelLayout nextLevelButtonLayout = new HudPanelLayout(200f, 56f, 56f, 86f);
-        public HudPanelLayout ingredientTraitToggleButtonLayout = new HudPanelLayout(178f, 54f, -56f, -264f);
-        public HudPanelLayout forceSliderLayout = new HudPanelLayout(390f, 52f, 56f, 220f);
-        public HudPanelLayout forceLabelPanelLayout = new HudPanelLayout(390f, 52f, 56f, 282f, 15);
-        public HudPanelLayout ratioSelectionPanelLayout = new HudPanelLayout(420f, 260f, 0f, 0f);
+        [HideInInspector] public HudPanelLayout currentOrderPanelLayout = new HudPanelLayout(430f, 118f, 56f, -166f, 23);
+        [HideInInspector] public HudPanelLayout currentRatioPanelLayout = new HudPanelLayout(430f, 138f, 56f, -296f, 23);
+        [HideInInspector] public HudPanelLayout currentSpeedPanelLayout = new HudPanelLayout(390f, 58f, 56f, -438f, 20);
+        [HideInInspector] public HudPanelLayout hintPanelLayout = new HudPanelLayout(430f, 258f, -56f, -132f, 20);
+        [HideInInspector] public HudPanelLayout experimentLogButtonLayout = new HudPanelLayout(210f, 54f, 56f, -42f);
+        [HideInInspector] public HudPanelLayout evaluateButtonLayout = new HudPanelLayout(200f, 56f, -56f, 174f);
+        [HideInInspector] public HudPanelLayout resetAttemptButtonLayout = new HudPanelLayout(200f, 56f, -56f, 112f);
+        [HideInInspector] public HudPanelLayout newBatchButtonLayout = new HudPanelLayout(200f, 56f, -56f, 50f);
+        [HideInInspector] public HudPanelLayout nextLevelButtonLayout = new HudPanelLayout(200f, 56f, 56f, 86f);
+        [HideInInspector] public HudPanelLayout ingredientTraitToggleButtonLayout = new HudPanelLayout(178f, 54f, -56f, -264f);
+        [HideInInspector] public HudPanelLayout forceSliderLayout = new HudPanelLayout(390f, 52f, 56f, 220f);
+        [HideInInspector] public HudPanelLayout forceLabelPanelLayout = new HudPanelLayout(390f, 52f, 56f, 282f, 15);
+        [HideInInspector] public HudPanelLayout ratioSelectionPanelLayout = new HudPanelLayout(420f, 260f, 0f, 0f);
 
-        [Header("Traits Overlay")]
+        [HideInInspector, Header("Traits Overlay")]
         [Range(0f, 1f)]
         public float ingredientTraitBackdropAlpha = 0.34f;
 
-        [Header("HUD Text Insets")]
+        [HideInInspector, Header("HUD Text Insets")]
         public Vector2 hudTextInsetMin = new Vector2(90f, 46f);
-        public Vector2 hudTextInsetMax = new Vector2(-90f, -66f);
-        public Vector2 buttonTextInsetMin = new Vector2(46f, 12f);
-        public Vector2 buttonTextInsetMax = new Vector2(-46f, -14f);
-        public Vector2 forceLabelTextInsetMin = new Vector2(58f, 13f);
-        public Vector2 forceLabelTextInsetMax = new Vector2(-58f, -13f);
+        [HideInInspector] public Vector2 hudTextInsetMax = new Vector2(-90f, -66f);
+        [HideInInspector] public Vector2 buttonTextInsetMin = new Vector2(46f, 12f);
+        [HideInInspector] public Vector2 buttonTextInsetMax = new Vector2(-46f, -14f);
+        [HideInInspector] public Vector2 forceLabelTextInsetMin = new Vector2(58f, 13f);
+        [HideInInspector] public Vector2 forceLabelTextInsetMax = new Vector2(-58f, -13f);
 
-        [Header("Opening Level Title")]
+        [HideInInspector, Header("Opening Level Title")]
         public bool showOpeningLevelTitle = true;
         public float openingLevelTitleSeconds = 2.5f;
 
-        [Header("Story Intro")]
+        [HideInInspector, Header("Story Intro")]
         public bool showStoryIntroPanels = true;
-        public Color storyIntroBackdropColor = new Color(0.93f, 0.88f, 0.78f, 1f);
-        public Vector2 storyIntroFrameSize = new Vector2(920f, 620f);
-        public Vector2 storyIntroFramePosition = new Vector2(0f, 82f);
-        public Vector2 storyIntroImageSize = new Vector2(1040f, 650f);
-        public Vector2 storyIntroImagePosition = new Vector2(0f, 42f);
-        public Vector2 storyIntroTextSize = new Vector2(820f, 122f);
-        public Vector2 storyIntroTextPosition = new Vector2(0f, -248f);
-        public Vector2 storyIntroButtonSize = new Vector2(220f, 58f);
-        public Vector2 storyIntroButtonPosition = new Vector2(0f, -328f);
+        [HideInInspector] public Color storyIntroBackdropColor = new Color(0.93f, 0.88f, 0.78f, 1f);
+        [HideInInspector] public Vector2 storyIntroFrameSize = new Vector2(920f, 620f);
+        [HideInInspector] public Vector2 storyIntroFramePosition = new Vector2(0f, 82f);
+        [HideInInspector] public Vector2 storyIntroImageSize = new Vector2(1040f, 650f);
+        [HideInInspector] public Vector2 storyIntroImagePosition = new Vector2(0f, 42f);
+        [HideInInspector] public Vector2 storyIntroTextSize = new Vector2(820f, 122f);
+        [HideInInspector] public Vector2 storyIntroTextPosition = new Vector2(0f, -248f);
+        [HideInInspector] public Vector2 storyIntroButtonSize = new Vector2(220f, 58f);
+        [HideInInspector] public Vector2 storyIntroButtonPosition = new Vector2(0f, -328f);
 
-        [Header("Ingredient Hover Tooltip")]
+        [HideInInspector, Header("Ingredient Hover Tooltip")]
         public GameObject ingredientTooltipPanel;
-        public TMP_Text ingredientTooltipLabel;
-        public Vector2 ingredientTooltipCursorOffset = new Vector2(24f, -22f);
+        [HideInInspector] public TMP_Text ingredientTooltipLabel;
+        [HideInInspector] public Vector2 ingredientTooltipCursorOffset = new Vector2(24f, -22f);
 
-        [Header("Mortar Reaction")]
+        [HideInInspector, Header("Mortar Reaction")]
         public Vector2 mortarReactionSize = new Vector2(620f, 207f);
-        public Vector2 mortarReactionPosition = new Vector2(0f, 126f);
-        public float mortarReactionHoldSeconds = 2f;
+        [HideInInspector] public Vector2 mortarReactionPosition = new Vector2(0f, 126f);
+        [HideInInspector] public float mortarReactionHoldSeconds = 2f;
         public float mortarReactionCooldownSeconds = 3f;
         public float mortarReactionMinimumStateSeconds = 0.85f;
 
@@ -181,25 +206,100 @@ namespace TheTasteReviver
             }
         }
 
-        public bool IsRatioSelectionOpen => ratioSelectionPanel != null && ratioSelectionPanel.activeSelf;
+        public bool IsRatioSelectionOpen => ratioSelectionView != null
+            ? ratioSelectionView.IsOpen
+            : ratioSelectionPanel != null && ratioSelectionPanel.activeSelf;
 
         private void Awake()
         {
-            EnsureRatioSelectionPanel();
-            EnsureExperimentLogButton();
-            EnsureActionButtons();
-            EnsureIngredientTraitPanel();
-            EnsureOpeningLevelTitlePanel();
-            EnsureIngredientTooltip();
-            EnsureMortarReactionPanel();
-            EnsureStoryIntroPanel();
-            NormalizeHudLayout();
-            PanelBackgroundStyle.ApplyToNamedPanels(transform);
-            ApplyDistinctBackgroundStyles();
+            ResolvePrefabViews();
+            gameplayHud?.Bind(this);
+            ingredientTooltipView?.Hide();
+            mortarReactionView?.Hide();
+            storyIntroView?.Hide();
+
+            // Keep the old scene-compatible path during migration. New scenes and
+            // the migrated gameplay scene use prefab views and skip runtime UI construction.
+            if (gameplayHud == null)
+            {
+                EnsureRatioSelectionPanel();
+                EnsureExperimentLogButton();
+                EnsureActionButtons();
+                EnsureIngredientTraitPanel();
+                EnsureOpeningLevelTitlePanel();
+                EnsureIngredientTooltip();
+                EnsureMortarReactionPanel();
+                EnsureStoryIntroPanel();
+                NormalizeHudLayout();
+                PanelBackgroundStyle.ApplyToNamedPanels(transform);
+                ApplyDistinctBackgroundStyles();
+            }
         }
+
+        private void ResolvePrefabViews()
+        {
+            gameplayHud ??= GetComponentInChildren<GameplayHudView>(true);
+            ratioSelectionView ??= GetComponentInChildren<RatioSelectionPanelView>(true);
+            ingredientTraitsView ??= GetComponentInChildren<IngredientTraitsPanelView>(true);
+            ingredientTooltipView ??= GetComponentInChildren<IngredientTooltipView>(true);
+            openingLevelTitleView ??= GetComponentInChildren<OpeningLevelTitlePanelView>(true);
+            mortarReactionView ??= GetComponentInChildren<MortarReactionPanelView>(true);
+            storyIntroView ??= GetComponentInChildren<StoryIntroPanelView>(true);
+
+            if (gameplayHud != null)
+            {
+                levelLabel = gameplayHud.LevelLabel;
+                currentOrderLabel = gameplayHud.CurrentOrderLabel;
+                currentRatioLabel = gameplayHud.CurrentRatioLabel;
+                currentSpeedLabel = gameplayHud.CurrentSpeedLabel;
+                hintLabel = gameplayHud.HintLabel;
+                experimentLogButton = gameplayHud.ExperimentLogButton;
+                evaluateButton = gameplayHud.EvaluateButton;
+                resetAttemptButton = gameplayHud.ResetAttemptButton;
+                newBatchButton = gameplayHud.NewBatchButton;
+                nextLevelButton = gameplayHud.NextLevelButton;
+            }
+
+            if (ingredientTraitsView != null)
+            {
+                ingredientTraitLabel = ingredientTraitsView.TraitLabel;
+                ingredientTraitToggleButton = ingredientTraitsView.ToggleButton;
+            }
+        }
+
+#if UNITY_EDITOR
+        public void ConfigurePrefabViews(
+            GameplayHudView hud,
+            RatioSelectionPanelView ratio,
+            IngredientTraitsPanelView traits,
+            IngredientTooltipView tooltip,
+            OpeningLevelTitlePanelView openingTitle,
+            MortarReactionPanelView reaction,
+            StoryIntroPanelView story)
+        {
+            gameplayHud = hud;
+            ratioSelectionView = ratio;
+            ingredientTraitsView = traits;
+            ingredientTooltipView = tooltip;
+            openingLevelTitleView = openingTitle;
+            mortarReactionView = reaction;
+            storyIntroView = story;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+#endif
 
         private void LateUpdate()
         {
+            if (ingredientTooltipView != null)
+            {
+                if (ingredientTraitsView != null && ingredientTraitsView.IsExpanded)
+                {
+                    ingredientTooltipView.Hide();
+                }
+
+                return;
+            }
+
             if (ingredientTraitsExpanded)
             {
                 HideIngredientTooltip(null);
@@ -214,6 +314,18 @@ namespace TheTasteReviver
 
         public void ShowIngredientTooltip(IReadOnlyList<IngredientData> ingredients, UnityEngine.Object owner)
         {
+            if (ingredientTooltipView != null)
+            {
+                if (ingredientTraitsView != null && ingredientTraitsView.IsExpanded)
+                {
+                    ingredientTooltipView.Hide();
+                    return;
+                }
+
+                ingredientTooltipView.Show(ingredients, owner);
+                return;
+            }
+
             if (ingredientTraitsExpanded
                 || (IsAlive(ingredientTraitPanel) && ingredientTraitPanel.activeInHierarchy))
             {
@@ -246,6 +358,12 @@ namespace TheTasteReviver
 
         public void HideIngredientTooltip(UnityEngine.Object owner)
         {
+            if (ingredientTooltipView != null)
+            {
+                ingredientTooltipView.Hide(owner);
+                return;
+            }
+
             if (owner != null && ingredientTooltipOwner != null && owner != ingredientTooltipOwner)
             {
                 return;
@@ -478,14 +596,20 @@ namespace TheTasteReviver
                 return;
             }
 
+            lastMortarReactionKey = key;
+            lastMortarReactionTime = Time.unscaledTime;
+            if (mortarReactionView != null)
+            {
+                mortarReactionView.Show("<size=16><color=#D9A441><b>" + heading + "</b></color></size>", body);
+                return;
+            }
+
             EnsureMortarReactionPanel();
             if (!IsAlive(mortarReactionPanel) || !IsAlive(mortarReactionLabel))
             {
                 return;
             }
 
-            lastMortarReactionKey = key;
-            lastMortarReactionTime = Time.unscaledTime;
             mortarReactionLabel.text = "<size=16><color=#D9A441><b>" + heading + "</b></color></size>\n" + body;
             mortarReactionPanel.SetActive(true);
             mortarReactionPanel.transform.SetAsLastSibling();
@@ -534,6 +658,14 @@ namespace TheTasteReviver
 
         private void HideMortarReaction()
         {
+            if (mortarReactionView != null)
+            {
+                mortarReactionView.Hide();
+                lastMortarReactionKey = string.Empty;
+                lastMortarReactionTime = -999f;
+                return;
+            }
+
             if (mortarReactionCoroutine != null)
             {
                 StopCoroutine(mortarReactionCoroutine);
@@ -1204,6 +1336,14 @@ namespace TheTasteReviver
 
         public void ShowIngredientTraits(RecipeLevelData level)
         {
+            if (ingredientTraitsView != null)
+            {
+                string traitText = BuildIngredientTraitText(level);
+                bool visible = level != null && !string.IsNullOrWhiteSpace(traitText);
+                ingredientTraitsView.SetContent(traitText, visible, visible && ShouldAutoExpandIngredientTraits(level));
+                return;
+            }
+
             EnsureIngredientTraitPanel();
             if (!IsAlive(ingredientTraitLabel))
             {
@@ -1227,11 +1367,24 @@ namespace TheTasteReviver
 
         public void ExpandIngredientTraits()
         {
+            if (ingredientTraitsView != null)
+            {
+                HideIngredientTooltip(null);
+                ingredientTraitsView.Expand();
+                return;
+            }
+
             SetIngredientTraitsExpanded(true);
         }
 
         public void CollapseIngredientTraits()
         {
+            if (ingredientTraitsView != null)
+            {
+                ingredientTraitsView.Collapse();
+                return;
+            }
+
             SetIngredientTraitsExpanded(false);
         }
 
@@ -1306,6 +1459,12 @@ namespace TheTasteReviver
 
         public void ShowRatioSelection(IngredientData ingredient, IReadOnlyList<RatioLevel> options, Action<RatioLevel> onSelected)
         {
+            if (ratioSelectionView != null)
+            {
+                ratioSelectionView.Show(ingredient, options, onSelected);
+                return;
+            }
+
             EnsureRatioSelectionPanel();
             if (options == null || options.Count == 0)
             {
@@ -1881,7 +2040,20 @@ namespace TheTasteReviver
                 return;
             }
 
-            EnsureOpeningLevelTitlePanel();
+            if (openingLevelTitleView != null && level != null && !IsTutorialCompleteTitleLevel(level))
+            {
+                openingLevelTitleView.Show(this, BuildFullLevelTitle(level), openingLevelTitleSeconds);
+                return;
+            }
+
+            if (openingLevelTitleView != null)
+            {
+                openingLevelTitleLabel = openingLevelTitleView.Label;
+            }
+            else
+            {
+                EnsureOpeningLevelTitlePanel();
+            }
             if (!IsAlive(openingLevelTitleLabel) || level == null)
             {
                 return;
@@ -1897,6 +2069,11 @@ namespace TheTasteReviver
 
         private void HideOpeningLevelTitle()
         {
+            if (openingLevelTitleView != null)
+            {
+                openingLevelTitleView.Hide(this);
+            }
+
             if (openingLevelTitleCoroutine != null)
             {
                 StopCoroutine(openingLevelTitleCoroutine);
@@ -2577,6 +2754,12 @@ namespace TheTasteReviver
 
         private void CloseRatioSelection()
         {
+            if (ratioSelectionView != null)
+            {
+                ratioSelectionView.Hide();
+                return;
+            }
+
             pendingRatioSelection = null;
             if (ratioSelectionPanel != null)
             {
@@ -3107,7 +3290,7 @@ namespace TheTasteReviver
 
         private void ShowStoryIntroPage(int index)
         {
-            if (!IsAlive(storyIntroPanel) || index < 0 || index >= pendingStoryIntroPages.Count)
+            if ((storyIntroView == null && !IsAlive(storyIntroPanel)) || index < 0 || index >= pendingStoryIntroPages.Count)
             {
                 CloseStoryIntro();
                 return;
@@ -3119,6 +3302,17 @@ namespace TheTasteReviver
             if (texture == null)
             {
                 AdvanceStoryIntro();
+                return;
+            }
+
+            if (storyIntroView != null)
+            {
+                storyIntroView.Show(
+                    texture,
+                    page.storyText,
+                    index >= pendingStoryIntroPages.Count - 1 ? "Begin" : "Continue",
+                    storyIntroBackdropColor,
+                    AdvanceStoryIntro);
                 return;
             }
 
@@ -3179,6 +3373,11 @@ namespace TheTasteReviver
         {
             pendingStoryIntroPages.Clear();
             currentStoryIntroIndex = 0;
+            if (storyIntroView != null)
+            {
+                storyIntroView.Hide();
+            }
+
             if (IsAlive(storyIntroPanel))
             {
                 storyIntroPanel.SetActive(false);
