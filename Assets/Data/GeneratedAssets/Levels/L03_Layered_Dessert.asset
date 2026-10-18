@@ -64,6 +64,7 @@ MonoBehaviour:
   allowAnyPairPreparation: 0
   targetForceLevel: 1
   targetSpeedLevel: 1
+  powderingSeconds: 1.5
   passingScore: 100
   enabledMechanics:
     enableIngredientSelection: 0
@@ -190,5 +191,5 @@ MonoBehaviour:
     responseHintRules: []
   successFeedback: 'The dessert has a clear order: red bean first, citrus next, sweetness
     last.'
-  closeFeedback: Very close. Check the order or grinding time.
+  closeFeedback: Very close. Check the ingredient order.
   wrongFeedback: The dessert tastes out of order. Check when each ingredient is added.

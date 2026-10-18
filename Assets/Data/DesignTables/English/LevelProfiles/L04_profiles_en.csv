@@ -1,5 +1,3 @@
 LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,ForceValue,MatchSpeed,SpeedValue,MatchRatio,RatioValue,MatchCombination,CombinationKey,HintText,TraitDescription
 L04,Peanut,L04_Peanut,Combination,Peanut,,,,,,,,,,,,"Peanut brings a warm roasted flavor."
 L04,BlackSesame,L04_BlackSesame,Combination,BlackSesame,,,,,,,,,,,,"Black sesame brings a darker roasted flavor."
-L04,Peanut,L04_Peanut,GrindDuration,15-24,,,,,,,,,,,,"It is clearer when it is prepared in its own batch first."
-L04,BlackSesame,L04_BlackSesame,GrindDuration,15-24,,,,,,,,,,,,"It keeps its identity better when prepared separately before combining."

@@ -10,25 +10,6 @@ using UnityEngine.UI;
 
 namespace TheTasteReviver
 {
-    [Serializable]
-    public class HudPanelLayout
-    {
-        public Vector2 size;
-        public Vector2 position;
-        public int fontSize;
-
-        public HudPanelLayout()
-        {
-        }
-
-        public HudPanelLayout(float width, float height, float x, float y, int fontSize = 22)
-        {
-            size = new Vector2(width, height);
-            position = new Vector2(x, y);
-            this.fontSize = fontSize;
-        }
-    }
-
     public class UIManager : MonoBehaviour
     {
         [Header("Prefab Views")]
@@ -85,37 +66,9 @@ namespace TheTasteReviver
         public string resetRequiredHint = "Press Reset Attempt before starting a new test.";
         public float resetPromptDelaySeconds = 3f;
 
-        [HideInInspector, Header("Legacy Layout Migration")]
-        [Tooltip("Off lets you move panels directly in the Scene view without NormalizeHudLayout overwriting their RectTransforms.")]
-        public bool driveHudLayoutFromInspector = false;
-
-        [HideInInspector, Header("HUD Layout")]
-        public HudPanelLayout levelPanelLayout = new HudPanelLayout(430f, 82f, 288f, -42f, 23);
-        [HideInInspector] public HudPanelLayout currentOrderPanelLayout = new HudPanelLayout(430f, 118f, 56f, -166f, 23);
-        [HideInInspector] public HudPanelLayout currentRatioPanelLayout = new HudPanelLayout(430f, 138f, 56f, -296f, 23);
-        [HideInInspector] public HudPanelLayout currentSpeedPanelLayout = new HudPanelLayout(390f, 58f, 56f, -438f, 20);
-        [HideInInspector] public HudPanelLayout hintPanelLayout = new HudPanelLayout(430f, 258f, -56f, -132f, 20);
-        [HideInInspector] public HudPanelLayout experimentLogButtonLayout = new HudPanelLayout(210f, 54f, 56f, -42f);
-        [HideInInspector] public HudPanelLayout evaluateButtonLayout = new HudPanelLayout(200f, 56f, -56f, 174f);
-        [HideInInspector] public HudPanelLayout resetAttemptButtonLayout = new HudPanelLayout(200f, 56f, -56f, 112f);
-        [HideInInspector] public HudPanelLayout newBatchButtonLayout = new HudPanelLayout(200f, 56f, -56f, 50f);
-        [HideInInspector] public HudPanelLayout nextLevelButtonLayout = new HudPanelLayout(200f, 56f, 56f, 86f);
-        [HideInInspector] public HudPanelLayout ingredientTraitToggleButtonLayout = new HudPanelLayout(178f, 54f, -56f, -264f);
-        [HideInInspector] public HudPanelLayout forceSliderLayout = new HudPanelLayout(390f, 52f, 56f, 220f);
-        [HideInInspector] public HudPanelLayout forceLabelPanelLayout = new HudPanelLayout(390f, 52f, 56f, 282f, 15);
-        [HideInInspector] public HudPanelLayout ratioSelectionPanelLayout = new HudPanelLayout(420f, 260f, 0f, 0f);
-
         [HideInInspector, Header("Traits Overlay")]
         [Range(0f, 1f)]
         public float ingredientTraitBackdropAlpha = 0.34f;
-
-        [HideInInspector, Header("HUD Text Insets")]
-        public Vector2 hudTextInsetMin = new Vector2(90f, 46f);
-        [HideInInspector] public Vector2 hudTextInsetMax = new Vector2(-90f, -66f);
-        [HideInInspector] public Vector2 buttonTextInsetMin = new Vector2(46f, 12f);
-        [HideInInspector] public Vector2 buttonTextInsetMax = new Vector2(-46f, -14f);
-        [HideInInspector] public Vector2 forceLabelTextInsetMin = new Vector2(58f, 13f);
-        [HideInInspector] public Vector2 forceLabelTextInsetMax = new Vector2(-58f, -13f);
 
         [HideInInspector, Header("Opening Level Title")]
         public bool showOpeningLevelTitle = true;
@@ -148,7 +101,6 @@ namespace TheTasteReviver
         private Action<RatioLevel> pendingRatioSelection;
         private Coroutine resetPromptCoroutine;
         private Coroutine openingLevelTitleCoroutine;
-        private Coroutine experimentLogPulseCoroutine;
         private Coroutine mortarReactionCoroutine;
         private float lastEvaluationTime = -999f;
         private GameObject ingredientTraitPanel;
@@ -186,9 +138,6 @@ namespace TheTasteReviver
         private static readonly Color OchreYellowTextColor = new Color(0.2f, 0.105f, 0.025f, 1f);
         private static readonly Color PowderBlueTextColor = new Color(0.075f, 0.12f, 0.16f, 1f);
         private static readonly Color PaleYellowTextColor = new Color(0.24f, 0.16f, 0.055f, 1f);
-#if UNITY_EDITOR
-        private bool layoutUpdateQueued;
-#endif
         private static readonly HashSet<string> autoShownIngredientTraitLevels = new HashSet<string>();
         private static readonly HashSet<string> shownStoryIntroPageKeys = new HashSet<string>();
 
@@ -218,9 +167,6 @@ namespace TheTasteReviver
                 EnsureIngredientTooltip();
                 EnsureMortarReactionPanel();
                 EnsureStoryIntroPanel();
-                NormalizeHudLayout();
-                PanelBackgroundStyle.ApplyToNamedPanels(transform);
-                ApplyDistinctBackgroundStyles();
             }
         }
 
@@ -791,39 +737,6 @@ namespace TheTasteReviver
             return "<b>" + displayName + "</b>";
         }
 
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            if (Application.isPlaying
-                || UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode
-                || layoutUpdateQueued
-                || UsesPrefabViews)
-            {
-                return;
-            }
-
-            layoutUpdateQueued = true;
-            UnityEditor.EditorApplication.delayCall += () =>
-            {
-                layoutUpdateQueued = false;
-                if (this == null)
-                {
-                    return;
-                }
-
-                if (driveHudLayoutFromInspector)
-                {
-                    NormalizeHudLayout();
-                }
-                else
-                {
-                    PanelBackgroundStyle.ApplyToNamedPanels(transform);
-                    ApplyDistinctBackgroundStyles();
-                }
-            };
-        }
-#endif
-
         public void EvaluateCurrentAttempt()
         {
             EvaluateCurrentAttempt(false);
@@ -845,6 +758,13 @@ namespace TheTasteReviver
             if (attemptManager.HasEvaluated)
             {
                 ShowHint(resetRequiredHint);
+                return;
+            }
+
+            string incompleteRecipeHint = attemptManager.BuildIncompleteEvaluationHint();
+            if (!string.IsNullOrWhiteSpace(incompleteRecipeHint))
+            {
+                ShowHint(incompleteRecipeHint);
                 return;
             }
 
@@ -1159,6 +1079,11 @@ namespace TheTasteReviver
                 return false;
             }
 
+            if (!attemptManager.CurrentBatchHasIngredients)
+            {
+                return attemptManager.GrindingBatches != null && attemptManager.GrindingBatches.Count > 0;
+            }
+
             bool reachedMinimumGrindTime = attemptManager.GetCurrentBatchGrindDuration() >= GetEvaluationGateSeconds(level);
             if (!reachedMinimumGrindTime)
             {
@@ -1201,8 +1126,7 @@ namespace TheTasteReviver
                 : 0f;
             if (currentSeconds < requiredSeconds)
             {
-                return "Keep grinding before checking. Time: "
-                    + currentSeconds.ToString("0.0") + "s / " + requiredSeconds.ToString("0.0") + "s.";
+                return "Keep grinding until the ingredients become powder.";
             }
 
             if (level != null
@@ -1218,7 +1142,7 @@ namespace TheTasteReviver
                     + heldSeconds.ToString("0.0") + "s / " + requiredHoldSeconds.ToString("0.0") + "s.";
             }
 
-            return "Keep grinding before checking. Time: " + currentSeconds.ToString("0.0") + "s / " + requiredSeconds.ToString("0.0") + "s.";
+            return "The ingredients are ready. Check the remaining recipe settings.";
         }
 
         private string BuildLevelStartGuidance(RecipeLevelData level, bool returnedFromExperimentLog = false)
@@ -1616,15 +1540,15 @@ namespace TheTasteReviver
 
         private void SetExperimentLogAttention(string label)
         {
-            if (!IsAlive(experimentLogButton))
+            if (gameplayHud != null)
             {
+                gameplayHud.SetExperimentLogAttention(label, ExperimentLogDefaultLabel);
                 return;
             }
 
-            if (experimentLogPulseCoroutine != null)
+            if (!IsAlive(experimentLogButton))
             {
-                StopCoroutine(experimentLogPulseCoroutine);
-                experimentLogPulseCoroutine = null;
+                return;
             }
 
             RectTransform buttonRect = experimentLogButton.transform as RectTransform;
@@ -1643,39 +1567,6 @@ namespace TheTasteReviver
                 image.color = Color.Lerp(image.color, new Color(0.98f, 0.78f, 0.34f, 1f), 0.42f);
             }
 
-            if (needsAttention && Application.isPlaying && isActiveAndEnabled)
-            {
-                experimentLogPulseCoroutine = StartCoroutine(PulseExperimentLogButton());
-            }
-        }
-
-        private IEnumerator PulseExperimentLogButton()
-        {
-            RectTransform buttonRect = IsAlive(experimentLogButton)
-                ? experimentLogButton.transform as RectTransform
-                : null;
-            if (!IsAlive(buttonRect))
-            {
-                experimentLogPulseCoroutine = null;
-                yield break;
-            }
-
-            const float duration = 1.4f;
-            float elapsed = 0f;
-            while (elapsed < duration && IsAlive(buttonRect))
-            {
-                elapsed += Time.unscaledDeltaTime;
-                float pulse = Mathf.Sin(elapsed / duration * Mathf.PI * 4f);
-                buttonRect.localScale = Vector3.one * (1f + Mathf.Max(0f, pulse) * 0.045f);
-                yield return null;
-            }
-
-            if (IsAlive(buttonRect))
-            {
-                buttonRect.localScale = Vector3.one;
-            }
-
-            experimentLogPulseCoroutine = null;
         }
 
         public void EnsureActionButtons()
@@ -1695,261 +1586,6 @@ namespace TheTasteReviver
                 newBatchButton.gameObject.SetActive(false);
             }
             nextLevelButton = BindButton(nextLevelButton, "Next Level", NextLevel);
-        }
-
-        public void NormalizeHudLayout()
-        {
-            if (UsesPrefabViews)
-            {
-                return;
-            }
-
-            if (driveHudLayoutFromInspector)
-            {
-                ConfigureTextPanel(levelLabel, levelPanelLayout, new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.MiddleCenter);
-                ConfigureTextPanel(currentOrderLabel, currentOrderPanelLayout, new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft);
-                ConfigureTextPanel(currentRatioLabel, currentRatioPanelLayout, new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.UpperLeft);
-                ConfigureTextPanel(currentSpeedLabel, currentSpeedPanelLayout, new Vector2(0f, 1f), new Vector2(0f, 1f), TextAnchor.MiddleLeft);
-                ConfigureTextPanel(hintLabel, hintPanelLayout, new Vector2(1f, 1f), new Vector2(1f, 1f), TextAnchor.UpperLeft);
-
-                ConfigureButton(experimentLogButton, experimentLogButtonLayout, new Vector2(0f, 1f), new Vector2(0f, 1f));
-                ConfigureButton(evaluateButton, evaluateButtonLayout, new Vector2(1f, 0f), new Vector2(1f, 0f));
-                ConfigureButton(resetAttemptButton, resetAttemptButtonLayout, new Vector2(1f, 0f), new Vector2(1f, 0f));
-                ConfigureButton(newBatchButton, newBatchButtonLayout, new Vector2(1f, 0f), new Vector2(1f, 0f));
-                ConfigureButton(nextLevelButton, nextLevelButtonLayout, new Vector2(0f, 0f), new Vector2(0f, 0f));
-                ConfigureButton(ingredientTraitToggleButton, ingredientTraitToggleButtonLayout, new Vector2(1f, 1f), new Vector2(1f, 1f));
-
-                ConfigureNamedRect("Force Slider", forceSliderLayout, new Vector2(0f, 0f), new Vector2(0f, 0f));
-                ConfigureNamedRect("Force Label Panel", forceLabelPanelLayout, new Vector2(0f, 0f), new Vector2(0f, 0f));
-                ConfigureNamedRect("Ratio Selection Panel", ratioSelectionPanelLayout, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
-                ConfigureManagedHudTextFrames();
-                ConfigureForceLabelPanel(true);
-            }
-            else
-            {
-                StyleExistingHud();
-                ConfigureForceLabelPanel(false);
-            }
-
-            ConfigureLevelLabelText();
-            ConfigureHintText();
-            ApplyDistinctBackgroundStyles();
-        }
-
-        private void ConfigureHintText()
-        {
-            if (!IsAlive(hintLabel))
-            {
-                return;
-            }
-
-            hintLabel.alignment = TextAlignmentOptions.TopLeft;
-            hintLabel.fontStyle = FontStyles.Normal;
-            hintLabel.textWrappingMode = TextWrappingModes.Normal;
-            hintLabel.overflowMode = TextOverflowModes.Truncate;
-
-            RectTransform rect = hintLabel.GetComponent<RectTransform>();
-            if (IsAlive(rect))
-            {
-                rect.anchorMin = Vector2.zero;
-                rect.anchorMax = Vector2.one;
-                rect.pivot = new Vector2(0.5f, 0.5f);
-                rect.anchoredPosition = Vector2.zero;
-                rect.offsetMin = new Vector2(52f, 30f);
-                rect.offsetMax = new Vector2(-44f, -40f);
-                rect.localRotation = Quaternion.identity;
-                rect.localScale = Vector3.one;
-            }
-        }
-
-        private static void ConfigureTextPanel(TMP_Text label, HudPanelLayout layout, Vector2 anchor, Vector2 pivot, TextAnchor alignment)
-        {
-            ConfigureTextPanel(label, GetLayoutSize(layout), GetLayoutPosition(layout), anchor, pivot, alignment, GetLayoutFontSize(layout, 22));
-        }
-
-        private static void ConfigureTextPanel(TMP_Text label, Vector2 size, Vector2 position, Vector2 anchor, Vector2 pivot, TextAnchor alignment, int fontSize)
-        {
-            if (!IsAlive(label))
-            {
-                return;
-            }
-
-            Transform panel = label.transform.parent;
-            if (IsAlive(panel))
-            {
-                ConfigureRect(panel as RectTransform, size, position, anchor, pivot);
-                PanelBackgroundStyle.Apply(panel.GetComponent<Image>());
-            }
-
-            label.alignment = TmpTextUtility.ToAlignment(alignment);
-            label.fontSize = fontSize;
-            label.font = ThemeFontProvider.GetTmpFont(fontSize);
-            label.fontStyle = alignment == TextAnchor.MiddleCenter ? FontStyles.Bold : FontStyles.Normal;
-            label.enableAutoSizing = true;
-            label.fontSizeMin = Mathf.Max(14, fontSize - 8);
-            label.fontSizeMax = fontSize;
-            label.textWrappingMode = TextWrappingModes.Normal;
-            label.overflowMode = TextOverflowModes.Truncate;
-            ConfigureTextInset(label, alignment);
-        }
-
-        private static void ConfigureTextInset(TMP_Text label, TextAnchor alignment)
-        {
-            RectTransform rect = IsAlive(label) ? label.GetComponent<RectTransform>() : null;
-            if (!IsAlive(rect))
-            {
-                return;
-            }
-
-            bool leftAligned = alignment == TextAnchor.UpperLeft
-                || alignment == TextAnchor.MiddleLeft
-                || alignment == TextAnchor.LowerLeft;
-            bool upperAligned = alignment == TextAnchor.UpperLeft
-                || alignment == TextAnchor.UpperCenter
-                || alignment == TextAnchor.UpperRight;
-            float horizontalInset = leftAligned ? 52f : 60f;
-            float bottomInset = alignment == TextAnchor.MiddleLeft || alignment == TextAnchor.MiddleCenter ? 18f : 28f;
-            float topInset = upperAligned ? 42f : 24f;
-
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.pivot = new Vector2(0.5f, 0.5f);
-            rect.anchoredPosition = Vector2.zero;
-            rect.offsetMin = new Vector2(horizontalInset, bottomInset);
-            rect.offsetMax = new Vector2(-horizontalInset, -topInset);
-            rect.sizeDelta = Vector2.zero;
-            rect.localRotation = Quaternion.identity;
-            rect.localScale = Vector3.one;
-        }
-
-        private void ConfigureManagedHudTextFrames()
-        {
-            ConfigureHudTextInset(levelLabel, TextAnchor.MiddleCenter);
-            ConfigureHudTextInset(currentOrderLabel, TextAnchor.UpperLeft);
-            ConfigureHudTextInset(currentRatioLabel, TextAnchor.UpperLeft);
-            ConfigureHudTextInset(currentSpeedLabel, TextAnchor.MiddleLeft);
-            ConfigureHudTextInset(hintLabel, TextAnchor.UpperLeft);
-        }
-
-        private void ConfigureHudTextInset(TMP_Text label, TextAnchor alignment)
-        {
-            RectTransform rect = IsAlive(label) ? label.GetComponent<RectTransform>() : null;
-            if (!IsAlive(rect))
-            {
-                return;
-            }
-
-            Vector2 min = hudTextInsetMin;
-            Vector2 max = hudTextInsetMax;
-            if (alignment == TextAnchor.MiddleLeft || alignment == TextAnchor.MiddleCenter)
-            {
-                min.y = Mathf.Max(18f, min.y - 8f);
-                max.y = Mathf.Min(-18f, max.y + 8f);
-            }
-
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.pivot = new Vector2(0.5f, 0.5f);
-            rect.anchoredPosition = Vector2.zero;
-            rect.offsetMin = min;
-            rect.offsetMax = max;
-            rect.sizeDelta = Vector2.zero;
-            rect.localRotation = Quaternion.identity;
-            rect.localScale = Vector3.one;
-        }
-
-        private void ConfigureButtonTextInset(TMP_Text label)
-        {
-            RectTransform rect = IsAlive(label) ? label.GetComponent<RectTransform>() : null;
-            if (!IsAlive(rect))
-            {
-                return;
-            }
-
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.pivot = new Vector2(0.5f, 0.5f);
-            rect.anchoredPosition = Vector2.zero;
-            rect.offsetMin = buttonTextInsetMin;
-            rect.offsetMax = buttonTextInsetMax;
-            rect.sizeDelta = Vector2.zero;
-            rect.localRotation = Quaternion.identity;
-            rect.localScale = Vector3.one;
-        }
-
-        private void ConfigureButton(Button button, HudPanelLayout layout, Vector2 anchor, Vector2 pivot)
-        {
-            ConfigureButton(button, GetLayoutSize(layout), GetLayoutPosition(layout), anchor, pivot);
-        }
-
-        private void ConfigureButton(Button button, Vector2 size, Vector2 position, Vector2 anchor, Vector2 pivot)
-        {
-            if (!IsAlive(button))
-            {
-                return;
-            }
-
-            ConfigureRect(button.transform as RectTransform, size, position, anchor, pivot);
-            TMP_Text label = button.GetComponentInChildren<TMP_Text>(true);
-            if (IsAlive(label))
-            {
-                label.fontSize = label.text != null && label.text.Length > 12 ? 22 : 24;
-                label.font = ThemeFontProvider.GetTmpFont();
-                label.fontStyle = FontStyles.Bold;
-                label.enableAutoSizing = true;
-                label.fontSizeMin = 16;
-                label.fontSizeMax = label.fontSize;
-                label.alignment = TextAlignmentOptions.Center;
-                label.textWrappingMode = TextWrappingModes.NoWrap;
-                label.overflowMode = TextOverflowModes.Truncate;
-                ConfigureButtonTextInset(label);
-            }
-        }
-
-        private void ConfigureNamedRect(string objectName, HudPanelLayout layout, Vector2 anchor, Vector2 pivot)
-        {
-            ConfigureNamedRect(objectName, GetLayoutSize(layout), GetLayoutPosition(layout), anchor, pivot);
-        }
-
-        private void ConfigureNamedRect(string objectName, Vector2 size, Vector2 position, Vector2 anchor, Vector2 pivot)
-        {
-            Transform target = transform.Find(objectName);
-            if (IsAlive(target))
-            {
-                ConfigureRect(target as RectTransform, size, position, anchor, pivot);
-                if (!string.Equals(objectName, "Ratio Selection Panel", StringComparison.OrdinalIgnoreCase))
-                {
-                    PanelBackgroundStyle.Apply(target.GetComponent<Image>());
-                }
-            }
-        }
-
-        private void StyleExistingHud()
-        {
-            ApplyPanelStyle(levelLabel);
-            ApplyPanelStyle(currentOrderLabel);
-            ApplyPanelStyle(currentRatioLabel);
-            ApplyPanelStyle(currentSpeedLabel);
-            ApplyPanelStyle(hintLabel);
-            ApplyButtonStyle(experimentLogButton);
-            ApplyButtonStyle(evaluateButton);
-            ApplyButtonStyle(resetAttemptButton);
-            ApplyButtonStyle(newBatchButton);
-            ApplyButtonStyle(nextLevelButton);
-            ApplyButtonStyle(ingredientTraitToggleButton);
-            ApplyNamedPanelStyle("Force Slider");
-            ApplyNamedPanelStyle("Force Label Panel");
-        }
-
-        private void ConfigureLevelLabelText()
-        {
-            if (!IsAlive(levelLabel))
-            {
-                return;
-            }
-
-            levelLabel.alignment = TextAlignmentOptions.Center;
-            levelLabel.fontStyle = FontStyles.Bold;
         }
 
         private void EnsureOpeningLevelTitlePanel()
@@ -2355,82 +1991,6 @@ namespace TheTasteReviver
             {
                 PanelBackgroundStyle.Apply(target.GetComponent<Image>());
             }
-        }
-
-        private void ConfigureForceLabelPanel(bool updateRectTransforms)
-        {
-            Transform panel = transform.Find("Force Label Panel");
-            if (!IsAlive(panel))
-            {
-                return;
-            }
-
-            PanelBackgroundStyle.Apply(panel.GetComponent<Image>(), 0.9f);
-            if (!updateRectTransforms)
-            {
-                return;
-            }
-
-            TMP_Text label = panel.GetComponentInChildren<TMP_Text>(true);
-            if (!IsAlive(label))
-            {
-                return;
-            }
-
-            label.font = ThemeFontProvider.GetTmpFont();
-            label.fontSize = GetLayoutFontSize(forceLabelPanelLayout, 15);
-            label.fontStyle = FontStyles.Normal;
-            label.enableAutoSizing = true;
-            label.fontSizeMin = 10;
-            label.fontSizeMax = GetLayoutFontSize(forceLabelPanelLayout, 15);
-            label.alignment = TextAlignmentOptions.Center;
-            label.textWrappingMode = TextWrappingModes.Normal;
-            label.overflowMode = TextOverflowModes.Truncate;
-
-            RectTransform rect = label.GetComponent<RectTransform>();
-            if (IsAlive(rect))
-            {
-                rect.anchorMin = Vector2.zero;
-                rect.anchorMax = Vector2.one;
-                rect.pivot = new Vector2(0.5f, 0.5f);
-                rect.anchoredPosition = Vector2.zero;
-                rect.offsetMin = forceLabelTextInsetMin;
-                rect.offsetMax = forceLabelTextInsetMax;
-                rect.sizeDelta = Vector2.zero;
-                rect.localRotation = Quaternion.identity;
-                rect.localScale = Vector3.one;
-            }
-        }
-
-        private static Vector2 GetLayoutSize(HudPanelLayout layout)
-        {
-            return layout != null ? layout.size : Vector2.zero;
-        }
-
-        private static Vector2 GetLayoutPosition(HudPanelLayout layout)
-        {
-            return layout != null ? layout.position : Vector2.zero;
-        }
-
-        private static int GetLayoutFontSize(HudPanelLayout layout, int fallback)
-        {
-            return layout != null && layout.fontSize > 0 ? layout.fontSize : fallback;
-        }
-
-        private static void ConfigureRect(RectTransform rect, Vector2 size, Vector2 position, Vector2 anchor, Vector2 pivot)
-        {
-            if (!IsAlive(rect))
-            {
-                return;
-            }
-
-            rect.anchorMin = anchor;
-            rect.anchorMax = anchor;
-            rect.pivot = pivot;
-            rect.sizeDelta = size;
-            rect.anchoredPosition = position;
-            rect.localRotation = Quaternion.identity;
-            rect.localScale = Vector3.one;
         }
 
         private Button BindButton(Button button, string objectName, UnityEngine.Events.UnityAction action)

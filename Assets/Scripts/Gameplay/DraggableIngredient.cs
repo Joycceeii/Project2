@@ -18,16 +18,14 @@ namespace TheTasteReviver
         public float groundVisualLift = 0.1f;
         public float mortarGroundVisualLift = 0.04f;
         public float homeGroundVisualLift = 0.22f;
-        public float groundVisualScale = 0.8f;
-        public float groundVisualFootprint = 0.7f;
-        public float groundVisualMaxHeight = 0.14f;
 
         private Vector3 startPosition;
         private bool dragging;
         private float dragPlaneY;
         private readonly List<Renderer> hiddenRenderers = new List<Renderer>();
         private GameObject groundVisualInstance;
-        private bool groundVisualSizeNormalized;
+        private IngredientVisualState visualState;
+        private bool usesAuthoredGroundVisual;
         private bool hasBeenGround;
         private UIManager hoverUIManager;
 
@@ -38,6 +36,8 @@ namespace TheTasteReviver
         {
             DisableLodGroups(transform);
             RemoveRedundantLodModels(transform);
+            visualState = GetComponent<IngredientVisualState>();
+            visualState?.ShowBeforeGrinding();
             NormalizeRuntimeVisualSettings();
             ResetHomePosition();
             if (interactionCamera == null)
@@ -82,7 +82,10 @@ namespace TheTasteReviver
         {
             hasBeenGround = true;
             ReturnHome(true);
-            RaiseGroundVisual(homeGroundVisualLift);
+            if (!usesAuthoredGroundVisual)
+            {
+                RaiseGroundVisual(homeGroundVisualLift);
+            }
         }
 
         public void HideAtHome()
@@ -100,42 +103,59 @@ namespace TheTasteReviver
 
             hasBeenGround = true;
             EnsureGroundVisual();
-            AlignGroundVisualToMortarSurface();
+            if (!usesAuthoredGroundVisual)
+            {
+                AlignGroundVisualToMortarSurface();
+            }
         }
 
         private void EnsureGroundVisual()
         {
-            if (ingredientData == null || ingredientData.groundPrefab == null)
+            visualState ??= GetComponent<IngredientVisualState>();
+            if (visualState != null && visualState.HasGroundDisplayVisual)
             {
-                return;
-            }
-
-            HideCurrentRenderers();
-            if (groundVisualInstance != null)
-            {
-                groundVisualInstance.SetActive(true);
+                usesAuthoredGroundVisual = true;
+                visualState.ShowAfterGrinding();
+                groundVisualInstance = visualState.GroundDisplayVisual;
                 SetGroundVisualRenderersEnabled(true);
-                NormalizeGroundVisualSize();
-                RaiseGroundVisual(groundVisualLift);
                 return;
             }
 
-            groundVisualInstance = Instantiate(ingredientData.groundPrefab, transform);
-            groundVisualSizeNormalized = false;
-            groundVisualInstance.name = "Ground Visual";
-            DisableLodGroups(groundVisualInstance.transform);
-            RemoveRedundantLodModels(groundVisualInstance.transform);
-            groundVisualInstance.transform.localPosition = Vector3.zero;
-            groundVisualInstance.transform.localRotation = Quaternion.identity;
-            groundVisualInstance.transform.localScale = Vector3.one * Mathf.Clamp(groundVisualScale, 0.25f, 1.2f);
-            NormalizeGroundVisualSize();
-            FitChildRenderersToAnchor(groundVisualInstance.transform, groundVisualLift);
-            SetGroundVisualRenderersEnabled(true);
-
-            foreach (Collider collider in groundVisualInstance.GetComponentsInChildren<Collider>(true))
+            // Keep the existing authored legacy powder model for earlier
+            // ingredients that have not yet been migrated to an After Grinding
+            // child. The reference is optional; never instantiate it blindly.
+            if (ingredientData != null && ingredientData.groundPrefab != null)
             {
-                collider.enabled = false;
+                HideCurrentRenderers();
+                if (groundVisualInstance != null)
+                {
+                    groundVisualInstance.SetActive(true);
+                    SetGroundVisualRenderersEnabled(true);
+                    RaiseGroundVisual(groundVisualLift);
+                    return;
+                }
+
+                groundVisualInstance = Instantiate(ingredientData.groundPrefab, transform, false);
+                usesAuthoredGroundVisual = false;
+                groundVisualInstance.name = "Ground Visual";
+                DisableLodGroups(groundVisualInstance.transform);
+                RemoveRedundantLodModels(groundVisualInstance.transform);
+                groundVisualInstance.transform.localPosition = Vector3.zero;
+                groundVisualInstance.transform.localRotation = Quaternion.identity;
+                FitChildRenderersToAnchor(groundVisualInstance.transform, groundVisualLift);
+                SetGroundVisualRenderersEnabled(true);
+
+                foreach (Collider collider in groundVisualInstance.GetComponentsInChildren<Collider>(true))
+                {
+                    collider.enabled = false;
+                }
+
+                return;
             }
+
+            // Some ingredients intentionally keep their authored before-grinding
+            // model after the powdering gate (for example coarse salt and
+            // scallion stem). This is a valid visual fallback, not an error.
         }
 
         private void RaiseGroundVisual(float lift)
@@ -148,37 +168,6 @@ namespace TheTasteReviver
             groundVisualInstance.transform.localPosition = Vector3.zero;
             FitChildRenderersToAnchor(groundVisualInstance.transform, Mathf.Max(0f, lift));
             SetGroundVisualRenderersEnabled(true);
-        }
-
-        private void NormalizeGroundVisualSize()
-        {
-            if (groundVisualInstance == null || groundVisualSizeNormalized)
-            {
-                return;
-            }
-
-            Bounds bounds;
-            if (!TryCalculateWorldBounds(groundVisualInstance.transform, out bounds) || bounds.size.sqrMagnitude <= 0.0001f)
-            {
-                return;
-            }
-
-            float footprint = Mathf.Max(bounds.size.x, bounds.size.z);
-            float height = bounds.size.y;
-            if (footprint <= 0.0001f || height <= 0.0001f)
-            {
-                return;
-            }
-
-            float targetFootprint = Mathf.Max(0.1f, groundVisualFootprint);
-            float targetHeight = Mathf.Max(0.02f, groundVisualMaxHeight);
-            Vector3 axisScale = new Vector3(
-                Mathf.Clamp(targetFootprint / Mathf.Max(bounds.size.x, 0.0001f), 0.05f, 4f),
-                Mathf.Clamp(targetHeight / height, 0.05f, 4f),
-                Mathf.Clamp(targetFootprint / Mathf.Max(bounds.size.z, 0.0001f), 0.05f, 4f));
-            groundVisualInstance.transform.localScale = Vector3.Scale(groundVisualInstance.transform.localScale, axisScale);
-
-            groundVisualSizeNormalized = true;
         }
 
         private void AlignGroundVisualToMortarSurface()
@@ -348,9 +337,6 @@ namespace TheTasteReviver
             groundVisualLift = Mathf.Clamp(groundVisualLift, 0.08f, 0.14f);
             mortarGroundVisualLift = Mathf.Clamp(mortarGroundVisualLift, 0.02f, 0.12f);
             homeGroundVisualLift = Mathf.Clamp(homeGroundVisualLift, 0.18f, 0.32f);
-            groundVisualScale = Mathf.Clamp(groundVisualScale, 0.72f, 0.9f);
-            groundVisualFootprint = Mathf.Clamp(groundVisualFootprint, 0.35f, 1.2f);
-            groundVisualMaxHeight = Mathf.Clamp(groundVisualMaxHeight, 0.06f, 0.28f);
         }
 
         private void MoveIntoMortar(MortarArea activeMortarArea)
@@ -424,10 +410,19 @@ namespace TheTasteReviver
         {
             if (groundVisualInstance != null)
             {
-                DestroyObject(groundVisualInstance);
+                if (usesAuthoredGroundVisual)
+                {
+                    visualState?.ShowBeforeGrinding();
+                }
+                else
+                {
+                    DestroyObject(groundVisualInstance);
+                }
+
                 groundVisualInstance = null;
-                groundVisualSizeNormalized = false;
             }
+
+            usesAuthoredGroundVisual = false;
 
             foreach (Renderer renderer in hiddenRenderers)
             {
@@ -442,6 +437,12 @@ namespace TheTasteReviver
 
         private void RestoreOriginalRenderers()
         {
+            if (visualState != null)
+            {
+                visualState.ShowBeforeGrinding();
+                return;
+            }
+
             foreach (Renderer renderer in GetComponentsInChildren<Renderer>(true))
             {
                 if (renderer == null)
@@ -587,7 +588,6 @@ namespace TheTasteReviver
             {
                 if (lodGroup != null)
                 {
-                    lodGroup.ForceLOD(0);
                     lodGroup.enabled = false;
                 }
             }

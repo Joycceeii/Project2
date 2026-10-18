@@ -11,7 +11,3 @@ L09,RedBean,L09_RedBean,Combination,BlackSesame+GlutinousRice+RedBean,,,,,,,,,,,
 L09,GlutinousRice,L09_GlutinousRice,Combination,BlackSesame+GlutinousRice+RedBean,,,,,,,,,,,,"Glutinous rice follows red bean and uses the Large amount to form the sticky body of the filling."
 L09,BlackSesame,L09_BlackSesame,Combination,BlackSesame+GlutinousRice+RedBean,,,,,,,,,,,,"Black sesame follows glutinous rice and uses the Medium amount to add a roasted note."
 L09,LotusLeaf,L09_LotusLeaf,Combination,LotusLeaf,,,,,,,,,,,,"The lotus leaf is a fragrant wrapper, not part of the ground filling. Add it only after the filling is ready."
-L09,RedBean,L09_RedBean,GrindDuration,25-40,,,,,,,,,,,,"Red bean begins the filling batch and uses the Small amount to keep its sweetness gentle."
-L09,GlutinousRice,L09_GlutinousRice,GrindDuration,25-40,,,,,,,,,,,,"Glutinous rice follows red bean and uses the Large amount to form the sticky body of the filling."
-L09,LotusLeaf,L09_LotusLeaf,GrindDuration,25-40,,,,,,,,,,,,"The lotus leaf is a fragrant wrapper, not part of the ground filling. Add it only after the filling is ready."
-L09,BlackSesame,L09_BlackSesame,GrindDuration,25-40,,,,,,,,,,,,"Black sesame follows glutinous rice and uses the Medium amount to add a roasted note."

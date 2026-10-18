@@ -272,10 +272,6 @@ public class TestLevelInitializer : MonoBehaviour
                     ui.EnsureExperimentLogButton();
                     ui.EnsureActionButtons();
                     ui.EnsureIngredientTraitPanel();
-                    if (ui.driveHudLayoutFromInspector)
-                    {
-                        ui.NormalizeHudLayout();
-                    }
                 }
                 ui.attemptManager = attempt;
                 ui.evaluator = evaluator;
@@ -596,9 +592,6 @@ public class TestLevelInitializer : MonoBehaviour
                 ingredient.mortarGroundVisualLift = 0.04f;
                 ingredient.groundVisualLift = 0.1f;
                 ingredient.homeGroundVisualLift = 0.24f;
-                ingredient.groundVisualScale = 0.8f;
-                ingredient.groundVisualFootprint = 0.7f;
-                ingredient.groundVisualMaxHeight = 0.14f;
                 if (attempt != null)
                 {
                     ingredient.attemptManager = attempt;
@@ -651,9 +644,6 @@ public class TestLevelInitializer : MonoBehaviour
                 drag.mortarGroundVisualLift = 0.04f;
                 drag.groundVisualLift = 0.1f;
                 drag.homeGroundVisualLift = 0.24f;
-                drag.groundVisualScale = 0.8f;
-                drag.groundVisualFootprint = 0.7f;
-                drag.groundVisualMaxHeight = 0.14f;
             }
         }
 
@@ -741,10 +731,6 @@ public class TestLevelInitializer : MonoBehaviour
             ui.nextLevelButton = CreateButton(canvas.transform, "Next Level", new Vector2(132f, 36f), new Vector2(-24f, 24f), bottomRight, bottomRight, ui.NextLevel);
             ui.EnsureActionButtons();
             ui.EnsureIngredientTraitPanel();
-            if (ui.driveHudLayoutFromInspector)
-            {
-                ui.NormalizeHudLayout();
-            }
         }
 
         private static void ConfigureGameplayCanvas(Canvas canvas)

@@ -215,6 +215,9 @@ namespace TheTasteReviver
         public bool allowAnyPairPreparation;
         public ForceLevel targetForceLevel = ForceLevel.Medium;
         public SpeedLevel targetSpeedLevel = SpeedLevel.Medium;
+        [Min(0.2f)]
+        [Tooltip("Seconds of valid grinding required for a batch to become powder. This is a progress gate, not an evaluated recipe answer.")]
+        public float powderingSeconds = 1.5f;
         [Range(0, 100)] public int passingScore = 80;
         public EnabledMechanics enabledMechanics = new EnabledMechanics();
         public FeedbackTextData feedbackTexts = new FeedbackTextData();

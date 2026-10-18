@@ -18,6 +18,17 @@ namespace TheTasteReviver
                 return new HintResult(MechanicType.IngredientSelection, "No hint available.", 0, givenHints);
             }
 
+            string incompleteAttemptHint = BuildIncompleteAttemptHint(level, attempt);
+            if (!string.IsNullOrWhiteSpace(incompleteAttemptHint))
+            {
+                if (!givenHints.Contains(incompleteAttemptHint))
+                {
+                    givenHints.Add(incompleteAttemptHint);
+                }
+
+                return new HintResult(MechanicType.IngredientSelection, incompleteAttemptHint, 0, givenHints);
+            }
+
             List<MechanicType> priority = level.hintSettings.hintPriority != null && level.hintSettings.hintPriority.Count > 0
                 ? level.hintSettings.hintPriority
                 : new List<MechanicType> { MechanicType.IngredientOrder, MechanicType.Ratio, MechanicType.Combination, MechanicType.Speed, MechanicType.Force };
@@ -81,6 +92,41 @@ namespace TheTasteReviver
         {
             hintCounts.Clear();
             givenHints.Clear();
+        }
+
+        private static string BuildIncompleteAttemptHint(RecipeLevelData level, RecipeAttemptManager attempt)
+        {
+            if (level == null || attempt == null || level.requiredIngredients == null)
+            {
+                return null;
+            }
+
+            HashSet<IngredientData> used = new HashSet<IngredientData>(attempt.IngredientAmounts
+                .Where(entry => entry != null && entry.ingredient != null)
+                .Select(entry => entry.ingredient));
+            List<IngredientData> missing = level.requiredIngredients
+                .Where(ingredient => ingredient != null && !used.Contains(ingredient))
+                .Distinct()
+                .ToList();
+            if (missing.Count == 0)
+            {
+                return null;
+            }
+
+            if (level.correctIngredientOrder != null && level.correctIngredientOrder.Count > 0)
+            {
+                missing = missing
+                    .OrderBy(ingredient =>
+                    {
+                        int index = level.correctIngredientOrder.IndexOf(ingredient);
+                        return index >= 0 ? index : int.MaxValue;
+                    })
+                    .ToList();
+            }
+
+            return "The recipe is incomplete: " + FormatIngredientNames(missing)
+                + (missing.Count == 1 ? " is missing. " : " are missing. ")
+                + "Press Reset Attempt and include every required ingredient before evaluating again.";
         }
 
         public HintResult GetStepHint(RecipeLevelData level, RecipeAttemptManager attempt, MechanicType mechanic, IngredientData targetIngredient = null)
@@ -198,6 +244,15 @@ namespace TheTasteReviver
                     return BuildRatioHint(level, attempt);
                 case MechanicType.Speed:
                 case MechanicType.Force:
+                    if (HasIngredientProfilesForMechanic(level, mechanic))
+                    {
+                        string profileHint = BuildTraitDrivenHint(level, attempt, mechanic);
+                        if (!string.IsNullOrWhiteSpace(profileHint))
+                        {
+                            return profileHint;
+                        }
+                    }
+
                     return BuildProcessHint(level, attempt);
                 default:
                     return null;

@@ -16,14 +16,9 @@ namespace TheTasteReviver
         private const float LabelSurfaceOffset = 0.08f;
         private const float PlateLabelYOffset = 0.018f;
         private const float PlateIngredientSurfaceY = 0.16f;
-        private const float IngredientPlateFootprint = 0.54f;
-        private const float IngredientPlateMaxHeight = 0.3f;
         private const float MortarDropHeight = 0.2f;
         private const float GroundVisualLift = 0.1f;
         private const float MortarGroundVisualLift = 0.04f;
-        private const float GroundVisualScale = 0.8f;
-        private const float GroundVisualFootprint = 0.7f;
-        private const float GroundVisualMaxHeight = 0.14f;
         private const float HomeGroundVisualLift = 0.24f;
         private const string PortionClusterName = "Portion Cluster";
 
@@ -282,8 +277,7 @@ namespace TheTasteReviver
             item.gameObject.name = "Ingredient";
             item.gameObject.SetActive(true);
             StripLodGroups(item.gameObject);
-            ConfigurePortionCluster(item, ingredient);
-            FitIngredientItemToPlate(item, ingredient.prefab != null);
+            PlaceIngredientItemOnPlate(item, ingredient.prefab != null);
             ConfigureIngredientDragCollider(item, ingredient.prefab != null);
             if (ingredient.prefab == null)
             {
@@ -304,9 +298,6 @@ namespace TheTasteReviver
             drag.mortarDropHeight = MortarDropHeight;
             drag.groundVisualLift = GroundVisualLift;
             drag.mortarGroundVisualLift = MortarGroundVisualLift;
-            drag.groundVisualScale = GroundVisualScale;
-            drag.groundVisualFootprint = GroundVisualFootprint;
-            drag.groundVisualMaxHeight = GroundVisualMaxHeight;
             drag.homeGroundVisualLift = HomeGroundVisualLift;
             drag.ResetHomePosition();
 
@@ -393,17 +384,20 @@ namespace TheTasteReviver
                 return;
             }
 
-            Bounds bounds = CalculateLocalBounds(item);
+            BoxCollider authoredCollider = item.GetComponent<BoxCollider>();
+            if (IsAlive(authoredCollider))
+            {
+                authoredCollider.enabled = true;
+                return;
+            }
+
+            Bounds bounds = CalculateVisibleLocalBounds(item);
             if (bounds.size.sqrMagnitude <= 0.0001f)
             {
                 return;
             }
 
-            BoxCollider boxCollider = item.GetComponent<BoxCollider>();
-            if (!IsAlive(boxCollider))
-            {
-                boxCollider = item.gameObject.AddComponent<BoxCollider>();
-            }
+            BoxCollider boxCollider = item.gameObject.AddComponent<BoxCollider>();
 
             if (!IsAlive(boxCollider))
             {
@@ -698,7 +692,9 @@ namespace TheTasteReviver
             visuals.localRotation = Quaternion.identity;
             visuals.localScale = Vector3.one;
 
-            List<IngredientData> validIngredients = ingredients.Where(x => x != null && x.groundPrefab != null).ToList();
+            List<IngredientData> validIngredients = ingredients
+                .Where(HasGroundDisplaySource)
+                .ToList();
             if (validIngredients.Count == 0)
             {
                 GameObject fallback = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -713,39 +709,73 @@ namespace TheTasteReviver
             for (int i = 0; i < validIngredients.Count; i++)
             {
                 IngredientData ingredient = validIngredients[i];
-                GameObject powder = Instantiate(ingredient.groundPrefab, visuals, false);
+                IngredientVisualState authoredState = ingredient.prefab != null
+                    ? ingredient.prefab.GetComponent<IngredientVisualState>()
+                    : null;
+                GameObject powder;
+                if (authoredState != null && authoredState.HasGroundDisplayVisual)
+                {
+                    powder = Instantiate(ingredient.prefab, visuals, false);
+                    powder.GetComponent<IngredientVisualState>()?.ShowAfterGrinding();
+                }
+                else if (ingredient.groundPrefab != null)
+                {
+                    powder = Instantiate(ingredient.groundPrefab, visuals, false);
+                }
+                else
+                {
+                    powder = Instantiate(ingredient.prefab, visuals, false);
+                    powder.GetComponent<IngredientVisualState>()?.ShowAfterGrinding();
+                }
+
                 powder.name = ingredient.DisplayName + " Powder";
                 powder.transform.localPosition = Vector3.zero;
                 powder.transform.localRotation = Quaternion.Euler(0f, i * 41f, 0f);
-                powder.transform.localScale = Vector3.one;
                 StripInteractionComponents(powder);
-                FitPowderVisualToSlot(powder.transform);
+                PlacePowderVisualOnSlot(powder.transform);
                 powder.transform.localPosition += GetPowderStackOffset(i, validIngredients.Count);
             }
         }
 
-        private static void FitPowderVisualToSlot(Transform powder)
+        private static bool HasGroundDisplaySource(IngredientData ingredient)
+        {
+            if (ingredient == null)
+            {
+                return false;
+            }
+
+            if (ingredient.groundPrefab != null)
+            {
+                return true;
+            }
+
+            if (ingredient.prefab == null)
+            {
+                return false;
+            }
+
+            IngredientVisualState visualState = ingredient.prefab.GetComponent<IngredientVisualState>();
+            return visualState != null && visualState.HasGroundDisplayVisual;
+        }
+
+        private static void PlacePowderVisualOnSlot(Transform powder)
         {
             if (!IsAlive(powder))
             {
                 return;
             }
 
-            Bounds bounds = CalculateLocalBounds(powder);
+            Bounds bounds = CalculateVisibleLocalBounds(powder);
             if (bounds.size.sqrMagnitude <= 0.0001f)
             {
                 return;
             }
 
-            float footprint = Mathf.Max(bounds.size.x, bounds.size.z);
-            float scale = Mathf.Min(
-                GroundVisualFootprint / Mathf.Max(footprint, 0.0001f),
-                GroundVisualMaxHeight / Mathf.Max(bounds.size.y, 0.0001f));
-            powder.localScale *= Mathf.Clamp(scale, 0.05f, 4f);
-            powder.localPosition += new Vector3(
-                -bounds.center.x * powder.localScale.x,
-                -bounds.min.y * powder.localScale.y,
-                -bounds.center.z * powder.localScale.z);
+            Vector3 localBottomCenter = new Vector3(bounds.center.x, bounds.min.y, bounds.center.z);
+            Vector3 parentOffset = powder.parent != null
+                ? powder.parent.InverseTransformVector(powder.TransformVector(localBottomCenter))
+                : powder.TransformVector(localBottomCenter);
+            powder.localPosition -= parentOffset;
         }
 
         private static Vector3 GetPowderStackOffset(int index, int count)
@@ -793,9 +823,6 @@ namespace TheTasteReviver
             drag.mortarDropHeight = MortarDropHeight;
             drag.groundVisualLift = GroundVisualLift;
             drag.mortarGroundVisualLift = MortarGroundVisualLift;
-            drag.groundVisualScale = GroundVisualScale;
-            drag.groundVisualFootprint = GroundVisualFootprint;
-            drag.groundVisualMaxHeight = GroundVisualMaxHeight;
             drag.homeGroundVisualLift = HomeGroundVisualLift;
             drag.ResetHomePosition();
         }
@@ -909,7 +936,7 @@ namespace TheTasteReviver
         }
 #endif
 
-        private static void FitIngredientItemToPlate(Transform item, bool usesPrefab)
+        private static void PlaceIngredientItemOnPlate(Transform item, bool usesPrefab)
         {
             if (!IsAlive(item))
             {
@@ -917,23 +944,18 @@ namespace TheTasteReviver
             }
 
             item.localPosition = Vector3.up * PlateIngredientSurfaceY;
-            item.localScale = Vector3.one * 0.26f;
             if (!usesPrefab)
             {
+                item.localScale = Vector3.one * 0.26f;
                 return;
             }
 
-            Bounds bounds = CalculateLocalBounds(item);
-            float largestFootprint = Mathf.Max(bounds.size.x, bounds.size.z);
-            if (largestFootprint <= 0.0001f || bounds.size.y <= 0.0001f)
+            Bounds bounds = CalculateVisibleLocalBounds(item);
+            if (bounds.size.sqrMagnitude <= 0.0001f)
             {
                 return;
             }
 
-            float footprintScale = IngredientPlateFootprint / largestFootprint;
-            float heightScale = IngredientPlateMaxHeight / bounds.size.y;
-            float scale = Mathf.Clamp(Mathf.Min(footprintScale, heightScale), 0.04f, 2.4f);
-            item.localScale = Vector3.one * scale;
             Vector3 horizontalCenterOffset = item.TransformVector(new Vector3(bounds.center.x, 0f, bounds.center.z));
             float bottomOffsetY = item.TransformVector(Vector3.up * bounds.min.y).y;
             item.localPosition = new Vector3(
@@ -958,6 +980,29 @@ namespace TheTasteReviver
                     continue;
                 }
 
+                Bounds worldBounds = renderer.bounds;
+                bounds.Encapsulate(root.InverseTransformPoint(worldBounds.min));
+                bounds.Encapsulate(root.InverseTransformPoint(worldBounds.max));
+            }
+
+            return bounds;
+        }
+
+        private static Bounds CalculateVisibleLocalBounds(Transform root)
+        {
+            Renderer[] renderers = root.GetComponentsInChildren<Renderer>(true)
+                .Where(renderer => IsAlive(renderer)
+                    && renderer.enabled
+                    && renderer.gameObject.activeInHierarchy)
+                .ToArray();
+            if (renderers.Length == 0)
+            {
+                return new Bounds(Vector3.zero, Vector3.zero);
+            }
+
+            Bounds bounds = new Bounds(root.InverseTransformPoint(renderers[0].bounds.center), Vector3.zero);
+            foreach (Renderer renderer in renderers)
+            {
                 Bounds worldBounds = renderer.bounds;
                 bounds.Encapsulate(root.InverseTransformPoint(worldBounds.min));
                 bounds.Encapsulate(root.InverseTransformPoint(worldBounds.max));

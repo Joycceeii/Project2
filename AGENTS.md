@@ -1,8 +1,59 @@
 # Project Continuity and Agent Change Log
 
+## 2026-10-18 - Safe Mixed-Powder Visual Fallback
+
+- Fixed the L09 Wrapped Rice Layers crash that occurred when all ingredients, including Lotus Leaf, were incorrectly ground together and evaluated.
+- Runtime mixed-powder and returned-ground displays prefer the ingredient's main prefab and its authored `IngredientVisualState`, while retaining a null-safe legacy `IngredientData.groundPrefab` fallback for earlier ingredients that have not yet been migrated.
+- Ingredients without either a separate after-grinding child or a legacy ground prefab, including Lotus Leaf, Coarse Salt, and Scallion Stem, safely retain their authored before-grinding display as the result fallback instead of throwing `UnassignedReferenceException`.
+- Checked the same path for the late multi-ingredient levels L10-L12; missing `groundPrefab` references are handled without dereferencing null data.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-18 - Gameplay HUD Prefab Ownership
+
+- Removed the legacy HUD layout records, text-inset controls, and normalization path from `UIManager`; gameplay HUD position, size, typography, and base styling now come exclusively from `GameplayHud.prefab`.
+- `GameplayHudView` now owns the Experiment Log button's dynamic label, attention tint, and pulse state. `UIManager` only requests the state change.
+- `ForceSliderController` no longer restyles or resizes the force label when a prefab-authored gameplay HUD is present. Its local visual settings remain only for the programmatically generated legacy test fallback.
+- Removed `TestLevelInitializer` calls that asked `UIManager` to normalize authored HUD layout.
+- Verified both runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-18 - Context-Aware Hint Coverage
+
+- Audited hint complexity across L01-L12: early levels evaluate one dimension, while L11 and L12 evaluate five dimensions and therefore have 31 possible non-empty correct/incorrect dimension combinations before ingredient-specific states are counted.
+- Powder-ready and post-`New Batch` guidance now counts remaining required ingredients rather than comparing batch count with ingredient count, which fixes misleading late-level prompts for grouped batches in L09-L12.
+- Shared workflow guidance now distinguishes a missing ingredient from a correctly completed batch, detects when a same-batch ingredient was omitted before grinding, names the next ingredient or group, announces when final prepared powders should be recombined, and tells the player when the recipe is ready to Evaluate.
+- Incorrect evaluation now prioritizes an explicit missing-ingredient message before discussing ratio, order, combination, force, or speed.
+- Pressing `Evaluate` before all required ingredients are present now gives contextual next-step guidance without consuming the attempt or falling through to the misleading powdering-time message.
+- Final-combination guidance counts the current powder batch as prepared for next-step instructions, while final-blend validation still requires preparation batches to precede the final combined batch.
+
+## 2026-10-18 - L05 Premature Final Blend Guidance
+
+- L05 now treats grinding all three raw spices together as an incorrect mixed-powder batch rather than mistaking it for the final combination of prepared powders.
+- The final combined batch is recognized only after an earlier exact pair batch and the remaining single-ingredient batch have both been prepared.
+- An early all-three batch displays as one mixed powder pile and gives an explicit `Reset Attempt` message explaining the required `two together + one separately` preparation.
+- Starting an empty next batch no longer causes Evaluate to show the misleading `Keep grinding` message; completed prior batches can proceed to normal recipe evaluation feedback.
+
+## 2026-10-18 - Ingredient Prefab Visual States
+
+- Ingredient prefab instances are the source of truth for ingredient model size; runtime gameplay code positions them but does not normalize or overwrite their authored scale.
+- Each migrated ingredient prefab contains editable `Before Grinding` and `After Grinding` children managed by `IngredientVisualState`.
+- Existing `After Grinding` visuals use an authored uniform parent scale of `0.4 / 0.4 / 0.4`; adjust individual prefab children only when a specific model genuinely needs a different visual treatment.
+- Removed legacy secondary wrapper scaling from Ground Rock Sugar, Ground Chili, Ground Yangjiang Douchi, and Ground Glutinous Rice so the uniform `After Grinding` scale is not multiplied by an older normalization value.
+- Tabletop ingredients, in-mortar ground visuals, returned ground ingredients, and mixed-powder plate displays all reuse those same prefab-authored visual states.
+- `IngredientData.groundPrefab` remains hidden only as a legacy migration/fallback source; new visual tuning belongs on the two child Transforms in the main ingredient prefab.
+
+## 2026-10-18 - Powdering Time Classification and Hint Alignment
+
+- Reclassified grinding duration as `PowderingSeconds`: a short interaction progress gate that controls when a batch becomes powder, not a scored recipe answer.
+- Removed the obsolete `GrindDuration` entries and misleading time ranges from the English design tables and ingredient profiles.
+- Early evaluation guidance now asks the player to keep grinding until the ingredients become powder instead of presenting a countdown as an answer requirement.
+- Experiment Log presentation no longer lists grinding time alongside evaluated recipe dimensions.
+- Corrected profile-driven Force and Speed hints so levels with per-ingredient process targets, especially L08, use the current ingredient's actual answer instead of the level-wide fallback.
+- Added Ginger to the L05 fallback hint associations and removed misleading grinding-time language from L01-L03 feedback.
+
 ## 2026-10-18 - Prefab-Authored UI Visuals
 
 - Prefab instances are now the source of truth for gameplay UI layout and appearance. Runtime code may update content, visibility, interaction state, sibling order, and genuinely dynamic geometry, but must not restyle authored prefab visuals.
+- Enlarged the prefab-authored Current Ratio Panel from height `160.18` to `220.18` so four-ingredient recipes can retain a readable TMP auto-size, and moved the Current Speed Panel down by `60` to preserve the authored gap without overlapping the Force controls.
 - `UIManager` skips legacy panel creation, normalization, and named-panel styling whenever prefab views are present; `TestLevelInitializer` follows the same boundary.
 - Story Intro runtime presentation no longer overwrites the prefab Backdrop color.
 - Re-running the gameplay UI migration only applies default layout and appearance to newly created objects or newly added visual components, preserving existing Story Intro and Mortar Reaction prefab edits.

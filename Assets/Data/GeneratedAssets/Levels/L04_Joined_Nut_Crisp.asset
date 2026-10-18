@@ -51,6 +51,7 @@ MonoBehaviour:
   allowAnyPairPreparation: 0
   targetForceLevel: 1
   targetSpeedLevel: 1
+  powderingSeconds: 1.5
   passingScore: 100
   enabledMechanics:
     enableIngredientSelection: 0

@@ -3,7 +3,7 @@ L01,Fallback,L01_Fallback,No new hint,General,999,,,"No new hint for now. Keep w
 L02,Fallback,L02_Fallback,No new hint,General,999,,,"No new hint for now. Keep what worked, and change only one thing on your next try.",,TeaLeaf,No
 L03,Fallback,L03_Fallback,No new hint,General,999,,,"No new hint for now. Keep what worked, and change only one thing on your next try.",,"RedBean,DriedTangerinePeel,RockSugar",No
 L04,Fallback,L04_Fallback,No new hint,General,999,,,"No new hint for now. Keep what worked, and change only one thing on your next try.",,"Peanut,BlackSesame",No
-L05,Fallback,L05_Fallback,No new hint,General,999,,,"No new hint for now. Keep what worked, and change only one thing on your next try.",,"WhitePepper,DriedTangerinePeel",No
+L05,Fallback,L05_Fallback,No new hint,General,999,,,"No new hint for now. Keep what worked, and change only one thing on your next try.",,"WhitePepper,DriedTangerinePeel,Ginger",No
 L06,Fallback,L06_Fallback,No new hint,General,999,,,"No new hint for now. Keep what worked, and change only one thing on your next try.",,"BlackSesame,GlutinousRice",No
 L07,Fallback,L07_Fallback,No new hint,General,999,,,"No new hint for now. Keep what worked, and change only one thing on your next try.",,"SandGinger,CoarseSalt,DriedTangerinePeel",No
 L07_Log_Practice,Fallback,L07_Log_Practice_Fallback,No new hint,General,999,,,"This level is a log-reading check. Open the Experiment Log and compare earlier saved clues before changing another control.",,TeaLeaf,No

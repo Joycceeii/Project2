@@ -12,7 +12,10 @@ namespace TheTasteReviver
         [TextArea] public string initialDescription;
         public Color ingredientColor = Color.white;
         public Sprite icon;
+        [Tooltip("Prefab used before grinding. Author its display size on the prefab root Transform.")]
         public GameObject prefab;
+        [HideInInspector]
+        [Tooltip("Legacy migration source. New ingredient prefabs keep Before Grinding and After Grinding visuals together.")]
         public GameObject groundPrefab;
         public int defaultRatioValue = 1;
 

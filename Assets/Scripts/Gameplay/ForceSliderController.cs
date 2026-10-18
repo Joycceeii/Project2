@@ -253,45 +253,44 @@ namespace TheTasteReviver
                 return;
             }
 
-            HudPanelLayout managerLabelLayout = uiManager != null ? uiManager.forceLabelPanelLayout : null;
-            bool updateLabelRectTransforms = uiManager == null || uiManager.driveHudLayoutFromInspector;
-            Vector2 insetMin = uiManager != null ? uiManager.forceLabelTextInsetMin : labelTextInsetMin;
-            Vector2 insetMax = uiManager != null ? uiManager.forceLabelTextInsetMax : labelTextInsetMax;
-            Vector2 panelSize = managerLabelLayout != null ? managerLabelLayout.size : labelPanelSize;
-            Vector2 panelPosition = managerLabelLayout != null ? managerLabelLayout.position : labelPanelPosition;
-            int fontSize = managerLabelLayout != null && managerLabelLayout.fontSize > 0 ? managerLabelLayout.fontSize : labelFontSize;
+            // A prefab-authored HUD owns all visual settings. The fields below are
+            // retained only for the legacy, programmatically generated fallback UI.
+            if (uiManager != null && uiManager.UsesPrefabViews)
+            {
+                return;
+            }
 
             forceLabel.font = ThemeFontProvider.GetTmpFont(14);
-            forceLabel.fontSize = fontSize;
+            forceLabel.fontSize = labelFontSize;
             forceLabel.fontStyle = FontStyles.Normal;
             forceLabel.enableAutoSizing = true;
             forceLabel.fontSizeMin = 10;
-            forceLabel.fontSizeMax = fontSize;
+            forceLabel.fontSizeMax = labelFontSize;
             forceLabel.alignment = TextAlignmentOptions.Center;
             forceLabel.textWrappingMode = TextWrappingModes.Normal;
             forceLabel.overflowMode = TextOverflowModes.Truncate;
 
             RectTransform labelRect = forceLabel.GetComponent<RectTransform>();
-            if (updateLabelRectTransforms && labelRect != null)
+            if (labelRect != null)
             {
                 labelRect.anchorMin = Vector2.zero;
                 labelRect.anchorMax = Vector2.one;
                 labelRect.pivot = new Vector2(0.5f, 0.5f);
                 labelRect.anchoredPosition = Vector2.zero;
-                labelRect.offsetMin = insetMin;
-                labelRect.offsetMax = insetMax;
+                labelRect.offsetMin = labelTextInsetMin;
+                labelRect.offsetMax = labelTextInsetMax;
                 labelRect.localRotation = Quaternion.identity;
                 labelRect.localScale = Vector3.one;
             }
 
             RectTransform panelRect = forceLabel.transform.parent as RectTransform;
-            if (updateLabelRectTransforms && panelRect != null)
+            if (panelRect != null)
             {
                 panelRect.anchorMin = Vector2.zero;
                 panelRect.anchorMax = Vector2.zero;
                 panelRect.pivot = Vector2.zero;
-                panelRect.sizeDelta = panelSize;
-                panelRect.anchoredPosition = panelPosition;
+                panelRect.sizeDelta = labelPanelSize;
+                panelRect.anchoredPosition = labelPanelPosition;
                 panelRect.localRotation = Quaternion.identity;
                 panelRect.localScale = Vector3.one;
             }

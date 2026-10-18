@@ -50,6 +50,7 @@ MonoBehaviour:
   allowAnyPairPreparation: 0
   targetForceLevel: 1
   targetSpeedLevel: 0
+  powderingSeconds: 1.5
   passingScore: 100
   enabledMechanics:
     enableIngredientSelection: 0
@@ -121,5 +122,5 @@ MonoBehaviour:
       grinding makes bitterness take over.
     responseHintRules: []
   successFeedback: 'The tea tastes balanced: light bitterness first, then sweetness.'
-  closeFeedback: Very close. Adjust the speed or grinding time a little.
-  wrongFeedback: The tea is too bitter. Check the speed and grinding time.
+  closeFeedback: Very close. Adjust the grinding speed.
+  wrongFeedback: The tea is too bitter. Check the grinding speed.

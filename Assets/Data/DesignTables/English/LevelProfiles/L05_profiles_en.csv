@@ -2,6 +2,3 @@ LevelID,IngredientID,ProfileTag,Mechanic,TargetValue,RuleID,Priority,MatchForce,
 L05,WhitePepper,L05_WhitePepper,Combination,WhitePepper,,,,,,,,,,,,"White pepper is sharp and quick to spread."
 L05,DriedTangerinePeel,L05_DriedTangerinePeel,Combination,DriedTangerinePeel,,,,,,,,,,,,"Dried tangerine peel adds a bright citrus edge."
 L05,Ginger,L05_Ginger,Combination,Ginger,,,,,,,,,,,,"Ginger brings a fresh sharp warmth."
-L05,WhitePepper,L05_WhitePepper,GrindDuration,14-22,,,,,,,,,,,,"It can share one preparation with a single spice; the remaining spice should stay separate first."
-L05,DriedTangerinePeel,L05_DriedTangerinePeel,GrindDuration,14-22,,,,,,,,,,,,"It can share one preparation with a single spice; the remaining spice should stay separate first."
-L05,Ginger,L05_Ginger,GrindDuration,14-22,,,,,,,,,,,,"It can share one preparation with a single spice; the remaining spice should stay separate first."

@@ -375,7 +375,6 @@ namespace TheTasteReviver
             AppendCheckedRecordLine(builder, "Combination", record.combinationPattern, record.combinationStatus);
             AppendCheckedRecordLine(builder, "Force", record.forceLevel.ToString(), record.forceStatus);
             AppendCheckedRecordLine(builder, "Speed", record.speedLevel.ToString(), record.speedStatus);
-            builder.AppendLine("Grinding Time: " + record.grindDuration.ToString("0.0") + "s");
             builder.AppendLine("Feedback: " + record.mainFeedback);
             if (!string.IsNullOrWhiteSpace(record.permanentHint))
             {

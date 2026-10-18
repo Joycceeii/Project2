@@ -148,6 +148,7 @@ namespace TheTasteReviver.EditorTools
                 asset.allowAnyPairPreparation = ParseBool(Get(row, "AllowAnyPairPreparation"));
                 asset.targetForceLevel = ParseEnum(Get(row, "TargetForceLevel"), ForceLevel.Medium);
                 asset.targetSpeedLevel = ParseEnum(Get(row, "TargetSpeedLevel"), SpeedLevel.Medium);
+                asset.powderingSeconds = Mathf.Max(0.2f, ParseFloat(Get(row, "PowderingSeconds"), 1.5f));
                 asset.passingScore = ParseInt(Get(row, "PassingScore"), 90);
                 asset.successFeedback = Get(row, "SuccessFeedback");
                 asset.closeFeedback = Get(row, "CloseFeedback");

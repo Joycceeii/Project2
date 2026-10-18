@@ -28,10 +28,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.031432316, y: 0.2990585, z: 0.099690564, w: 0.9484924}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.18, y: 0.1, z: 0.28}
+  m_LocalScale: {x: 0.18, y: 0.10000001, z: 0.28}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8351960437136938902}
+  m_Father: {fileID: 3560187524825848958}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5399260018990729174
 MeshFilter:
@@ -112,12 +112,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4274642819147029961}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.104528464, w: 0.9945219}
+  m_LocalRotation: {x: -0, y: -0, z: 0.104528464, w: 0.9945219}
   m_LocalPosition: {x: -0.17, y: 0, z: 0}
-  m_LocalScale: {x: 0.18, y: 0.1, z: 0.28}
+  m_LocalScale: {x: 0.17999999, y: 0.099999994, z: 0.28}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8351960437136938902}
+  m_Father: {fileID: 3560187524825848958}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3302446901195584787
 MeshFilter:
@@ -200,10 +200,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.059955064, y: 0.57043433, z: 0.08562471, w: 0.81466466}
   m_LocalPosition: {x: 0.17, y: 0, z: 0}
-  m_LocalScale: {x: 0.18, y: 0.1, z: 0.28}
+  m_LocalScale: {x: 0.18000004, y: 0.099999994, z: 0.28000003}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8351960437136938902}
+  m_Father: {fileID: 3560187524825848958}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8016503093009389176
 MeshFilter:
@@ -258,6 +258,40 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &5714729919828260817
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3560187524825848958}
+  m_Layer: 0
+  m_Name: Before Grinding
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3560187524825848958
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5714729919828260817}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2588320968196633646}
+  - {fileID: 6980291195684344224}
+  - {fileID: 7730314415158304280}
+  m_Father: {fileID: 8351960437136938902}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8378243839497634870
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,6 +303,7 @@ GameObject:
   - component: {fileID: 8351960437136938902}
   - component: {fileID: 87558829813320558}
   - component: {fileID: 26446459085751824}
+  - component: {fileID: 6596681617092620953}
   m_Layer: 0
   m_Name: PF_PeanutCrumb
   m_TagString: Untagged
@@ -289,9 +324,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2588320968196633646}
-  - {fileID: 6980291195684344224}
-  - {fileID: 7730314415158304280}
+  - {fileID: 3560187524825848958}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &87558829813320558
@@ -318,9 +351,6 @@ MonoBehaviour:
   groundVisualLift: 0.1
   mortarGroundVisualLift: 0.04
   homeGroundVisualLift: 0.22
-  groundVisualScale: 0.8
-  groundVisualFootprint: 0.7
-  groundVisualMaxHeight: 0.14
 --- !u!65 &26446459085751824
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -342,3 +372,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7, y: 0.45, z: 0.7}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6596681617092620953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8378243839497634870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b72589e7f5af4ad09d5996c23911fb28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  beforeGrinding: {fileID: 5714729919828260817}
+  afterGrinding: {fileID: 0}

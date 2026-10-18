@@ -12,7 +12,7 @@ namespace TheTasteReviver
         public PestleController pestleController;
         public LevelIngredientDisplayManager ingredientDisplayManager;
         [Header("Grinding Completion")]
-        [Tooltip("How many seconds of valid grinding this batch needs before ingredients become powder. Adjust this in the Inspector to tune the whole batch powder pace.")]
+        [Tooltip("Fallback powdering time when the current level does not provide one. This controls the ingredient-to-powder transition and is not evaluated as a recipe answer.")]
         public float batchPowderSeconds = 1.5f;
         [Header("Final Crafted Object")]
         [Tooltip("Level ID that should craft a final object instead of turning the final wrapper ingredient into powder.")]
@@ -58,6 +58,7 @@ namespace TheTasteReviver
             }
         }
         public bool HasIngredientsInBowl => ingredientAmounts.Any(x => x != null && x.ingredient != null);
+        public bool CurrentBatchHasIngredients => GetCurrentBatchIngredients().Count > 0;
         public bool HasEvaluated { get; private set; }
         public bool HasAutoEvaluated { get; private set; }
         public float RequiredBatchPowderSeconds => Mathf.Max(0.2f, batchPowderSeconds);
@@ -381,6 +382,7 @@ namespace TheTasteReviver
 
             if (changedAnyIngredient)
             {
+                RecordCurrentBatchAsPreparedIfReady();
                 uiManager?.ShowHint(BuildPowderReadyHint());
             }
 
@@ -405,6 +407,48 @@ namespace TheTasteReviver
             }
 
             return GetMinimumBatchPowderSeconds();
+        }
+
+        public string BuildIncompleteEvaluationHint()
+        {
+            List<IngredientData> remaining = GetRemainingRequiredIngredients();
+            if (remaining.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            List<IngredientData> currentIngredients = GetCurrentBatchIngredients();
+            List<IngredientData> sameGroupMissing = GetIngredientsMissingFromCurrentTargetGroup(currentIngredients, remaining);
+            if (sameGroupMissing.Count > 0)
+            {
+                if (HasCurrentBatchReachedPowderTime())
+                {
+                    return "The recipe is incomplete: " + FormatIngredientNames(sameGroupMissing)
+                        + " belonged in the batch that is already powder. Press Reset Attempt and add the complete batch before grinding.";
+                }
+
+                return "The recipe is incomplete. Add " + FormatIngredientNames(sameGroupMissing)
+                    + " to the current batch before grinding and evaluating.";
+            }
+
+            if (ingredientBatchEntries.Count == 0)
+            {
+                return "The recipe has no ingredients yet. " + CapitalizeInstruction(BuildAddInstruction(remaining)) + " before grinding.";
+            }
+
+            if (!CurrentBatchHasIngredients)
+            {
+                return "The recipe is incomplete. " + CapitalizeInstruction(BuildAddInstruction(remaining)) + " before evaluating.";
+            }
+
+            if (HasCurrentBatchReachedPowderTime())
+            {
+                return "The recipe is incomplete: " + FormatIngredientNames(remaining)
+                    + (remaining.Count == 1 ? " is" : " are")
+                    + " still missing. Press New Batch, then " + BuildAddInstruction(remaining) + ".";
+            }
+
+            return "The recipe is incomplete: add " + FormatIngredientNames(remaining) + " before evaluating.";
         }
 
         private bool TryShowFinalCraftedObject()
@@ -706,7 +750,12 @@ namespace TheTasteReviver
             List<IngredientData> currentBatchIngredients = GetCurrentBatchIngredients();
             bool isFinalCombinedBatch = currentLevel != null
                 && currentLevel.requireFinalCombinedBatch
-                && HasExactCurrentRequiredIngredients(currentBatchIngredients);
+                && HasExactCurrentRequiredIngredients(currentBatchIngredients)
+                && HasRequiredPreparationBeforeCurrentBatch();
+            bool combinedAllIngredientsTooEarly = currentLevel != null
+                && currentLevel.requireFinalCombinedBatch
+                && HasExactCurrentRequiredIngredients(currentBatchIngredients)
+                && !isFinalCombinedBatch;
             bool createsMixedPowder = currentLevel != null
                 && currentLevel.requireFinalCombinedBatch
                 && !isFinalCombinedBatch
@@ -730,7 +779,11 @@ namespace TheTasteReviver
             currentBatchStartGrindDuration = pestleController != null ? pestleController.GrindDuration : 0f;
             pestleController?.ResetSpeedAveraging();
             uiManager?.RefreshAttemptPanels(this);
-            uiManager?.ShowHint("Next ingredients will start a separate batch.");
+            uiManager?.ShowHint(combinedAllIngredientsTooEarly
+                ? "All three spices were ground together too early. Press Reset Attempt, then prepare any two together and the remaining spice in a separate batch."
+                : isFinalCombinedBatch
+                    ? "The final blend is complete. You can Evaluate the recipe."
+                : BuildEmptyBatchNextStepHint(currentBatchIngredients));
         }
 
         public float GetCurrentBatchGrindDuration()
@@ -741,30 +794,250 @@ namespace TheTasteReviver
 
         private float GetMinimumBatchPowderSeconds()
         {
-            return RequiredBatchPowderSeconds;
+            return currentLevel != null
+                ? Mathf.Max(0.2f, currentLevel.powderingSeconds)
+                : RequiredBatchPowderSeconds;
         }
 
         private string BuildPowderReadyHint()
         {
-            int preparedCount = ingredientBatchEntries
+            List<IngredientData> currentIngredients = GetCurrentBatchIngredients();
+            if (currentLevel != null
+                && currentLevel.requireFinalCombinedBatch
+                && HasExactCurrentRequiredIngredients(currentIngredients)
+                && !HasRequiredPreparationBeforeCurrentBatch())
+            {
+                return currentLevel.allowAnyPairPreparation
+                    ? "All three spices were ground together too early. Press Reset Attempt, then prepare any two together and the remaining spice separately."
+                    : "These ingredients needed separate preparation before the final blend. Press Reset Attempt and prepare the required batches first.";
+            }
+
+            if (currentLevel != null
+                && currentLevel.requireFinalCombinedBatch
+                && HasExactCurrentRequiredIngredients(currentIngredients)
+                && HasRequiredPreparationBeforeCurrentBatch())
+            {
+                return "The final blend is ready. You can Evaluate the recipe.";
+            }
+
+            List<IngredientData> remaining = GetRemainingRequiredIngredients();
+            if (remaining.Count > 0)
+            {
+                List<IngredientData> sameGroupMissing = GetIngredientsMissingFromCurrentTargetGroup(currentIngredients, remaining);
+                if (sameGroupMissing.Count > 0)
+                {
+                    return "This batch became powder before " + FormatIngredientNames(sameGroupMissing)
+                        + " joined it. Press Reset Attempt and add the complete batch before grinding.";
+                }
+
+                return "This batch is powder. Press New Batch, then " + BuildAddInstruction(remaining) + ".";
+            }
+
+            if (currentLevel != null && currentLevel.requireFinalCombinedBatch)
+            {
+                return HasRequiredPreparationThroughCurrentBatch()
+                    ? "The preparation batches are ready. Press New Batch, then put all prepared powders back into the mortar for the final blend."
+                    : "This batch is powder, but the required preparation structure is incomplete. Evaluate for feedback or press Reset Attempt to rebuild the batches.";
+            }
+
+            return "All required ingredients are ready. You can Evaluate the recipe.";
+        }
+
+        private string BuildEmptyBatchNextStepHint(IReadOnlyList<IngredientData> finalizedIngredients)
+        {
+            List<IngredientData> remaining = GetRemainingRequiredIngredients();
+            if (remaining.Count > 0)
+            {
+                List<IngredientData> sameGroupMissing = GetIngredientsMissingFromCurrentTargetGroup(finalizedIngredients, remaining);
+                if (sameGroupMissing.Count > 0)
+                {
+                    return FormatIngredientNames(sameGroupMissing)
+                        + " belonged in the batch you just finished. Press Reset Attempt and prepare that complete batch before grinding.";
+                }
+
+                return "New batch ready. " + BuildAddInstruction(remaining) + ".";
+            }
+
+            if (currentLevel != null && currentLevel.requireFinalCombinedBatch)
+            {
+                return HasRequiredPreparationBeforeCurrentBatch()
+                    ? "All preparation batches are ready. Put all prepared powders back into the mortar for the final blend."
+                    : "All ingredients have been used, but the preparation batches are incomplete. Evaluate for feedback or press Reset Attempt to try a new batch structure.";
+            }
+
+            return "All required ingredients have been prepared. You can Evaluate the recipe.";
+        }
+
+        private List<IngredientData> GetRemainingRequiredIngredients()
+        {
+            if (currentLevel == null || currentLevel.requiredIngredients == null)
+            {
+                return new List<IngredientData>();
+            }
+
+            HashSet<IngredientData> used = new HashSet<IngredientData>(ingredientBatchEntries
                 .Where(entry => entry != null && entry.ingredient != null)
-                .Select(entry => entry.batchID)
+                .Select(entry => entry.ingredient));
+            List<IngredientData> remaining = currentLevel.requiredIngredients
+                .Where(ingredient => ingredient != null && !used.Contains(ingredient))
                 .Distinct()
-                .Count();
-            int requiredCount = currentLevel != null && currentLevel.requiredIngredients != null
-                ? currentLevel.requiredIngredients.Where(ingredient => ingredient != null).Distinct().Count()
-                : 0;
+                .ToList();
+
+            if (currentLevel.correctIngredientOrder == null || currentLevel.correctIngredientOrder.Count == 0)
+            {
+                return remaining;
+            }
+
+            return remaining
+                .OrderBy(ingredient =>
+                {
+                    int index = currentLevel.correctIngredientOrder.IndexOf(ingredient);
+                    return index >= 0 ? index : int.MaxValue;
+                })
+                .ToList();
+        }
+
+        private List<IngredientData> GetIngredientsMissingFromCurrentTargetGroup(
+            IReadOnlyList<IngredientData> currentIngredients,
+            IReadOnlyList<IngredientData> remaining)
+        {
+            if (currentLevel == null
+                || currentLevel.allowAnyPairPreparation
+                || currentLevel.enabledMechanics == null
+                || !currentLevel.enabledMechanics.enableCombination
+                || currentLevel.correctCombinationPattern == null
+                || currentLevel.correctCombinationPattern.groups == null
+                || currentIngredients == null
+                || remaining == null)
+            {
+                return new List<IngredientData>();
+            }
+
+            HashSet<IngredientData> current = new HashSet<IngredientData>(currentIngredients.Where(ingredient => ingredient != null));
+            HashSet<IngredientData> missing = new HashSet<IngredientData>(remaining.Where(ingredient => ingredient != null));
+            CombinationGroup group = currentLevel.correctCombinationPattern.groups.FirstOrDefault(candidate => candidate != null
+                && candidate.ingredients != null
+                && candidate.ingredients.Any(current.Contains));
+            return group != null
+                ? group.ingredients.Where(ingredient => ingredient != null && missing.Contains(ingredient)).Distinct().ToList()
+                : new List<IngredientData>();
+        }
+
+        private string BuildAddInstruction(IReadOnlyList<IngredientData> remaining)
+        {
+            if (remaining == null || remaining.Count == 0)
+            {
+                return "continue with the recipe";
+            }
+
+            if (currentLevel != null && currentLevel.allowAnyPairPreparation && remaining.Count >= 3)
+            {
+                return "choose any two of " + FormatIngredientNames(remaining) + " and add them together";
+            }
+
+            if (currentLevel != null && currentLevel.allowAnyPairPreparation && remaining.Count == 2)
+            {
+                return "add " + FormatIngredientNames(remaining) + " together";
+            }
+
+            IngredientData next = remaining[0];
+            List<IngredientData> nextGroup = currentLevel != null
+                && currentLevel.correctCombinationPattern != null
+                && currentLevel.correctCombinationPattern.groups != null
+                ? currentLevel.correctCombinationPattern.groups
+                    .Where(group => group != null && group.ingredients != null && group.ingredients.Contains(next))
+                    .Select(group => group.ingredients.Where(remaining.Contains).Distinct().ToList())
+                    .FirstOrDefault()
+                : null;
 
             if (currentLevel != null
                 && currentLevel.enabledMechanics != null
                 && currentLevel.enabledMechanics.enableCombination
-                && requiredCount > 0
-                && preparedCount < requiredCount)
+                && nextGroup != null
+                && nextGroup.Count > 1)
             {
-                return "This batch is powder. Press New Batch, then add the next ingredient.";
+                return "add " + FormatIngredientNames(nextGroup) + " together";
             }
 
-            return "This batch is powder. You can Evaluate when the recipe is ready.";
+            return "add " + next.DisplayName + (currentLevel != null
+                && currentLevel.enabledMechanics != null
+                && currentLevel.enabledMechanics.enableCombination
+                ? " on its own"
+                : string.Empty);
+        }
+
+        private static string FormatIngredientNames(IEnumerable<IngredientData> ingredients)
+        {
+            List<string> names = ingredients != null
+                ? ingredients.Where(ingredient => ingredient != null).Select(ingredient => ingredient.DisplayName).Distinct().ToList()
+                : new List<string>();
+            if (names.Count == 0) return "the missing ingredient";
+            if (names.Count == 1) return names[0];
+            if (names.Count == 2) return names[0] + " and " + names[1];
+            return string.Join(", ", names.Take(names.Count - 1)) + ", and " + names[names.Count - 1];
+        }
+
+        private static string CapitalizeInstruction(string instruction)
+        {
+            return string.IsNullOrWhiteSpace(instruction)
+                ? "Continue with the recipe"
+                : char.ToUpperInvariant(instruction[0]) + instruction.Substring(1);
+        }
+
+        private bool HasRequiredPreparationBeforeCurrentBatch()
+        {
+            return HasRequiredPreparationByBatch(currentBatchID - 1);
+        }
+
+        private bool HasRequiredPreparationThroughCurrentBatch()
+        {
+            return HasRequiredPreparationByBatch(currentBatchID);
+        }
+
+        private bool HasRequiredPreparationByBatch(int latestAllowedBatchID)
+        {
+            if (currentLevel == null || currentLevel.requiredIngredients == null)
+            {
+                return false;
+            }
+
+            List<IngredientData> required = currentLevel.requiredIngredients
+                .Where(ingredient => ingredient != null)
+                .Distinct()
+                .ToList();
+            if (required.Count <= 1)
+            {
+                return false;
+            }
+
+            if (currentLevel.allowAnyPairPreparation && required.Count == 3)
+            {
+                for (int first = 0; first < required.Count - 1; first++)
+                {
+                    for (int second = first + 1; second < required.Count; second++)
+                    {
+                        List<IngredientData> pair = new List<IngredientData> { required[first], required[second] };
+                        IngredientData remaining = required.First(ingredient => !pair.Contains(ingredient));
+                        if (WasPreparedByBatch(pair, latestAllowedBatchID)
+                            && WasPreparedByBatch(new[] { remaining }, latestAllowedBatchID))
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+
+            return required.All(ingredient => WasPreparedByBatch(new[] { ingredient }, latestAllowedBatchID));
+        }
+
+        private bool WasPreparedByBatch(IEnumerable<IngredientData> ingredients, int latestAllowedBatchID)
+        {
+            string key = RecipeLevelData.BuildCombinationKey(ingredients);
+            return !string.IsNullOrWhiteSpace(key)
+                && preparedBatchIDsByKey.TryGetValue(key, out int preparedBatchID)
+                && preparedBatchID <= latestAllowedBatchID;
         }
 
         private List<IngredientData> GetCurrentBatchIngredients()
