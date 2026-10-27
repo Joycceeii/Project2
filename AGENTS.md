@@ -1,5 +1,14 @@
 # Project Continuity and Agent Change Log
 
+## 2026-10-27 - Lower Mortar Ingredients and Final Interaction Checks
+
+- Lowered serialized ingredient mortar offsets to -0.10 across all 17 ingredient prefabs and existing scene draggable objects. Fixed the missing-placement-point fallback to actually honor that offset; authored placement points still remain editable.
+- Returned prepared powders reapply their -0.06 ground offset once on every mortar drop, preventing them from jumping upward or accumulating downward drift. Legacy powder anchoring now honors negative mortarGroundVisualLift values.
+- Evaluated attempts reject ingredient additions/removals and new batches until Reset Attempt. Ingredient dragging and pestle grinding are also stopped after evaluation, preserving the evaluated recipe and progression state.
+- Ignored Unity-generated .slnx solution files alongside existing .sln exclusions.
+- Unity batch compilation and regression checks passed: fallback/explicit mortar placement, repeated powder transition/return, all 12 Correct-only progression gates and reset locks, evaluated-attempt mutation blocking, End return/Cover ordering, 17 prefabs/30 visual sizes, missing-script checks, and Cover/Begin/End resources. In-game visual height confirmation remains pending.
+
+
 ## 2026-10-27 - Correct-Only Progression and Ending Return
 
 - Next Level is enabled only after a Correct evaluation of the current level. LevelManager also checks the same condition before advancing or displaying End; Wrong, Close, and unevaluated attempts cannot skip ahead.

@@ -210,6 +210,11 @@ namespace TheTasteReviver
 
         private void OnMouseDown()
         {
+            if (uiManager != null && uiManager.attemptManager != null && uiManager.attemptManager.HasEvaluated)
+            {
+                return;
+            }
+
             dragging = true;
             lastMousePosition = Input.mousePosition;
             dragPlaneY = transform.position.y;
@@ -217,6 +222,12 @@ namespace TheTasteReviver
 
         private void OnMouseDrag()
         {
+            if (uiManager != null && uiManager.attemptManager != null && uiManager.attemptManager.HasEvaluated)
+            {
+                dragging = false;
+                return;
+            }
+
             if (!dragging)
             {
                 return;

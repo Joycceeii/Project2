@@ -13,7 +13,7 @@ namespace TheTasteReviver
         public Camera interactionCamera;
         public GameObject sourcePrefab;
         public Transform platePlacementPoint;
-        public float mortarIngredientVerticalOffset = -0.05f;
+        public float mortarIngredientVerticalOffset = -0.10f;
         public float mortarPowderVerticalOffset = -0.06f;
         public float dragLiftHeight = 0.55f;
         public float mortarDragClearance = 0.08f;
@@ -191,7 +191,7 @@ namespace TheTasteReviver
             Collider mortarCollider = activeMortarArea.GetComponent<Collider>();
             Vector3 target = IsAlive(mortarCollider) ? mortarCollider.bounds.center : activeMortarArea.transform.position;
             float surfaceY = IsAlive(mortarCollider) ? mortarCollider.bounds.max.y : activeMortarArea.transform.position.y + mortarDropHeight;
-            AlignGroundVisualToWorldAnchor(new Vector3(target.x, surfaceY + Mathf.Max(0f, mortarGroundVisualLift), target.z));
+            AlignGroundVisualToWorldAnchor(new Vector3(target.x, surfaceY + mortarGroundVisualLift, target.z));
         }
 
         private void AlignGroundVisualToWorldAnchor(Vector3 worldAnchor)
@@ -235,6 +235,10 @@ namespace TheTasteReviver
         private void OnMouseDown()
         {
             HideHoverTooltip();
+            if (attemptManager != null && attemptManager.HasEvaluated)
+            {
+                return;
+            }
             if (IsInMortar && attemptManager != null)
             {
                 attemptManager.RemoveIngredientsFromCurrentBatch(GetRepresentedIngredients());
@@ -261,6 +265,11 @@ namespace TheTasteReviver
 
         private void OnMouseUp()
         {
+            if (!dragging)
+            {
+                return;
+            }
+
             dragging = false;
             MortarArea activeMortarArea = GetActiveMortarArea();
             bool droppedInMortar = activeMortarArea != null && activeMortarArea.ContainsWorldPoint(GetMortarCheckPoint(activeMortarArea));
@@ -355,18 +364,28 @@ namespace TheTasteReviver
             {
                 transform.position = activeMortarArea.ingredientPlacementPoint.position
                     + Vector3.up * mortarIngredientVerticalOffset;
-                return;
             }
-            Collider mortarCollider = activeMortarArea.GetComponent<Collider>();
-            Vector3 center = IsAlive(mortarCollider) ? mortarCollider.bounds.center : activeMortarArea.transform.position;
-            float visibleY = activeMortarArea.transform.position.y + mortarDropHeight;
-            if (IsAlive(mortarCollider))
+            else
             {
-                visibleY = Mathf.Max(visibleY, mortarCollider.bounds.max.y + 0.015f);
+                Collider mortarCollider = activeMortarArea.GetComponent<Collider>();
+                Vector3 center = IsAlive(mortarCollider) ? mortarCollider.bounds.center : activeMortarArea.transform.position;
+                float visibleY = activeMortarArea.transform.position.y + mortarDropHeight;
+                if (IsAlive(mortarCollider))
+                {
+                    visibleY = Mathf.Max(visibleY, mortarCollider.bounds.max.y + 0.015f);
+                }
+
+                transform.position = new Vector3(center.x, visibleY, center.z);
+                FitSelfRenderersToWorldAnchor(new Vector3(center.x, visibleY, center.z));
+                transform.position += Vector3.up * mortarIngredientVerticalOffset;
             }
 
-            transform.position = new Vector3(center.x, visibleY, center.z);
-            FitSelfRenderersToWorldAnchor(new Vector3(center.x, visibleY, center.z));
+            // Returning prepared powder starts from the same resting anchor
+            // as the first drop. Reapply its extra offset once, never cumulatively.
+            if (hasBeenGround && usesAuthoredGroundVisual)
+            {
+                transform.position += Vector3.up * mortarPowderVerticalOffset;
+            }
         }
 
         private void HideCurrentRenderers()
@@ -413,6 +432,7 @@ namespace TheTasteReviver
 
         private void OnDisable()
         {
+            dragging = false;
             HideHoverTooltip();
         }
 

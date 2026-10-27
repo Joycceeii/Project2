@@ -529,7 +529,7 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 0}
   platePlacementPoint: {fileID: 0}
-  mortarIngredientVerticalOffset: -0.05
+  mortarIngredientVerticalOffset: -0.1
   mortarPowderVerticalOffset: -0.06
   dragLiftHeight: 0.55
   mortarDragClearance: 0.08
@@ -1220,7 +1220,7 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 0}
   platePlacementPoint: {fileID: 0}
-  mortarIngredientVerticalOffset: -0.05
+  mortarIngredientVerticalOffset: -0.1
   mortarPowderVerticalOffset: -0.06
   dragLiftHeight: 0.55
   mortarDragClearance: 0.08
@@ -1371,7 +1371,7 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 0}
   platePlacementPoint: {fileID: 0}
-  mortarIngredientVerticalOffset: -0.05
+  mortarIngredientVerticalOffset: -0.1
   mortarPowderVerticalOffset: -0.06
   dragLiftHeight: 0.55
   mortarDragClearance: 0.08
@@ -1643,7 +1643,7 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 0}
   platePlacementPoint: {fileID: 0}
-  mortarIngredientVerticalOffset: -0.05
+  mortarIngredientVerticalOffset: -0.1
   mortarPowderVerticalOffset: -0.06
   dragLiftHeight: 0.55
   mortarDragClearance: 0.08
@@ -4088,7 +4088,7 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 0}
   platePlacementPoint: {fileID: 0}
-  mortarIngredientVerticalOffset: -0.05
+  mortarIngredientVerticalOffset: -0.1
   mortarPowderVerticalOffset: -0.06
   dragLiftHeight: 0.55
   mortarDragClearance: 0.08
@@ -4334,7 +4334,7 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 0}
   platePlacementPoint: {fileID: 0}
-  mortarIngredientVerticalOffset: -0.05
+  mortarIngredientVerticalOffset: -0.1
   mortarPowderVerticalOffset: -0.06
   dragLiftHeight: 0.55
   mortarDragClearance: 0.08
@@ -4525,7 +4525,7 @@ MonoBehaviour:
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 0}
   platePlacementPoint: {fileID: 0}
-  mortarIngredientVerticalOffset: -0.05
+  mortarIngredientVerticalOffset: -0.1
   mortarPowderVerticalOffset: -0.06
   dragLiftHeight: 0.55
   mortarDragClearance: 0.08

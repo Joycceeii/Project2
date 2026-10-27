@@ -71,6 +71,12 @@ namespace TheTasteReviver
 
         public bool TryAddIngredients(IReadOnlyList<IngredientData> ingredients)
         {
+            if (HasEvaluated)
+            {
+                uiManager?.ShowHint("Press Reset Attempt before changing an evaluated recipe.");
+                return false;
+            }
+
             List<IngredientData> validIngredients = ingredients != null
                 ? ingredients.Where(ingredient => ingredient != null).Distinct().ToList()
                 : new List<IngredientData>();
@@ -283,6 +289,11 @@ namespace TheTasteReviver
 
         public bool RemoveIngredientsFromCurrentBatch(IReadOnlyList<IngredientData> ingredients)
         {
+            if (HasEvaluated)
+            {
+                return false;
+            }
+
             List<IngredientData> validIngredients = ingredients != null
                 ? ingredients.Where(ingredient => ingredient != null).Distinct().ToList()
                 : new List<IngredientData>();
@@ -772,6 +783,12 @@ namespace TheTasteReviver
 
         public void StartNewBatch()
         {
+            if (HasEvaluated)
+            {
+                uiManager?.ShowHint("Press Reset Attempt before starting another batch.");
+                return;
+            }
+
             if (!HasIngredientsInBowl)
             {
                 uiManager?.ShowHint("Add an ingredient before starting another batch.");

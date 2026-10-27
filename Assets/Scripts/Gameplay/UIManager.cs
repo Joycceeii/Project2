@@ -994,6 +994,7 @@ namespace TheTasteReviver
 
             if (IsAlive(newBatchButton))
             {
+                newBatchButton.interactable = !attempt.HasEvaluated;
                 bool showNewBatch = mechanics != null && mechanics.enableCombination && hasIngredients;
                 newBatchButton.gameObject.SetActive(showNewBatch);
             }
