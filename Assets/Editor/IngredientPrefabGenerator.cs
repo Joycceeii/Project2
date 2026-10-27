@@ -10,6 +10,137 @@ namespace TheTasteReviver.EditorTools
     public static class IngredientPrefabGenerator
     {
         private const string ArtRoot = "Assets/Art/Ingredients";
+
+        [MenuItem("The Taste Reviver/Prepare Ingredient Placement Points")]
+        private static void PrepareIngredientPlacementPoints()
+        {
+            if (Application.isPlaying)
+            {
+                Debug.LogWarning("Exit Play Mode before preparing ingredient placement points.");
+                return;
+            }
+            RestoreSuppliedChiliModel();
+            foreach (LevelIngredientDisplayManager display in Object.FindObjectsByType<LevelIngredientDisplayManager>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                Transform slots = display.transform.Find("Ingredient Slots");
+                if (slots == null) continue;
+                int slotIndex = 0;
+                Vector3 rowOrigin = slots.childCount > 0 ? slots.GetChild(0).localPosition : Vector3.zero;
+                foreach (Transform slot in slots)
+                {
+                    Undo.RecordObject(slot, "Arrange ingredient plates in a row");
+                    slot.localPosition = new Vector3((slotIndex++ - 1.5f) * 1.2f, rowOrigin.y, rowOrigin.z);
+                    Transform item = slot.Find("Ingredient");
+                    Transform point = slot.Find("Ingredient Placement Point");
+                    if (point == null)
+                    {
+                        point = new GameObject("Ingredient Placement Point").transform;
+                        Undo.RegisterCreatedObjectUndo(point.gameObject, "Create ingredient placement point");
+                        point.SetParent(slot, false);
+                        point.localPosition = item != null ? item.localPosition : Vector3.zero;
+                    }
+                    DraggableIngredient drag = item != null ? item.GetComponent<DraggableIngredient>() : null;
+                    if (drag != null && drag.sourcePrefab != null && item.GetComponent<IngredientVisualState>() == null)
+                    {
+                        GameObject replacement = (GameObject)PrefabUtility.InstantiatePrefab(drag.sourcePrefab, slot);
+                        Undo.RegisterCreatedObjectUndo(replacement, "Use complete ingredient prefab");
+                        replacement.name = "Ingredient";
+                        replacement.transform.SetLocalPositionAndRotation(item.localPosition, item.localRotation);
+                        replacement.transform.localScale = item.localScale;
+                        DraggableIngredient replacementDrag = replacement.GetComponent<DraggableIngredient>();
+                        if (replacementDrag == null) replacementDrag = Undo.AddComponent<DraggableIngredient>(replacement);
+                        replacementDrag.ingredientData = drag.ingredientData;
+                        replacementDrag.sourcePrefab = drag.sourcePrefab;
+                        replacementDrag.attemptManager = display.attemptManager;
+                        replacementDrag.mortarArea = display.mortarArea;
+                        Undo.DestroyObjectImmediate(item.gameObject);
+                        drag = replacementDrag;
+                    }
+                    if (drag != null)
+                    {
+                        if (drag.ingredientData != null && drag.ingredientData.ingredientID == "Rice" && drag.sourcePrefab != null)
+                        {
+                            Undo.RecordObject(drag.transform, "Restore authored Rice prefab size");
+                            drag.transform.localScale = drag.sourcePrefab.transform.localScale;
+                        }
+                        // One-time editor placement based on visible meshes; runtime never
+                        // recalculates this position. Ignore inactive powder/legacy visuals.
+                        Transform plate = slot.Find("Plate");
+                        Renderer[] plateRenderers = plate != null ? plate.GetComponentsInChildren<Renderer>() : new Renderer[0];
+                        Renderer[] ingredientRenderers = drag.GetComponentsInChildren<Renderer>();
+                        if (plateRenderers.Length > 0 && ingredientRenderers.Length > 0)
+                        {
+                            Bounds plateBounds = plateRenderers[0].bounds;
+                            foreach (Renderer renderer in plateRenderers) plateBounds.Encapsulate(renderer.bounds);
+                            Bounds ingredientBounds = ingredientRenderers[0].bounds;
+                            foreach (Renderer renderer in ingredientRenderers) ingredientBounds.Encapsulate(renderer.bounds);
+                            Vector3 offset = new Vector3(plateBounds.center.x - ingredientBounds.center.x,
+                                plateBounds.max.y + 0.005f - ingredientBounds.min.y,
+                                plateBounds.center.z - ingredientBounds.center.z);
+                            Undo.RecordObject(drag.transform, "Place ingredient above plate mesh");
+                            drag.transform.position += offset;
+                            Undo.RecordObject(point, "Save plate placement point");
+                            point.position = drag.transform.position;
+                        }
+                        Undo.RecordObject(drag, "Assign plate placement point");
+                        drag.platePlacementPoint = point;
+                        EditorUtility.SetDirty(drag);
+                    }
+                }
+                MortarArea mortar = display.mortarArea;
+                if (mortar != null && mortar.ingredientPlacementPoint == null)
+                {
+                    Transform point = new GameObject("Ingredient Placement Point").transform;
+                    Undo.RegisterCreatedObjectUndo(point.gameObject, "Create mortar placement point");
+                    point.SetParent(mortar.transform, false);
+                    // Initial preview only; the user authors this Transform in Scene view.
+                    point.localPosition = Vector3.up * 0.2f;
+                    Undo.RecordObject(mortar, "Assign mortar placement point");
+                    mortar.ingredientPlacementPoint = point;
+                    EditorUtility.SetDirty(mortar);
+                }
+                UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(display.gameObject.scene);
+            }
+        }
+        private static void RestoreSuppliedChiliModel()
+        {
+            const string modelPath = "Assets/Art/Ingredients/Chili/Models/lod_basic_pbr.fbx";
+            const string source = "C:/Users/25973/OneDrive/Desktop/味觉复原师素材/chili";
+            const string prefabPath = "Assets/Art/Ingredients/Chili/Prefabs/PF_Chili.prefab";
+            if (!File.Exists(source + "/lod_basic_pbr.fbx")) return;
+            Directory.CreateDirectory("Assets/Art/Ingredients/Chili/Models");
+            Directory.CreateDirectory("Assets/Art/Ingredients/Chili/Textures");
+            if (!File.Exists(modelPath)) File.Copy(source + "/lod_basic_pbr.fbx", modelPath);
+            foreach (string file in Directory.GetFiles(source, "*.png"))
+            {
+                string target = "Assets/Art/Ingredients/Chili/Textures/" + Path.GetFileName(file);
+                if (!File.Exists(target)) File.Copy(file, target);
+            }
+            AssetDatabase.Refresh();
+            GameObject model = AssetDatabase.LoadAssetAtPath<GameObject>(modelPath);
+            if (model == null) return;
+            const string materialPath = "Assets/Art/Ingredients/Chili/Materials/MAT_Imported_Chili.mat";
+            Material material = AssetDatabase.LoadAssetAtPath<Material>(materialPath);
+            if (material == null)
+            {
+                material = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+                material.SetTexture("_BaseMap", AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Art/Ingredients/Chili/Textures/texture_diffuse.png"));
+                AssetDatabase.CreateAsset(material, materialPath);
+            }
+            GameObject contents = PrefabUtility.LoadPrefabContents(prefabPath);
+            try
+            {
+                Transform before = contents.transform.Find("Before Grinding");
+                if (before == null || before.Find("Imported Chili") != null) return;
+                foreach (Transform child in before) child.gameObject.SetActive(false);
+                GameObject visual = (GameObject)PrefabUtility.InstantiatePrefab(model, before);
+                visual.name = "Imported Chili";
+                foreach (Renderer renderer in visual.GetComponentsInChildren<Renderer>(true))
+                    renderer.sharedMaterials = Enumerable.Repeat(material, renderer.sharedMaterials.Length).ToArray();
+                PrefabUtility.SaveAsPrefabAsset(contents, prefabPath);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(contents); }
+        }
         private const string EnvironmentRoot = "Assets/Art/Environment";
         private const string IngredientDataRoot = "Assets/Data/GeneratedAssets/Ingredients";
         private const string BowlModelPath = "Assets/Art/Environment/Mortar/Models/lod_basic_pbr.fbx";

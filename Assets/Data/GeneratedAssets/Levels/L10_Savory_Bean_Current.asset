@@ -21,7 +21,24 @@ MonoBehaviour:
     and coarse salt should feel familiar from earlier recipes. Use your Experiment
     Log to place and balance them, then choose a force and speed that preserve the
     douchi's depth.
-  storyIntroPages: []
+  storyIntroPages:
+  - pageKey: Level10_Savory_Bean_Start
+    imageResourcePath: Story/Level10_Savory_Bean_Start
+    storyText: 'At the harbor, Grandma finds the deep savory aroma of Yangjiang douchi.
+
+      Ginger,
+      dried tangerine peel, and coarse salt wait nearby, each carrying a lesson from
+      an earlier page.
+
+      She opens the cookbook again and begins to rebuild
+      the savory base.'
+    overrideTextPresentation: 1
+    textSize: {x: 820, y: 122}
+    textPosition: {x: 406, y: 266}
+    textRotation: 9.985362
+    textFontSize: 36
+    textColor: {r: 0.12, g: 0.1, b: 0.08, a: 1}
+    textAlignment: 257
   maxIngredientCount: 4
   availableIngredients:
   - {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}

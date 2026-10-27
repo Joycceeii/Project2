@@ -588,10 +588,6 @@ public class TestLevelInitializer : MonoBehaviour
                 }
 
                 ingredient.mortarArea = mortar;
-                ingredient.mortarDropHeight = 0.2f;
-                ingredient.mortarGroundVisualLift = 0.04f;
-                ingredient.groundVisualLift = 0.1f;
-                ingredient.homeGroundVisualLift = 0.24f;
                 if (attempt != null)
                 {
                     ingredient.attemptManager = attempt;
@@ -640,10 +636,6 @@ public class TestLevelInitializer : MonoBehaviour
                 drag.ingredientData = ingredient;
                 drag.mortarArea = mortar;
                 drag.attemptManager = attempt;
-                drag.mortarDropHeight = 0.2f;
-                drag.mortarGroundVisualLift = 0.04f;
-                drag.groundVisualLift = 0.1f;
-                drag.homeGroundVisualLift = 0.24f;
             }
         }
 

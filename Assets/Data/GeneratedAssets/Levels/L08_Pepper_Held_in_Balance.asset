@@ -32,6 +32,13 @@ MonoBehaviour:
       Grandma
       knows this recipe cannot be rushed together; every ingredient must first tell
       its own story.'
+    overrideTextPresentation: 1
+    textSize: {x: 820, y: 122}
+    textPosition: {x: 495, y: 236}
+    textRotation: 1.5710124
+    textFontSize: 36
+    textColor: {r: 0.12, g: 0.1, b: 0.08, a: 1}
+    textAlignment: 257
   maxIngredientCount: 3
   availableIngredients:
   - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}

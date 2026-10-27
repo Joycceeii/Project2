@@ -29,6 +29,13 @@ MonoBehaviour:
 
       She must recover the dessert by remembering
       what comes first, what follows, and what waits until the end.'
+    overrideTextPresentation: 1
+    textSize: {x: 820, y: 122}
+    textPosition: {x: 504, y: 184}
+    textRotation: -3.9437256
+    textFontSize: 36
+    textColor: {r: 0.12, g: 0.1, b: 0.08, a: 1}
+    textAlignment: 257
   maxIngredientCount: 3
   availableIngredients:
   - {fileID: 11400000, guid: d193365c702168b409c46e26e3afb9c3, type: 2}

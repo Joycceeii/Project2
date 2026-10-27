@@ -21,7 +21,24 @@ MonoBehaviour:
     Sand ginger, ginger, and coarse salt should feel familiar, while scallion stem
     adds a fresh new layer. Use your Experiment Log to decide the amounts, batch
     structure, order, force, and speed.
-  storyIntroPages: []
+  storyIntroPages:
+  - pageKey: Level11_Ginger_Scallion_Start
+    imageResourcePath: Story/Level11_Ginger_Scallion_Start
+    storyText: 'The next page brings together two familiar gingers and a fresh scallion
+      stem.
+
+      The ginger pair must form the bold first layer, while scallion
+      stem stays fresh in its own batch.
+
+      A little coarse salt will finish
+      the sauce only after every layer is ready.'
+    overrideTextPresentation: 1
+    textSize: {x: 820, y: 122}
+    textPosition: {x: 517, y: 221}
+    textRotation: 1.2930498
+    textFontSize: 36
+    textColor: {r: 0.12, g: 0.1, b: 0.08, a: 1}
+    textAlignment: 257
   maxIngredientCount: 4
   availableIngredients:
   - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}

@@ -30,6 +30,13 @@ MonoBehaviour:
 
       She turns back to the mortar, ready to
       find how much support a strong base truly needs.'
+    overrideTextPresentation: 1
+    textSize: {x: 820, y: 122}
+    textPosition: {x: 462, y: 274}
+    textRotation: 11.2772455
+    textFontSize: 36
+    textColor: {r: 0.12, g: 0.1, b: 0.08, a: 1}
+    textAlignment: 257
   maxIngredientCount: 3
   availableIngredients:
   - {fileID: 11400000, guid: d11fd9689b3620b42bb523b2127f7740, type: 2}

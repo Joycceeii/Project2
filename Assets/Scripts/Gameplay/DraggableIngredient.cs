@@ -12,11 +12,17 @@ namespace TheTasteReviver
         public MortarArea mortarArea;
         public Camera interactionCamera;
         public GameObject sourcePrefab;
+        public Transform platePlacementPoint;
+        public float mortarIngredientVerticalOffset = -0.05f;
+        public float mortarPowderVerticalOffset = -0.06f;
         public float dragLiftHeight = 0.55f;
         public float mortarDragClearance = 0.08f;
         public float mortarDropHeight = 0.2f;
         public float groundVisualLift = 0.1f;
-        public float mortarGroundVisualLift = 0.04f;
+        // Ground visuals use a slightly lower anchor than the drop collider;
+        // the collider encloses the whole mortar while the visible stone is
+        // lower inside the bowl.
+        public float mortarGroundVisualLift = -0.05f;
         public float homeGroundVisualLift = 0.22f;
 
         private Vector3 startPosition;
@@ -38,7 +44,6 @@ namespace TheTasteReviver
             RemoveRedundantLodModels(transform);
             visualState = GetComponent<IngredientVisualState>();
             visualState?.ShowBeforeGrinding();
-            NormalizeRuntimeVisualSettings();
             ResetHomePosition();
             if (interactionCamera == null)
             {
@@ -70,8 +75,8 @@ namespace TheTasteReviver
                 RestoreOriginalRenderers();
             }
 
-            transform.position = startPosition;
-            dragPlaneY = startPosition.y;
+            transform.position = platePlacementPoint != null ? platePlacementPoint.position : startPosition;
+            dragPlaneY = transform.position.y;
             if (keepGroundState && hasBeenGround)
             {
                 EnsureGroundVisual();
@@ -101,8 +106,13 @@ namespace TheTasteReviver
                 return;
             }
 
+            bool firstGroundDisplay = !hasBeenGround;
             hasBeenGround = true;
             EnsureGroundVisual();
+            if (firstGroundDisplay && usesAuthoredGroundVisual)
+            {
+                transform.position += Vector3.up * mortarPowderVerticalOffset;
+            }
             if (!usesAuthoredGroundVisual)
             {
                 AlignGroundVisualToMortarSurface();
@@ -262,7 +272,7 @@ namespace TheTasteReviver
             }
             else
             {
-                transform.position = startPosition;
+                transform.position = platePlacementPoint != null ? platePlacementPoint.position : startPosition;
             }
 
             dragPlaneY = transform.position.y;
@@ -335,12 +345,18 @@ namespace TheTasteReviver
             mortarDragClearance = Mathf.Clamp(mortarDragClearance, 0.03f, 0.2f);
             mortarDropHeight = Mathf.Clamp(mortarDropHeight, 0.18f, 0.22f);
             groundVisualLift = Mathf.Clamp(groundVisualLift, 0.08f, 0.14f);
-            mortarGroundVisualLift = Mathf.Clamp(mortarGroundVisualLift, 0.02f, 0.12f);
+            mortarGroundVisualLift = Mathf.Clamp(mortarGroundVisualLift, -0.12f, 0.12f);
             homeGroundVisualLift = Mathf.Clamp(homeGroundVisualLift, 0.18f, 0.32f);
         }
 
         private void MoveIntoMortar(MortarArea activeMortarArea)
         {
+            if (activeMortarArea.ingredientPlacementPoint != null)
+            {
+                transform.position = activeMortarArea.ingredientPlacementPoint.position
+                    + Vector3.up * mortarIngredientVerticalOffset;
+                return;
+            }
             Collider mortarCollider = activeMortarArea.GetComponent<Collider>();
             Vector3 center = IsAlive(mortarCollider) ? mortarCollider.bounds.center : activeMortarArea.transform.position;
             float visibleY = activeMortarArea.transform.position.y + mortarDropHeight;

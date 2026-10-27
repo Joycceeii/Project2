@@ -30,6 +30,13 @@ MonoBehaviour:
 
       The memory will return only if strength and gentleness
       meet in the right balance.'
+    overrideTextPresentation: 1
+    textSize: {x: 820, y: 122}
+    textPosition: {x: 543, y: 179}
+    textRotation: -5.110626
+    textFontSize: 36
+    textColor: {r: 0.12, g: 0.1, b: 0.08, a: 1}
+    textAlignment: 257
   maxIngredientCount: 2
   availableIngredients:
   - {fileID: 11400000, guid: 66d3b0afa3225c24f8aa1b4bd1bd4d12, type: 2}

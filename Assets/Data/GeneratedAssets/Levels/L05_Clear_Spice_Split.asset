@@ -30,6 +30,13 @@ MonoBehaviour:
 
       Grandma studies the
       little bags and searches for the blend hidden between them.'
+    overrideTextPresentation: 1
+    textSize: {x: 820, y: 122}
+    textPosition: {x: 506, y: 241}
+    textRotation: 1.8074017
+    textFontSize: 36
+    textColor: {r: 0.12, g: 0.1, b: 0.08, a: 1}
+    textAlignment: 257
   maxIngredientCount: 3
   availableIngredients:
   - {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}

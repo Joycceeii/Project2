@@ -29,6 +29,13 @@ MonoBehaviour:
 
       She opens the recipe
       book and prepares to restore the crisp one batch at a time.'
+    overrideTextPresentation: 1
+    textSize: {x: 820, y: 122}
+    textPosition: {x: 432, y: 287}
+    textRotation: 10.705562
+    textFontSize: 36
+    textColor: {r: 0.12, g: 0.1, b: 0.08, a: 1}
+    textAlignment: 257
   maxIngredientCount: 2
   availableIngredients:
   - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}

@@ -19,19 +19,43 @@ MonoBehaviour:
   levelIntro: Use rice to learn grinding force. The goal is a soft rice flavor without
     a burnt taste.
   storyIntroPages:
-  - pageKey: Opening_Guangdong_Map
-    imageResourcePath: Story/Opening_Guangdong_Map
-    storyText: "Grandma is getting old. She always craves that taste from her childhood. She took out an old, yellowed cookbook from the bottom of her suitcase, intending to recreate that childhood taste according to the steps in the cookbook. However, due to the passage of time, the words on the cookbook were no longer legible."
+  - pageKey: Cover
+    imageResourcePath: Story/Cover
+    storyText: 
+    overrideTextPresentation: 0
+    textSize: {x: 820, y: 122}
+    textPosition: {x: 0, y: -248}
+    textRotation: 0
+    textFontSize: 22
+    textColor: {r: 0.12, g: 0.1, b: 0.08, a: 1}
+    textAlignment: 257
+  - pageKey: Begin
+    imageResourcePath: Story/Begin
+    storyText: "\tGrandma is getting old. She always craves that taste from her childhood.
+      \n\tShe took out an old, yellowed cookbook from the bottom of her suitcase,
+      intending to recreate that childhood taste according to the steps in the cookbook.
+      However, due to the passage of time, the words on the cookbook were no longer
+      legible."
+    overrideTextPresentation: 1
+    textSize: {x: 820, y: 122}
+    textPosition: {x: 505, y: 264}
+    textRotation: 1.9372404
+    textFontSize: 36
+    textColor: {r: 0.12, g: 0.1, b: 0.08, a: 1}
+    textAlignment: 257
   - pageKey: Level01_Rice_Start
     imageResourcePath: Story/Level01_Rice_Start
-    storyText: 'The first stop begins on an old arcade street.
-
-      In her hand
-      is a small bag of rice, and in the recipe book only one warning remains: rice
-      can turn burnt under the wrong pressure.
-
-      She starts with the simplest
-      flavor: a clean grain memory.'
+    storyText: "\tThe first stop begins on an old arcade street.\n\tIn her hand is
+      a small bag of rice, and in the recipe book only one warning remains: rice
+      can turn burnt under the wrong pressure.\n\tShe starts with the simplest flavor:
+      a clean grain memory."
+    overrideTextPresentation: 1
+    textSize: {x: 820, y: 122}
+    textPosition: {x: 505, y: 264}
+    textRotation: 1.9372404
+    textFontSize: 32
+    textColor: {r: 0.12, g: 0.1, b: 0.08, a: 1}
+    textAlignment: 257
   maxIngredientCount: 1
   availableIngredients:
   - {fileID: 11400000, guid: 9a1cd94e3dd91be4b88ca7f39f71ca64, type: 2}

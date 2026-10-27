@@ -32,6 +32,13 @@ MonoBehaviour:
 
       She recalls that wrapping
       is the last gesture, not another ingredient to grind away.'
+    overrideTextPresentation: 1
+    textSize: {x: 820, y: 122}
+    textPosition: {x: 510, y: 186}
+    textRotation: -3.694458
+    textFontSize: 36
+    textColor: {r: 0.12, g: 0.1, b: 0.08, a: 1}
+    textAlignment: 257
   maxIngredientCount: 4
   availableIngredients:
   - {fileID: 11400000, guid: 4d5f8caf59bb96d47b2236cf190c5a6d, type: 2}

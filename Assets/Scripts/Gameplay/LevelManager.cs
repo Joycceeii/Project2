@@ -14,6 +14,8 @@ namespace TheTasteReviver
 
         public int CurrentLevelIndex { get; private set; }
         public RecipeLevelData CurrentLevel => levels.Count == 0 ? null : levels[Mathf.Clamp(CurrentLevelIndex, 0, levels.Count - 1)];
+        public bool CanAdvance => CurrentLevel != null && attemptManager != null
+            && attemptManager.currentLevel == CurrentLevel && attemptManager.HasCorrectEvaluation;
 
         private void Start()
         {
@@ -44,7 +46,19 @@ namespace TheTasteReviver
                 return;
             }
 
-            LoadLevel((CurrentLevelIndex + 1) % levels.Count);
+            if (!CanAdvance)
+            {
+                uiManager?.ShowHint("Complete this recipe correctly before moving to the next level.");
+                return;
+            }
+
+            if (CurrentLevelIndex >= levels.Count - 1)
+            {
+                uiManager?.ShowEndPage();
+                return;
+            }
+
+            LoadLevel(CurrentLevelIndex + 1);
         }
     }
 }

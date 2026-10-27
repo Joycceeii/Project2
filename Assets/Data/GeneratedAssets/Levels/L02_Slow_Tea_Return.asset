@@ -29,6 +29,13 @@ MonoBehaviour:
 
       Grandma sits by the window and listens for
       the rhythm of the leaves.'
+    overrideTextPresentation: 1
+    textSize: {x: 820, y: 122}
+    textPosition: {x: 458, y: 247}
+    textRotation: 2.3640354
+    textFontSize: 36
+    textColor: {r: 0.12, g: 0.1, b: 0.08, a: 1}
+    textAlignment: 257
   maxIngredientCount: 1
   availableIngredients:
   - {fileID: 11400000, guid: 96f578bf4f94cac4c86b426bcf1f3119, type: 2}

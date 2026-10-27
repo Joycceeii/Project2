@@ -118,6 +118,7 @@ namespace TheTasteReviver
         private Image storyIntroImage;
         private TMP_Text storyIntroText;
         private TMP_Text storyIntroButtonText;
+        private bool showingEndPage;
         private readonly List<StoryIntroPageData> pendingStoryIntroPages = new List<StoryIntroPageData>();
         private int currentStoryIntroIndex;
         private string lastMortarReactionKey = string.Empty;
@@ -150,6 +151,7 @@ namespace TheTasteReviver
         private void Awake()
         {
             ResolvePrefabViews();
+            ApplyThemeFontToPrefabTexts();
             gameplayHud?.Bind(this);
             ingredientTooltipView?.Hide();
             mortarReactionView?.Hide();
@@ -167,6 +169,45 @@ namespace TheTasteReviver
                 EnsureIngredientTooltip();
                 EnsureMortarReactionPanel();
                 EnsureStoryIntroPanel();
+            }
+
+            ApplyStoryIntroFont();
+        }
+
+        private void ApplyThemeFontToPrefabTexts()
+        {
+            TMP_FontAsset themeFont = ThemeFontProvider.GetTmpFont();
+            if (themeFont == null)
+            {
+                return;
+            }
+
+            TMP_Text[] texts = GetComponentsInChildren<TMP_Text>(true);
+            foreach (TMP_Text text in texts)
+            {
+                if (text != null)
+                {
+                    text.font = themeFont;
+                }
+            }
+        }
+
+        private void ApplyStoryIntroFont()
+        {
+            TMP_FontAsset storyFont = ThemeFontProvider.GetStoryTmpFont();
+            if (storyFont == null)
+            {
+                return;
+            }
+
+            if (storyIntroView != null && storyIntroView.EditorStoryText != null)
+            {
+                storyIntroView.EditorStoryText.font = storyFont;
+            }
+
+            if (IsAlive(storyIntroText))
+            {
+                storyIntroText.font = storyFont;
             }
         }
 
@@ -786,7 +827,7 @@ namespace TheTasteReviver
 
             ShowEvaluationResult(result, hint, permanentHint);
             logManager?.AddRecord(attemptManager, result, hint, permanentHint);
-            attemptManager.MarkEvaluated();
+            attemptManager.MarkEvaluated(result);
             lastEvaluationTime = Time.time;
             if (isAutoEvaluation)
             {
@@ -910,6 +951,11 @@ namespace TheTasteReviver
 
         public void RefreshAttemptPanels(RecipeAttemptManager attempt)
         {
+            if (IsAlive(nextLevelButton))
+            {
+                nextLevelButton.interactable = levelManager != null && levelManager.CanAdvance;
+            }
+
             if (attempt == null)
             {
                 return;
@@ -1084,7 +1130,8 @@ namespace TheTasteReviver
                 return attemptManager.GrindingBatches != null && attemptManager.GrindingBatches.Count > 0;
             }
 
-            bool reachedMinimumGrindTime = attemptManager.GetCurrentBatchGrindDuration() >= GetEvaluationGateSeconds(level);
+            bool reachedMinimumGrindTime = attemptManager.HasCurrentBatchReachedPowderTime()
+                || attemptManager.GetCurrentBatchGrindDuration() >= GetEvaluationGateSeconds(level);
             if (!reachedMinimumGrindTime)
             {
                 return false;
@@ -2748,25 +2795,25 @@ namespace TheTasteReviver
             GameObject imageFrame = new GameObject("Story Image Frame");
             imageFrame.transform.SetParent(storyIntroPanel.transform, false);
             RectTransform imageFrameRect = imageFrame.AddComponent<RectTransform>();
-            imageFrameRect.anchorMin = new Vector2(0.5f, 0.5f);
-            imageFrameRect.anchorMax = new Vector2(0.5f, 0.5f);
+            imageFrameRect.anchorMin = Vector2.zero;
+            imageFrameRect.anchorMax = Vector2.one;
             imageFrameRect.pivot = new Vector2(0.5f, 0.5f);
-            imageFrameRect.sizeDelta = storyIntroFrameSize;
-            imageFrameRect.anchoredPosition = storyIntroFramePosition;
+            imageFrameRect.sizeDelta = Vector2.zero;
+            imageFrameRect.anchoredPosition = Vector2.zero;
             Image imageFrameBackground = imageFrame.AddComponent<Image>();
             PanelBackgroundStyle.Apply(imageFrameBackground, PanelBackgroundKind.PaleCream, 0.98f);
 
             GameObject imageObject = new GameObject("Story Image");
             imageObject.transform.SetParent(imageFrame.transform, false);
             RectTransform imageRect = imageObject.AddComponent<RectTransform>();
-            imageRect.anchorMin = new Vector2(0.5f, 0.5f);
-            imageRect.anchorMax = new Vector2(0.5f, 0.5f);
+            imageRect.anchorMin = Vector2.zero;
+            imageRect.anchorMax = Vector2.one;
             imageRect.pivot = new Vector2(0.5f, 0.5f);
-            imageRect.sizeDelta = storyIntroImageSize;
-            imageRect.anchoredPosition = storyIntroImagePosition;
+            imageRect.sizeDelta = Vector2.zero;
+            imageRect.anchoredPosition = Vector2.zero;
             storyIntroImage = imageObject.AddComponent<Image>();
             storyIntroImage.color = Color.white;
-            storyIntroImage.preserveAspect = true;
+            storyIntroImage.preserveAspect = false;
             storyIntroImage.raycastTarget = false;
 
             storyIntroText = CreateRuntimeText(
@@ -2830,6 +2877,53 @@ namespace TheTasteReviver
             ShowStoryIntroPage(0);
         }
 
+        public void ShowEndPage()
+        {
+            HideOpeningLevelTitle();
+            pendingStoryIntroPages.Clear();
+            currentStoryIntroIndex = 0;
+            Texture2D texture = Resources.Load<Texture2D>("Story/End");
+            if (texture == null)
+            {
+                return;
+            }
+
+            showingEndPage = true;
+            if (storyIntroView == null && !IsAlive(storyIntroPanel))
+            {
+                EnsureStoryIntroPanel();
+            }
+
+            if (storyIntroView != null)
+            {
+                storyIntroView.Show(texture, string.Empty, "Back to Cover", ReturnToCover);
+                return;
+            }
+
+            storyIntroPanel.SetActive(true);
+            storyIntroPanel.transform.SetAsLastSibling();
+            if (IsAlive(storyIntroBackdropImage))
+            {
+                storyIntroBackdropImage.color = storyIntroBackdropColor;
+            }
+            if (IsAlive(storyIntroImage))
+            {
+                storyIntroImage.sprite = Sprite.Create(
+                    texture,
+                    new Rect(0f, 0f, texture.width, texture.height),
+                    new Vector2(0.5f, 0.5f),
+                    100f);
+            }
+            if (IsAlive(storyIntroText))
+            {
+                storyIntroText.text = string.Empty;
+            }
+            if (IsAlive(storyIntroButtonText))
+            {
+                storyIntroButtonText.text = "Back to Cover";
+            }
+        }
+
         private Transform GetStoryIntroParent()
         {
             Canvas parentCanvas = GetComponentInParent<Canvas>();
@@ -2860,6 +2954,7 @@ namespace TheTasteReviver
                     page.storyText,
                     index >= pendingStoryIntroPages.Count - 1 ? "Begin" : "Continue",
                     AdvanceStoryIntro);
+                ApplyStoryIntroTextPresentation(page);
                 return;
             }
 
@@ -2883,7 +2978,9 @@ namespace TheTasteReviver
 
             if (IsAlive(storyIntroText))
             {
+                ResetLegacyStoryIntroTextPresentation();
                 storyIntroText.text = page.storyText;
+                ApplyStoryIntroTextPresentation(page);
             }
 
             if (IsAlive(storyIntroButtonText))
@@ -2892,8 +2989,63 @@ namespace TheTasteReviver
             }
         }
 
+        private void ApplyStoryIntroTextPresentation(StoryIntroPageData page)
+        {
+            if (page == null || !page.overrideTextPresentation)
+            {
+                return;
+            }
+
+            if (storyIntroView != null)
+            {
+                storyIntroView.ApplyTextPresentation(
+                    page.textSize,
+                    page.textPosition,
+                    page.textRotation,
+                    page.textFontSize,
+                    page.textColor,
+                    page.textAlignment);
+                return;
+            }
+
+            if (!IsAlive(storyIntroText))
+            {
+                return;
+            }
+
+            RectTransform textRect = storyIntroText.rectTransform;
+            textRect.sizeDelta = page.textSize;
+            textRect.anchoredPosition = page.textPosition;
+            textRect.localRotation = Quaternion.Euler(0f, 0f, page.textRotation);
+            storyIntroText.fontSize = page.textFontSize;
+            storyIntroText.color = page.textColor;
+            storyIntroText.alignment = page.textAlignment;
+        }
+
+        private void ResetLegacyStoryIntroTextPresentation()
+        {
+            if (!IsAlive(storyIntroText))
+            {
+                return;
+            }
+
+            RectTransform textRect = storyIntroText.rectTransform;
+            textRect.sizeDelta = storyIntroTextSize;
+            textRect.anchoredPosition = storyIntroTextPosition;
+            textRect.localRotation = Quaternion.identity;
+            storyIntroText.fontSize = 22f;
+            storyIntroText.color = GraphiteTextColor;
+            storyIntroText.alignment = TextAlignmentOptions.TopLeft;
+        }
+
         private void AdvanceStoryIntro()
         {
+            if (showingEndPage)
+            {
+                ReturnToCover();
+                return;
+            }
+
             if (pendingStoryIntroPages.Count == 0)
             {
                 CloseStoryIntro();
@@ -2916,8 +3068,16 @@ namespace TheTasteReviver
             ShowStoryIntroPage(nextIndex);
         }
 
+        private void ReturnToCover()
+        {
+            CloseStoryIntro();
+            shownStoryIntroPageKeys.Clear();
+            levelManager?.LoadLevel(0);
+        }
+
         private void CloseStoryIntro()
         {
+            showingEndPage = false;
             pendingStoryIntroPages.Clear();
             currentStoryIntroIndex = 0;
             if (storyIntroView != null)

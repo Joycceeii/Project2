@@ -27,6 +27,13 @@ namespace TheTasteReviver
         [Tooltip("Fallback only when no RecipeAttemptManager is connected. Use RecipeAttemptManager.batchPowderSeconds for gameplay tuning.")]
         public float groundVisualDelaySeconds = 1.5f;
         public bool expandClickHitbox = true;
+        [Header("Visual Alignment")]
+        [Tooltip("Aligns the GrindingTip with the mortar center when the level starts, preventing the tip from clipping through the rim.")]
+        // Keep the authored scene position. This is intentionally opt-in so
+        // the pestle can be positioned by hand in the Unity editor without
+        // being moved again whenever a level starts.
+        public bool alignGrindingTipToMortarOnStart = false;
+        public float grindingTipCenterClearance = 0.015f;
         public Vector3 clickHitboxPadding = new Vector3(0.45f, 0.28f, 0.45f);
         public Vector3 minimumClickHitboxSize = new Vector3(0.9f, 0.45f, 0.9f);
 
@@ -66,6 +73,55 @@ namespace TheTasteReviver
 
             dragPlaneY = transform.position.y;
             RefreshLabel();
+        }
+
+        private void Start()
+        {
+            if (alignGrindingTipToMortarOnStart)
+            {
+                AlignGrindingTipToMortar();
+            }
+
+            startPosition = transform.position;
+            startRotation = transform.rotation;
+            dragPlaneY = transform.position.y;
+        }
+
+        private void AlignGrindingTipToMortar()
+        {
+            if (mortarArea == null)
+            {
+                mortarArea = FindFirstObjectByType<MortarArea>();
+            }
+
+            if (mortarArea == null)
+            {
+                return;
+            }
+
+            Bounds visualBounds = CalculateLocalBounds();
+            if (visualBounds.size.sqrMagnitude <= 0.0001f)
+            {
+                return;
+            }
+
+            Collider mortarCollider = mortarArea.GetComponent<Collider>();
+            Vector3 target = mortarCollider != null
+                ? new Vector3(mortarCollider.bounds.center.x, mortarCollider.bounds.max.y, mortarCollider.bounds.center.z)
+                : mortarArea.transform.position;
+            Vector3 visualTipWorld = transform.TransformPoint(new Vector3(
+                visualBounds.center.x,
+                visualBounds.min.y,
+                visualBounds.center.z));
+            // The tip must sit on the upper grinding surface, not at the
+            // collider center. The previous X/Z-only alignment left the tip
+            // below the stone, which made the pestle visibly clip through it.
+            transform.position += target - visualTipWorld;
+
+            if (grindingTipCenterClearance > 0f)
+            {
+                transform.position += mortarArea.transform.up * grindingTipCenterClearance;
+            }
         }
 
         private void ApplyPlayerFriendlySpeedCalibration()
@@ -171,7 +227,7 @@ namespace TheTasteReviver
                 transform.position = worldPoint;
             }
 
-            bool validGrinding = mortarArea != null && mortarArea.ContainsWorldPoint(transform.position);
+            bool validGrinding = mortarArea != null && mortarArea.ContainsGrindingPoint(transform.position);
             if (validGrinding)
             {
                 float delta = Vector3.Distance(Input.mousePosition, lastMousePosition);

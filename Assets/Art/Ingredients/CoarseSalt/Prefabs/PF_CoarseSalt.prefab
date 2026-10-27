@@ -569,6 +569,9 @@ MonoBehaviour:
   mortarArea: {fileID: 0}
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 7302915921474419236}
+  platePlacementPoint: {fileID: 0}
+  mortarIngredientVerticalOffset: -0.05
+  mortarPowderVerticalOffset: -0.06
   dragLiftHeight: 0.55
   mortarDragClearance: 0.08
   mortarDropHeight: 0.2
@@ -635,8 +638,8 @@ Transform:
   m_GameObject: {fileID: 7500498178598206182}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.0017499626, y: 0.009248279, z: -0.00043174624}
+  m_LocalScale: {x: 1.1029481, y: 1.1029481, z: 1.1029481}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 18159048998094450}

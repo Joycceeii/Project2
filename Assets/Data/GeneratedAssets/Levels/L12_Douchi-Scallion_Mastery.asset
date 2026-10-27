@@ -20,7 +20,24 @@ MonoBehaviour:
   levelIntro: This mastery recipe uses only familiar ingredients. Build a douchi-and-ginger
     base, keep scallion stem fresh in its own batch, and let coarse salt finish the
     sauce. Your Experiment Log contains every rule you need.
-  storyIntroPages: []
+  storyIntroPages:
+  - pageKey: Level12_Douchi_Scallion_Start
+    imageResourcePath: Story/Level12_Douchi_Scallion_Start
+    storyText: 'On the final recipe page, Yangjiang douchi meets ginger, scallion
+      stem, and coarse salt.
+
+      The savory base leads, the fresh scallion waits
+      separately, and the smallest finishing note comes last.
+
+      Grandma gathers
+      every lesson from the Experiment Log for one last taste to restore.'
+    overrideTextPresentation: 1
+    textSize: {x: 820, y: 122}
+    textPosition: {x: 504, y: 191}
+    textRotation: -4.1318665
+    textFontSize: 36
+    textColor: {r: 0.12, g: 0.1, b: 0.08, a: 1}
+    textAlignment: 257
   maxIngredientCount: 4
   availableIngredients:
   - {fileID: 11400000, guid: 35cab88bfd23e2a4ba86da57c9d1e0de, type: 2}

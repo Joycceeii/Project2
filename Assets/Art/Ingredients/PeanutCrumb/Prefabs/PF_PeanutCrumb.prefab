@@ -283,8 +283,8 @@ Transform:
   m_GameObject: {fileID: 5714729919828260817}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.00020200014, y: -0.00040892512, z: 0}
+  m_LocalScale: {x: 0.9939526, y: 0.9939526, z: 0.9939526}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7800320321949957066}
@@ -378,6 +378,9 @@ MonoBehaviour:
   mortarArea: {fileID: 0}
   interactionCamera: {fileID: 0}
   sourcePrefab: {fileID: 8378243839497634870}
+  platePlacementPoint: {fileID: 0}
+  mortarIngredientVerticalOffset: -0.05
+  mortarPowderVerticalOffset: -0.06
   dragLiftHeight: 0.55
   mortarDragClearance: 0.08
   mortarDropHeight: 0.2

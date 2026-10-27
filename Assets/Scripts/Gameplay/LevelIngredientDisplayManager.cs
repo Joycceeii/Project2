@@ -16,15 +16,15 @@ namespace TheTasteReviver
         private const float LabelSurfaceOffset = 0.08f;
         private const float PlateLabelYOffset = 0.018f;
         private const float PlateIngredientSurfaceY = 0.16f;
-        private const float MortarDropHeight = 0.2f;
-        private const float GroundVisualLift = 0.1f;
-        private const float MortarGroundVisualLift = 0.04f;
-        private const float HomeGroundVisualLift = 0.24f;
         private const string PortionClusterName = "Portion Cluster";
 
         public MortarArea mortarArea;
         public RecipeAttemptManager attemptManager;
         public GameObject platePrefab;
+        [Tooltip("Keep positions and rotations authored on the Ingredient Slot objects in the Scene instead of recalculating them at level start.")]
+        public bool preserveAuthoredSlotPositions = true;
+        public float plateRowCenterX = 0f;
+        public float plateRowSpacing = 1.2f;
         public bool hideLegacyDisplaysOnFirstRefresh = true;
         public bool showIngredientLabels = false;
         public Vector3 labelOffset = new Vector3(0f, PlateLabelYOffset, -0.28f);
@@ -32,6 +32,7 @@ namespace TheTasteReviver
         public float labelCharacterSize = 0.035f;
 
         private bool legacyDisplaysHandled;
+        private readonly HashSet<GameObject> runtimeCreatedSlots = new HashSet<GameObject>();
 
 #if UNITY_EDITOR
         private void OnValidate()
@@ -191,6 +192,8 @@ namespace TheTasteReviver
                 if (!IsAlive(slotTransform))
                 {
                     slotTransform = CreateSlot(slotName, container).transform;
+                    runtimeCreatedSlots.Add(slotTransform.gameObject);
+                    slotTransform.position = GetSlotPosition(i, MaxSlots);
                 }
                 else
                 {
@@ -258,8 +261,14 @@ namespace TheTasteReviver
                 return;
             }
 
-            slot.transform.position = GetSlotPosition(index, activeCount);
-            slot.transform.rotation = Quaternion.identity;
+            if (!preserveAuthoredSlotPositions || runtimeCreatedSlots.Contains(slot))
+            {
+                slot.transform.position = GetSlotPosition(index, activeCount);
+                slot.transform.rotation = Quaternion.identity;
+            }
+            Vector3 rowPosition = slot.transform.localPosition;
+            rowPosition.x = plateRowCenterX + (index - (activeCount - 1) * 0.5f) * plateRowSpacing;
+            slot.transform.localPosition = rowPosition;
 
             EnsurePlateVisual(slot.transform);
             Transform previousPowderVisuals = slot.transform.Find(PowderVisualsName);
@@ -268,6 +277,26 @@ namespace TheTasteReviver
                 DestroyObject(previousPowderVisuals.gameObject);
             }
 
+            Transform existingItem = FindIngredientItem(slot.transform);
+            DraggableIngredient previousDrag = IsAlive(existingItem) ? existingItem.GetComponent<DraggableIngredient>() : null;
+            bool sameIngredient = previousDrag != null && previousDrag.sourcePrefab == ingredient.prefab;
+            Transform platePoint = slot.transform.Find("Ingredient Placement Point");
+            if (platePoint == null)
+            {
+                platePoint = new GameObject("Ingredient Placement Point").transform;
+                platePoint.SetParent(slot.transform, false);
+                platePoint.localPosition = IsAlive(existingItem) ? existingItem.localPosition : Vector3.zero;
+            }
+            bool preserveAuthoredIngredientPosition = IsAlive(existingItem);
+            Vector3 authoredIngredientPosition = preserveAuthoredIngredientPosition
+                ? existingItem.localPosition
+                : Vector3.zero;
+            Quaternion authoredIngredientRotation = preserveAuthoredIngredientPosition
+                ? existingItem.localRotation
+                : Quaternion.identity;
+            Vector3 authoredIngredientScale = preserveAuthoredIngredientPosition
+                ? existingItem.localScale
+                : Vector3.one;
             Transform item = EnsureIngredientItem(slot.transform, ingredient);
             if (!IsAlive(item))
             {
@@ -277,7 +306,13 @@ namespace TheTasteReviver
             item.gameObject.name = "Ingredient";
             item.gameObject.SetActive(true);
             StripLodGroups(item.gameObject);
-            PlaceIngredientItemOnPlate(item, ingredient.prefab != null);
+            if (preserveAuthoredIngredientPosition && (item == existingItem || sameIngredient))
+            {
+                item.localPosition = authoredIngredientPosition;
+                item.localRotation = authoredIngredientRotation;
+                item.localScale = authoredIngredientScale;
+            }
+            item.position = platePoint.position;
             ConfigureIngredientDragCollider(item, ingredient.prefab != null);
             if (ingredient.prefab == null)
             {
@@ -295,10 +330,7 @@ namespace TheTasteReviver
             drag.mortarArea = mortarArea;
             drag.attemptManager = attemptManager;
             drag.sourcePrefab = ingredient.prefab;
-            drag.mortarDropHeight = MortarDropHeight;
-            drag.groundVisualLift = GroundVisualLift;
-            drag.mortarGroundVisualLift = MortarGroundVisualLift;
-            drag.homeGroundVisualLift = HomeGroundVisualLift;
+            drag.platePlacementPoint = platePoint;
             drag.ResetHomePosition();
 
             ConfigureLabel(slot.transform, ingredient);
@@ -312,7 +344,8 @@ namespace TheTasteReviver
             DraggableIngredient currentDrag = IsAlive(current) ? current.GetComponent<DraggableIngredient>() : null;
             bool currentMatchesPrefab = prefab == null
                 ? IsAlive(current) && (!IsAlive(currentDrag) || currentDrag.sourcePrefab == null)
-                : IsAlive(currentDrag) && currentDrag.sourcePrefab == prefab;
+                : IsAlive(currentDrag) && currentDrag.sourcePrefab == prefab
+                    && current.GetComponent<IngredientVisualState>() != null;
 
             if (currentMatchesPrefab)
             {
@@ -321,6 +354,8 @@ namespace TheTasteReviver
 
             if (IsAlive(current))
             {
+                current.gameObject.SetActive(false);
+                current.name = "Retired Ingredient";
                 DestroyObject(current.gameObject);
             }
 
@@ -820,10 +855,6 @@ namespace TheTasteReviver
                 : new List<IngredientData>();
             drag.mortarArea = mortarArea;
             drag.attemptManager = attemptManager;
-            drag.mortarDropHeight = MortarDropHeight;
-            drag.groundVisualLift = GroundVisualLift;
-            drag.mortarGroundVisualLift = MortarGroundVisualLift;
-            drag.homeGroundVisualLift = HomeGroundVisualLift;
             drag.ResetHomePosition();
         }
 
@@ -874,9 +905,6 @@ namespace TheTasteReviver
                 }
 
                 current.name = "Plate";
-                current.localPosition = Vector3.zero;
-                current.localRotation = Quaternion.identity;
-                current.localScale = Vector3.one;
                 DisablePlateColliders(current);
                 return current;
             }
@@ -935,34 +963,6 @@ namespace TheTasteReviver
             }
         }
 #endif
-
-        private static void PlaceIngredientItemOnPlate(Transform item, bool usesPrefab)
-        {
-            if (!IsAlive(item))
-            {
-                return;
-            }
-
-            item.localPosition = Vector3.up * PlateIngredientSurfaceY;
-            if (!usesPrefab)
-            {
-                item.localScale = Vector3.one * 0.26f;
-                return;
-            }
-
-            Bounds bounds = CalculateVisibleLocalBounds(item);
-            if (bounds.size.sqrMagnitude <= 0.0001f)
-            {
-                return;
-            }
-
-            Vector3 horizontalCenterOffset = item.TransformVector(new Vector3(bounds.center.x, 0f, bounds.center.z));
-            float bottomOffsetY = item.TransformVector(Vector3.up * bounds.min.y).y;
-            item.localPosition = new Vector3(
-                -horizontalCenterOffset.x,
-                PlateIngredientSurfaceY - bottomOffsetY,
-                -horizontalCenterOffset.z);
-        }
 
         private static Bounds CalculateLocalBounds(Transform root)
         {

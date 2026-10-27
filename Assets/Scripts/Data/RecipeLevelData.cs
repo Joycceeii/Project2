@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 namespace TheTasteReviver
@@ -191,6 +192,17 @@ namespace TheTasteReviver
         public string pageKey;
         public string imageResourcePath;
         [TextArea] public string storyText;
+
+        [Header("Story Text Presentation")]
+        [Tooltip("When enabled, this page uses its own text layout and typography instead of the Story Intro prefab defaults.")]
+        public bool overrideTextPresentation;
+        public Vector2 textSize = new Vector2(820f, 122f);
+        public Vector2 textPosition = new Vector2(0f, -248f);
+        [Tooltip("Rotation angle in degrees around the text box center. Positive values rotate counter-clockwise.")]
+        public float textRotation;
+        [Min(1f)] public float textFontSize = 22f;
+        public Color textColor = new Color(0.12f, 0.10f, 0.08f, 1f);
+        public TextAlignmentOptions textAlignment = TextAlignmentOptions.TopLeft;
     }
 
     [CreateAssetMenu(menuName = "The Taste Reviver/Recipe Level Data", fileName = "RecipeLevelData")]

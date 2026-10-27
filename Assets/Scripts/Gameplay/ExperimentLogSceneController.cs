@@ -44,6 +44,7 @@ namespace TheTasteReviver
 
             SuspendGameplayScene();
             EnsureSceneObjects();
+            ApplyThemeFontToSceneTexts();
         }
 
         private void OnEnable()
@@ -54,6 +55,7 @@ namespace TheTasteReviver
             }
 
             EnsureSceneObjects();
+            ApplyThemeFontToSceneTexts();
             Refresh();
         }
 
@@ -65,7 +67,28 @@ namespace TheTasteReviver
             }
 
             EnsureSceneObjects();
+            ApplyThemeFontToSceneTexts();
             Refresh();
+        }
+
+        private void ApplyThemeFontToSceneTexts()
+        {
+            TMP_FontAsset themeFont = ThemeFontProvider.GetTmpFont();
+            if (themeFont == null)
+            {
+                return;
+            }
+
+            TMP_Text[] texts = UnityEngine.Object.FindObjectsByType<TMP_Text>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None);
+            foreach (TMP_Text text in texts)
+            {
+                if (text != null)
+                {
+                    text.font = themeFont;
+                }
+            }
         }
 
         public void EnsureSceneObjects()
@@ -889,15 +912,24 @@ namespace TheTasteReviver
             {
                 builder.AppendLine();
                 builder.AppendLine("Experiment Notes");
-                foreach (ExperimentIngredientEntry note in entry.levelNotes)
+                foreach (ExperimentIngredientEntry note in entry.levelNotes
+                    .OrderBy(note => IsNoteCorrect(note) ? 0 : 1)
+                    .ThenBy(note => note.attemptNumber))
                 {
-                    builder.AppendLine("[" + note.levelID + " " + note.levelName + "]");
+                    builder.AppendLine(FormatLevelHeading(note));
                     List<string> parts = new List<string>();
-                    if (note.checkedRatio) parts.Add(FormatCheckedNote("Amount", note.ratio, note.ratioStatus));
+                    if (note.checkedRatio) parts.Add(FormatCheckedNote("Amount", note.ingredientName + ": " + note.ratio, note.ratioStatus));
                     if (note.checkedOrder) parts.Add(FormatCheckedNote("Order", note.order, note.orderStatus));
-                    if (note.checkedForce) parts.Add(FormatCheckedNote("Force", note.force, note.forceStatus));
-                    if (note.checkedSpeed) parts.Add(FormatCheckedNote("Speed", note.speed, note.speedStatus));
-                    if (note.checkedCombination) parts.Add(FormatCheckedNote("Batch", note.combination, note.combinationStatus));
+                    if (note.checkedForce) parts.Add("Force: " + note.force);
+                    if (note.checkedSpeed) parts.Add("Speed: " + note.speed);
+                    if (note.checkedCombination)
+                    {
+                        parts.Add(FormatCheckedNote("Combination", note.combination, note.combinationStatus));
+                        if (!string.IsNullOrWhiteSpace(note.combinationNote))
+                        {
+                            parts.Add(note.combinationNote);
+                        }
+                    }
 
                     if (parts.Count == 0)
                     {
@@ -920,22 +952,36 @@ namespace TheTasteReviver
 
         private static string FormatCheckedNote(string label, string value, string status)
         {
-            string normalizedStatus;
-            if (string.Equals(status, "Correct", StringComparison.OrdinalIgnoreCase))
+            string suffix = status == "Correct" || status == "Incorrect" ? " (" + status + ")" : string.Empty;
+            return label + ": " + value + suffix;
+        }
+
+        private static string FormatLevelHeading(ExperimentIngredientEntry note)
+        {
+            string levelName = note != null ? note.levelName : string.Empty;
+            string levelID = note != null ? note.levelID : string.Empty;
+            if (!string.IsNullOrWhiteSpace(levelName)
+                && !string.IsNullOrWhiteSpace(levelID)
+                && levelName.StartsWith(levelID, StringComparison.OrdinalIgnoreCase))
             {
-                normalizedStatus = "CORRECT";
-            }
-            else if (string.Equals(status, "Incorrect", StringComparison.OrdinalIgnoreCase)
-                || string.Equals(status, "Needs Work", StringComparison.OrdinalIgnoreCase))
-            {
-                normalizedStatus = "INCORRECT";
-            }
-            else
-            {
-                normalizedStatus = "NOT CHECKED";
+                levelName = levelName.Substring(levelID.Length).TrimStart(' ', '-', ':');
             }
 
-            return label + ": " + value + " [" + normalizedStatus + "]";
+            return levelID + " " + levelName + " (" + (IsNoteCorrect(note) ? "Correct" : "Incorrect") + ")";
+        }
+
+        private static bool IsNoteCorrect(ExperimentIngredientEntry note)
+        {
+            if (note == null)
+            {
+                return false;
+            }
+
+            return note.ratioStatus != "Incorrect"
+                && note.orderStatus != "Incorrect"
+                && note.forceStatus != "Incorrect"
+                && note.speedStatus != "Incorrect"
+                && note.combinationStatus != "Incorrect";
         }
 
         private void EnsureCamera()

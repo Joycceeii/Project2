@@ -126,10 +126,13 @@ namespace TheTasteReviver.EditorTools
                 asset.targetTasteName = Get(row, "TargetTasteName");
                 asset.levelIntro = Get(row, "LevelIntro");
                 asset.storyIntroPages ??= new List<StoryIntroPageData>();
-                asset.storyIntroPages.Clear();
                 if (storyIntrosByLevel.TryGetValue(id, out List<Dictionary<string, string>> levelStoryIntros))
                 {
                     ApplyStoryIntros(asset, levelStoryIntros);
+                }
+                else
+                {
+                    asset.storyIntroPages.Clear();
                 }
                 asset.availableIngredients = ResolveIngredients(Get(row, "AvailableIngredients"), ingredients);
                 asset.requiredIngredients = ResolveIngredients(Get(row, "RequiredIngredients"), ingredients);
@@ -196,6 +199,11 @@ namespace TheTasteReviver.EditorTools
 
         private static void ApplyStoryIntros(RecipeLevelData level, List<Dictionary<string, string>> rows)
         {
+            Dictionary<string, StoryIntroPageData> existingPages = (level.storyIntroPages ?? new List<StoryIntroPageData>())
+                .Where(page => page != null && !string.IsNullOrWhiteSpace(page.pageKey))
+                .GroupBy(page => page.pageKey)
+                .ToDictionary(group => group.Key, group => group.First());
+            level.storyIntroPages.Clear();
             foreach (Dictionary<string, string> row in rows)
             {
                 string pageKey = Get(row, "PageKey");
@@ -208,12 +216,25 @@ namespace TheTasteReviver.EditorTools
                     continue;
                 }
 
-                level.storyIntroPages.Add(new StoryIntroPageData
+                StoryIntroPageData page = new StoryIntroPageData
                 {
                     pageKey = pageKey,
                     imageResourcePath = imageResourcePath,
                     storyText = storyText
-                });
+                };
+
+                if (existingPages.TryGetValue(pageKey, out StoryIntroPageData previousPage))
+                {
+                    page.overrideTextPresentation = previousPage.overrideTextPresentation;
+                    page.textSize = previousPage.textSize;
+                    page.textPosition = previousPage.textPosition;
+                    page.textRotation = previousPage.textRotation;
+                    page.textFontSize = previousPage.textFontSize;
+                    page.textColor = previousPage.textColor;
+                    page.textAlignment = previousPage.textAlignment;
+                }
+
+                level.storyIntroPages.Add(page);
             }
         }
 

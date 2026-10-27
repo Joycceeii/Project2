@@ -1,5 +1,213 @@
 # Project Continuity and Agent Change Log
 
+## 2026-10-27 - Correct-Only Progression and Ending Return
+
+- Next Level is enabled only after a Correct evaluation of the current level. LevelManager also checks the same condition before advancing or displaying End; Wrong, Close, and unevaluated attempts cannot skip ahead.
+- Reset Attempt and loading a level clear successful evaluation state. Additive Experiment Log preserves the current attempt as before.
+- End page button now reads Back to Cover and restarts at L01, clearing the session's shown story-page keys so Cover, Begin, and later story pages can play again. Existing experiment records and clues are retained.
+- Updated both prefab-backed and legacy story-button flows. Unity batch compilation and checks for all 12 levels (unevaluated/Wrong/Close/Correct/reset), plus End-to-L01 story-key reset and Cover resource ordering, passed.
+
+
+## 2026-10-27 - Consistent Ingredient Plate Footprints
+
+- Calibrated all 17 PF ingredient prefabs (30 raw/ground visual states) to a 0.60-unit maximum X/Z mesh footprint, relative to the approximately 0.92-unit plate. Preserved model proportions, visual centers/base heights, and prefab root transforms.
+- Replaced the scene's obsolete unpacked Rice ingredient (root scale 0.3) with a connected PF_Rice instance at unit scale. Preserved gameplay bindings and aligned its raw mesh bottom 0.005 above its plate; updated its placement point.
+- Rice raw and powder now use the same footprint as other ingredients. All tuning is serialized in prefabs; runtime does not normalize sizes.
+- Unity batch import/compilation and saved mesh/scene verification completed; final in-game visual confirmation remains pending.
+
+
+## 2026-10-27 - TeaLeaf Raw Visual Scale
+
+- Reduced PF_TeaLeaf Before Grinding visual scale from 1 to 0.4 on all axes to address oversized raw leaves. After Grinding remains at its existing 0.4 scale.
+- Kept root interaction scale and placement points unchanged. Visual size balance still requires Unity confirmation because the two source meshes have different native dimensions.
+
+## 2026-10-27 - Source Ingredient Model Audit
+
+- SHA256 comparison matched every existing ingredient lod.fbx/lod_basic_pbr.fbx to its original desktop source folder. Audited PF ingredient nested source references for raw/ground roles.
+- Rice and TeaLeaf raw visual references restored to existing imported prefabs; ground references retained.
+- Prepare Ingredient Placement Points now also imports the missing source chili model/textures and connects its Before Grinding branch, preserving the existing ground prefab. This import executes only when the menu is invoked; not yet executed by the agent.
+- No source matches exist for CoarseSalt or ScallionWhite. The bambooleaf-to-LotusLeaf correspondence remains unconfirmed and was not substituted.
+- Runtime and Editor compilation passed; Unity import/render validation remains pending.
+
+## 2026-10-27 - Restore Supplied Rice and TeaLeaf Models
+
+- PF_Rice Before Grinding now nests the existing Rice_3D prefab; disabled its five simplified Grain objects without deleting them. Preserved its powder reference.
+- PF_TeaLeaf Before Grinding now nests the existing TeaLeaf_3D prefab, with the simplified legacy leaf branch inactive. Preserved TeaPowder_3D for After Grinding.
+- Changes are serialized prefab references; Unity import and visual confirmation remain pending.
+
+## 2026-10-27 - Centered Ingredient Rows and TeaLeaf Visibility
+
+- Active plate slots now center symmetrically by ingredient count using editable row center X and spacing; authored Y/Z positions remain intact.
+- Restored TeaLeaf's existing leaf visuals: Before Grinding contained only an inactive legacy leaf branch after removal of the broken imported reference. No valid imported before-grinding model was present.
+- The edit-mode placement command restores Rice to its prefab-authored root scale and places ingredients 0.005 above the plate mesh rather than 0.015.
+- Added independently editable mortar ingredient (-0.05) and powder (-0.06) vertical offsets; powder offset applies once on the first ground-state transition.
+- Runtime and Editor builds passed; Unity visual validation remains pending.
+
+## 2026-10-27 - Horizontal Plate Row and Editor Surface Placement
+
+- Authored the four scene Slot positions as a horizontal row at X -1.8, -0.6, 0.6, 1.8, retaining Slot 1's Y and Z.
+- Disabled the legacy scene Rice Portion Cluster; the five authored Grain objects remain, and the complete Rice prefab also contains five before-grinding grains.
+- Extended Prepare Ingredient Placement Points to arrange the open Scene's slots and align visible ingredient mesh bottoms above visible plate mesh bounds once in edit mode. Saved points remain manually editable; runtime does not repeat the bounds alignment.
+- Runtime and Editor compilation passed with zero warnings/errors. The menu must be run outside Play Mode for the open Scene; visual validation remains pending.
+
+## 2026-10-27 - Explicit Ingredient Placement Points
+
+- Added plate and mortar placement Transform references; return-home and accepted mortar drops use their authored positions.
+- Removed startup visual-height normalization and existing-plate Transform resets. Different ingredient prefabs no longer inherit the previous ingredient's scale and rotation.
+- Legacy ingredient objects lacking IngredientVisualState are replaced with their complete ingredient prefab. Same-ingredient migration retains its authored root transform.
+- Added `The Taste Reviver > Prepare Ingredient Placement Points` for an undoable edit-mode migration in the currently open Scene; it creates editable points and replaces legacy ingredient visuals without saving the Scene automatically.
+- C# runtime and Editor compilation passed. Unity visual and interaction verification remains pending; the edit-mode menu must be run and its Scene saved by the user.
+
+## 2026-10-27 - Stop Ingredient Home-Position Resets
+
+- Removed the automatic `ReturnHome` call from `LevelIngredientDisplayManager` during level display refreshes.
+- Removed the manager's fixed plate-height placement and the initializer's global visual-height overrides. Existing Ingredient Slot child transforms now remain at their authored Scene positions, rotations, and scales; newly instantiated ingredient Prefabs keep their own authored root transform, while the manager only binds the correct ingredient data and preserves the separate runtime mortar placement when an ingredient is dragged into the bowl.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - Preserve Ingredient Transforms Across Display Refreshes
+
+- Kept `LevelIngredientDisplayManager` because it still owns level-to-ingredient binding, drag setup, plate visuals, and powder displays, but stopped it from losing authored transforms when it refreshes or swaps a prefab.
+- Existing Ingredient objects are returned to their authored home state before refresh, and their local position, rotation, and scale are carried onto any replacement prefab.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - Stable Ingredient Plate Anchor
+
+- Removed imported-model-bounds auto-placement from `LevelIngredientDisplayManager`; large FBX child bounds could move an ingredient such as TeaLeaf to local Y `2.528`, making it appear missing in level 2.
+- New or prefab-swapped ingredients now start from the stable plate anchor `Y=0.16`, while existing authored positions remain untouched for manual Scene editing.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - Preserve Authored Ingredient Child Positions
+
+- Stopped `LevelIngredientDisplayManager.ConfigureSlot` from reapplying the default plate surface position to an existing matching Ingredient child.
+- Existing manually positioned ingredient visuals now retain their authored local coordinates; only newly created or prefab-swapped visuals receive automatic placement.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - Preserve Authored Ingredient Slot Coordinates
+
+- `LevelIngredientDisplayManager` now preserves the Scene-authored position and rotation of existing Ingredient Slot objects when a level starts.
+- Only newly created runtime slots receive the fallback table layout, so manually placed plate ingredients no longer jump to the old calculated coordinates.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - Horizontal Mortar Grinding判定
+
+- Kept ingredient drag/drop using the full Mortar Area collider, but changed pestle grinding validation to use the collider's horizontal X/Z footprint only.
+- This allows a manually raised pestle to grind over the stone without being rejected because its authored Y position is above the collider volume.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - Manual Mortar and Pestle Placement
+
+- Hid the visible Mortar Area mesh while preserving its Capsule Collider and `MortarArea` script for grinding-hit detection.
+- Applied the user's authored scene placement for `GrindingPestle` (`0.5478, 1.544, -0.0141`) and `Portion Cluster` (`-0.24, -1.35, 0`), with automatic startup alignment explicitly disabled.
+
+## 2026-10-27 - Preserve Authored Pestle Position and Lower Powder Visuals
+
+- Disabled automatic pestle alignment at level start so the Unity-authored pestle position remains under the user's direct control.
+- Lowered in-mortar powder visual anchoring slightly below the mortar collider top, matching the visible stone surface and preventing the powder from appearing too high beneath the pestle.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - Pestle Tip Raised Onto Grinding Surface
+
+- Corrected the startup alignment of the pestle so its visible grinding tip aligns to the top of the mortar collider/stone surface instead of the collider center.
+- This removes the visible pestle-tip clipping through the grinding stone while preserving the mortar position and all gameplay behavior.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - Prepared Powder Final Fusion Flow
+
+- Separate-batch levels now treat dragging all completed powder batches back into the mortar as the final fusion step, so the player can Evaluate immediately without grinding the combined powders a second time.
+- Evaluate now shows a blue Hint Panel message when only some prepared powders have been returned, explaining that all powders must be placed together before evaluating and that no additional grinding is needed.
+- Returned prepared powders retain their previously selected ratios instead of reopening ratio selection.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - Per-Page Story Text Presentation
+
+- Added `The Taste Reviver > Story Page Visual Editor` so story text can be selected and adjusted directly in the Scene view, then saved back to the selected page.
+- The editor now previews the selected page's Resources image and story text in Scene view before editing.
+- Added independent Story Intro text controls to every story page: size, position, font size, color, and alignment.
+- Added a per-page text rotation angle for a more hand-drawn, storybook-like layout.
+- Each page can opt into its own presentation from the `StoryIntroPageData` Inspector while pages that do not opt in keep the prefab-authored defaults.
+- CSV re-import preserves these per-page presentation overrides by matching existing pages by `pageKey`.
+- Applied the same settings to the prefab-backed Story Intro view and the legacy runtime fallback.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - Dancing Script Font Replacement
+
+- Imported the user-provided `DancingScript-VariableFont_wght.ttf` into `Assets/Resources/Fonts`.
+- Story Intro text uses the imported Dancing Script font without changing text content, layout, sizing, or interaction behavior.
+- Experiment Log now applies the font to all loaded TMP text objects in its additive scene, including scene-owned text outside the controller hierarchy.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - Modern Farmhouse Gameplay Font
+
+- Imported `ModernFarmhouse.otf` into `Assets/Resources/Fonts`.
+- Gameplay UI and Experiment Log use Modern Farmhouse, while per-level Story Intro text remains on Dancing Script.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - Pestle Tip Mortar Alignment
+
+- Aligns the visible pestle mesh's lowest point to the mortar center at level start, preventing the pestle head from clipping through the mortar rim while preserving its authored rotation and gameplay motion.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - Experiment Log Record Ordering and Formatting
+
+- Removed duplicated level prefixes such as `L01 L01 Rice Flour` from ingredient note headings.
+- Correct experiment notes now appear before incorrect notes, with `(Correct)` or `(Incorrect)` markers.
+- Simplified note details to direct order sequences, ingredient ratio values, force/speed values, and `Together:` combination descriptions; fixed Force/Speed dimensions are also unlocked as permanent clues.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - Image-Only Cover and Ending
+
+- Cover and `The End` story pages now clear their Intro Text, leaving the supplied artwork unobstructed.
+- Continue/Close controls remain available so the player can advance or dismiss those image-only pages.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - Full-Screen 16:9 Story Images
+
+- Updated the Story Intro image frame and image to stretch across the full story interface, matching the supplied 16:9 artwork instead of the old centered square presentation.
+- Applied the same full-screen behavior to the runtime-generated legacy fallback while keeping story text and controls functional.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-27 - TeaLeaf Prefab Stale Nested Reference
+
+- Removed the invalid nested Prefab instance from `PF_TeaLeaf.prefab` that referenced missing GUID `df8887e...` under the inactive legacy visual branch.
+- Preserved the valid TeaLeaf prefab structure and After Grinding nested prefab; the remaining FBX tangent warning is non-blocking.
+
+## 2026-10-27 - Story Resource Folder Cleanup
+
+- Renamed the remaining legacy opening resource to `Begin.jpg` and updated the L01 source/generated references.
+- Removed the obsolete `Opening_Guangdong_Map.jpg` and its `.meta`; the story resource folder now contains only `Cover`, `Begin`, `L01Start`–`L12Start` equivalents, and `End` resources.
+
+## 2026-10-27 - Storybook Transition Image Replacement
+
+- Replaced the existing story transition images with the user-named `Begin`, `L1Start`–`L12Start`, `Cover`, and `End` artwork under `Assets/Resources/Story`.
+- Added the opening cover page, L11 and L12 story descriptions/pages, and a final `The End` page after the last level's Next Level action.
+- Gameplay rules, level mechanics, and gameplay UI layout remain unchanged.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-26 - Avoid Duplicate Single-Ingredient Powder Displays
+
+- Mixed Powder slots are now created only for batches containing multiple ingredients.
+- Separate single-ingredient levels such as L08 no longer create hidden duplicate `Mixed Powder 1/2/3` labels behind the mortar while their powders are already shown on the ingredient plates.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-26 - Experiment Log Plain Handwritten Presentation
+
+- Removed square-bracket status and section markers from Experiment Log presentation.
+- Notes now read as plain handwritten-style lines such as `Force: Medium` and `Final Blend: Peanut + Black Sesame powders combined`, while retaining the underlying record data and fixed-dimension behavior.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-26 - Experiment Log Fixed Process Dimensions
+
+- Experiment Notes now retain authored fixed Force and Speed values even when those dimensions are locked for the current level.
+- Fixed process values are shown as `FIXED`, separate from evaluated `CORRECT`/`INCORRECT` results, so later levels can reuse them through the Experiment Log.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
+## 2026-10-26 - Experiment Log Final-Blend Guidance
+
+- Split final-blend recipe notes into preparation-batch correctness and final-combination guidance, so a correctly separated ingredient is no longer mislabeled as an incorrect batch when only the final blend is missing.
+- Ingredient details now explicitly tell the player to combine the prepared powders when all required preparation batches are complete, and show the completed final blend separately after success.
+- Kept the alternate L05 two-plus-one preparation rule distinct from L04's separate single-ingredient batches.
+- Runtime and Editor C# projects compile with zero warnings and zero errors.
+
 ## 2026-10-18 - Imported Ingredient Material Overrides Saved
 
 - Reapplied each imported Before Grinding model's authored ingredient material to every child Renderer and saved all 12 migrated ingredient prefabs.
@@ -273,3 +481,5 @@
 - Updated L09 text, hints, success, close, and wrong feedback to describe wrapping the prepared filling into zongzi rather than grinding Lotus Leaf into powder.
 - Verified the Unity C# project rebuild successfully after the changes.
 - Committed and pushed the implementation to GitHub as `01fec40 Add zongzi crafting and tune late-level hints`.
+
+

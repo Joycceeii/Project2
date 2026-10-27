@@ -60,6 +60,7 @@ namespace TheTasteReviver
         public bool HasIngredientsInBowl => ingredientAmounts.Any(x => x != null && x.ingredient != null);
         public bool CurrentBatchHasIngredients => GetCurrentBatchIngredients().Count > 0;
         public bool HasEvaluated { get; private set; }
+        public bool HasCorrectEvaluation { get; private set; }
         public bool HasAutoEvaluated { get; private set; }
         public float RequiredBatchPowderSeconds => Mathf.Max(0.2f, batchPowderSeconds);
 
@@ -124,7 +125,10 @@ namespace TheTasteReviver
             RecordCurrentBatchAsPreparedIfReady();
             foreach (IngredientData ingredient in validIngredients)
             {
-                AddIngredientWithRatio(ingredient, RatioLevel.Medium, false);
+                bool isPreparedPowder = currentLevel != null
+                    && currentLevel.requireFinalCombinedBatch
+                    && ingredientBatchEntries.Any(entry => entry != null && entry.ingredient == ingredient);
+                AddIngredientWithRatio(ingredient, isPreparedPowder ? GetPreviouslySelectedRatio(ingredient) : RatioLevel.Medium, false);
             }
 
             RebuildCurrentBatch();
@@ -177,6 +181,15 @@ namespace TheTasteReviver
 
             RecordCurrentBatchAsPreparedIfReady();
 
+            // A returned prepared powder already has its recipe amount. Do
+            // not open the ratio picker a second time when it is dragged back
+            // for the final fusion batch.
+            if (canReuseGroundIngredient)
+            {
+                AddIngredientWithRatio(ingredient, GetPreviouslySelectedRatio(ingredient));
+                return true;
+            }
+
             if (!IsRatioSelectionRequired())
             {
                 AddIngredientWithRatio(ingredient, RatioLevel.Medium);
@@ -223,6 +236,7 @@ namespace TheTasteReviver
             finalCraftCompleted = false;
             ClearFinalCraftedObject();
             HasEvaluated = false;
+            HasCorrectEvaluation = false;
             HasAutoEvaluated = false;
             forceController?.ResetToDefault();
             pestleController?.ResetToDefault();
@@ -255,9 +269,11 @@ namespace TheTasteReviver
             HasAutoEvaluated = true;
         }
 
-        public void MarkEvaluated()
+        public void MarkEvaluated(EvaluationResult result)
         {
             HasEvaluated = true;
+            HasCorrectEvaluation = result != null && result.judgement == JudgementResult.Correct;
+            uiManager?.RefreshAttemptPanels(this);
         }
 
         public bool RemoveIngredientFromCurrentBatch(IngredientData ingredient)
@@ -396,6 +412,15 @@ namespace TheTasteReviver
                 return true;
             }
 
+            // A final-combination batch is made from powders that were already
+            // completed in earlier batches. Returning those prepared powders
+            // to the mortar is the fusion step; it must not require a second
+            // timed grinding pass.
+            if (IsPreparedPowderFinalBlendReady())
+            {
+                return true;
+            }
+
             return GetCurrentBatchGrindDuration() >= GetMinimumBatchPowderSeconds();
         }
 
@@ -412,6 +437,16 @@ namespace TheTasteReviver
         public string BuildIncompleteEvaluationHint()
         {
             List<IngredientData> remaining = GetRemainingRequiredIngredients();
+            if (currentLevel != null
+                && currentLevel.requireFinalCombinedBatch
+                && currentBatchID > 1
+                && HasRequiredPreparationBeforeCurrentBatch()
+                && CurrentBatchHasIngredients
+                && !IsPreparedPowderFinalBlendReady())
+            {
+                return "Put all prepared powders back into the mortar together to combine them, then Evaluate. No additional grinding is needed.";
+            }
+
             if (remaining.Count == 0)
             {
                 return string.Empty;
@@ -476,6 +511,20 @@ namespace TheTasteReviver
                 && HasFinalCraftWrapperInCurrentBatch()
                 && HasRequiredPreparedMainBatch()
                 && GetCurrentBatchGrindDuration() >= GetCurrentBatchRequiredCompletionSeconds();
+        }
+
+        private bool IsPreparedPowderFinalBlendReady()
+        {
+            if (currentLevel == null
+                || !currentLevel.requireFinalCombinedBatch
+                || currentBatchID <= 1)
+            {
+                return false;
+            }
+
+            List<IngredientData> currentIngredients = GetCurrentBatchIngredients();
+            return HasExactCurrentRequiredIngredients(currentIngredients)
+                && HasRequiredPreparationBeforeCurrentBatch();
         }
 
         private bool IsFinalCraftLevel()
@@ -769,7 +818,8 @@ namespace TheTasteReviver
             {
                 ingredientDisplayManager?.ShowMixturePowderInIngredientSlot(currentBatchIngredients);
             }
-            else if (currentLevel == null || !currentLevel.requireFinalCombinedBatch)
+            else if ((currentLevel == null || !currentLevel.requireFinalCombinedBatch)
+                && currentBatchIngredients.Count > 1)
             {
                 ingredientDisplayManager?.ShowMixedPowderBatch(currentBatchID, currentBatchIngredients);
             }
@@ -782,7 +832,7 @@ namespace TheTasteReviver
             uiManager?.ShowHint(combinedAllIngredientsTooEarly
                 ? "All three spices were ground together too early. Press Reset Attempt, then prepare any two together and the remaining spice in a separate batch."
                 : isFinalCombinedBatch
-                    ? "The final blend is complete. You can Evaluate the recipe."
+                    ? "The prepared powders are combined. You can Evaluate the recipe; no additional grinding is needed."
                 : BuildEmptyBatchNextStepHint(currentBatchIngredients));
         }
 
@@ -817,7 +867,7 @@ namespace TheTasteReviver
                 && HasExactCurrentRequiredIngredients(currentIngredients)
                 && HasRequiredPreparationBeforeCurrentBatch())
             {
-                return "The final blend is ready. You can Evaluate the recipe.";
+                return "The prepared powders are combined. You can Evaluate the recipe; no additional grinding is needed.";
             }
 
             List<IngredientData> remaining = GetRemainingRequiredIngredients();
@@ -836,7 +886,7 @@ namespace TheTasteReviver
             if (currentLevel != null && currentLevel.requireFinalCombinedBatch)
             {
                 return HasRequiredPreparationThroughCurrentBatch()
-                    ? "The preparation batches are ready. Press New Batch, then put all prepared powders back into the mortar for the final blend."
+                    ? "The preparation batches are ready. Put all prepared powders back into the mortar together to combine them, then Evaluate. No additional grinding is needed."
                     : "This batch is powder, but the required preparation structure is incomplete. Evaluate for feedback or press Reset Attempt to rebuild the batches.";
             }
 
@@ -861,7 +911,7 @@ namespace TheTasteReviver
             if (currentLevel != null && currentLevel.requireFinalCombinedBatch)
             {
                 return HasRequiredPreparationBeforeCurrentBatch()
-                    ? "All preparation batches are ready. Put all prepared powders back into the mortar for the final blend."
+                    ? "All preparation batches are ready. Put all prepared powders back into the mortar together to combine them, then Evaluate. No additional grinding is needed."
                     : "All ingredients have been used, but the preparation batches are incomplete. Evaluate for feedback or press Reset Attempt to try a new batch structure.";
             }
 
@@ -1197,6 +1247,23 @@ namespace TheTasteReviver
                     uiManager.ShowStepFeedback(MechanicType.Combination, ingredient);
                 }
             }
+        }
+
+        private RatioLevel GetPreviouslySelectedRatio(IngredientData ingredient)
+        {
+            if (ingredient != null)
+            {
+                for (int index = selectedRatioPattern.Count - 1; index >= 0; index--)
+                {
+                    RatioRequirement requirement = selectedRatioPattern[index];
+                    if (requirement != null && requirement.ingredient == ingredient)
+                    {
+                        return requirement.ratioLevel;
+                    }
+                }
+            }
+
+            return RatioLevel.Medium;
         }
 
         private bool HasExactCurrentRequiredIngredients(IReadOnlyList<IngredientData> currentBatchIngredients)
