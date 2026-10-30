@@ -2897,7 +2897,7 @@ namespace TheTasteReviver
 
             if (storyIntroView != null)
             {
-                storyIntroView.Show(texture, string.Empty, "Back to Cover", ReturnToCover);
+                storyIntroView.Show(texture, string.Empty, "Return to Start", ReturnToCover);
                 return;
             }
 
@@ -2921,7 +2921,7 @@ namespace TheTasteReviver
             }
             if (IsAlive(storyIntroButtonText))
             {
-                storyIntroButtonText.text = "Back to Cover";
+                storyIntroButtonText.text = "Return to Start";
             }
         }
 

@@ -61,6 +61,8 @@ namespace TheTasteReviver
         public bool CurrentBatchHasIngredients => GetCurrentBatchIngredients().Count > 0;
         public bool HasEvaluated { get; private set; }
         public bool HasCorrectEvaluation { get; private set; }
+        // Passing the level unlocks progression independently of subsequent attempts.
+        public bool HasUnlockedNextLevel { get; private set; }
         public bool HasAutoEvaluated { get; private set; }
         public float RequiredBatchPowderSeconds => Mathf.Max(0.2f, batchPowderSeconds);
 
@@ -267,6 +269,7 @@ namespace TheTasteReviver
         public void SetLevel(RecipeLevelData level)
         {
             currentLevel = level;
+            HasUnlockedNextLevel = false;
             ResetAttempt(false);
         }
 
@@ -279,6 +282,7 @@ namespace TheTasteReviver
         {
             HasEvaluated = true;
             HasCorrectEvaluation = result != null && result.judgement == JudgementResult.Correct;
+            HasUnlockedNextLevel |= HasCorrectEvaluation;
             uiManager?.RefreshAttemptPanels(this);
         }
 

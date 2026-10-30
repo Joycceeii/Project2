@@ -1,5 +1,15 @@
 # Project Continuity and Agent Change Log
 
+## 2026-10-29 - Ending Button Wording
+
+- End page button now reads Return to Start in both prefab and legacy flows. Existing return-to-cover and L01 restart behavior is unchanged.
+
+## 2026-10-29 - Preserve Unlocked Next Level Across Attempt Resets
+
+- Added HasUnlockedNextLevel separately from per-attempt correctness. A Correct evaluation latches the current level's progression unlock; Reset Attempt and later Wrong/Close evaluations preserve it.
+- LevelManager and the existing button refresh use the latched unlock. SetLevel clears it for a newly loaded level or Back to Cover restart; evaluated-attempt editing locks remain unchanged.
+- Runtime/Editor compilation passed with zero warnings/errors. An isolated harness using the actual ResetAttempt, SetLevel, MarkEvaluated and CanAdvance source passed 156 state checks across 12 levels; Unity scene interactions were stubbed for that harness.
+
 ## 2026-10-29 - Move Ingredient Plate Row Toward Screen Bottom
 
 - Moved all four authored ingredient slots 0.45 units toward the camera along Z, retaining Y, spacing, rotation and scale. Child plates, ingredients and placement points move together.
