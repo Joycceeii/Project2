@@ -2941,6 +2941,9 @@ namespace TheTasteReviver
 
             currentStoryIntroIndex = index;
             StoryIntroPageData page = pendingStoryIntroPages[index];
+            string buttonLabel = string.Equals(page.pageKey, "Cover", StringComparison.OrdinalIgnoreCase)
+                ? "Start Game"
+                : index >= pendingStoryIntroPages.Count - 1 ? "Begin" : "Continue";
             Texture2D texture = Resources.Load<Texture2D>(page.imageResourcePath);
             if (texture == null)
             {
@@ -2953,7 +2956,7 @@ namespace TheTasteReviver
                 storyIntroView.Show(
                     texture,
                     page.storyText,
-                    index >= pendingStoryIntroPages.Count - 1 ? "Begin" : "Continue",
+                    buttonLabel,
                     AdvanceStoryIntro);
                 ApplyStoryIntroTextPresentation(page);
                 return;
@@ -2986,7 +2989,7 @@ namespace TheTasteReviver
 
             if (IsAlive(storyIntroButtonText))
             {
-                storyIntroButtonText.text = index >= pendingStoryIntroPages.Count - 1 ? "Begin" : "Continue";
+                storyIntroButtonText.text = buttonLabel;
             }
         }
 

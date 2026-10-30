@@ -358,7 +358,8 @@ namespace TheTasteReviver
 
             if (IsAlive(guidanceText))
             {
-                guidanceText.text = "Select an ingredient to compare saved clues with notes from earlier attempts.";
+                guidanceText.richText = true;
+                guidanceText.text = "Select an ingredient to review clues and earlier attempts.\n" + ExperimentLogManager.StatusColorGuide;
             }
 
             EnsureScrollView(root);
@@ -855,6 +856,7 @@ namespace TheTasteReviver
                 return;
             }
 
+            detailText.richText = true;
             detailText.text = BuildIngredientDetailText(entry);
             detailBackdrop.SetActive(true);
             detailBackdrop.transform.SetAsLastSibling();
@@ -952,7 +954,7 @@ namespace TheTasteReviver
 
         private static string FormatCheckedNote(string label, string value, string status)
         {
-            string suffix = status == "Correct" || status == "Incorrect" ? " (" + status + ")" : string.Empty;
+            string suffix = status == "Correct" || status == "Incorrect" ? " (" + ExperimentLogManager.FormatStatus(status) + ")" : string.Empty;
             return label + ": " + value + suffix;
         }
 
@@ -967,7 +969,7 @@ namespace TheTasteReviver
                 levelName = levelName.Substring(levelID.Length).TrimStart(' ', '-', ':');
             }
 
-            return levelID + " " + levelName + " (" + (IsNoteCorrect(note) ? "Correct" : "Incorrect") + ")";
+            return levelID + " " + levelName + " (" + ExperimentLogManager.FormatStatus(IsNoteCorrect(note) ? "Correct" : "Incorrect") + ")";
         }
 
         private static bool IsNoteCorrect(ExperimentIngredientEntry note)

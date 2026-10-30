@@ -122,6 +122,12 @@ public class TestLevelInitializer : MonoBehaviour
             }
 
             EnsureCameraRaycaster(Camera.main);
+            if (Application.isPlaying) GameplayBackground.Ensure(Camera.main);
+
+            if (Camera.main != null && FindFirstObjectByType<AudioListener>() == null)
+            {
+                Camera.main.gameObject.AddComponent<AudioListener>();
+            }
 
             EnsureSingleEventSystem();
 
@@ -218,6 +224,7 @@ public class TestLevelInitializer : MonoBehaviour
 
         public void RepairRuntimeReferences()
         {
+            if (Application.isPlaying) GameplayBackground.Ensure(Camera.main);
             RecipeAttemptManager attempt = gameObject.GetComponent<RecipeAttemptManager>();
             UIManager ui = FindFirstObjectByType<UIManager>();
             ForceSliderController force = FindFirstObjectByType<ForceSliderController>();

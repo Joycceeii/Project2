@@ -296,6 +296,7 @@ namespace TheTasteReviver
                 AppendRecordSummary(builder, record);
             }
 
+            logText.richText = true;
             logText.text = builder.ToString();
         }
 
@@ -324,6 +325,7 @@ namespace TheTasteReviver
                 }
 
                 builder.AppendLine("Experiment Notes");
+                builder.AppendLine(StatusColorGuide);
                 builder.AppendLine();
                 foreach (ExperimentRecord record in OrderedRecords())
                 {
@@ -417,7 +419,7 @@ namespace TheTasteReviver
 
         private static void AppendRecordSummary(StringBuilder builder, ExperimentRecord record)
         {
-            builder.AppendLine("Experiment #" + record.attemptNumber + " (" + (IsRecordCorrect(record) ? "Correct" : "Incorrect") + ")");
+            builder.AppendLine("Experiment #" + record.attemptNumber + " (" + FormatStatus(IsRecordCorrect(record) ? "Correct" : "Incorrect") + ")");
             builder.AppendLine("Ingredients: " + record.ingredientsUsed);
             AppendCheckedRecordLine(builder, "Order", record.ingredientOrder, record.orderStatus);
             AppendCheckedRecordLine(builder, "Ratio", record.ratioPattern, record.ratioStatus);
@@ -441,7 +443,17 @@ namespace TheTasteReviver
                 return;
             }
 
-            builder.AppendLine(label + ": " + value + (status == "Correct" || status == "Incorrect" ? " (" + status + ")" : string.Empty));
+            builder.AppendLine(label + ": " + value + (status == "Correct" || status == "Incorrect" ? " (" + FormatStatus(status) + ")" : string.Empty));
+        }
+
+        public static string StatusColorGuide => "Experiment notes: " + FormatStatus("Correct") + " in deep green; " + FormatStatus("Incorrect") + " in deep red.";
+
+        public static string FormatStatus(string status)
+        {
+            // Muted ink colors complement the journal's hand-painted paper.
+            if (status == "Correct") return "<color=#2F5D46>Correct</color>";
+            if (status == "Incorrect") return "<color=#8A3D3A>Incorrect</color>";
+            return status;
         }
 
         private static IEnumerable<ExperimentRecord> OrderedRecords()

@@ -23,6 +23,9 @@ namespace TheTasteReviver
         [Header("Grinding Completion")]
         [Tooltip("The pestle must be moving at least this many screen pixels per frame before the motion counts as grinding.")]
         public float minimumGrindingMouseDelta = 1f;
+        [Header("Grinding Audio")]
+        public AudioClip grindingClip;
+        [Range(0f, 1f)] public float grindingVolume = 0.65f;
         [HideInInspector]
         [Tooltip("Fallback only when no RecipeAttemptManager is connected. Use RecipeAttemptManager.batchPowderSeconds for gameplay tuning.")]
         public float groundVisualDelaySeconds = 1.5f;
@@ -59,6 +62,8 @@ namespace TheTasteReviver
         private float dragPlaneY;
         private Vector3 startPosition;
         private Quaternion startRotation;
+        private AudioSource grindingAudioSource;
+        private int lastGrindingAudioFrame = -1;
 
         private void Awake()
         {
@@ -72,7 +77,57 @@ namespace TheTasteReviver
             }
 
             dragPlaneY = transform.position.y;
+            ConfigureGrindingAudio();
             RefreshLabel();
+        }
+
+        private void ConfigureGrindingAudio()
+        {
+            if (grindingClip == null)
+            {
+                grindingClip = Resources.Load<AudioClip>("Audio/Grinding");
+            }
+
+            grindingAudioSource = gameObject.AddComponent<AudioSource>();
+            grindingAudioSource.playOnAwake = false;
+            grindingAudioSource.loop = true;
+            grindingAudioSource.spatialBlend = 0f;
+            grindingAudioSource.volume = grindingVolume;
+            grindingAudioSource.clip = grindingClip;
+        }
+
+        private void LateUpdate()
+        {
+            // Mouse drag events stop while gameplay is covered or its camera is disabled.
+            if (lastGrindingAudioFrame != Time.frameCount || !dragging || Time.timeScale <= 0f
+                || (interactionCamera != null && !interactionCamera.isActiveAndEnabled)
+                || (uiManager != null && uiManager.attemptManager != null && uiManager.attemptManager.HasEvaluated))
+            {
+                StopGrindingAudio();
+            }
+        }
+
+        private void StopGrindingAudio()
+        {
+            if (grindingAudioSource != null && grindingAudioSource.isPlaying)
+            {
+                grindingAudioSource.Stop();
+            }
+        }
+
+        private void OnDisable()
+        {
+            dragging = false;
+            StopGrindingAudio();
+        }
+
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (!hasFocus)
+            {
+                dragging = false;
+                StopGrindingAudio();
+            }
         }
 
         private void Start()
@@ -246,6 +301,12 @@ namespace TheTasteReviver
                 CurrentSpeedLevel = SpeedToLevel(currentMouseSpeed);
                 if (IsEffectiveGrindingMotion(delta))
                 {
+                    lastGrindingAudioFrame = Time.frameCount;
+                    if (grindingAudioSource != null && grindingAudioSource.clip != null && !grindingAudioSource.isPlaying)
+                    {
+                        grindingAudioSource.volume = grindingVolume;
+                        grindingAudioSource.Play();
+                    }
                     GrindDuration += Time.deltaTime;
                     UpdateEvaluatedSpeedLevel(CurrentSpeedLevel, Time.deltaTime);
                     RefreshLabel();
@@ -269,6 +330,7 @@ namespace TheTasteReviver
         private void OnMouseUp()
         {
             dragging = false;
+            StopGrindingAudio();
             if (hasSpeedSample)
             {
                 uiManager?.ShowStepFeedback(MechanicType.Speed);
@@ -278,6 +340,7 @@ namespace TheTasteReviver
         public void ResetTracking()
         {
             dragging = false;
+            StopGrindingAudio();
             currentMouseSpeed = 0f;
             hasSpeedSample = false;
             ResetSpeedEvaluation();

@@ -1,5 +1,36 @@
 # Project Continuity and Agent Change Log
 
+## 2026-10-29 - Move Ingredient Plate Row Toward Screen Bottom
+
+- Moved all four authored ingredient slots 0.45 units toward the camera along Z, retaining Y, spacing, rotation and scale. Child plates, ingredients and placement points move together.
+- Removed the editor synchronization script at the user's request. Adjust Ingredient Slot 1-4 directly in Scene view; their child plates, ingredients and placement points move together.
+
+## 2026-10-29 - Kitchen Background Texture Import Repair
+
+- Replaced the incomplete background texture importer settings with a complete TextureImporter configuration and forced Unity reimport. Runtime checks now resolve both the Texture2D and material texture.
+- Confirmed the kitchen background renders behind the table in a 1920x1080 camera capture. Preview saved under Art/Backgrounds/LingnanKitchen-in-game-preview.png (camera render excludes overlay UI). Removed temporary editor diagnostics after validation.
+
+## 2026-10-29 - Lingnan Kitchen Gameplay Background
+
+- Added the generated kitchen illustration and URP unlit material under Resources/Backgrounds. Gameplay startup creates a camera-aligned background quad behind scene geometry, preserving the authored table and UI.
+- Background fills the viewport with proportional cropping, follows camera framing, casts no shadows, and has no active collider. Runtime and Editor compilation passed with zero warnings/errors; in-game visual confirmation remains pending.
+
+## 2026-10-29 - Restore Gameplay Audio Listener
+
+- Fixed silent grinding audio: the gameplay scene Main Camera had no AudioListener. Added one enabled listener to the saved scene and a missing-listener fallback for generated test scenes.
+- Verified exactly one serialized gameplay listener on Main Camera. In-game listening confirmation remains pending.
+
+## 2026-10-29 - Grinding Interaction Audio
+
+- Converted the supplied grinding recording to Resources/Audio/Grinding.wav and loop it only during effective pestle movement inside the mortar.
+- Stop audio on mouse release, stationary/outside motion, reset, evaluated attempts, disabled gameplay camera, lost focus, and component disable. Clip and volume are editable on PestleController.
+- In-game listening and loop/volume confirmation remain pending.
+
+## 2026-10-29 - Experiment Log Status Ink Colors
+
+- Correct/Incorrect labels use deep green (#2F5D46) and deep red (#8A3D3A), with a matching journal color guide.
+- Runtime and Editor compilation passed with zero warnings/errors; in-game visual confirmation remains pending.
+
 ## 2026-10-27 - Lower Mortar Ingredients and Final Interaction Checks
 
 - Lowered serialized ingredient mortar offsets to -0.10 across all 17 ingredient prefabs and existing scene draggable objects. Fixed the missing-placement-point fallback to actually honor that offset; authored placement points still remain editable.
