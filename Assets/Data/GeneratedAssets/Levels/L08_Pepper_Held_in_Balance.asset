@@ -20,7 +20,7 @@ MonoBehaviour:
   levelIntro: White pepper should stay clear without becoming harsh. Peanut and dried
     tangerine peel should feel familiar from earlier recipes. Prepare each ingredient
     in its own batch, then use your Experiment Log to choose the force and speed
-    that fit each one.
+    that fit each one. After all three are ground, press New Batch, drag all three prepared powders back into the mortar together, then press Evaluate. No further grinding is needed.
   storyIntroPages:
   - pageKey: Level08_Pepper_Peanut_Start
     imageResourcePath: Story/Level08_Pepper_Peanut_Start
@@ -70,7 +70,7 @@ MonoBehaviour:
       - {fileID: 11400000, guid: 431bce1c5bea0bb48b47d4f454b666d8, type: 2}
     - ingredients:
       - {fileID: 11400000, guid: c7727387d990f0346ac32728800d205b, type: 2}
-  requireFinalCombinedBatch: 0
+  requireFinalCombinedBatch: 1
   allowAnyPairPreparation: 0
   targetForceLevel: 1
   targetSpeedLevel: 1
@@ -143,7 +143,7 @@ MonoBehaviour:
     mechanic: 3
     hintText: These familiar ingredients react differently. Grind white pepper, peanut,
       and dried tangerine peel in separate batches. Press New Batch before changing
-      ingredients.
+      ingredients. After all three are ground, press New Batch again, return all three powders to the mortar together, and press Evaluate. No further grinding is needed.
   ingredientProfiles:
   - profileTag: L08_WhitePepper
     ingredient: {fileID: 11400000, guid: e3ec2780f0a8e9c4cba3e497b92c30f2, type: 2}

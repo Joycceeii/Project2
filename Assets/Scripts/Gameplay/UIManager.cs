@@ -185,7 +185,8 @@ namespace TheTasteReviver
             TMP_Text[] texts = GetComponentsInChildren<TMP_Text>(true);
             foreach (TMP_Text text in texts)
             {
-                if (text != null)
+                if (text != null && text != storyIntroText
+                    && (storyIntroView == null || text != storyIntroView.EditorStoryText))
                 {
                     text.font = themeFont;
                 }
@@ -1121,6 +1122,11 @@ namespace TheTasteReviver
 
         private bool HasReachedEvaluationGate(RecipeLevelData level)
         {
+            if (attemptManager != null && attemptManager.IsPreparedFinalBlendReady)
+            {
+                // Process targets belong to the original preparation batches.
+                return true;
+            }
             if (level == null || attemptManager == null || attemptManager.pestleController == null)
             {
                 return false;
@@ -1435,6 +1441,10 @@ namespace TheTasteReviver
             if (ratioSelectionView != null)
             {
                 ratioSelectionView.Show(ingredient, options, onSelected);
+                if (ingredientTraitsView != null)
+                {
+                    ingredientTraitsView.transform.SetAsLastSibling();
+                }
                 return;
             }
 
@@ -1479,6 +1489,7 @@ namespace TheTasteReviver
 
             ratioSelectionPanel.transform.SetAsLastSibling();
             ratioSelectionPanel.SetActive(true);
+            SetIngredientTraitsExpanded(ingredientTraitsExpanded);
         }
 
         public static string GetRatioDisplayName(RatioLevel ratio)
@@ -2940,6 +2951,7 @@ namespace TheTasteReviver
             }
 
             currentStoryIntroIndex = index;
+            ApplyStoryIntroFont();
             StoryIntroPageData page = pendingStoryIntroPages[index];
             string buttonLabel = string.Equals(page.pageKey, "Cover", StringComparison.OrdinalIgnoreCase)
                 ? "Start Game"

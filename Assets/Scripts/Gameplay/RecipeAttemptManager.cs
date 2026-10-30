@@ -64,6 +64,7 @@ namespace TheTasteReviver
         // Passing the level unlocks progression independently of subsequent attempts.
         public bool HasUnlockedNextLevel { get; private set; }
         public bool HasAutoEvaluated { get; private set; }
+        public bool IsPreparedFinalBlendReady => IsPreparedPowderFinalBlendReady();
         public float RequiredBatchPowderSeconds => Mathf.Max(0.2f, batchPowderSeconds);
 
         public bool TryAddIngredient(IngredientData ingredient)
@@ -187,6 +188,13 @@ namespace TheTasteReviver
                 return false;
             }
 
+            if (IsFinalCraftLevel()
+                && string.Equals(ingredient.ingredientID, finalCraftWrapperIngredientID, System.StringComparison.OrdinalIgnoreCase)
+                && IsCurrentBatchCompleteFilling())
+            {
+                // Dropping the wrapper finishes the filling batch automatically.
+                StartNewBatch(true);
+            }
             RecordCurrentBatchAsPreparedIfReady();
 
             // A returned prepared powder already has its recipe amount. Do
@@ -383,6 +391,10 @@ namespace TheTasteReviver
 
         public bool ShowGroundVisualsForCurrentBatch()
         {
+            if (IsFinalCraftLevel() && HasFinalCraftWrapperInCurrentBatch() && HasRequiredPreparedMainBatch())
+            {
+                return TryShowFinalCraftedObject();
+            }
             if (TryShowFinalCraftedObject())
             {
                 return true;
@@ -422,6 +434,12 @@ namespace TheTasteReviver
 
         public bool HasCurrentBatchReachedPowderTime()
         {
+            if (IsFinalCraftLevel() && HasFinalCraftWrapperInCurrentBatch() && HasRequiredPreparedMainBatch())
+            {
+                // The leaf is a wrapping step, including when its recipe answer
+                // is wrong; it never needs another grinding pass to Evaluate.
+                return true;
+            }
             if (IsFinalCraftBatchReady())
             {
                 return true;
@@ -443,7 +461,7 @@ namespace TheTasteReviver
         {
             if (IsFinalCraftLevel() && HasFinalCraftWrapperInCurrentBatch() && HasRequiredPreparedMainBatch())
             {
-                return Mathf.Max(0.01f, finalCraftMotionSeconds);
+                return 0f;
             }
 
             return GetMinimumBatchPowderSeconds();
@@ -451,7 +469,18 @@ namespace TheTasteReviver
 
         public string BuildIncompleteEvaluationHint()
         {
+            if (IsFinalCraftLevel() && HasCorrectPreparedFilling() && !HasFinalCraftWrapperInCurrentBatch())
+            {
+                return BuildWrappingHint();
+            }
             List<IngredientData> remaining = GetRemainingRequiredIngredients();
+            if (currentLevel != null && currentLevel.requireFinalCombinedBatch
+                && remaining.Count == 0 && !IsPreparedPowderFinalBlendReady())
+            {
+                return HasRequiredPreparationThroughCurrentBatch()
+                    ? "Press New Batch, then drag all prepared powders into the mortar together and press Evaluate. No further grinding is needed."
+                    : "Prepare the required separate batches before combining the powders. Press Reset Attempt to rebuild the preparation batches.";
+            }
             if (currentLevel != null
                 && currentLevel.requireFinalCombinedBatch
                 && currentBatchID > 1
@@ -503,18 +532,26 @@ namespace TheTasteReviver
 
         private bool TryShowFinalCraftedObject()
         {
-            if (!IsFinalCraftBatchReady() || finalCraftCompleted)
+            if (finalCraftCompleted) return true;
+            if (!IsFinalCraftBatchReady())
             {
                 return false;
             }
 
-            HideCurrentBatchIngredientsInMortar();
-            ingredientDisplayManager?.ClearMixedPowderBatches();
             SpawnFinalCraftedObject();
             finalCraftCompleted = finalCraftedObjectInstance != null;
             if (finalCraftCompleted)
             {
-                uiManager?.ShowHint("The filling is wrapped. You can Evaluate when the recipe is ready.");
+                HideCurrentBatchIngredientsInMortar();
+                foreach (DraggableIngredient ingredient in FindObjectsByType<DraggableIngredient>(FindObjectsSortMode.None))
+                {
+                    if (ingredient.ingredientData != null && currentLevel.requiredIngredients.Contains(ingredient.ingredientData))
+                    {
+                        ingredient.HideAtHome();
+                    }
+                }
+                ingredientDisplayManager?.ClearMixedPowderBatches();
+                uiManager?.ShowHint("Your zongzi is wrapped! Press Evaluate to complete the recipe. No more grinding is needed.");
             }
 
             return finalCraftCompleted;
@@ -525,7 +562,45 @@ namespace TheTasteReviver
             return IsFinalCraftLevel()
                 && HasFinalCraftWrapperInCurrentBatch()
                 && HasRequiredPreparedMainBatch()
-                && GetCurrentBatchGrindDuration() >= GetCurrentBatchRequiredCompletionSeconds();
+                && HasCorrectPreparedFilling()
+                && GetCurrentBatchIngredients().All(ingredient => GetPreviouslySelectedRatio(ingredient) == RatioLevel.VeryLess);
+        }
+
+        private string BuildWrappingHint()
+        {
+            IngredientData leaf = currentLevel.requiredIngredients.FirstOrDefault(ingredient => ingredient != null
+                && string.Equals(ingredient.ingredientID, finalCraftWrapperIngredientID, System.StringComparison.OrdinalIgnoreCase));
+            return "The filling is correct and ready. Drag " + (leaf != null ? leaf.DisplayName : "the lotus leaf")
+                + " into the mortar and choose Very Small to wrap it into zongzi. No New Batch or further grinding is needed.";
+        }
+
+        private bool IsCurrentBatchCompleteFilling()
+        {
+            if (!IsFinalCraftLevel()) return false;
+            var filling = currentLevel.requiredIngredients.Where(ingredient => ingredient != null
+                && !string.Equals(ingredient.ingredientID, finalCraftWrapperIngredientID, System.StringComparison.OrdinalIgnoreCase)).ToList();
+            return filling.Count > 0 && new HashSet<IngredientData>(GetCurrentBatchIngredients()).SetEquals(filling)
+                && GetCurrentBatchGrindDuration() >= GetMinimumBatchPowderSeconds();
+        }
+
+        private bool HasCorrectPreparedFilling()
+        {
+            if (!IsFinalCraftLevel()) return false;
+            var filling = currentLevel.requiredIngredients.Where(ingredient => ingredient != null
+                && !string.Equals(ingredient.ingredientID, finalCraftWrapperIngredientID, System.StringComparison.OrdinalIgnoreCase)).ToList();
+            var entries = ingredientBatchEntries.Where(entry => entry != null && entry.ingredient != null
+                && !string.Equals(entry.ingredient.ingredientID, finalCraftWrapperIngredientID, System.StringComparison.OrdinalIgnoreCase)).ToList();
+            if (filling.Count == 0 || entries.Count != filling.Count
+                || !new HashSet<IngredientData>(entries.Select(entry => entry.ingredient)).SetEquals(filling)
+                || entries.Select(entry => entry.batchID).Distinct().Count() != 1) return false;
+            int fillingBatchID = entries[0].batchID;
+            float duration = fillingBatchID == currentBatchID ? GetCurrentBatchGrindDuration()
+                : finalizedBatchDurations.TryGetValue(fillingBatchID, out float completedDuration) ? completedDuration : 0f;
+            if (duration < GetMinimumBatchPowderSeconds()) return false;
+            var expectedOrder = currentLevel.correctIngredientOrder.Where(filling.Contains);
+            if (!ingredientOrder.Where(filling.Contains).SequenceEqual(expectedOrder)) return false;
+            return currentLevel.correctRatioPattern.Where(requirement => requirement != null && filling.Contains(requirement.ingredient))
+                .All(requirement => GetPreviouslySelectedRatio(requirement.ingredient) == requirement.ratioLevel);
         }
 
         private bool IsPreparedPowderFinalBlendReady()
@@ -660,53 +735,21 @@ namespace TheTasteReviver
 
         private void ApplyFinalCraftedObjectMaterial(GameObject instance)
         {
-            if (instance == null)
+            if (instance == null) return;
+            // Serialized URP material keeps the shader and texture in player builds.
+            Material material = Resources.Load<Material>("Zhongzi/ZongziLeaf");
+            if (material == null)
             {
+                Debug.LogError("Zongzi URP material is missing.");
                 return;
             }
-
-            Texture2D diffuse = LoadTexture(finalCraftDiffuseResourcePath);
-            Texture2D normal = LoadTexture(finalCraftNormalResourcePath);
-            Texture2D metallic = LoadTexture(finalCraftMetallicResourcePath);
-            Texture2D roughness = LoadTexture(finalCraftRoughnessResourcePath);
-
             foreach (Renderer renderer in instance.GetComponentsInChildren<Renderer>(true))
             {
-                if (renderer == null)
-                {
-                    continue;
-                }
-
-                Material material = new Material(Shader.Find("Standard"));
-                if (diffuse != null)
-                {
-                    material.mainTexture = diffuse;
-                }
-
-                if (normal != null)
-                {
-                    material.SetTexture("_BumpMap", normal);
-                    material.EnableKeyword("_NORMALMAP");
-                }
-
-                if (metallic != null)
-                {
-                    material.SetTexture("_MetallicGlossMap", metallic);
-                    material.SetFloat("_Metallic", 0.1f);
-                    material.EnableKeyword("_METALLICGLOSSMAP");
-                }
-
-                if (roughness != null)
-                {
-                    material.SetTexture("_SpecGlossMap", roughness);
-                    material.SetFloat("_Glossiness", 0.35f);
-                    material.EnableKeyword("_SPECGLOSSMAP");
-                }
-
-                renderer.material = material;
+                Material[] materials = renderer.sharedMaterials;
+                for (int i = 0; i < materials.Length; i++) materials[i] = material;
+                renderer.sharedMaterials = materials;
             }
         }
-
         private static Texture2D LoadTexture(string resourcePath)
         {
             return !string.IsNullOrWhiteSpace(resourcePath)
@@ -787,6 +830,11 @@ namespace TheTasteReviver
 
         public void StartNewBatch()
         {
+            StartNewBatch(false);
+        }
+
+        private void StartNewBatch(bool keepFillingInMortar)
+        {
             if (HasEvaluated)
             {
                 uiManager?.ShowHint("Press Reset Attempt before starting another batch.");
@@ -830,7 +878,12 @@ namespace TheTasteReviver
                 && currentLevel.requireFinalCombinedBatch
                 && !isFinalCombinedBatch
                 && currentBatchIngredients.Count > 1;
-            if (isFinalCombinedBatch)
+            if (keepFillingInMortar)
+            {
+                // Wrapping changes the logical batch only. Keep the filling
+                // visible in the mortar while the player chooses the leaf amount.
+            }
+            else if (isFinalCombinedBatch)
             {
                 ingredientDisplayManager?.ClearPreparedPowderDisplays();
                 ingredientDisplayManager?.ClearMixedPowderBatches();
@@ -845,7 +898,10 @@ namespace TheTasteReviver
                 ingredientDisplayManager?.ShowMixedPowderBatch(currentBatchID, currentBatchIngredients);
             }
 
-            ReturnCurrentBatchIngredientsHome(!createsMixedPowder);
+            if (!keepFillingInMortar)
+            {
+                ReturnCurrentBatchIngredientsHome(!createsMixedPowder);
+            }
             currentBatchID++;
             currentBatchStartGrindDuration = pestleController != null ? pestleController.GrindDuration : 0f;
             pestleController?.ResetSpeedAveraging();
@@ -872,6 +928,11 @@ namespace TheTasteReviver
 
         private string BuildPowderReadyHint()
         {
+            if (IsFinalCraftLevel() && IsCurrentBatchCompleteFilling())
+            {
+                return HasCorrectPreparedFilling() ? BuildWrappingHint()
+                    : "The filling is ground, but its amounts or ingredient order need correcting. Press Reset Attempt and review your Experiment Log before wrapping.";
+            }
             List<IngredientData> currentIngredients = GetCurrentBatchIngredients();
             if (currentLevel != null
                 && currentLevel.requireFinalCombinedBatch
@@ -916,6 +977,7 @@ namespace TheTasteReviver
 
         private string BuildEmptyBatchNextStepHint(IReadOnlyList<IngredientData> finalizedIngredients)
         {
+            if (IsFinalCraftLevel() && HasCorrectPreparedFilling()) return BuildWrappingHint();
             List<IngredientData> remaining = GetRemainingRequiredIngredients();
             if (remaining.Count > 0)
             {
@@ -1266,6 +1328,13 @@ namespace TheTasteReviver
                     && !uiManager.ShowStepFeedback(MechanicType.Force, ingredient))
                 {
                     uiManager.ShowStepFeedback(MechanicType.Combination, ingredient);
+                }
+                if (IsFinalCraftLevel() && HasFinalCraftWrapperInCurrentBatch() && HasRequiredPreparedMainBatch())
+                {
+                    if (!TryShowFinalCraftedObject() && !IsFinalCraftBatchReady())
+                    {
+                        uiManager?.ShowHint("The wrapper is in place, but the filling recipe or leaf amount is incorrect. Press Evaluate for feedback, or Reset Attempt to try again. No further grinding is needed.");
+                    }
                 }
             }
         }

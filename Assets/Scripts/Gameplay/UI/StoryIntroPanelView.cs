@@ -43,6 +43,8 @@ namespace TheTasteReviver
 
             if (storyText != null)
             {
+                TMP_FontAsset font = ThemeFontProvider.GetStoryTmpFont();
+                if (font != null) storyText.font = font;
                 storyText.text = text ?? string.Empty;
             }
 
@@ -56,6 +58,11 @@ namespace TheTasteReviver
 
         public void Show(Texture2D texture, string text, string buttonText, Action onContinue)
         {
+            if (storyText != null)
+            {
+                TMP_FontAsset font = ThemeFontProvider.GetStoryTmpFont();
+                if (font != null) storyText.font = font;
+            }
             CaptureDefaultTextPresentation();
             ResetTextPresentation();
             continueAction = onContinue;

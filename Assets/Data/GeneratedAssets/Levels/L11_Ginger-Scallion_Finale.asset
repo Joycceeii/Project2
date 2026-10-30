@@ -231,7 +231,7 @@ MonoBehaviour:
     targetOrderIndex: 3
     targetCombinationKey: CoarseSalt
     levelTraitDescription: Coarse salt uses the Very Small amount in a separate final
-      batch.
+      batch. Use Medium force and Medium speed for this batch.
     responseHintRules: []
   - profileTag: L11_ScallionWhite
     ingredient: {fileID: 11400000, guid: 90232a38a4c71eb4396c578d8b4122a9, type: 2}
@@ -248,7 +248,7 @@ MonoBehaviour:
     targetOrderIndex: 2
     targetCombinationKey: ScallionWhite
     levelTraitDescription: Scallion stem uses the Small amount in its own batch after
-      the ginger so its fresh aroma remains clear.
+      the ginger so its fresh aroma remains clear. Use Medium force and Medium speed for this batch.
     responseHintRules: []
   successFeedback: 'The sauce comes together cleanly: the ginger pair forms a bold
     base, scallion stem stays fresh in its own batch, and the Very Small amount of

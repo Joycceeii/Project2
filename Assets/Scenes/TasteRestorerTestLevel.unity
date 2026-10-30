@@ -839,52 +839,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!28 &165966420
-Texture2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Modern Farmhouse - Regular Atlas
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 3
-  m_Width: 1
-  m_Height: 1
-  m_CompleteImageSize: 1
-  m_MipsStripped: 0
-  m_TextureFormat: 1
-  m_MipCount: 1
-  m_IsReadable: 1
-  m_IsPreProcessed: 0
-  m_IgnoreMipmapLimit: 1
-  m_MipmapLimitGroupName: 
-  m_StreamingMipmaps: 0
-  m_StreamingMipmapsPriority: 0
-  m_VTOnly: 0
-  m_AlphaIsTransparency: 0
-  m_ImageCount: 1
-  m_TextureDimension: 2
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 0
-    m_WrapV: 0
-    m_WrapW: 0
-  m_LightmapFormat: 0
-  m_ColorSpace: 1
-  m_PlatformBlob: 
-  image data: 1
-  _typelessdata: cd
-  m_StreamData:
-    serializedVersion: 2
-    offset: 0
-    size: 0
-    path: 
 --- !u!114 &172202430 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1285277052097766782, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
@@ -1048,147 +1002,6 @@ Material:
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &389884990
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: Modern Farmhouse Runtime Font
-  m_EditorClassIdentifier: 
-  m_Version: 1.1.0
-  m_FaceInfo:
-    m_FaceIndex: 0
-    m_FamilyName: Modern Farmhouse
-    m_StyleName: Regular
-    m_PointSize: 90
-    m_Scale: 1
-    m_UnitsPerEM: 1000
-    m_LineHeight: 81
-    m_AscentLine: 63.000004
-    m_CapLine: 44
-    m_MeanLine: 44
-    m_Baseline: 0
-    m_DescentLine: -18
-    m_SuperscriptOffset: 63.000004
-    m_SuperscriptSize: 0.5
-    m_SubscriptOffset: -18
-    m_SubscriptSize: 0.5
-    m_UnderlineOffset: 0
-    m_UnderlineThickness: 0
-    m_StrikethroughOffset: 17.6
-    m_StrikethroughThickness: 0
-    m_TabWidth: 22
-  m_Material: {fileID: 1684333750}
-  m_SourceFontFileGUID: 75c7573e8da91b24ba7e4495fc48c143
-  m_CreationSettings:
-    sourceFontFileName: 
-    sourceFontFileGUID: 
-    faceIndex: 0
-    pointSizeSamplingMode: 0
-    pointSize: 0
-    padding: 0
-    paddingMode: 0
-    packingMode: 0
-    atlasWidth: 0
-    atlasHeight: 0
-    characterSetSelectionMode: 0
-    characterSequence: 
-    referencedFontAssetGUID: 
-    referencedTextAssetGUID: 
-    fontStyle: 0
-    fontStyleModifier: 0
-    renderMode: 0
-    includeFontFeatures: 0
-  m_SourceFontFile: {fileID: 12800000, guid: 75c7573e8da91b24ba7e4495fc48c143, type: 3}
-  m_SourceFontFilePath: 
-  m_AtlasPopulationMode: 1
-  InternalDynamicOS: 0
-  m_GlyphTable: []
-  m_CharacterTable: []
-  m_AtlasTextures:
-  - {fileID: 165966420}
-  m_AtlasTextureIndex: 0
-  m_IsMultiAtlasTexturesEnabled: 1
-  m_GetFontFeatures: 1
-  m_ClearDynamicDataOnBuild: 1
-  m_AtlasWidth: 1024
-  m_AtlasHeight: 1024
-  m_AtlasPadding: 9
-  m_AtlasRenderMode: 4165
-  m_UsedGlyphRects: []
-  m_FreeGlyphRects:
-  - m_X: 0
-    m_Y: 0
-    m_Width: 1023
-    m_Height: 1023
-  m_FontFeatureTable:
-    m_MultipleSubstitutionRecords: []
-    m_LigatureSubstitutionRecords: []
-    m_GlyphPairAdjustmentRecords: []
-    m_MarkToBaseAdjustmentRecords: []
-    m_MarkToMarkAdjustmentRecords: []
-  m_ShouldReimportFontFeatures: 0
-  m_FallbackFontAssetTable: []
-  m_FontWeightTable:
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  fontWeights: []
-  normalStyle: 0
-  normalSpacingOffset: 0
-  boldStyle: 0.75
-  boldSpacing: 7
-  italicStyle: 35
-  tabSize: 10
-  m_fontInfo:
-    Name: 
-    PointSize: 0
-    Scale: 0
-    CharacterCount: 0
-    LineHeight: 0
-    Baseline: 0
-    Ascender: 0
-    CapHeight: 0
-    Descender: 0
-    CenterLine: 0
-    SuperscriptOffset: 0
-    SubscriptOffset: 0
-    SubSize: 0
-    Underline: 0
-    UnderlineThickness: 0
-    strikethrough: 0
-    strikethroughThickness: 0
-    TabWidth: 0
-    Padding: 0
-    AtlasWidth: 0
-    AtlasHeight: 0
-  m_glyphInfoList: []
-  m_KerningTable:
-    kerningPairs: []
-  fallbackFontAssets: []
-  atlas: {fileID: 0}
 --- !u!1 &434197621
 GameObject:
   m_ObjectHideFlags: 0
@@ -2722,6 +2535,193 @@ Transform:
   - {fileID: 1492037704}
   m_Father: {fileID: 448129733}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &832138209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
+  m_Name: Modern Farmhouse Runtime Font
+  m_EditorClassIdentifier: 
+  m_Version: 1.1.0
+  m_FaceInfo:
+    m_FaceIndex: 0
+    m_FamilyName: Modern Farmhouse
+    m_StyleName: Regular
+    m_PointSize: 90
+    m_Scale: 1
+    m_UnitsPerEM: 1000
+    m_LineHeight: 81
+    m_AscentLine: 63.000004
+    m_CapLine: 44
+    m_MeanLine: 44
+    m_Baseline: 0
+    m_DescentLine: -18
+    m_SuperscriptOffset: 63.000004
+    m_SuperscriptSize: 0.5
+    m_SubscriptOffset: -18
+    m_SubscriptSize: 0.5
+    m_UnderlineOffset: 0
+    m_UnderlineThickness: 0
+    m_StrikethroughOffset: 17.6
+    m_StrikethroughThickness: 0
+    m_TabWidth: 22
+  m_Material: {fileID: 1477730362}
+  m_SourceFontFileGUID: 75c7573e8da91b24ba7e4495fc48c143
+  m_CreationSettings:
+    sourceFontFileName: 
+    sourceFontFileGUID: 
+    faceIndex: 0
+    pointSizeSamplingMode: 0
+    pointSize: 0
+    padding: 0
+    paddingMode: 0
+    packingMode: 0
+    atlasWidth: 0
+    atlasHeight: 0
+    characterSetSelectionMode: 0
+    characterSequence: 
+    referencedFontAssetGUID: 
+    referencedTextAssetGUID: 
+    fontStyle: 0
+    fontStyleModifier: 0
+    renderMode: 0
+    includeFontFeatures: 0
+  m_SourceFontFile: {fileID: 12800000, guid: 75c7573e8da91b24ba7e4495fc48c143, type: 3}
+  m_SourceFontFilePath: 
+  m_AtlasPopulationMode: 1
+  InternalDynamicOS: 0
+  m_GlyphTable: []
+  m_CharacterTable: []
+  m_AtlasTextures:
+  - {fileID: 844575075}
+  m_AtlasTextureIndex: 0
+  m_IsMultiAtlasTexturesEnabled: 1
+  m_GetFontFeatures: 1
+  m_ClearDynamicDataOnBuild: 1
+  m_AtlasWidth: 1024
+  m_AtlasHeight: 1024
+  m_AtlasPadding: 9
+  m_AtlasRenderMode: 4165
+  m_UsedGlyphRects: []
+  m_FreeGlyphRects:
+  - m_X: 0
+    m_Y: 0
+    m_Width: 1023
+    m_Height: 1023
+  m_FontFeatureTable:
+    m_MultipleSubstitutionRecords: []
+    m_LigatureSubstitutionRecords: []
+    m_GlyphPairAdjustmentRecords: []
+    m_MarkToBaseAdjustmentRecords: []
+    m_MarkToMarkAdjustmentRecords: []
+  m_ShouldReimportFontFeatures: 0
+  m_FallbackFontAssetTable: []
+  m_FontWeightTable:
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 0}
+    italicTypeface: {fileID: 0}
+  fontWeights: []
+  normalStyle: 0
+  normalSpacingOffset: 0
+  boldStyle: 0.75
+  boldSpacing: 7
+  italicStyle: 35
+  tabSize: 10
+  m_fontInfo:
+    Name: 
+    PointSize: 0
+    Scale: 0
+    CharacterCount: 0
+    LineHeight: 0
+    Baseline: 0
+    Ascender: 0
+    CapHeight: 0
+    Descender: 0
+    CenterLine: 0
+    SuperscriptOffset: 0
+    SubscriptOffset: 0
+    SubSize: 0
+    Underline: 0
+    UnderlineThickness: 0
+    strikethrough: 0
+    strikethroughThickness: 0
+    TabWidth: 0
+    Padding: 0
+    AtlasWidth: 0
+    AtlasHeight: 0
+  m_glyphInfoList: []
+  m_KerningTable:
+    kerningPairs: []
+  fallbackFontAssets: []
+  atlas: {fileID: 0}
+--- !u!28 &844575075
+Texture2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Modern Farmhouse - Regular Atlas
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 3
+  m_Width: 1
+  m_Height: 1
+  m_CompleteImageSize: 1
+  m_MipsStripped: 0
+  m_TextureFormat: 1
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_IsPreProcessed: 0
+  m_IgnoreMipmapLimit: 1
+  m_MipmapLimitGroupName: 
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_VTOnly: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_LightmapFormat: 0
+  m_ColorSpace: 1
+  m_PlatformBlob: 
+  image data: 1
+  _typelessdata: cd
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
 --- !u!1 &851528706
 GameObject:
   m_ObjectHideFlags: 0
@@ -4922,6 +4922,73 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!21 &1477730362
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Modern Farmhouse - Regular Material
+  m_Shader: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 844575075}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _CullMode: 0
+    - _FaceDilate: 0
+    - _GradientScale: 10
+    - _MaskSoftnessX: 0
+    - _MaskSoftnessY: 0
+    - _OutlineSoftness: 0
+    - _OutlineWidth: 0
+    - _PerspectiveFilter: 0.875
+    - _ScaleRatioA: 0.9
+    - _ScaleRatioB: 1
+    - _ScaleRatioC: 0.73125
+    - _ScaleX: 1
+    - _ScaleY: 1
+    - _ShaderFlags: 0
+    - _Sharpness: 0
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _TextureHeight: 1024
+    - _TextureWidth: 1024
+    - _UnderlayDilate: 0
+    - _UnderlayOffsetX: 0
+    - _UnderlayOffsetY: 0
+    - _UnderlaySoftness: 0
+    - _VertexOffsetX: 0
+    - _VertexOffsetY: 0
+    - _WeightBold: 0.75
+    - _WeightNormal: 0
+    m_Colors:
+    - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
+    - _FaceColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _UnderlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!1 &1485608092
 GameObject:
   m_ObjectHideFlags: 0
@@ -5542,73 +5609,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!21 &1684333750
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Modern Farmhouse - Regular Material
-  m_Shader: {fileID: 4800000, guid: fe393ace9b354375a9cb14cdbbc28be4, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 165966420}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _ColorMask: 15
-    - _CullMode: 0
-    - _FaceDilate: 0
-    - _GradientScale: 10
-    - _MaskSoftnessX: 0
-    - _MaskSoftnessY: 0
-    - _OutlineSoftness: 0
-    - _OutlineWidth: 0
-    - _PerspectiveFilter: 0.875
-    - _ScaleRatioA: 0.9
-    - _ScaleRatioB: 1
-    - _ScaleRatioC: 0.73125
-    - _ScaleX: 1
-    - _ScaleY: 1
-    - _ShaderFlags: 0
-    - _Sharpness: 0
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    - _TextureHeight: 1024
-    - _TextureWidth: 1024
-    - _UnderlayDilate: 0
-    - _UnderlayOffsetX: 0
-    - _UnderlayOffsetY: 0
-    - _UnderlaySoftness: 0
-    - _VertexOffsetX: 0
-    - _VertexOffsetY: 0
-    - _WeightBold: 0.75
-    - _WeightNormal: 0
-    m_Colors:
-    - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
-    - _FaceColor: {r: 1, g: 1, b: 1, a: 1}
-    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _UnderlayColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_BuildTextureStacks: []
-  m_AllowLocking: 1
 --- !u!1 &1723602037
 GameObject:
   m_ObjectHideFlags: 0
@@ -6234,7 +6234,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 1684333750}
+  - {fileID: 1477730362}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6278,8 +6278,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Rice
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 389884990}
-  m_sharedMaterial: {fileID: 1684333750}
+  m_fontAsset: {fileID: 832138209}
+  m_sharedMaterial: {fileID: 1477730362}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7187,6 +7187,74 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2100562655}
     m_Modifications:
+    - target: {fileID: 24293611688312991, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_fontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 24293611688312991, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2313483857097188686, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_fontSize
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 2313483857097188686, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_margin.w
+      value: -13.214905
+      objectReference: {fileID: 0}
+    - target: {fileID: 2313483857097188686, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_margin.x
+      value: -61.583862
+      objectReference: {fileID: 0}
+    - target: {fileID: 2313483857097188686, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_margin.z
+      value: -70.472534
+      objectReference: {fileID: 0}
+    - target: {fileID: 2313483857097188686, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 3870536800852045513, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_fontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3870536800852045513, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4069261258242088662, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_fontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 4069261258242088662, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5157234382865956482, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_fontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5157234382865956482, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5989276541256234764, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 182.4366
+      objectReference: {fileID: 0}
+    - target: {fileID: 5989276541256234764, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 74.6278
+      objectReference: {fileID: 0}
+    - target: {fileID: 5989276541256234764, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 124.618385
+      objectReference: {fileID: 0}
+    - target: {fileID: 5989276541256234764, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -70.6861
+      objectReference: {fileID: 0}
     - target: {fileID: 6102451960035623073, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -7213,11 +7281,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6102451960035623073, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 480
+      value: 600
       objectReference: {fileID: 0}
     - target: {fileID: 6102451960035623073, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 360
+      value: 450
       objectReference: {fileID: 0}
     - target: {fileID: 6102451960035623073, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7270,6 +7338,62 @@ PrefabInstance:
     - target: {fileID: 7128372138160964085, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
       propertyPath: m_Name
       value: Ratio Selection Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 7128372138160964085, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7948155017259103301, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 169.8224
+      objectReference: {fileID: 0}
+    - target: {fileID: 7948155017259103301, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 77.0305
+      objectReference: {fileID: 0}
+    - target: {fileID: 7948155017259103301, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -115.01119
+      objectReference: {fileID: 0}
+    - target: {fileID: 7948155017259103301, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -72.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8162557281501325534, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 186.0614
+      objectReference: {fileID: 0}
+    - target: {fileID: 8162557281501325534, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 78.8325
+      objectReference: {fileID: 0}
+    - target: {fileID: 8162557281501325534, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 122.809296
+      objectReference: {fileID: 0}
+    - target: {fileID: 8162557281501325534, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 22.201
+      objectReference: {fileID: 0}
+    - target: {fileID: 8870079132883245066, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 122
+      objectReference: {fileID: 0}
+    - target: {fileID: 8997058970041559350, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 171.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 8997058970041559350, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 78.2319
+      objectReference: {fileID: 0}
+    - target: {fileID: 8997058970041559350, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -114.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 8997058970041559350, guid: 8c5fd38d34af76a4eb0abf96f8f54ab8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 21.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7386,7 +7510,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1377713968357410964, guid: db53359f935adad44a74d8f810d9f7f0, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 268.45
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1377713968357410964, guid: db53359f935adad44a74d8f810d9f7f0, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -7398,7 +7522,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3359422830384499624, guid: db53359f935adad44a74d8f810d9f7f0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4043607254051791875, guid: db53359f935adad44a74d8f810d9f7f0, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -204
       objectReference: {fileID: 0}
     - target: {fileID: 4322967167574377266, guid: db53359f935adad44a74d8f810d9f7f0, type: 3}
       propertyPath: m_IsActive
@@ -7868,7 +7996,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1432254393072597145, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 29
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 1860566758427486572, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2100445261776348978, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
       propertyPath: m_AnchorMax.x
@@ -7884,7 +8016,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2312154681884962268, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 38
+      value: 26
+      objectReference: {fileID: 0}
+    - target: {fileID: 2945797471001553066, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2982728011909061806, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3411018974215883850, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
       propertyPath: m_Pivot.x
@@ -7966,13 +8106,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4823567410905772436, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5634206121458389079, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 28
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 5816167567039977035, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 351
+      value: 332
+      objectReference: {fileID: 0}
+    - target: {fileID: 5935195264522004930, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5964295696827385320, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
       propertyPath: uiManager
@@ -7982,9 +8130,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gameplay HUD
       objectReference: {fileID: 0}
+    - target: {fileID: 7541903855030825687, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7978262501308403962, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 40
+      value: 29
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143184274675065980, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 216.4888
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143184274675065980, guid: 5c3a52ee5cb23ee498858216b90e9a65, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8018,6 +8178,10 @@ PrefabInstance:
     - target: {fileID: 2296398323815524896, guid: 82b4ff5ac1f4d8341b9d0981494c3d8c, type: 3}
       propertyPath: m_Name
       value: Opening Level Title Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 2296398323815524896, guid: 82b4ff5ac1f4d8341b9d0981494c3d8c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2885625076184623245, guid: 82b4ff5ac1f4d8341b9d0981494c3d8c, type: 3}
       propertyPath: m_Pivot.x

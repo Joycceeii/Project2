@@ -14,8 +14,15 @@ namespace TheTasteReviver
 
         public int CurrentLevelIndex { get; private set; }
         public RecipeLevelData CurrentLevel => levels.Count == 0 ? null : levels[Mathf.Clamp(CurrentLevelIndex, 0, levels.Count - 1)];
-        public bool CanAdvance => CurrentLevel != null && attemptManager != null
-            && attemptManager.currentLevel == CurrentLevel && attemptManager.HasUnlockedNextLevel;
+        public bool CanAdvance
+        {
+            get
+            {
+                if (CurrentLevel == null) return false;
+                return attemptManager != null && attemptManager.currentLevel == CurrentLevel
+                    && attemptManager.HasUnlockedNextLevel;
+            }
+        }
 
         private void Start()
         {

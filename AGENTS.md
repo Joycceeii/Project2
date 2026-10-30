@@ -1,5 +1,81 @@
 # Project Continuity and Agent Change Log
 
+## 2026-10-30 - Hide Mixed Powder Plate Labels
+
+- Mixed powder labels now respect the existing showIngredientLabels setting instead of being forcibly enabled. This removes Mixture Powder/Mixed Powder names after L05 New Batch while retaining powder visuals and drag behavior.
+
+## 2026-10-30 - Remove Temporary Editor Level Skipping
+
+- Removed allowEditorLevelSkipping and its progression bypass after user testing. Editor and builds now both require a Correct completion to unlock Next Level; Reset Attempt still preserves an earned unlock.
+- Runtime/Editor compilation passed with zero warnings/errors; no remaining allowEditorLevelSkipping references under Assets.
+
+## 2026-10-30 - Keep Filling in Mortar During Leaf Selection
+
+- Automatic L09 wrapper transition now finalizes the logical filling batch while keeping its ingredient visuals in the mortar. It skips the normal New Batch return-home and mixed-powder plate creation, removing the plate flash while choosing the leaf amount.
+- Successful model generation hides the consumed filling through the existing path; manual New Batch retains normal behavior. Runtime/Editor compilation passed with zero warnings/errors; in-game transition confirmation remains pending.
+
+## 2026-10-30 - Zongzi URP Material and Consumed Filling
+
+- Replaced runtime Standard material creation with a Resources-backed URP Lit material using the supplied model's original diffuse texture. All renderer material slots use the serialized material so shader references are retained in builds.
+- After successful wrapping, hide required ingredient objects on the plates as consumed filling/leaf, while keeping plates and recipe records. Reset Attempt restores their active state through the existing return-home path.
+- Runtime/Editor compilation passed with zero warnings/errors. In-game texture appearance and consumed-ingredient visuals remain pending confirmation.
+
+## 2026-10-30 - Editor-Only Next Level Testing Unlock
+
+- Added LevelManager.allowEditorLevelSkipping, enabled by default for the requested L09 testing. In Unity Editor, Next Level bypasses recipe completion while this Inspector switch is enabled.
+- Both the switch and bypass are wrapped in UNITY_EDITOR; player builds retain Correct-only progression and reset-preserved unlock behavior. Turn off Editor Testing > Allow Editor Level Skipping to test normal progression in the Editor.
+
+## 2026-10-30 - Restore Runtime Zongzi Model Resource
+
+- Found the final model and textures under Art/Ingredients/Zhongzi while runtime uses Resources.Load with Zhongzi paths. Moved the complete folder into Resources/Zhongzi with original metadata/GUIDs preserved.
+- Generate the final model before hiding the leaf or clearing mixed powder displays. Missing model feedback is no longer overwritten with an incorrect-recipe message.
+- Runtime/Editor compilation passed with zero warnings/errors and moved metadata was compared with tracked originals. In-game model appearance remains to be confirmed after resource refresh.
+
+## 2026-10-30 - L08 Separate Preparation Then Final Blend
+
+- Enabled requireFinalCombinedBatch for L08 in generated asset and source CSV. All three ingredients must be ground separately, followed by New Batch and returning all three powders before manual Evaluate can succeed. Existing per-ingredient Force/Speed targets remain unchanged and use original preparation batches.
+- Completed powder return uses the existing no-ratio-reselection/no-extra-grinding path. Evaluation gate now recognizes a prepared final blend without requiring a new Speed reading; incomplete preparation or missing final powders receives workflow guidance before consuming an attempt.
+- Updated L08 intro/combination hints in source and generated data. Runtime/Editor compilation passed with zero warnings/errors; 65 actual-source final-blend checks passed for every preparation/return subset and the required fresh final batch. In-game interaction confirmation remains pending.
+
+## 2026-10-30 - Direct L09 Zongzi Wrapping
+
+- Once the exact red bean/glutinous rice/black sesame filling is ground with correct amounts/order, Hint explicitly asks for the lotus leaf at Very Small. Dropping the leaf automatically finalizes the filling batch; manual New Batch remains supported.
+- Selecting Very Small generates the zongzi immediately, without pestle motion. Wrong filling/leaf amounts, incorrect order, unfinished or split filling cannot generate it. The separate leaf step can still be evaluated for feedback without grinding.
+- Synchronized L09 intro and wrapping hint in English source CSVs and generated level asset; recipe target data unchanged.
+- Runtime/Editor compilation passed. An isolated harness using the actual readiness-method source passed 31 checks covering correct/manual wrapping, invalid amounts/order, unfinished/split filling, mixed leaf and other levels. In-game model/interaction confirmation remains pending.
+
+## 2026-10-30 - Restore Text Inside Detail Viewport
+
+- Found legacy Experiment Log detail text margins around -285/-195/-295/-116, pushing glyphs outside the newly clipped viewport. Replaced them with positive 4/4/12/12 in the saved scene and scroll-layout repair; explicitly use top-left alignment.
+- Text content, clue colors and scrolling behavior are preserved. In-game visual confirmation remains pending.
+
+## 2026-10-29 - Contain and Scroll Experiment Details
+
+- Repaired older saved detail panels lacking a viewport: create an inset raycastable RectMask2D viewport, reparent the text under it, and bind ScrollRect content/viewport without changing authored panel bounds.
+- Detail text now anchors at the top and receives its wrapped preferred height on each open, allowing long entries to scroll vertically while remaining clipped inside the panel. Reopening resets to the top; competing ContentSizeFitter is disabled.
+- Runtime/Editor compilation passed with zero warnings/errors; in-game scroll verification remains pending.
+
+## 2026-10-29 - Center Experiment Log Ingredient Grid
+
+- Ingredient buttons now anchor to the horizontal center of the scroll content and position the two-column grid symmetrically around it, retaining existing sizes, spacing and vertical scrolling. Template and fallback buttons share the same centered anchors.
+- Runtime/Editor compilation passed with zero warnings/errors.
+
+## 2026-10-29 - Traits Overlay Above Ratio Selection
+
+- Expanding Ingredient Traits raises its prefab root above Ratio Selection. Showing the ratio picker also keeps the Traits root above it, preserving both opening orders and access to the collapsed Traits button.
+- Legacy ratio presentation reapplies the current Traits expansion state to restore the same layering. Runtime/Editor compilation passed with zero warnings/errors; visual confirmation remains pending.
+
+## 2026-10-29 - Isolate Story and Experiment Log Fonts
+
+- Fixed additive Experiment Log font application scanning all loaded scenes: it now changes only text belonging to the log controller's scene, preserving hidden gameplay/story text.
+- Gameplay theme assignment excludes story body text. Story Show/preview and legacy page presentation explicitly restore Dancing Script; gameplay and log remain Modern Farmhouse.
+- Runtime/Editor compilation passed. Unity batch regression passed with distinct font resources, repeated journal application scoped to its own scene, inactive story font preservation, and restoration when showing a story page. Temporary test assets were removed.
+
+## 2026-10-29 - Color Complete Experiment Log Entries
+
+- Correct/Incorrect coloring now wraps each complete evaluated note, including labels, values, status suffixes and multiline content. Force/Speed lines and combination explanations use their own evaluated status; unlocked permanent clues are deep green.
+- Ingredient-detail and full-log presentations share the same muted ink formatter and updated color guide. Unchecked/fixed text retains its base ink color.
+
 ## 2026-10-29 - Ending Button Wording
 
 - End page button now reads Return to Start in both prefab and legacy flows. Existing return-to-cover and L01 restart behavior is unchanged.

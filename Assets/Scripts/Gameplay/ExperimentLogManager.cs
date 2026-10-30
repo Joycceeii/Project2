@@ -311,8 +311,8 @@ namespace TheTasteReviver
                 builder.AppendLine();
                 foreach (UnlockedClueRecord clue in unlockedClues)
                 {
-                    builder.AppendLine(clue.title);
-                    builder.AppendLine(clue.content);
+                    builder.AppendLine(FormatResultText(clue.title, "Correct"));
+                    builder.AppendLine(FormatResultText(clue.content, "Correct"));
                     builder.AppendLine();
                 }
             }
@@ -419,13 +419,14 @@ namespace TheTasteReviver
 
         private static void AppendRecordSummary(StringBuilder builder, ExperimentRecord record)
         {
-            builder.AppendLine("Experiment #" + record.attemptNumber + " (" + FormatStatus(IsRecordCorrect(record) ? "Correct" : "Incorrect") + ")");
+            string recordStatus = IsRecordCorrect(record) ? "Correct" : "Incorrect";
+            builder.AppendLine(FormatResultText("Experiment #" + record.attemptNumber + " (" + recordStatus + ")", recordStatus));
             builder.AppendLine("Ingredients: " + record.ingredientsUsed);
             AppendCheckedRecordLine(builder, "Order", record.ingredientOrder, record.orderStatus);
             AppendCheckedRecordLine(builder, "Ratio", record.ratioPattern, record.ratioStatus);
             AppendCheckedRecordLine(builder, "Combination", record.combinationPattern, record.combinationStatus);
-            builder.AppendLine("Force: " + record.forceLevel);
-            builder.AppendLine("Speed: " + record.speedLevel);
+            builder.AppendLine(FormatResultText("Force: " + record.forceLevel, record.forceStatus));
+            builder.AppendLine(FormatResultText("Speed: " + record.speedLevel, record.speedStatus));
             builder.AppendLine("Feedback: " + record.mainFeedback);
             if (!string.IsNullOrWhiteSpace(record.permanentHint))
             {
@@ -443,17 +444,22 @@ namespace TheTasteReviver
                 return;
             }
 
-            builder.AppendLine(label + ": " + value + (status == "Correct" || status == "Incorrect" ? " (" + FormatStatus(status) + ")" : string.Empty));
+            builder.AppendLine(FormatResultText(label + ": " + value + (status == "Correct" || status == "Incorrect" ? " (" + status + ")" : string.Empty), status));
         }
 
-        public static string StatusColorGuide => "Experiment notes: " + FormatStatus("Correct") + " in deep green; " + FormatStatus("Incorrect") + " in deep red.";
+        public static string StatusColorGuide => "Notes: " + FormatResultText("correct entries in deep green", "Correct") + "; " + FormatResultText("incorrect entries in deep red", "Incorrect") + ".";
 
         public static string FormatStatus(string status)
         {
+            return FormatResultText(status, status);
+        }
+
+        public static string FormatResultText(string text, string status)
+        {
             // Muted ink colors complement the journal's hand-painted paper.
-            if (status == "Correct") return "<color=#2F5D46>Correct</color>";
-            if (status == "Incorrect") return "<color=#8A3D3A>Incorrect</color>";
-            return status;
+            if (status == "Correct") return "<color=#2F5D46>" + text + "</color>";
+            if (status == "Incorrect") return "<color=#8A3D3A>" + text + "</color>";
+            return text;
         }
 
         private static IEnumerable<ExperimentRecord> OrderedRecords()

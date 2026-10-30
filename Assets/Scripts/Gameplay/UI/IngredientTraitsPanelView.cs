@@ -52,6 +52,11 @@ namespace TheTasteReviver
         public void SetExpanded(bool expanded)
         {
             IsExpanded = expanded && traitLabel != null && !string.IsNullOrWhiteSpace(traitLabel.text);
+            if (IsExpanded)
+            {
+                // Raise the prefab root, not just its children, above the ratio panel.
+                transform.SetAsLastSibling();
+            }
             if (backdrop != null)
             {
                 backdrop.SetActive(IsExpanded);

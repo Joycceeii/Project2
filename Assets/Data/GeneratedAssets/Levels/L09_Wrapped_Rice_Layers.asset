@@ -18,9 +18,7 @@ MonoBehaviour:
   targetTasteName: Sweet glutinous rice wrapped in a lotus leaf
   levelIntro: Several familiar ingredients appear again in this zongzi recipe. Prepare
     red bean, glutinous rice, and black sesame as a single filling batch, adding
-    them in the order suggested by your Experiment Log. Once the filling is ready,
-    add the lotus leaf last and move the pestle briefly to complete the wrapping
-    step.
+    them in the order suggested by your Experiment Log. Once the filling is correct and ground, drag the lotus leaf into the mortar and choose Very Small to wrap the zongzi. No New Batch or further grinding is needed.
   storyIntroPages:
   - pageKey: Level09_Zongzi_Start
     imageResourcePath: Story/Level09_Zongzi_Start
@@ -169,8 +167,7 @@ MonoBehaviour:
   - ruleId: L09_Hint_Lotus_Separate_Combination
     priority: 19
     mechanic: 3
-    hintText: When the filling is ready, add the lotus leaf as the final separate
-      step, then move the pestle briefly to complete the wrapping.
+    hintText: When the filling is correct and ground, drag the lotus leaf into the mortar and choose Very Small. The zongzi appears immediately; no New Batch or further grinding is needed.
   - ruleId: L09_Hint_RedBean_Order
     priority: 22
     mechanic: 1

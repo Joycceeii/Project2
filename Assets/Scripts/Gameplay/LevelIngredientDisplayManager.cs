@@ -861,7 +861,7 @@ namespace TheTasteReviver
         private void ConfigureMixedPowderLabel(Transform slot, string labelText)
         {
             TextMeshPro label = EnsureLabel(slot);
-            label.gameObject.SetActive(true);
+            label.gameObject.SetActive(showIngredientLabels);
             label.text = labelText;
             label.color = Color.black;
             label.fontSize = Mathf.Max(8, labelFontSize);
